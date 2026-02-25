@@ -137,13 +137,13 @@ export function SystemHealthScreen() {
 
 const styles = StyleSheet.create({
   refreshButton: {
-    backgroundColor: '#E0F2FE',
+    backgroundColor: colors.primarySoft,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
   refreshButtonText: {
-    color: '#0369A1',
+    color: colors.primaryText,
     fontSize: 12,
     fontWeight: '700',
   },

@@ -3,7 +3,7 @@ export type AuthStackParamList = {
   Register: undefined;
 };
 
-export type AppStackParamList = {
+export type DashboardDrawerParamList = {
   Dashboard: undefined;
   Revenue: undefined;
   Purchases: undefined;
@@ -15,3 +15,6 @@ export type AppStackParamList = {
   SystemHealth: undefined;
   Settings: undefined;
 };
+
+// Backward compatibility for any existing screen props.
+export type AppStackParamList = DashboardDrawerParamList;

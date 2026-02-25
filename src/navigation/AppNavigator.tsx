@@ -1,5 +1,6 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import { LoginScreen } from '../screens/auth/LoginScreen';
@@ -17,11 +18,12 @@ import { PersonalizationScreen } from '../screens/dashboard/PersonalizationScree
 import { SupportScreen } from '../screens/dashboard/SupportScreen';
 import { SystemHealthScreen } from '../screens/dashboard/SystemHealthScreen';
 import { SettingsScreen } from '../screens/dashboard/SettingsScreen';
-import type { AppStackParamList, AuthStackParamList } from './types';
+import type { AuthStackParamList, DashboardDrawerParamList } from './types';
+import { AppDrawerContent } from './AppDrawerContent';
 import { colors } from '../theme/colors';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-const AppStack = createNativeStackNavigator<AppStackParamList>();
+const Drawer = createDrawerNavigator<DashboardDrawerParamList>();
 
 const theme = {
   ...DefaultTheme,
@@ -50,34 +52,33 @@ function AuthNavigator() {
 
 function MainNavigator() {
   return (
-    <AppStack.Navigator
+    <Drawer.Navigator
       initialRouteName="Dashboard"
+      drawerContent={(props) => <AppDrawerContent {...props} />}
       screenOptions={{
-        headerShadowVisible: false,
-        headerStyle: {
+        headerShown: false,
+        drawerType: 'front',
+        overlayColor: 'rgba(15, 23, 42, 0.35)',
+        drawerStyle: {
+          width: 280,
+          backgroundColor: colors.navBg,
+        },
+        sceneStyle: {
           backgroundColor: colors.background,
         },
       }}
     >
-      <AppStack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="Revenue" component={RevenueScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="Purchases" component={PurchasesScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="Users" component={UsersScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="Photos" component={PhotosScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="Leads" component={LeadsScreen} options={{ headerShown: false }} />
-      <AppStack.Screen
-        name="Personalization"
-        component={PersonalizationScreen}
-        options={{ headerShown: false }}
-      />
-      <AppStack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
-      <AppStack.Screen
-        name="SystemHealth"
-        component={SystemHealthScreen}
-        options={{ headerShown: false }}
-      />
-      <AppStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
-    </AppStack.Navigator>
+      <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+      <Drawer.Screen name="Revenue" component={RevenueScreen} />
+      <Drawer.Screen name="Purchases" component={PurchasesScreen} />
+      <Drawer.Screen name="Users" component={UsersScreen} />
+      <Drawer.Screen name="Photos" component={PhotosScreen} />
+      <Drawer.Screen name="Leads" component={LeadsScreen} />
+      <Drawer.Screen name="Personalization" component={PersonalizationScreen} />
+      <Drawer.Screen name="Support" component={SupportScreen} />
+      <Drawer.Screen name="SystemHealth" component={SystemHealthScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+    </Drawer.Navigator>
   );
 }
 

@@ -178,13 +178,13 @@ export function SupportScreen() {
 
 const styles = StyleSheet.create({
   refreshButton: {
-    backgroundColor: '#E0F2FE',
+    backgroundColor: colors.primarySoft,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
   refreshButtonText: {
-    color: '#0369A1',
+    color: colors.primaryText,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   priorityButtonSelected: {
-    backgroundColor: '#E0F2FE',
-    borderColor: '#7DD3FC',
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryBorder,
   },
   priorityButtonText: {
     color: '#374151',
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   priorityButtonTextSelected: {
-    color: '#0369A1',
+    color: colors.primaryText,
   },
   primaryButton: {
     backgroundColor: colors.primary,

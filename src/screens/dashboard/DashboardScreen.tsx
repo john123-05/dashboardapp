@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation, type NavigationProp } from '@react-navigation/native';
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { MetricCard } from '../../components/MetricCard';
@@ -9,11 +9,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { usePark } from '../../contexts/ParkContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
 import { supabase } from '../../lib/supabase';
-import type { AppStackParamList } from '../../navigation/types';
+import type { DashboardDrawerParamList } from '../../navigation/types';
 import { colors } from '../../theme/colors';
-import { formatCurrency, formatDateTime, formatNumber, formatRelative } from '../../lib/utils';
-
-type Props = NativeStackScreenProps<AppStackParamList, 'Dashboard'>;
+import { formatCurrency, formatDateTime, formatNumber, formatPercent, formatRelative } from '../../lib/utils';
 
 interface PurchaseItem {
   id: string;
@@ -30,7 +28,27 @@ interface ActivityItem {
   status: string;
 }
 
-export function DashboardScreen({ navigation }: Props) {
+interface RevenueByDayRow {
+  date: string;
+  amount: number;
+}
+
+interface QuickLink {
+  label: string;
+  route: keyof DashboardDrawerParamList;
+}
+
+const quickLinks: QuickLink[] = [
+  { label: 'Revenue', route: 'Revenue' },
+  { label: 'Purchases', route: 'Purchases' },
+  { label: 'Users', route: 'Users' },
+  { label: 'Photos', route: 'Photos' },
+  { label: 'Leads', route: 'Leads' },
+  { label: 'Support', route: 'Support' },
+];
+
+export function DashboardScreen() {
+  const navigation = useNavigation<NavigationProp<DashboardDrawerParamList>>();
   const { profile } = useAuth();
   const { parkId, parkName } = usePark();
 
@@ -45,6 +63,7 @@ export function DashboardScreen({ navigation }: Props) {
   const [healthAlerts, setHealthAlerts] = useState(0);
   const [recentPurchases, setRecentPurchases] = useState<PurchaseItem[]>([]);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [revenueByDay, setRevenueByDay] = useState<RevenueByDayRow[]>([]);
 
   useEffect(() => {
     loadDashboard();
@@ -71,7 +90,7 @@ export function DashboardScreen({ navigation }: Props) {
       healthResult,
       supportResult,
     ] = await Promise.all([
-      invokeEdgeFunction<{ total_revenue: number }>('stripe-revenue'),
+      invokeEdgeFunction<{ total_revenue: number; revenue_by_day?: RevenueByDayRow[] }>('stripe-revenue'),
       invokeEdgeFunction<{ payments: PurchaseItem[] }>('stripe-payments'),
       invokeEdgeFunction<{ customers: Array<{ id: string }> }>('external-users', {
         query: { park_id: parkId },
@@ -152,6 +171,7 @@ export function DashboardScreen({ navigation }: Props) {
       .slice(0, 10);
 
     setTotalRevenue(Math.round((revenueResult.data?.total_revenue ?? 0) * 100));
+    setRevenueByDay(revenueResult.data?.revenue_by_day ?? []);
     setTotalPurchases(payments.length);
     setRecentPurchases(payments.slice(0, 5));
     setTotalUsers((usersResult.data?.customers ?? []).length);
@@ -169,18 +189,36 @@ export function DashboardScreen({ navigation }: Props) {
     setRefreshing(false);
   }
 
+  const trendRows = useMemo(() => {
+    const sliced = revenueByDay.slice(-7);
+    const max = sliced.reduce((highest, row) => Math.max(highest, row.amount), 0);
+
+    return sliced.map((row) => ({
+      key: row.date,
+      label: formatShortDay(row.date),
+      amountCents: Math.round(row.amount * 100),
+      widthPercent: max > 0 ? Math.max((row.amount / max) * 100, 8) : 8,
+    }));
+  }, [revenueByDay]);
+
+  const conversionRate = totalPhotos > 0 ? (totalPurchases / totalPhotos) * 100 : 0;
+
   if (loading) {
-    return <Screen title="Dashboard"><ActivityIndicator color={colors.primary} /></Screen>;
+    return (
+      <Screen title="Overview">
+        <ActivityIndicator color={colors.primary} />
+      </Screen>
+    );
   }
 
   if (error) {
     return (
       <Screen
-        title="Dashboard"
+        title="Overview"
         subtitle={parkName ? `Park: ${parkName}` : undefined}
         right={
-          <Pressable style={styles.linkButton} onPress={() => loadDashboard(true)}>
-            <Text style={styles.linkButtonText}>Retry</Text>
+          <Pressable style={styles.actionButton} onPress={() => loadDashboard(true)}>
+            <Text style={styles.actionButtonText}>Retry</Text>
           </Pressable>
         }
       >
@@ -193,45 +231,75 @@ export function DashboardScreen({ navigation }: Props) {
 
   return (
     <Screen
-      title="Dashboard"
+      title="Overview"
       subtitle={parkName ? `Park: ${parkName}` : undefined}
       right={
-        <Pressable style={styles.linkButton} onPress={() => loadDashboard(true)}>
-          <Text style={styles.linkButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+        <Pressable style={styles.actionButton} onPress={() => loadDashboard(true)}>
+          <Text style={styles.actionButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
         </Pressable>
       }
     >
-      <Card>
-        <Text style={styles.greeting}>Welcome back {profile?.full_name?.split(' ')[0] ?? 'Operator'}</Text>
-        <Text style={styles.greetingSub}>Mobile dashboard overview with live Supabase data.</Text>
+      <Card style={styles.heroCard}>
+        <Text style={styles.heroGreeting}>
+          {`Good ${dayPart()}, ${profile?.full_name?.split(' ')[0] ?? 'Operator'}`}
+        </Text>
+        <Text style={styles.heroSub}>Your mobile operations snapshot, synced with live dashboard data.</Text>
+
+        <View style={styles.heroStatsRow}>
+          <View style={styles.heroStatPill}>
+            <Text style={styles.heroStatLabel}>Attractions</Text>
+            <Text style={styles.heroStatValue}>{formatNumber(activeAttractions)}</Text>
+          </View>
+          <View style={styles.heroStatPill}>
+            <Text style={styles.heroStatLabel}>Health Alerts</Text>
+            <Text style={styles.heroStatValue}>{formatNumber(healthAlerts)}</Text>
+          </View>
+        </View>
       </Card>
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Total Revenue" value={formatCurrency(totalRevenue)} />
-        <MetricCard label="Purchases" value={formatNumber(totalPurchases)} />
+        <MetricCard label="Total Revenue" value={formatCurrency(totalRevenue)} footnote="All-time" />
+        <MetricCard label="Purchases" value={formatNumber(totalPurchases)} footnote="Completed" />
       </View>
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Users" value={formatNumber(totalUsers)} />
-        <MetricCard label="Photos" value={formatNumber(totalPhotos)} />
-      </View>
-
-      <View style={styles.metricGrid}>
-        <MetricCard label="Active Attractions" value={formatNumber(activeAttractions)} />
-        <MetricCard label="Health Alerts" value={formatNumber(healthAlerts)} />
+        <MetricCard label="Users" value={formatNumber(totalUsers)} footnote="Active records" />
+        <MetricCard
+          label="Conversion"
+          value={formatPercent(conversionRate)}
+          footnote="Purchases / photos"
+        />
       </View>
 
       <Card>
-        <Text style={styles.sectionTitle}>Quick Links</Text>
-        <View style={styles.linkGrid}>
-          <QuickLink label="Revenue" onPress={() => navigation.navigate('Revenue')} />
-          <QuickLink label="Purchases" onPress={() => navigation.navigate('Purchases')} />
-          <QuickLink label="Users" onPress={() => navigation.navigate('Users')} />
-          <QuickLink label="Photos" onPress={() => navigation.navigate('Photos')} />
-          <QuickLink label="Leads" onPress={() => navigation.navigate('Leads')} />
-          <QuickLink label="Support" onPress={() => navigation.navigate('Support')} />
-          <QuickLink label="System" onPress={() => navigation.navigate('SystemHealth')} />
-          <QuickLink label="Settings" onPress={() => navigation.navigate('Settings')} />
+        <Text style={styles.sectionTitle}>Revenue Trend (Last 7 Days)</Text>
+        {trendRows.length === 0 ? (
+          <Text style={styles.muted}>No revenue trend data available.</Text>
+        ) : (
+          trendRows.map((row) => (
+            <View key={row.key} style={styles.trendRow}>
+              <Text style={styles.trendLabel}>{row.label}</Text>
+              <View style={styles.trendTrack}>
+                <View style={[styles.trendFill, { width: `${row.widthPercent}%` }]} />
+              </View>
+              <Text style={styles.trendValue}>{formatCurrency(row.amountCents)}</Text>
+            </View>
+          ))
+        )}
+      </Card>
+
+      <Card>
+        <Text style={styles.sectionTitle}>Quick Navigation</Text>
+        <View style={styles.quickGrid}>
+          {quickLinks.map((link) => (
+            <Pressable
+              key={link.route}
+              style={styles.quickLink}
+              onPress={() => navigation.navigate(link.route)}
+            >
+              <Text style={styles.quickLinkText}>{link.label}</Text>
+            </Pressable>
+          ))}
         </View>
       </Card>
 
@@ -253,11 +321,11 @@ export function DashboardScreen({ navigation }: Props) {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
+        <Text style={styles.sectionTitle}>News & Activity</Text>
         {activity.length === 0 ? (
           <Text style={styles.muted}>No recent activity.</Text>
         ) : (
-          activity.map((item) => (
+          activity.slice(0, 5).map((item) => (
             <View key={item.id} style={styles.row}>
               <View style={styles.rowLeft}>
                 <Text style={styles.rowTitle}>{item.label}</Text>
@@ -273,28 +341,33 @@ export function DashboardScreen({ navigation }: Props) {
   );
 }
 
-interface QuickLinkProps {
-  label: string;
-  onPress: () => void;
+function dayPart() {
+  const hours = new Date().getHours();
+  if (hours < 12) return 'morning';
+  if (hours < 18) return 'afternoon';
+  return 'evening';
 }
 
-function QuickLink({ label, onPress }: QuickLinkProps) {
-  return (
-    <Pressable style={styles.quickLink} onPress={onPress}>
-      <Text style={styles.quickLinkText}>{label}</Text>
-    </Pressable>
-  );
+function formatShortDay(value: string) {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(parsed);
 }
 
 const styles = StyleSheet.create({
-  linkButton: {
-    backgroundColor: '#E0F2FE',
-    borderRadius: 8,
-    paddingHorizontal: 10,
+  actionButton: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryBorder,
+    borderWidth: 1,
+    borderRadius: 9,
+    paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  linkButtonText: {
-    color: '#0369A1',
+  actionButtonText: {
+    color: colors.primaryText,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -302,14 +375,40 @@ const styles = StyleSheet.create({
     color: colors.danger,
     fontSize: 14,
   },
-  greeting: {
+  heroCard: {
+    backgroundColor: '#F8FAFD',
+  },
+  heroGreeting: {
     color: colors.text,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
   },
-  greetingSub: {
+  heroSub: {
     color: colors.muted,
     fontSize: 14,
+    lineHeight: 20,
+  },
+  heroStatsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 4,
+  },
+  heroStatPill: {
+    flex: 1,
+    backgroundColor: '#EFF3F9',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    gap: 2,
+  },
+  heroStatLabel: {
+    color: colors.muted,
+    fontSize: 12,
+  },
+  heroStatValue: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '700',
   },
   metricGrid: {
     flexDirection: 'row',
@@ -325,18 +424,52 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 14,
   },
-  linkGrid: {
+  trendRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    paddingVertical: 8,
+  },
+  trendLabel: {
+    width: 34,
+    color: colors.muted,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  trendTrack: {
+    flex: 1,
+    height: 8,
+    backgroundColor: '#E6EEF7',
+    borderRadius: 999,
+    overflow: 'hidden',
+  },
+  trendFill: {
+    height: '100%',
+    borderRadius: 999,
+    backgroundColor: colors.dataBlue,
+  },
+  trendValue: {
+    width: 70,
+    textAlign: 'right',
+    color: colors.text,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  quickGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
   },
   quickLink: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#F4F7FC',
     borderColor: colors.border,
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 9,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    minWidth: 100,
   },
   quickLinkText: {
     color: colors.text,
@@ -366,7 +499,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   rowTime: {
-    color: '#9CA3AF',
+    color: '#94A3B8',
     fontSize: 12,
   },
 });

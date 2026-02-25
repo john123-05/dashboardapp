@@ -176,15 +176,15 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   parkButtonSelected: {
-    backgroundColor: '#E0F2FE',
-    borderColor: '#7DD3FC',
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryBorder,
   },
   parkButtonText: {
     color: '#1F2937',
     fontWeight: '500',
   },
   parkButtonTextSelected: {
-    color: '#075985',
+    color: colors.primaryText,
   },
   emptyParks: {
     color: colors.muted,
