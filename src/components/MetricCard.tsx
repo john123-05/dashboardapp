@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from './Card';
-import { colors } from '../theme/colors';
+import { useAppTheme } from '../contexts/ThemeContext';
 
 interface MetricCardProps {
   label: string;
@@ -10,6 +10,8 @@ interface MetricCardProps {
 }
 
 export function MetricCard({ label, value, tone = 'data', footnote }: MetricCardProps) {
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const isData = tone === 'data';
 
   return (
@@ -26,47 +28,48 @@ export function MetricCard({ label, value, tone = 'data', footnote }: MetricCard
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    minWidth: 150,
-    gap: 6,
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 8,
-  },
-  label: {
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-  },
-  dotData: {
-    backgroundColor: colors.dataBlue,
-  },
-  dotNeutral: {
-    backgroundColor: '#CBD5E1',
-  },
-  value: {
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  valueData: {
-    color: colors.text,
-  },
-  valueNeutral: {
-    color: colors.text,
-  },
-  footnote: {
-    color: colors.muted,
-    fontSize: 12,
-    fontWeight: '500',
-  },
-});
+const createStyles = (colors: { muted: string; dataBlue: string; text: string }) =>
+  StyleSheet.create({
+    card: {
+      flex: 1,
+      minWidth: 150,
+      gap: 6,
+    },
+    topRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 8,
+    },
+    label: {
+      color: colors.muted,
+      fontSize: 13,
+      fontWeight: '500',
+    },
+    dot: {
+      width: 10,
+      height: 10,
+      borderRadius: 999,
+    },
+    dotData: {
+      backgroundColor: colors.dataBlue,
+    },
+    dotNeutral: {
+      backgroundColor: '#CBD5E1',
+    },
+    value: {
+      fontSize: 24,
+      fontWeight: '700',
+    },
+    valueData: {
+      color: colors.text,
+    },
+    valueNeutral: {
+      color: colors.text,
+    },
+    footnote: {
+      color: colors.muted,
+      fontSize: 12,
+      fontWeight: '500',
+    },
+  });

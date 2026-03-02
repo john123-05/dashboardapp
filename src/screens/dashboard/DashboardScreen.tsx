@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useNavigation, type NavigationProp } from '@react-navigation/native';
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { MetricCard } from '../../components/MetricCard';
+import { RevenueLineChart } from '../../components/RevenueLineChart';
 import { StatusPill } from '../../components/StatusPill';
+import { WalkthroughAnchor } from '../../components/WalkthroughAnchor';
 import { useAuth } from '../../contexts/AuthContext';
+import { useI18n } from '../../contexts/LanguageContext';
 import { usePark } from '../../contexts/ParkContext';
+import { useAppTheme } from '../../contexts/ThemeContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
 import { supabase } from '../../lib/supabase';
-import type { DashboardDrawerParamList } from '../../navigation/types';
-import { colors } from '../../theme/colors';
-import { formatCurrency, formatDateTime, formatNumber, formatPercent, formatRelative } from '../../lib/utils';
+import { formatCurrency, formatNumber, formatPercent, formatRelative } from '../../lib/utils';
 
 interface PurchaseItem {
   id: string;
@@ -33,24 +34,12 @@ interface RevenueByDayRow {
   amount: number;
 }
 
-interface QuickLink {
-  label: string;
-  route: keyof DashboardDrawerParamList;
-}
-
-const quickLinks: QuickLink[] = [
-  { label: 'Revenue', route: 'Revenue' },
-  { label: 'Purchases', route: 'Purchases' },
-  { label: 'Users', route: 'Users' },
-  { label: 'Photos', route: 'Photos' },
-  { label: 'Leads', route: 'Leads' },
-  { label: 'Support', route: 'Support' },
-];
-
 export function DashboardScreen() {
-  const navigation = useNavigation<NavigationProp<DashboardDrawerParamList>>();
   const { profile } = useAuth();
-  const { parkId, parkName } = usePark();
+  const { t, language } = useI18n();
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
+  const { parkId } = usePark();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,11 +48,9 @@ export function DashboardScreen() {
   const [totalPurchases, setTotalPurchases] = useState(0);
   const [totalPhotos, setTotalPhotos] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [activeAttractions, setActiveAttractions] = useState(0);
-  const [healthAlerts, setHealthAlerts] = useState(0);
-  const [recentPurchases, setRecentPurchases] = useState<PurchaseItem[]>([]);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [revenueByDay, setRevenueByDay] = useState<RevenueByDayRow[]>([]);
+  const [dismissedActivityIds, setDismissedActivityIds] = useState<string[]>([]);
 
   useEffect(() => {
     loadDashboard();
@@ -86,7 +73,6 @@ export function DashboardScreen() {
       paymentsResult,
       usersResult,
       photosResult,
-      attractionsResult,
       healthResult,
       supportResult,
     ] = await Promise.all([
@@ -98,12 +84,6 @@ export function DashboardScreen() {
       invokeEdgeFunction<{ photos: Array<{ id: string }> }>('external-photos', {
         query: { park_id: parkId },
       }),
-      invokeEdgeFunction<{ attractions: Array<{ id: string; is_active?: boolean }> }>(
-        'external-attractions',
-        {
-          query: { park_id: parkId },
-        }
-      ),
       invokeEdgeFunction<{
         events: Array<{
           id: string;
@@ -127,7 +107,6 @@ export function DashboardScreen() {
       paymentsResult.error ||
       usersResult.error ||
       photosResult.error ||
-      attractionsResult.error ||
       healthResult.error
     ) {
       setError(
@@ -135,9 +114,8 @@ export function DashboardScreen() {
           paymentsResult.error ||
           usersResult.error ||
           photosResult.error ||
-          attractionsResult.error ||
           healthResult.error ||
-          'Failed to load dashboard data.'
+          t('common_failed_load_dashboard')
       );
       setLoading(false);
       setRefreshing(false);
@@ -154,14 +132,14 @@ export function DashboardScreen() {
     const mergedActivity: ActivityItem[] = [
       ...healthEvents.slice(0, 6).map((event) => ({
         id: `health-${event.id}`,
-        label: `Health: ${event.event_type}`,
-        message: event.message || 'System event',
+        label: t('dashboard_health_prefix', { type: event.event_type }),
+        message: event.message || t('dashboard_system_event'),
         created_at: event.created_at,
         status: event.severity,
       })),
       ...supportRows.slice(0, 6).map((ticket) => ({
         id: `support-${ticket.id}`,
-        label: 'Support ticket',
+        label: t('dashboard_support_ticket'),
         message: `${ticket.subject} (${ticket.status.replace('_', ' ')})`,
         created_at: ticket.updated_at || ticket.created_at,
         status: ticket.status,
@@ -173,16 +151,10 @@ export function DashboardScreen() {
     setTotalRevenue(Math.round((revenueResult.data?.total_revenue ?? 0) * 100));
     setRevenueByDay(revenueResult.data?.revenue_by_day ?? []);
     setTotalPurchases(payments.length);
-    setRecentPurchases(payments.slice(0, 5));
     setTotalUsers((usersResult.data?.customers ?? []).length);
     setTotalPhotos((photosResult.data?.photos ?? []).length);
-    setActiveAttractions(
-      (attractionsResult.data?.attractions ?? []).filter((item) => item.is_active !== false).length
-    );
-    setHealthAlerts(
-      healthEvents.filter((event) => event.severity === 'critical' || event.severity === 'error').length
-    );
     setActivity(mergedActivity);
+    setDismissedActivityIds([]);
 
     setError(null);
     setLoading(false);
@@ -195,17 +167,21 @@ export function DashboardScreen() {
 
     return sliced.map((row) => ({
       key: row.date,
-      label: formatShortDay(row.date),
+      label: row.date,
       amountCents: Math.round(row.amount * 100),
       widthPercent: max > 0 ? Math.max((row.amount / max) * 100, 8) : 8,
     }));
   }, [revenueByDay]);
 
   const conversionRate = totalPhotos > 0 ? (totalPurchases / totalPhotos) * 100 : 0;
+  const visibleActivity = useMemo(
+    () => activity.filter((item) => !dismissedActivityIds.includes(item.id)).slice(0, 5),
+    [activity, dismissedActivityIds]
+  );
 
   if (loading) {
     return (
-      <Screen title="Overview">
+      <Screen title={t('nav_overview')}>
         <ActivityIndicator color={colors.primary} />
       </Screen>
     );
@@ -214,11 +190,10 @@ export function DashboardScreen() {
   if (error) {
     return (
       <Screen
-        title="Overview"
-        subtitle={parkName ? `Park: ${parkName}` : undefined}
+        title={t('nav_overview')}
         right={
           <Pressable style={styles.actionButton} onPress={() => loadDashboard(true)}>
-            <Text style={styles.actionButtonText}>Retry</Text>
+            <Text style={styles.actionButtonText}>{t('common_retry')}</Text>
           </Pressable>
         }
       >
@@ -231,275 +206,270 @@ export function DashboardScreen() {
 
   return (
     <Screen
-      title="Overview"
-      subtitle={parkName ? `Park: ${parkName}` : undefined}
+      title={t('nav_overview')}
       right={
         <Pressable style={styles.actionButton} onPress={() => loadDashboard(true)}>
-          <Text style={styles.actionButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+          <Text style={styles.actionButtonText}>
+            {refreshing ? t('common_refreshing') : t('common_refresh')}
+          </Text>
         </Pressable>
       }
     >
-      <Card style={styles.heroCard}>
-        <Text style={styles.heroGreeting}>
-          {`Good ${dayPart()}, ${profile?.full_name?.split(' ')[0] ?? 'Operator'}`}
-        </Text>
-        <Text style={styles.heroSub}>Your mobile operations snapshot, synced with live dashboard data.</Text>
+      <WalkthroughAnchor id="overview-hero">
+        <Card style={styles.heroCard}>
+          <Text style={styles.heroGreeting}>
+            {t('dashboard_greeting', {
+              part: t(dayPartKey()),
+              name: profile?.full_name?.split(' ')[0] ?? t('common_operator'),
+            })}
+          </Text>
+          <Text style={styles.heroSub}>{t('dashboard_subtitle')}</Text>
+        </Card>
+      </WalkthroughAnchor>
 
-        <View style={styles.heroStatsRow}>
-          <View style={styles.heroStatPill}>
-            <Text style={styles.heroStatLabel}>Attractions</Text>
-            <Text style={styles.heroStatValue}>{formatNumber(activeAttractions)}</Text>
+      <WalkthroughAnchor id="overview-metrics">
+        <View style={styles.metricsWrap}>
+          <View style={styles.metricGrid}>
+            <MetricCard
+              label={t('dashboard_total_revenue')}
+              value={formatCurrency(totalRevenue)}
+              footnote={t('common_all_time')}
+            />
+            <MetricCard
+              label={t('dashboard_purchases')}
+              value={formatNumber(totalPurchases)}
+              footnote={t('common_completed')}
+            />
           </View>
-          <View style={styles.heroStatPill}>
-            <Text style={styles.heroStatLabel}>Health Alerts</Text>
-            <Text style={styles.heroStatValue}>{formatNumber(healthAlerts)}</Text>
+
+          <View style={styles.metricGrid}>
+            <MetricCard
+              label={t('dashboard_users')}
+              value={formatNumber(totalUsers)}
+              footnote={t('common_active_records')}
+            />
+            <MetricCard
+              label={t('dashboard_conversion')}
+              value={formatPercent(conversionRate)}
+              footnote={t('common_purchases_per_photos')}
+            />
           </View>
         </View>
-      </Card>
+      </WalkthroughAnchor>
 
-      <View style={styles.metricGrid}>
-        <MetricCard label="Total Revenue" value={formatCurrency(totalRevenue)} footnote="All-time" />
-        <MetricCard label="Purchases" value={formatNumber(totalPurchases)} footnote="Completed" />
-      </View>
+      <WalkthroughAnchor id="overview-daily-chart">
+        <Card>
+          <Text style={styles.sectionTitle}>{t('dashboard_daily_revenue_30')}</Text>
+          <RevenueLineChart rows={revenueByDay} />
+        </Card>
+      </WalkthroughAnchor>
 
-      <View style={styles.metricGrid}>
-        <MetricCard label="Users" value={formatNumber(totalUsers)} footnote="Active records" />
-        <MetricCard
-          label="Conversion"
-          value={formatPercent(conversionRate)}
-          footnote="Purchases / photos"
-        />
-      </View>
-
-      <Card>
-        <Text style={styles.sectionTitle}>Revenue Trend (Last 7 Days)</Text>
-        {trendRows.length === 0 ? (
-          <Text style={styles.muted}>No revenue trend data available.</Text>
-        ) : (
-          trendRows.map((row) => (
-            <View key={row.key} style={styles.trendRow}>
-              <Text style={styles.trendLabel}>{row.label}</Text>
-              <View style={styles.trendTrack}>
-                <View style={[styles.trendFill, { width: `${row.widthPercent}%` }]} />
+      <WalkthroughAnchor id="overview-trend">
+        <Card>
+          <Text style={styles.sectionTitle}>{t('dashboard_revenue_trend_7')}</Text>
+          {trendRows.length === 0 ? (
+            <Text style={styles.muted}>{t('dashboard_no_trend_data')}</Text>
+          ) : (
+            trendRows.map((row) => (
+              <View key={row.key} style={styles.trendRow}>
+                <Text style={styles.trendLabel}>{formatShortDay(row.label, language)}</Text>
+                <View style={styles.trendTrack}>
+                  <View style={[styles.trendFill, { width: `${row.widthPercent}%` }]} />
+                </View>
+                <Text style={styles.trendValue}>{formatCurrency(row.amountCents)}</Text>
               </View>
-              <Text style={styles.trendValue}>{formatCurrency(row.amountCents)}</Text>
-            </View>
-          ))
-        )}
-      </Card>
+            ))
+          )}
+        </Card>
+      </WalkthroughAnchor>
 
-      <Card>
-        <Text style={styles.sectionTitle}>Quick Navigation</Text>
-        <View style={styles.quickGrid}>
-          {quickLinks.map((link) => (
-            <Pressable
-              key={link.route}
-              style={styles.quickLink}
-              onPress={() => navigation.navigate(link.route)}
-            >
-              <Text style={styles.quickLinkText}>{link.label}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </Card>
-
-      <Card>
-        <Text style={styles.sectionTitle}>Recent Purchases</Text>
-        {recentPurchases.length === 0 ? (
-          <Text style={styles.muted}>No recent purchases.</Text>
-        ) : (
-          recentPurchases.map((purchase) => (
-            <View key={purchase.id} style={styles.row}>
-              <View style={styles.rowLeft}>
-                <Text style={styles.rowTitle}>{formatCurrency(Math.round(purchase.amount * 100))}</Text>
-                <Text style={styles.rowSub}>{formatDateTime(purchase.created_at)}</Text>
+      <WalkthroughAnchor id="overview-activity">
+        <Card>
+          <Text style={styles.sectionTitle}>{t('dashboard_news_activity')}</Text>
+          {visibleActivity.length === 0 ? (
+            <Text style={styles.muted}>{t('dashboard_no_activity')}</Text>
+          ) : (
+            visibleActivity.map((item) => (
+              <View key={item.id} style={styles.row}>
+                <View style={styles.rowLeft}>
+                  <Text style={styles.rowTitle}>{item.label}</Text>
+                  <Text style={styles.rowSub}>{item.message}</Text>
+                  <Text style={styles.rowTime}>{formatRelative(item.created_at)}</Text>
+                </View>
+                <View style={styles.rowRight}>
+                  <Pressable
+                    style={styles.dismissButton}
+                    onPress={() =>
+                      setDismissedActivityIds((current) =>
+                        current.includes(item.id) ? current : [...current, item.id]
+                      )
+                    }
+                  >
+                    <Text style={styles.dismissButtonText}>X</Text>
+                  </Pressable>
+                  <StatusPill value={item.status} />
+                </View>
               </View>
-              <StatusPill value={purchase.status} />
-            </View>
-          ))
-        )}
-      </Card>
-
-      <Card>
-        <Text style={styles.sectionTitle}>News & Activity</Text>
-        {activity.length === 0 ? (
-          <Text style={styles.muted}>No recent activity.</Text>
-        ) : (
-          activity.slice(0, 5).map((item) => (
-            <View key={item.id} style={styles.row}>
-              <View style={styles.rowLeft}>
-                <Text style={styles.rowTitle}>{item.label}</Text>
-                <Text style={styles.rowSub}>{item.message}</Text>
-                <Text style={styles.rowTime}>{formatRelative(item.created_at)}</Text>
-              </View>
-              <StatusPill value={item.status} />
-            </View>
-          ))
-        )}
-      </Card>
+            ))
+          )}
+        </Card>
+      </WalkthroughAnchor>
     </Screen>
   );
 }
 
-function dayPart() {
+function dayPartKey(): 'dashboard_part_morning' | 'dashboard_part_afternoon' | 'dashboard_part_evening' {
   const hours = new Date().getHours();
-  if (hours < 12) return 'morning';
-  if (hours < 18) return 'afternoon';
-  return 'evening';
+  if (hours < 12) return 'dashboard_part_morning';
+  if (hours < 18) return 'dashboard_part_afternoon';
+  return 'dashboard_part_evening';
 }
 
-function formatShortDay(value: string) {
+function formatShortDay(value: string, language: string) {
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) {
     return value;
   }
 
-  return new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(parsed);
+  return new Intl.DateTimeFormat(language, { weekday: 'short' }).format(parsed);
 }
 
-const styles = StyleSheet.create({
-  actionButton: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primaryBorder,
-    borderWidth: 1,
-    borderRadius: 9,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  actionButtonText: {
-    color: colors.primaryText,
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  errorText: {
-    color: colors.danger,
-    fontSize: 14,
-  },
-  heroCard: {
-    backgroundColor: '#F8FAFD',
-  },
-  heroGreeting: {
-    color: colors.text,
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  heroSub: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  heroStatsRow: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 4,
-  },
-  heroStatPill: {
-    flex: 1,
-    backgroundColor: '#EFF3F9',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    gap: 2,
-  },
-  heroStatLabel: {
-    color: colors.muted,
-    fontSize: 12,
-  },
-  heroStatValue: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  metricGrid: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  sectionTitle: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  muted: {
-    color: colors.muted,
-    fontSize: 14,
-  },
-  trendRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    paddingVertical: 8,
-  },
-  trendLabel: {
-    width: 34,
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  trendTrack: {
-    flex: 1,
-    height: 8,
-    backgroundColor: '#E6EEF7',
-    borderRadius: 999,
-    overflow: 'hidden',
-  },
-  trendFill: {
-    height: '100%',
-    borderRadius: 999,
-    backgroundColor: colors.dataBlue,
-  },
-  trendValue: {
-    width: 70,
-    textAlign: 'right',
-    color: colors.text,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  quickGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  quickLink: {
-    backgroundColor: '#F4F7FC',
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    minWidth: 100,
-  },
-  quickLinkText: {
-    color: colors.text,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-    alignItems: 'flex-start',
-    paddingVertical: 8,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-  },
-  rowLeft: {
-    flex: 1,
-    gap: 2,
-  },
-  rowTitle: {
-    color: colors.text,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  rowSub: {
-    color: colors.muted,
-    fontSize: 13,
-  },
-  rowTime: {
-    color: '#94A3B8',
-    fontSize: 12,
-  },
-});
+const createStyles = (colors: {
+  primarySoft: string;
+  primaryBorder: string;
+  primaryText: string;
+  danger: string;
+  card: string;
+  text: string;
+  muted: string;
+  border: string;
+  dataBlue: string;
+  dataBlueSoft: string;
+}) =>
+  StyleSheet.create({
+    actionButton: {
+      backgroundColor: colors.primarySoft,
+      borderColor: colors.primaryBorder,
+      borderWidth: 1,
+      borderRadius: 9,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+    },
+    actionButtonText: {
+      color: colors.primaryText,
+      fontSize: 12,
+      fontWeight: '700',
+    },
+    errorText: {
+      color: colors.danger,
+      fontSize: 14,
+    },
+    heroCard: {
+      backgroundColor: colors.card,
+    },
+    heroGreeting: {
+      color: colors.text,
+      fontSize: 20,
+      fontWeight: '700',
+    },
+    heroSub: {
+      color: colors.muted,
+      fontSize: 14,
+      lineHeight: 18,
+    },
+    metricGrid: {
+      flexDirection: 'row',
+      gap: 10,
+    },
+    metricsWrap: {
+      gap: 10,
+    },
+    sectionTitle: {
+      color: colors.text,
+      fontSize: 16,
+      fontWeight: '700',
+      marginBottom: 4,
+    },
+    muted: {
+      color: colors.muted,
+      fontSize: 14,
+    },
+    trendRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+      paddingVertical: 8,
+    },
+    trendLabel: {
+      width: 34,
+      color: colors.muted,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    trendTrack: {
+      flex: 1,
+      height: 8,
+      backgroundColor: colors.dataBlueSoft,
+      borderRadius: 999,
+      overflow: 'hidden',
+    },
+    trendFill: {
+      height: '100%',
+      borderRadius: 999,
+      backgroundColor: colors.dataBlue,
+    },
+    trendValue: {
+      width: 70,
+      textAlign: 'right',
+      color: colors.text,
+      fontSize: 13,
+      fontWeight: '700',
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: 12,
+      alignItems: 'flex-start',
+      paddingVertical: 8,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+    },
+    rowLeft: {
+      flex: 1,
+      gap: 2,
+    },
+    rowTitle: {
+      color: colors.text,
+      fontSize: 14,
+      fontWeight: '600',
+    },
+    rowSub: {
+      color: colors.muted,
+      fontSize: 13,
+    },
+    rowTime: {
+      color: colors.muted,
+      fontSize: 12,
+    },
+    rowRight: {
+      alignItems: 'flex-end',
+      gap: 8,
+    },
+    dismissButton: {
+      width: 22,
+      height: 22,
+      borderRadius: 999,
+      backgroundColor: colors.dataBlueSoft,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    dismissButtonText: {
+      color: colors.text,
+      fontSize: 11,
+      fontWeight: '700',
+    },
+  });

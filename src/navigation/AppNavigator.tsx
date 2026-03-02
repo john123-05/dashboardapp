@@ -18,22 +18,17 @@ import { PersonalizationScreen } from '../screens/dashboard/PersonalizationScree
 import { SupportScreen } from '../screens/dashboard/SupportScreen';
 import { SystemHealthScreen } from '../screens/dashboard/SystemHealthScreen';
 import { SettingsScreen } from '../screens/dashboard/SettingsScreen';
+import { useI18n } from '../contexts/LanguageContext';
+import { useAppTheme } from '../contexts/ThemeContext';
 import type { AuthStackParamList, DashboardDrawerParamList } from './types';
 import { AppDrawerContent } from './AppDrawerContent';
-import { colors } from '../theme/colors';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const Drawer = createDrawerNavigator<DashboardDrawerParamList>();
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: colors.background,
-  },
-};
-
 function AuthNavigator() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
   return (
     <AuthStack.Navigator
       initialRouteName="Login"
@@ -45,12 +40,17 @@ function AuthNavigator() {
       }}
     >
       <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-      <AuthStack.Screen name="Register" component={RegisterScreen} options={{ title: 'Create Account' }} />
+      <AuthStack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ title: t('auth_create_account_header') }}
+      />
     </AuthStack.Navigator>
   );
 }
 
 function MainNavigator() {
+  const { colors } = useAppTheme();
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
@@ -85,6 +85,15 @@ function MainNavigator() {
 export function AppNavigator() {
   const auth = useAuth();
   const park = usePark();
+  const { colors } = useAppTheme();
+
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: colors.background,
+    },
+  };
 
   if (auth.loading || park.loading) {
     return <LoadingScreen />;

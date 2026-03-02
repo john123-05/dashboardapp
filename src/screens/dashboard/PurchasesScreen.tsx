@@ -3,9 +3,10 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { StatusPill } from '../../components/StatusPill';
+import { useI18n } from '../../contexts/LanguageContext';
+import { useAppTheme } from '../../contexts/ThemeContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
 import { formatCurrency, formatDateTime } from '../../lib/utils';
-import { colors } from '../../theme/colors';
 
 interface PurchaseRow {
   id: string;
@@ -18,6 +19,9 @@ interface PurchaseRow {
 }
 
 export function PurchasesScreen() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,16 +69,18 @@ export function PurchasesScreen() {
   }, [rows, search]);
 
   if (loading) {
-    return <Screen title="Purchases"><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title={t('nav_purchases')}><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   return (
     <Screen
-      title="Purchases"
-      subtitle="Stripe payments and statuses"
+      title={t('nav_purchases')}
+      subtitle={t('purchases_subtitle')}
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadPurchases(true)}>
-          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+          <Text style={styles.refreshButtonText}>
+            {refreshing ? t('common_refreshing') : t('common_refresh')}
+          </Text>
         </Pressable>
       }
     >
@@ -86,7 +92,7 @@ export function PurchasesScreen() {
 
       <Card>
         <TextInput
-          placeholder="Search by email, ID, or description"
+          placeholder={t('purchases_search_placeholder')}
           style={styles.searchInput}
           value={search}
           onChangeText={setSearch}
@@ -95,17 +101,17 @@ export function PurchasesScreen() {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Payment List ({filtered.length})</Text>
+        <Text style={styles.sectionTitle}>{t('purchases_list', { count: filtered.length })}</Text>
 
         {filtered.length === 0 ? (
-          <Text style={styles.muted}>No matching purchases found.</Text>
+          <Text style={styles.muted}>{t('purchases_none')}</Text>
         ) : (
           filtered.slice(0, 80).map((row) => (
             <View key={row.id} style={styles.row}>
               <View style={styles.rowLeft}>
                 <Text style={styles.amount}>{formatCurrency(Math.round(row.amount * 100), row.currency)}</Text>
-                <Text style={styles.rowSub}>{row.customer_email || 'Anonymous customer'}</Text>
-                <Text style={styles.rowSub}>{row.description || 'Photo purchase'}</Text>
+                <Text style={styles.rowSub}>{row.customer_email || t('purchases_anonymous')}</Text>
+                <Text style={styles.rowSub}>{row.description || t('purchases_photo_purchase')}</Text>
                 <Text style={styles.rowTime}>{formatDateTime(row.created_at)}</Text>
               </View>
               <StatusPill value={row.status} />
@@ -117,7 +123,7 @@ export function PurchasesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,
@@ -134,13 +140,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   searchInput: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
+    color: colors.text,
   },
   sectionTitle: {
     color: colors.text,
@@ -174,7 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   rowTime: {
-    color: '#9CA3AF',
+    color: colors.muted,
     fontSize: 12,
     marginTop: 2,
   },

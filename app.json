@@ -4,8 +4,8 @@
     "slug": "dashboardapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/ride.png",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "scheme": "dashboardapp",
     "splash": {
@@ -15,12 +15,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.john12305.dashboardapp"
+      "icon": "./assets/ride.png",
+      "bundleIdentifier": "com.john12305.dashboardapp",
+      "buildNumber": "2",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.john12305.dashboardapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ride.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -28,6 +33,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-notifications"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "976d7cfc-6559-485a-902d-5724536a1d85"
+      }
+    },
+    "owner": "johndurden"
   }
 }

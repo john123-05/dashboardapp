@@ -4,12 +4,16 @@ import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { StatusPill } from '../../components/StatusPill';
 import { useAuth } from '../../contexts/AuthContext';
+import { useI18n } from '../../contexts/LanguageContext';
+import { useAppTheme } from '../../contexts/ThemeContext';
 import { supabase } from '../../lib/supabase';
 import type { SupportTicket } from '../../lib/types';
 import { formatRelative } from '../../lib/utils';
-import { colors } from '../../theme/colors';
 
 export function SupportScreen() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const { currentOrg, user } = useAuth();
 
   const [loading, setLoading] = useState(true);
@@ -53,12 +57,12 @@ export function SupportScreen() {
 
   async function createTicket() {
     if (!currentOrg || !user) {
-      setError('Missing organization or user context.');
+      setError(t('support_missing_context'));
       return;
     }
 
     if (!subject.trim() || !description.trim()) {
-      setError('Subject and description are required.');
+      setError(t('support_required_error'));
       return;
     }
 
@@ -87,16 +91,18 @@ export function SupportScreen() {
   }
 
   if (loading) {
-    return <Screen title="Support"><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title={t('nav_support')}><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   return (
     <Screen
-      title="Support"
-      subtitle="Support tickets and contact status"
+      title={t('nav_support')}
+      subtitle={t('support_subtitle')}
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadTickets(true)}>
-          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+          <Text style={styles.refreshButtonText}>
+            {refreshing ? t('common_refreshing') : t('common_refresh')}
+          </Text>
         </Pressable>
       }
     >
@@ -107,16 +113,16 @@ export function SupportScreen() {
       ) : null}
 
       <Card>
-        <Text style={styles.sectionTitle}>Create Ticket</Text>
+        <Text style={styles.sectionTitle}>{t('support_create_ticket')}</Text>
         <TextInput
           style={styles.input}
-          placeholder="Subject"
+          placeholder={t('support_subject')}
           value={subject}
           onChangeText={setSubject}
         />
         <TextInput
           style={[styles.input, styles.textArea]}
-          placeholder="Description"
+          placeholder={t('support_description')}
           value={description}
           onChangeText={setDescription}
           multiline
@@ -147,15 +153,15 @@ export function SupportScreen() {
           {creating ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={styles.primaryButtonText}>Create Ticket</Text>
+            <Text style={styles.primaryButtonText}>{t('support_create_ticket')}</Text>
           )}
         </Pressable>
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Open Tickets ({tickets.length})</Text>
+        <Text style={styles.sectionTitle}>{t('support_open_tickets', { count: tickets.length })}</Text>
         {tickets.length === 0 ? (
-          <Text style={styles.muted}>No support tickets yet.</Text>
+          <Text style={styles.muted}>{t('support_no_tickets')}</Text>
         ) : (
           tickets.slice(0, 80).map((ticket) => (
             <View key={ticket.id} style={styles.ticketRow}>
@@ -176,7 +182,7 @@ export function SupportScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,
@@ -199,13 +205,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   input: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
+    color: colors.text,
   },
   textArea: {
     minHeight: 90,
@@ -222,14 +229,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: 10,
     paddingVertical: 7,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.background,
   },
   priorityButtonSelected: {
     backgroundColor: colors.primarySoft,
     borderColor: colors.primaryBorder,
   },
   priorityButtonText: {
-    color: '#374151',
+    color: colors.muted,
     fontWeight: '600',
     fontSize: 12,
     textTransform: 'capitalize',
@@ -281,7 +288,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   ticketTime: {
-    color: '#9CA3AF',
+    color: colors.muted,
     fontSize: 12,
     marginTop: 2,
   },

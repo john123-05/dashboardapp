@@ -1,9 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from './supabase';
+import { SUPABASE_ANON_KEY, SUPABASE_URL, supabase } from './supabase';
 
 interface EdgeFunctionOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   body?: unknown;
   query?: Record<string, string | number | boolean | null | undefined>;
+  allowAnonFallback?: boolean;
 }
 
 interface EdgeFunctionResponse<T> {
@@ -26,21 +27,46 @@ export async function invokeEdgeFunction<T = unknown>(
   options: EdgeFunctionOptions = {}
 ): Promise<EdgeFunctionResponse<T>> {
   try {
-    const { method = 'GET', body, query } = options;
+    const { method = 'GET', body, query, allowAnonFallback = true } = options;
     const url = `${SUPABASE_URL}/functions/v1/${functionName}${toQueryString(query)}`;
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const accessToken = session?.access_token || SUPABASE_ANON_KEY;
 
-    const response = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        apikey: SUPABASE_ANON_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: body && method !== 'GET' ? JSON.stringify(body) : undefined,
-    });
+    const makeRequest = async (token: string) =>
+      fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: body && method !== 'GET' ? JSON.stringify(body) : undefined,
+      });
+
+    let response = await makeRequest(accessToken);
 
     if (!response.ok) {
-      const text = await response.text();
+      let text = await response.text();
+
+      if (
+        allowAnonFallback &&
+        accessToken !== SUPABASE_ANON_KEY &&
+        response.status === 401 &&
+        text.includes('Invalid JWT')
+      ) {
+        response = await makeRequest(SUPABASE_ANON_KEY);
+        if (response.ok) {
+          const json = (await response.json()) as { error?: string } & T;
+          if (json && 'error' in json && typeof json.error === 'string') {
+            return { data: null, error: json.error };
+          }
+          return { data: json, error: null };
+        }
+        text = await response.text();
+      }
+
       return {
         data: null,
         error: `HTTP ${response.status}: ${text || response.statusText}`,

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { MetricCard } from '../../components/MetricCard';
+import { useI18n } from '../../contexts/LanguageContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
 import { usePark } from '../../contexts/ParkContext';
-import { colors } from '../../theme/colors';
+import { useAppTheme } from '../../contexts/ThemeContext';
 import { formatDate, formatNumber } from '../../lib/utils';
 
 interface LeadRow {
@@ -21,12 +22,16 @@ interface LeadRow {
 type Filter = 'all' | 'opted_in' | 'opted_out';
 
 export function LeadsScreen() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const { parkId } = usePark();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
+  const barAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     loadLeads();
@@ -73,18 +78,35 @@ export function LeadsScreen() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5);
   }, [rows]);
+  const maxSourceCount = useMemo(
+    () => sourceCounts.reduce((max, [, count]) => Math.max(max, count), 0),
+    [sourceCounts]
+  );
+
+  useEffect(() => {
+    barAnim.setValue(0);
+    if (sourceCounts.length === 0) return;
+    Animated.timing(barAnim, {
+      toValue: 1,
+      duration: 700,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+  }, [barAnim, sourceCounts]);
 
   if (loading) {
-    return <Screen title="Leads"><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title={t('nav_leads')}><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   return (
     <Screen
-      title="Leads"
-      subtitle="Marketing capture and opt-in management"
+      title={t('nav_leads')}
+      subtitle={t('leads_subtitle')}
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadLeads(true)}>
-          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+          <Text style={styles.refreshButtonText}>
+            {refreshing ? t('common_refreshing') : t('common_refresh')}
+          </Text>
         </Pressable>
       }
     >
@@ -95,31 +117,44 @@ export function LeadsScreen() {
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Total Leads" value={formatNumber(rows.length)} />
-        <MetricCard label="Opted In" value={formatNumber(rows.filter((item) => item.opted_in).length)} />
+        <MetricCard label={t('leads_total_leads')} value={formatNumber(rows.length)} />
+        <MetricCard label={t('leads_opted_in')} value={formatNumber(rows.filter((item) => item.opted_in).length)} />
       </View>
 
       <Card>
-        <Text style={styles.sectionTitle}>Filter</Text>
+        <Text style={styles.sectionTitle}>{t('leads_filter')}</Text>
         <View style={styles.filterRow}>
-          <FilterButton label="All" active={filter === 'all'} onPress={() => setFilter('all')} />
-          <FilterButton
-            label="Opted In"
-            active={filter === 'opted_in'}
+          <Pressable
+            style={[styles.filterButton, filter === 'all' && styles.filterButtonActive]}
+            onPress={() => setFilter('all')}
+          >
+            <Text style={[styles.filterButtonText, filter === 'all' && styles.filterButtonTextActive]}>
+              {t('leads_all')}
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.filterButton, filter === 'opted_in' && styles.filterButtonActive]}
             onPress={() => setFilter('opted_in')}
-          />
-          <FilterButton
-            label="Opted Out"
-            active={filter === 'opted_out'}
+          >
+            <Text style={[styles.filterButtonText, filter === 'opted_in' && styles.filterButtonTextActive]}>
+              {t('leads_opted_in')}
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.filterButton, filter === 'opted_out' && styles.filterButtonActive]}
             onPress={() => setFilter('opted_out')}
-          />
+          >
+            <Text style={[styles.filterButtonText, filter === 'opted_out' && styles.filterButtonTextActive]}>
+              {t('leads_opted_out')}
+            </Text>
+          </Pressable>
         </View>
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Top Sources</Text>
+        <Text style={styles.sectionTitle}>{t('leads_top_sources')}</Text>
         {sourceCounts.length === 0 ? (
-          <Text style={styles.muted}>No lead source data.</Text>
+          <Text style={styles.muted}>{t('leads_no_source_data')}</Text>
         ) : (
           sourceCounts.map(([source, count]) => (
             <View key={source} style={styles.row}>
@@ -131,19 +166,48 @@ export function LeadsScreen() {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Lead List ({filtered.length})</Text>
+        <Text style={styles.sectionTitle}>{t('leads_by_source')}</Text>
+        {sourceCounts.length === 0 ? (
+          <Text style={styles.muted}>{t('leads_no_source_data')}</Text>
+        ) : (
+          <View style={styles.chartWrap}>
+            {sourceCounts.map(([source, count]) => {
+              const normalized = maxSourceCount > 0 ? count / maxSourceCount : 0;
+              const height = barAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, Math.max(normalized * 148, 8)],
+              });
+
+              return (
+                <View key={`bar-${source}`} style={styles.barGroup}>
+                  <View style={styles.barTrack}>
+                    <Animated.View style={[styles.barFill, { height }]} />
+                  </View>
+                  <Text style={styles.barValue}>{formatNumber(count)}</Text>
+                  <Text style={styles.barLabel} numberOfLines={1}>
+                    {source}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </Card>
+
+      <Card>
+        <Text style={styles.sectionTitle}>{t('leads_list', { count: filtered.length })}</Text>
         {filtered.length === 0 ? (
-          <Text style={styles.muted}>No leads found.</Text>
+          <Text style={styles.muted}>{t('leads_no_leads')}</Text>
         ) : (
           filtered.slice(0, 80).map((row) => (
             <View key={row.id} style={styles.leadRow}>
               <View style={styles.leadLeft}>
                 <Text style={styles.leadTitle}>{row.email}</Text>
-                <Text style={styles.leadSub}>{row.full_name || 'No name'}</Text>
-                <Text style={styles.leadSub}>{row.park?.name || 'Unknown park'}</Text>
+                <Text style={styles.leadSub}>{row.full_name || t('leads_no_name')}</Text>
+                <Text style={styles.leadSub}>{row.park?.name || t('leads_unknown_park')}</Text>
                 <Text style={styles.leadSub}>{formatDate(row.created_at)}</Text>
               </View>
-              <Text style={styles.leadBadge}>{row.opted_in ? 'Opted In' : 'Opted Out'}</Text>
+              <Text style={styles.leadBadge}>{row.opted_in ? t('leads_opted_in') : t('leads_opted_out')}</Text>
             </View>
           ))
         )}
@@ -152,21 +216,7 @@ export function LeadsScreen() {
   );
 }
 
-interface FilterButtonProps {
-  label: string;
-  active: boolean;
-  onPress: () => void;
-}
-
-function FilterButton({ label, active, onPress }: FilterButtonProps) {
-  return (
-    <Pressable style={[styles.filterButton, active && styles.filterButtonActive]} onPress={onPress}>
-      <Text style={[styles.filterButtonText, active && styles.filterButtonTextActive]}>{label}</Text>
-    </Pressable>
-  );
-}
-
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,
@@ -207,14 +257,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: 10,
     paddingVertical: 7,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.background,
   },
   filterButtonActive: {
     backgroundColor: colors.primarySoft,
     borderColor: colors.primaryBorder,
   },
   filterButtonText: {
-    color: '#374151',
+    color: colors.muted,
     fontWeight: '600',
     fontSize: 12,
   },
@@ -236,6 +286,43 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 14,
     fontWeight: '700',
+  },
+  chartWrap: {
+    minHeight: 190,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: 10,
+    paddingTop: 8,
+  },
+  barGroup: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 4,
+  },
+  barTrack: {
+    height: 148,
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: colors.dataBlueSoft,
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+  barFill: {
+    width: '100%',
+    backgroundColor: colors.dataBlue,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  barValue: {
+    color: colors.text,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  barLabel: {
+    color: colors.muted,
+    fontSize: 11,
+    textAlign: 'center',
   },
   leadRow: {
     flexDirection: 'row',
@@ -260,8 +347,8 @@ const styles = StyleSheet.create({
   },
   leadBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#E5E7EB',
-    color: '#374151',
+    backgroundColor: colors.primarySoft,
+    color: colors.primaryText,
     fontSize: 12,
     fontWeight: '700',
     borderRadius: 999,

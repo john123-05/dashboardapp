@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { colors } from '../theme/colors';
+import { useAppTheme } from '../contexts/ThemeContext';
 
 interface ScreenProps extends PropsWithChildren {
   title: string;
@@ -21,6 +21,8 @@ export function Screen({
   showMenu = true,
   children,
 }: ScreenProps) {
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const navigation = useNavigation();
 
   const body = (
@@ -54,53 +56,53 @@ export function Screen({
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  scrollContent: {
-    paddingBottom: 24,
-  },
-  content: {
-    gap: 14,
-    paddingHorizontal: 14,
-  },
-  header: {
-    marginTop: 8,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  titleRow: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-  },
-  menuButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 2,
-  },
-  headerTextWrap: {
-    flex: 1,
-    gap: 4,
-  },
-  title: {
-    color: colors.text,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  subtitle: {
-    color: colors.muted,
-    fontSize: 14,
-  },
-});
+const createStyles = (colors: { background: string; border: string; text: string; muted: string; card: string }) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    scrollContent: {
+      paddingBottom: 24,
+    },
+    content: {
+      gap: 14,
+      paddingHorizontal: 14,
+    },
+    header: {
+      marginTop: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12,
+    },
+    titleRow: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+    },
+    menuButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      backgroundColor: colors.card,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    headerTextWrap: {
+      flex: 1,
+      gap: 4,
+    },
+    title: {
+      color: colors.text,
+      fontSize: 24,
+      fontWeight: '700',
+    },
+    subtitle: {
+      color: colors.muted,
+      fontSize: 14,
+    },
+  });

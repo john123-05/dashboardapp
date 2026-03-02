@@ -4,10 +4,11 @@ import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { StatusPill } from '../../components/StatusPill';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
+import { useI18n } from '../../contexts/LanguageContext';
 import { usePark } from '../../contexts/ParkContext';
+import { useAppTheme } from '../../contexts/ThemeContext';
 import type { HealthEvent } from '../../lib/types';
 import { formatRelative } from '../../lib/utils';
-import { colors } from '../../theme/colors';
 
 interface ServiceStatus {
   name: string;
@@ -17,6 +18,9 @@ interface ServiceStatus {
 }
 
 export function SystemHealthScreen() {
+  const { t } = useI18n();
+  const { colors } = useAppTheme();
+  const styles = createStyles(colors);
   const { parkId } = usePark();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -63,16 +67,18 @@ export function SystemHealthScreen() {
   }
 
   if (loading) {
-    return <Screen title="System Health"><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title={t('nav_system_health')}><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   return (
     <Screen
-      title="System Health"
-      subtitle="Service uptime and recent health events"
+      title={t('nav_system_health')}
+      subtitle={t('system_health_subtitle')}
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadHealth(true)}>
-          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
+          <Text style={styles.refreshButtonText}>
+            {refreshing ? t('common_refreshing') : t('common_refresh')}
+          </Text>
         </Pressable>
       }
     >
@@ -83,16 +89,18 @@ export function SystemHealthScreen() {
       ) : null}
 
       <Card>
-        <Text style={styles.sectionTitle}>Services</Text>
+        <Text style={styles.sectionTitle}>{t('system_health_services')}</Text>
         {services.length === 0 ? (
-          <Text style={styles.muted}>No service records available.</Text>
+          <Text style={styles.muted}>{t('system_health_no_services')}</Text>
         ) : (
           services.map((service) => (
             <View key={service.name} style={styles.row}>
               <View style={styles.rowLeft}>
                 <Text style={styles.rowTitle}>{service.name}</Text>
-                <Text style={styles.rowSub}>{service.detail || 'No detail available'}</Text>
-                <Text style={styles.rowSub}>{service.latency ? `${service.latency}ms` : 'Latency n/a'}</Text>
+                <Text style={styles.rowSub}>{service.detail || t('system_health_no_detail')}</Text>
+                <Text style={styles.rowSub}>
+                  {service.latency ? `${service.latency}ms` : t('system_health_latency_na')}
+                </Text>
               </View>
               <StatusPill value={service.status} />
             </View>
@@ -101,9 +109,9 @@ export function SystemHealthScreen() {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Live Metrics</Text>
+        <Text style={styles.sectionTitle}>{t('system_health_live_metrics')}</Text>
         {Object.keys(metrics).length === 0 ? (
-          <Text style={styles.muted}>No live metrics exposed by function.</Text>
+          <Text style={styles.muted}>{t('system_health_no_metrics')}</Text>
         ) : (
           Object.entries(metrics).map(([key, value]) => (
             <View key={key} style={styles.metricRow}>
@@ -115,9 +123,9 @@ export function SystemHealthScreen() {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>Recent Events</Text>
+        <Text style={styles.sectionTitle}>{t('system_health_recent_events')}</Text>
         {events.length === 0 ? (
-          <Text style={styles.muted}>No system health events.</Text>
+          <Text style={styles.muted}>{t('system_health_no_events')}</Text>
         ) : (
           events.slice(0, 60).map((event) => (
             <View key={event.id} style={styles.row}>
@@ -135,7 +143,7 @@ export function SystemHealthScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,

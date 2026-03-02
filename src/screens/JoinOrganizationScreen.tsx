@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { useI18n } from '../contexts/LanguageContext';
 import { colors } from '../theme/colors';
 
 export function JoinOrganizationScreen() {
   const { joinDemoOrg } = useAuth();
+  const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,7 +17,7 @@ export function JoinOrganizationScreen() {
     try {
       await joinDemoOrg();
     } catch (joinError) {
-      setError(joinError instanceof Error ? joinError.message : 'Failed to join organization.');
+      setError(joinError instanceof Error ? joinError.message : t('join_demo_error'));
     } finally {
       setSubmitting(false);
     }
@@ -24,10 +26,8 @@ export function JoinOrganizationScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.panel}>
-        <Text style={styles.title}>Welcome to Liftpictures</Text>
-        <Text style={styles.body}>
-          This account is not assigned to an organization yet. Join the demo organization to unlock the dashboard.
-        </Text>
+        <Text style={styles.title}>{t('join_welcome_title')}</Text>
+        <Text style={styles.body}>{t('join_welcome_body')}</Text>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
@@ -39,7 +39,7 @@ export function JoinOrganizationScreen() {
           {submitting ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={styles.primaryButtonText}>Join Demo Organization</Text>
+            <Text style={styles.primaryButtonText}>{t('join_demo_button')}</Text>
           )}
         </Pressable>
       </View>

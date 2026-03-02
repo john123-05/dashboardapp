@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import { SUPABASE_ANON_KEY, SUPABASE_URL, supabase } from '../lib/supabase';
 import type { OperatorProfile, Organization, OrganizationMembership } from '../lib/types';
 
 interface AuthState {
@@ -18,6 +18,7 @@ interface AuthContextValue extends AuthState {
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<{ error: string | null }>;
   joinDemoOrg: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -137,6 +138,110 @@ export function AuthProvider({ children }: PropsWithChildren) {
     await supabase.auth.signOut();
   }
 
+  function messageFromUnknown(error: unknown): string {
+    if (!error) return '';
+    if (typeof error === 'string') return error;
+    if (typeof error === 'object' && error !== null) {
+      const maybeMessage = (error as { message?: unknown }).message;
+      if (typeof maybeMessage === 'string') return maybeMessage;
+      try {
+        return JSON.stringify(error);
+      } catch (_ignored) {
+        return String(error);
+      }
+    }
+    return String(error);
+  }
+
+  function isAuthJwtError(message: string): boolean {
+    const normalized = message.toLowerCase();
+    return (
+      normalized.includes('invalid jwt') ||
+      normalized.includes('"code":401') ||
+      normalized.includes('401') ||
+      normalized.includes('unauthorized') ||
+      normalized.includes('jwt')
+    );
+  }
+
+  async function invokeDeleteAccount() {
+    return supabase.functions.invoke('delete-account', {
+      method: 'POST',
+      body: {},
+    });
+  }
+
+  async function deleteViaDirectFetch(accessToken: string) {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        apikey: SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (response.ok) {
+      return { ok: true, message: '' };
+    }
+
+    const text = await response.text();
+    return { ok: false, message: text || `HTTP ${response.status}` };
+  }
+
+  async function deleteAccount() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      return { error: 'No active session found. Please sign in again and retry.' };
+    }
+
+    // Attempt 1: regular invoke.
+    let result = await invokeDeleteAccount();
+    if (!result.error) {
+      await supabase.auth.signOut();
+      return { error: null };
+    }
+
+    let message = messageFromUnknown(result.error);
+
+    // Attempt 2: refresh session and retry invoke once.
+    await supabase.auth.refreshSession();
+    result = await invokeDeleteAccount();
+    if (!result.error) {
+      await supabase.auth.signOut();
+      return { error: null };
+    }
+    message = `${message}\n${messageFromUnknown(result.error)}`.trim();
+
+    // Attempt 3: direct fetch with latest token.
+    const {
+      data: { session: latestSession },
+    } = await supabase.auth.getSession();
+    const fallbackToken = latestSession?.access_token ?? null;
+    if (fallbackToken) {
+      const fallbackResult = await deleteViaDirectFetch(fallbackToken);
+      if (fallbackResult.ok) {
+        await supabase.auth.signOut();
+        return { error: null };
+      }
+      message = `${message}\n${fallbackResult.message}`.trim();
+    }
+
+    // Guaranteed fallback: if auth is bad, force a clean sign-out and guide re-login.
+    if (isAuthJwtError(message)) {
+      await supabase.auth.signOut();
+      return {
+        error:
+          'Session token was invalid. You were signed out. Please sign in again and retry delete account.',
+      };
+    }
+
+    return { error: message || 'Delete account failed.' };
+  }
+
   async function joinDemoOrg() {
     await supabase.rpc('join_demo_organization');
     if (state.user) {
@@ -156,6 +261,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       signIn,
       signUp,
       signOut,
+      deleteAccount,
       joinDemoOrg,
       refreshProfile,
     }),
