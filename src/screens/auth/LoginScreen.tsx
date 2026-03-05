@@ -4,23 +4,56 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BlurView } from 'expo-blur';
 import { useAuth } from '../../contexts/AuthContext';
 import { useI18n } from '../../contexts/LanguageContext';
+import { usePark } from '../../contexts/ParkContext';
+import { invokeEdgeFunction } from '../../lib/edgeFunctions';
+import type { ParkSelection } from '../../lib/types';
 import type { AuthStackParamList } from '../../navigation/types';
 import { colors } from '../../theme/colors';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
+const APP_REVIEW_EMAIL = '123@gmail.com';
+const APP_REVIEW_PASSWORD = '123456';
+const APP_REVIEW_PARK_NAME = 'adventure land';
+
 export function LoginScreen({ navigation }: Props) {
   const { signIn } = useAuth();
+  const { setPark } = usePark();
   const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  async function tryAutoSelectReviewPark(emailInput: string, passwordInput: string) {
+    const normalizedEmail = emailInput.trim().toLowerCase();
+    const isReviewLogin =
+      normalizedEmail === APP_REVIEW_EMAIL && passwordInput === APP_REVIEW_PASSWORD;
+
+    if (!isReviewLogin) return;
+
+    const result = await invokeEdgeFunction<{ parks: ParkSelection[] }>('external-parks');
+    if (result.error) return;
+
+    const parks = result.data?.parks ?? [];
+    if (parks.length === 0) return;
+
+    const preferredPark =
+      parks.find((park) => park.name.trim().toLowerCase() === APP_REVIEW_PARK_NAME) ?? parks[0];
+
+    await setPark(preferredPark.id, preferredPark.name);
+  }
+
   async function handleSignIn() {
     setError(null);
     setSubmitting(true);
-    const result = await signIn(email.trim(), password);
+    const emailInput = email.trim();
+    const result = await signIn(emailInput, password);
+
+    if (!result.error) {
+      await tryAutoSelectReviewPark(emailInput, password);
+    }
+
     setSubmitting(false);
 
     if (result.error) {
