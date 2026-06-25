@@ -1,5 +1,4 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { useI18n } from '../contexts/LanguageContext';
 import { colors } from '../theme/colors';
 
 interface LoadingScreenProps {
@@ -7,11 +6,10 @@ interface LoadingScreenProps {
 }
 
 export function LoadingScreen({ label = 'Loading dashboard...' }: LoadingScreenProps) {
-  const { t } = useI18n();
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color={colors.primary} />
-      <Text style={styles.label}>{label === 'Loading dashboard...' ? t('common_loading_dashboard') : label}</Text>
+      <Text style={styles.label}>{label}</Text>
     </View>
   );
 }

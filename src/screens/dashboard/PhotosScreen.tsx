@@ -3,10 +3,9 @@ import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'rea
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { MetricCard } from '../../components/MetricCard';
-import { useI18n } from '../../contexts/LanguageContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
 import { usePark } from '../../contexts/ParkContext';
-import { useAppTheme } from '../../contexts/ThemeContext';
+import { colors } from '../../theme/colors';
 import { formatNumber, formatPercent, formatRelative } from '../../lib/utils';
 
 interface PhotoRow {
@@ -19,9 +18,6 @@ interface PhotoRow {
 }
 
 export function PhotosScreen() {
-  const { t } = useI18n();
-  const { colors } = useAppTheme();
-  const styles = createStyles(colors);
   const { parkId } = usePark();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -66,18 +62,16 @@ export function PhotosScreen() {
   const conversionRate = photos.length > 0 ? (purchased / photos.length) * 100 : 0;
 
   if (loading) {
-    return <Screen title={t('nav_photos')}><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title="Photos"><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   return (
     <Screen
-      title={t('nav_photos')}
-      subtitle={t('photos_subtitle')}
+      title="Photos"
+      subtitle="Photo and conversion snapshots"
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadPhotos(true)}>
-          <Text style={styles.refreshButtonText}>
-            {refreshing ? t('common_refreshing') : t('common_refresh')}
-          </Text>
+          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
         </Pressable>
       }
     >
@@ -88,35 +82,35 @@ export function PhotosScreen() {
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label={t('photos_total_photos')} value={formatNumber(photos.length)} />
-        <MetricCard label={t('photos_purchased')} value={formatNumber(purchased)} />
+        <MetricCard label="Total Photos" value={formatNumber(photos.length)} />
+        <MetricCard label="Purchased" value={formatNumber(purchased)} />
       </View>
 
       <View style={styles.metricGrid}>
-        <MetricCard label={t('photos_available')} value={formatNumber(available)} />
-        <MetricCard label={t('photos_conversion')} value={formatPercent(conversionRate)} />
+        <MetricCard label="Available" value={formatNumber(available)} />
+        <MetricCard label="Conversion" value={formatPercent(conversionRate)} />
       </View>
 
       <Card>
-        <Text style={styles.sectionTitle}>{t('photos_status_summary')}</Text>
+        <Text style={styles.sectionTitle}>Status Summary</Text>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>{t('photos_purchased')}</Text>
+          <Text style={styles.summaryLabel}>Purchased</Text>
           <Text style={styles.summaryValue}>{formatNumber(purchased)}</Text>
         </View>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>{t('photos_available')}</Text>
+          <Text style={styles.summaryLabel}>Available</Text>
           <Text style={styles.summaryValue}>{formatNumber(available)}</Text>
         </View>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>{t('photos_expired')}</Text>
+          <Text style={styles.summaryLabel}>Expired</Text>
           <Text style={styles.summaryValue}>{formatNumber(expired)}</Text>
         </View>
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>{t('photos_recent_photos')}</Text>
+        <Text style={styles.sectionTitle}>Recent Photos</Text>
         {recent.length === 0 ? (
-          <Text style={styles.muted}>{t('photos_none')}</Text>
+          <Text style={styles.muted}>No recent photos.</Text>
         ) : (
           recent.slice(0, 30).map((item) => (
             <View key={item.id} style={styles.photoRow}>
@@ -126,7 +120,7 @@ export function PhotosScreen() {
                 resizeMode="cover"
               />
               <View style={styles.photoMeta}>
-                <Text style={styles.photoTitle}>{item.attraction?.name || t('photos_unknown_attraction')}</Text>
+                <Text style={styles.photoTitle}>{item.attraction?.name || 'Unknown attraction'}</Text>
                 <Text style={styles.photoSub}>{formatRelative(item.taken_at)}</Text>
                 <Text style={styles.photoStatus}>{item.status}</Text>
               </View>
@@ -138,7 +132,7 @@ export function PhotosScreen() {
   );
 }
 
-const createStyles = (colors: any) => StyleSheet.create({
+const styles = StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,
@@ -195,7 +189,7 @@ const createStyles = (colors: any) => StyleSheet.create({
     width: 72,
     height: 54,
     borderRadius: 8,
-    backgroundColor: colors.background,
+    backgroundColor: '#E5E7EB',
   },
   photoMeta: {
     flex: 1,
@@ -212,7 +206,7 @@ const createStyles = (colors: any) => StyleSheet.create({
     fontSize: 12,
   },
   photoStatus: {
-    color: colors.dataBlue,
+    color: '#1F2937',
     fontSize: 12,
     fontWeight: '600',
     textTransform: 'capitalize',

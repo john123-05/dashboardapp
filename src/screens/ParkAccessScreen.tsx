@@ -1,23 +1,12 @@
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
-import { BlurView } from 'expo-blur';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { invokeEdgeFunction } from '../lib/edgeFunctions';
 import type { ParkSelection } from '../lib/types';
 import { supabase } from '../lib/supabase';
-import { useI18n } from '../contexts/LanguageContext';
 import { usePark } from '../contexts/ParkContext';
 import { colors } from '../theme/colors';
 
 export function ParkAccessScreen() {
-  const { t } = useI18n();
   const { setPark } = usePark();
   const [parks, setParks] = useState<ParkSelection[]>([]);
   const [selectedParkId, setSelectedParkId] = useState<string>('');
@@ -58,7 +47,7 @@ export function ParkAccessScreen() {
 
   async function handleContinue() {
     if (!selectedParkId || !parkPassword) {
-      setError(t('park_access_select_error'));
+      setError('Select a park and enter the park password.');
       return;
     }
 
@@ -71,7 +60,7 @@ export function ParkAccessScreen() {
     });
 
     if (verifyError || !ok) {
-      setError(t('park_access_invalid_error'));
+      setError('Invalid park password.');
       setSubmitting(false);
       return;
     }
@@ -85,100 +74,78 @@ export function ParkAccessScreen() {
     return (
       <View style={styles.loadingWrap}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.loadingText}>{t('common_loading_parks')}</Text>
+        <Text style={styles.loadingText}>Loading parks...</Text>
       </View>
     );
   }
 
   return (
-    <ImageBackground
-      source={{
-        uri: 'https://xcrxltiiovpoladpaewd.supabase.co/storage/v1/object/public/test/liftpicturesattraction.jpg',
-      }}
-      style={styles.background}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay} />
-      <View style={styles.container}>
-        <BlurView intensity={40} tint="light" style={styles.panel}>
-          <Text style={styles.title}>{t('park_access_title')}</Text>
-          <Text style={styles.subtitle}>{t('park_access_subtitle')}</Text>
+    <View style={styles.container}>
+      <View style={styles.panel}>
+        <Text style={styles.title}>Park Access</Text>
+        <Text style={styles.subtitle}>Choose your park and confirm access password</Text>
 
-          <Text style={styles.label}>{t('park_access_park')}</Text>
-          <View style={styles.pickerWrap}>
-            {parks.map((park) => {
-              const selected = park.id === selectedParkId;
-              return (
-                <Pressable
-                  key={park.id}
-                  style={[styles.parkButton, selected && styles.parkButtonSelected]}
-                  onPress={() => setSelectedParkId(park.id)}
-                >
-                  <Text style={[styles.parkButtonText, selected && styles.parkButtonTextSelected]}>
-                    {park.name}
-                  </Text>
-                </Pressable>
-              );
-            })}
+        <Text style={styles.label}>Park</Text>
+        <View style={styles.pickerWrap}>
+          {parks.map((park) => {
+            const selected = park.id === selectedParkId;
+            return (
+              <Pressable
+                key={park.id}
+                style={[styles.parkButton, selected && styles.parkButtonSelected]}
+                onPress={() => setSelectedParkId(park.id)}
+              >
+                <Text style={[styles.parkButtonText, selected && styles.parkButtonTextSelected]}>
+                  {park.name}
+                </Text>
+              </Pressable>
+            );
+          })}
 
-            {parks.length === 0 ? <Text style={styles.emptyParks}>{t('park_access_no_parks')}</Text> : null}
-          </View>
+          {parks.length === 0 ? <Text style={styles.emptyParks}>No parks found.</Text> : null}
+        </View>
 
-          <Text style={styles.label}>{t('park_access_park_password')}</Text>
-          <TextInput
-            secureTextEntry
-            style={styles.input}
-            placeholder={t('park_access_placeholder_password')}
-            placeholderTextColor="#475569"
-            value={parkPassword}
-            onChangeText={setParkPassword}
-          />
+        <Text style={styles.label}>Park Password</Text>
+        <TextInput
+          secureTextEntry
+          style={styles.input}
+          placeholder="Enter park password"
+          value={parkPassword}
+          onChangeText={setParkPassword}
+        />
 
-          {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-          <Pressable
-            style={[styles.primaryButton, submitting && styles.primaryButtonDisabled]}
-            disabled={submitting}
-            onPress={handleContinue}
-          >
-            {submitting ? (
-              <ActivityIndicator color="#FFFFFF" />
-            ) : (
-              <Text style={styles.primaryButtonText}>{t('common_continue')}</Text>
-            )}
-          </Pressable>
-        </BlurView>
+        <Pressable
+          style={[styles.primaryButton, submitting && styles.primaryButtonDisabled]}
+          disabled={submitting}
+          onPress={handleContinue}
+        >
+          {submitting ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.primaryButtonText}>Continue</Text>
+          )}
+        </Pressable>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor: colors.background,
   },
   panel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.28)',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.58)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
     gap: 10,
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
   },
   title: {
     fontSize: 24,
@@ -186,14 +153,13 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   subtitle: {
-    color: '#1E293B',
+    color: colors.muted,
     fontSize: 14,
-    fontWeight: '500',
     marginBottom: 4,
   },
   label: {
     fontSize: 13,
-    color: '#0F172A',
+    color: colors.text,
     fontWeight: '600',
   },
   pickerWrap: {
@@ -205,16 +171,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    backgroundColor: '#F3F4F6',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.7)',
+    borderColor: colors.border,
   },
   parkButtonSelected: {
     backgroundColor: colors.primarySoft,
     borderColor: colors.primaryBorder,
   },
   parkButtonText: {
-    color: '#0F172A',
+    color: '#1F2937',
     fontWeight: '500',
   },
   parkButtonTextSelected: {
@@ -225,14 +191,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   input: {
-    backgroundColor: 'rgba(255,255,255,0.84)',
+    backgroundColor: '#F9FAFB',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.72)',
+    borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
-    color: colors.text,
   },
   error: {
     color: colors.danger,

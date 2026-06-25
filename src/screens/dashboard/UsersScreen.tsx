@@ -3,10 +3,9 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 
 import { Screen } from '../../components/Screen';
 import { Card } from '../../components/Card';
 import { MetricCard } from '../../components/MetricCard';
-import { useI18n } from '../../contexts/LanguageContext';
-import { usePark } from '../../contexts/ParkContext';
 import { invokeEdgeFunction } from '../../lib/edgeFunctions';
-import { useAppTheme } from '../../contexts/ThemeContext';
+import { usePark } from '../../contexts/ParkContext';
+import { colors } from '../../theme/colors';
 import { formatCurrency, formatDate, formatNumber } from '../../lib/utils';
 
 interface ExternalCustomer {
@@ -30,9 +29,6 @@ interface CustomerRow extends ExternalCustomer {
 }
 
 export function UsersScreen() {
-  const { t } = useI18n();
-  const { colors } = useAppTheme();
-  const styles = createStyles(colors);
   const { parkId } = usePark();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -108,7 +104,7 @@ export function UsersScreen() {
   }, [rows, search]);
 
   if (loading) {
-    return <Screen title={t('nav_users')}><ActivityIndicator color={colors.primary} /></Screen>;
+    return <Screen title="Users"><ActivityIndicator color={colors.primary} /></Screen>;
   }
 
   const totalUsers = rows.length;
@@ -117,13 +113,11 @@ export function UsersScreen() {
 
   return (
     <Screen
-      title={t('nav_users')}
-      subtitle={t('users_subtitle')}
+      title="Users"
+      subtitle="Read-only customer data"
       right={
         <Pressable style={styles.refreshButton} onPress={() => loadUsers(true)}>
-          <Text style={styles.refreshButtonText}>
-            {refreshing ? t('common_refreshing') : t('common_refresh')}
-          </Text>
+          <Text style={styles.refreshButtonText}>{refreshing ? 'Refreshing...' : 'Refresh'}</Text>
         </Pressable>
       }
     >
@@ -134,13 +128,13 @@ export function UsersScreen() {
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label={t('users_total_users')} value={formatNumber(totalUsers)} />
-        <MetricCard label={t('users_paying_users')} value={formatNumber(payingUsers)} />
+        <MetricCard label="Total Users" value={formatNumber(totalUsers)} />
+        <MetricCard label="Paying Users" value={formatNumber(payingUsers)} />
       </View>
       <View style={styles.metricGrid}>
-        <MetricCard label={t('users_marketing_optins')} value={formatNumber(marketingOptIns)} />
+        <MetricCard label="Marketing Opt-ins" value={formatNumber(marketingOptIns)} />
         <MetricCard
-          label={t('users_average_spend')}
+          label="Average Spend"
           value={
             totalUsers > 0
               ? formatCurrency(
@@ -153,7 +147,7 @@ export function UsersScreen() {
 
       <Card>
         <TextInput
-          placeholder={t('users_search_placeholder')}
+          placeholder="Search by name, email, or phone"
           style={styles.searchInput}
           value={search}
           onChangeText={setSearch}
@@ -162,23 +156,21 @@ export function UsersScreen() {
       </Card>
 
       <Card>
-        <Text style={styles.sectionTitle}>{t('users_customers', { count: filtered.length })}</Text>
+        <Text style={styles.sectionTitle}>Customers ({filtered.length})</Text>
         {filtered.length === 0 ? (
-          <Text style={styles.muted}>{t('users_no_customers')}</Text>
+          <Text style={styles.muted}>No customers found.</Text>
         ) : (
           filtered.slice(0, 80).map((row) => (
             <View key={row.id} style={styles.row}>
               <View style={styles.rowLeft}>
-                <Text style={styles.name}>{row.full_name || t('users_unknown_user')}</Text>
-                <Text style={styles.sub}>{row.email || row.phone || t('users_no_contact')}</Text>
-                <Text style={styles.sub}>{t('users_joined', { date: formatDate(row.created_at) })}</Text>
+                <Text style={styles.name}>{row.full_name || 'Unknown User'}</Text>
+                <Text style={styles.sub}>{row.email || row.phone || 'No contact details'}</Text>
+                <Text style={styles.sub}>Joined {formatDate(row.created_at)}</Text>
               </View>
               <View style={styles.rowRight}>
-                <Text style={styles.value}>{t('users_purchases_count', { count: row.purchaseCount })}</Text>
+                <Text style={styles.value}>{row.purchaseCount} purchases</Text>
                 <Text style={styles.value}>{row.totalSpent > 0 ? formatCurrency(row.totalSpent) : '$0.00'}</Text>
-                <Text style={styles.miniPill}>
-                  {row.opted_in_marketing ? t('users_opted_in') : t('users_opted_out')}
-                </Text>
+                <Text style={styles.miniPill}>{row.opted_in_marketing ? 'Opted In' : 'Opted Out'}</Text>
               </View>
             </View>
           ))
@@ -188,7 +180,7 @@ export function UsersScreen() {
   );
 }
 
-const createStyles = (colors: any) => StyleSheet.create({
+const styles = StyleSheet.create({
   refreshButton: {
     backgroundColor: colors.primarySoft,
     borderRadius: 8,
@@ -209,14 +201,13 @@ const createStyles = (colors: any) => StyleSheet.create({
     gap: 10,
   },
   searchInput: {
-    backgroundColor: colors.background,
+    backgroundColor: '#F9FAFB',
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
-    color: colors.text,
   },
   sectionTitle: {
     color: colors.text,
@@ -258,8 +249,8 @@ const createStyles = (colors: any) => StyleSheet.create({
     fontWeight: '600',
   },
   miniPill: {
-    backgroundColor: colors.primarySoft,
-    color: colors.primaryText,
+    backgroundColor: '#E5E7EB',
+    color: '#374151',
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 3,
