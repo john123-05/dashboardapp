@@ -1,175 +1,138 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
-import type { OperatorProfile, Organization, OrganizationMembership } from '../lib/types';
+import { PREVIEW } from '../lib/preview';
 
+// Rollen und Seitenrechte wie im Web-Dashboard (src/contexts/AuthContext.tsx):
+// Inhaber sehen alles, Mitarbeiter nur die im CRM freigegebenen Seiten (allowed_pages).
 interface AuthState {
   loading: boolean;
   session: Session | null;
   user: User | null;
-  profile: OperatorProfile | null;
-  memberships: Array<OrganizationMembership & { organization: Organization }>;
-  currentOrg: Organization | null;
+  fullName: string | null;
+  email: string | null;
   hasOrg: boolean;
+  isOwner: boolean;
+  isStaff: boolean;
+  allowedPages: string[] | null;
+  allowedParkIds: string[];
 }
 
 interface AuthContextValue extends AuthState {
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
-  joinDemoOrg: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextValue | null>(null);
-
-const initialState: AuthState = {
+const initial: AuthState = {
   loading: true,
   session: null,
   user: null,
-  profile: null,
-  memberships: [],
-  currentOrg: null,
+  fullName: null,
+  email: null,
   hasOrg: false,
+  isOwner: false,
+  isStaff: false,
+  allowedPages: null,
+  allowedParkIds: [],
 };
 
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+function withTimeout<T>(promise: PromiseLike<T>, ms = 12000): Promise<T | null> {
+  return Promise.race([Promise.resolve(promise), new Promise<null>((resolve) => setTimeout(() => resolve(null), ms))]);
+}
+
+function parkIdsOf(user: User | null): string[] {
+  const raw = user?.app_metadata?.allowed_park_ids;
+  return Array.isArray(raw) ? raw.map(String) : [];
+}
+
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [state, setState] = useState<AuthState>(initialState);
+  const [state, setState] = useState<AuthState>(PREVIEW ? { ...initial, loading: false, hasOrg: true, isOwner: true, email: 'vorschau@liftpictures.de', fullName: 'Vorschau' } : initial);
 
-  async function loadProfile(userId: string) {
-    const { data: profile } = await supabase
-      .from('operator_profiles')
-      .select('*')
-      .eq('id', userId)
-      .maybeSingle();
+  const loadProfile = useCallback(async (user: User) => {
+    const [profile, memberships] = await Promise.all([
+      withTimeout(supabase.from('operator_profiles').select('*').eq('id', user.id).maybeSingle()),
+      withTimeout(supabase.from('organization_memberships').select('*').eq('user_id', user.id)),
+    ]);
+    const rows = (memberships && !memberships.error ? memberships.data : null) as Array<Record<string, any>> | null;
+    const current = rows && rows.length > 0 ? rows[0] : null;
 
-    const { data: memberships } = await supabase
-      .from('organization_memberships')
-      .select('*, organization:organizations(*)')
-      .eq('user_id', userId);
-
-    const normalizedMemberships = ((memberships ?? []) as Array<
-      OrganizationMembership & { organization: Organization }
-    >).filter((item) => Boolean(item.organization));
+    // Vom Betreiber deaktivierter Zugang: sofort abmelden.
+    if (current?.disabled_at) {
+      await supabase.auth.signOut().catch(() => undefined);
+      return;
+    }
 
     setState((prev) => ({
       ...prev,
-      profile: (profile as OperatorProfile | null) ?? null,
-      memberships: normalizedMemberships,
-      currentOrg: normalizedMemberships[0]?.organization ?? null,
-      hasOrg: normalizedMemberships.length > 0,
       loading: false,
+      user,
+      email: user.email ?? null,
+      fullName: ((profile && !profile.error ? profile.data : null) as any)?.full_name ?? null,
+      hasOrg: rows ? rows.length > 0 : prev.hasOrg,
+      isOwner: rows ? current?.role === 'org_owner' || current?.role === 'platform_admin' : prev.isOwner,
+      isStaff: rows ? current?.role === 'staff' : prev.isStaff,
+      allowedPages: Array.isArray(current?.allowed_pages) ? current.allowed_pages : null,
+      allowedParkIds: parkIdsOf(user),
     }));
-  }
+  }, []);
 
   useEffect(() => {
+    if (PREVIEW) return;
     let active = true;
 
     supabase.auth.getSession().then(({ data }) => {
       if (!active) return;
-
       const session = data.session;
-      setState((prev) => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-      }));
-
-      if (session?.user) {
-        loadProfile(session.user.id);
-      } else {
-        setState((prev) => ({ ...prev, loading: false }));
-      }
+      setState((prev) => ({ ...prev, session, user: session?.user ?? null }));
+      if (session?.user) void loadProfile(session.user);
+      else setState((prev) => ({ ...prev, loading: false }));
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (!active) return;
-
-      setState((prev) => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-      }));
-
-      if (session?.user) {
-        loadProfile(session.user.id);
-      } else {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          profile: null,
-          memberships: [],
-          currentOrg: null,
-          hasOrg: false,
-        }));
+      setState((prev) => ({ ...prev, session, user: session?.user ?? null }));
+      if (!session?.user) {
+        setState({ ...initial, loading: false });
+      } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+        void loadProfile(session.user);
       }
     });
 
+    // Notbremse: nie ewig laden.
+    const timer = setTimeout(() => setState((prev) => (prev.loading ? { ...prev, loading: false } : prev)), 15000);
     return () => {
       active = false;
-      subscription.unsubscribe();
+      clearTimeout(timer);
+      sub.subscription.unsubscribe();
     };
-  }, []);
-
-  async function signIn(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
-  }
-
-  async function signUp(email: string, password: string, fullName: string) {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-      },
-    });
-
-    return { error: error?.message ?? null };
-  }
-
-  async function signOut() {
-    await supabase.auth.signOut();
-  }
-
-  async function joinDemoOrg() {
-    await supabase.rpc('join_demo_organization');
-    if (state.user) {
-      await loadProfile(state.user.id);
-    }
-  }
-
-  async function refreshProfile() {
-    if (state.user) {
-      await loadProfile(state.user.id);
-    }
-  }
+  }, [loadProfile]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       ...state,
-      signIn,
-      signUp,
-      signOut,
-      joinDemoOrg,
-      refreshProfile,
+      signIn: async (email, password) => {
+        const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+        return { error: error?.message ?? null };
+      },
+      signOut: async () => {
+        await supabase.auth.signOut();
+      },
+      refreshProfile: async () => {
+        if (state.user) await loadProfile(state.user);
+      },
     }),
-    [state]
+    [state, loadProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth außerhalb von AuthProvider');
+  return ctx;
 }

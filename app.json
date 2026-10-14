@@ -2,8 +2,8 @@
   "expo": {
     "name": "Liftpictures Dashboard",
     "slug": "dashboardapp",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "version": "1.2.0",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -15,7 +15,13 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.john12305.dashboardapp"
+      "bundleIdentifier": "com.john12305.dashboardapp",
+      "buildNumber": "4",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSPhotoLibraryUsageDescription": "Damit du Logos und Fotos ins Dashboard hochladen kannst.",
+        "NSCameraUsageDescription": "Damit du Fotos direkt aufnehmen und ins Dashboard hochladen kannst."
+      }
     },
     "android": {
       "package": "com.john12305.dashboardapp",
@@ -28,6 +34,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fb8b5a24-9ecc-403d-bd2c-f73062d073f0"
+      }
+    },
+    "owner": "impressrank",
+    "plugins": [
+      "./plugins/withPodTargets"
+    ]
   }
 }

@@ -1,231 +1,165 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { invokeEdgeFunction } from '../lib/edgeFunctions';
-import type { ParkSelection } from '../lib/types';
-import { supabase } from '../lib/supabase';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Field } from '../components/Field';
+import { Button, Card, ErrorNote, ListCard, Row, Section, Skeleton } from '../components/ui';
+import { successHaptic } from '../components/haptics';
+import { Screen } from '../components/Screen';
+import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
-import { colors } from '../theme/colors';
+import { invokeEdgeFunction } from '../lib/edgeFunctions';
+import { isSuperAdminEmail } from '../lib/pages';
+import { supabase } from '../lib/supabase';
+import { colors, font, radius, space } from '../theme';
 
-export function ParkAccessScreen() {
-  const { setPark } = usePark();
-  const [parks, setParks] = useState<ParkSelection[]>([]);
-  const [selectedParkId, setSelectedParkId] = useState<string>('');
-  const [parkPassword, setParkPassword] = useState('');
-  const [loadingParks, setLoadingParks] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+type Park = { id: string; name: string };
+const LAST_PARK_KEY = 'lp-last-park';
+
+// Park wählen, wie auf der Anmeldeseite des Web-Dashboards: ein paar Buchstaben tippen, die Funktion
+// park-lookup nennt den Park, danach das Park-Passwort. Super-Admins wechseln ohne Passwort.
+export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
+  const insets = useSafeAreaInsets();
+  const { email, allowedParkIds, signOut } = useAuth();
+  const { setPark, parkId } = usePark();
+  const superAdmin = isSuperAdminEmail(email);
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState<Park | null>(null);
+  const [state, setState] = useState<'idle' | 'loading' | 'short' | 'none' | 'many' | 'one'>('idle');
+  const [match, setMatch] = useState<Park | null>(null);
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [list, setList] = useState<Park[] | null>(null);
 
   useEffect(() => {
-    let active = true;
-
-    invokeEdgeFunction<{ parks: ParkSelection[] }>('external-parks')
-      .then((result) => {
-        if (!active) return;
-
-        if (result.error) {
-          setError(result.error);
-          setParks([]);
-          return;
-        }
-
-        const loaded = result.data?.parks ?? [];
-        setParks(loaded);
-        if (loaded.length > 0) {
-          setSelectedParkId(loaded[0].id);
-        }
+    AsyncStorage.getItem(LAST_PARK_KEY)
+      .then((raw) => {
+        if (!raw || superAdmin) return;
+        const p = JSON.parse(raw) as Park;
+        if (p?.id && p?.name) setSelected(p);
       })
-      .finally(() => {
-        if (active) {
-          setLoadingParks(false);
-        }
-      });
+      .catch(() => undefined);
+  }, [superAdmin]);
 
+  useEffect(() => {
+    if (!superAdmin) return;
+    let active = true;
+    (async () => {
+      const [listed, accessible] = await Promise.all([invokeEdgeFunction<{ parks: Park[] }>('external-parks'), supabase.from('parks').select('id')]);
+      if (!active) return;
+      if (listed.error || !listed.data) {
+        setError(listed.error || 'Parks konnten nicht geladen werden');
+        setList([]);
+        return;
+      }
+      const ok = new Set((accessible.data ?? []).map((r: any) => String(r.id)));
+      setList(listed.data.parks.filter((p) => ok.has(p.id) && (allowedParkIds.length === 0 || allowedParkIds.includes(p.id))));
+    })();
     return () => {
       active = false;
     };
-  }, []);
+  }, [superAdmin, allowedParkIds]);
 
-  async function handleContinue() {
-    if (!selectedParkId || !parkPassword) {
-      setError('Select a park and enter the park password.');
-      return;
-    }
+  useEffect(() => {
+    if (superAdmin) return;
+    const q = query.trim();
+    setMatch(null);
+    if (selected || q.length === 0) return setState('idle');
+    if (q.length < 2) return setState('short');
+    setState('loading');
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const { data, error: err } = await invokeEdgeFunction<{ park: Park | null; state: 'short' | 'none' | 'many' | 'one' }>('park-lookup', { query: { q } });
+      if (cancelled) return;
+      if (err || !data) return setState('none');
+      setMatch(data.park);
+      setState(data.park ? 'one' : data.state);
+    }, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query, selected, superAdmin]);
 
-    setError(null);
-    setSubmitting(true);
-
-    const { data: ok, error: verifyError } = await supabase.rpc('verify_park_access', {
-      p_park_id: selectedParkId,
-      p_password: parkPassword,
-    });
-
-    if (verifyError || !ok) {
-      setError('Invalid park password.');
-      setSubmitting(false);
-      return;
-    }
-
-    const selectedPark = parks.find((item) => item.id === selectedParkId);
-    await setPark(selectedParkId, selectedPark?.name ?? null);
-    setSubmitting(false);
+  async function pick(p: Park) {
+    await setPark(p.id, p.name);
+    successHaptic();
+    onClose?.();
   }
 
-  if (loadingParks) {
+  async function submit() {
+    if (!selected) return setError('Bitte zuerst einen Park wählen.');
+    if (!password) return setError('Bitte das Park-Passwort eingeben.');
+    setError(null);
+    setBusy(true);
+    const { data: ok, error: err } = await supabase.rpc('verify_park_access', { p_park_id: selected.id, p_password: password });
+    setBusy(false);
+    if (err || !ok) return setError('Das Park-Passwort stimmt nicht.');
+    await AsyncStorage.setItem(LAST_PARK_KEY, JSON.stringify(selected)).catch(() => undefined);
+    await pick(selected);
+  }
+
+  if (superAdmin) {
     return (
-      <View style={styles.loadingWrap}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.loadingText}>Loading parks...</Text>
-      </View>
+      <Screen title="Park wählen" onBack={onClose}>
+        {error ? <ErrorNote text={error} /> : null}
+        {list === null ? (
+          <Card>
+            <Skeleton height={20} width="60%" />
+          </Card>
+        ) : (
+          <ListCard>
+            {list.map((p, i) => (
+              <Row key={p.id} icon="location-outline" title={p.name} right={p.id === parkId ? <Text style={{ ...font.callout, color: colors.brand }}>Aktiv</Text> : null} onPress={() => pick(p)} last={i === list.length - 1} />
+            ))}
+          </ListCard>
+        )}
+      </Screen>
     );
   }
 
+  const hint =
+    state === 'short' ? 'Mindestens 2 Buchstaben eingeben.' : state === 'none' ? 'Kein Park gefunden.' : state === 'many' ? 'Mehrere Parks passen, bitte genauer tippen.' : state === 'loading' ? 'Suche…' : null;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.panel}>
-        <Text style={styles.title}>Park Access</Text>
-        <Text style={styles.subtitle}>Choose your park and confirm access password</Text>
-
-        <Text style={styles.label}>Park</Text>
-        <View style={styles.pickerWrap}>
-          {parks.map((park) => {
-            const selected = park.id === selectedParkId;
-            return (
-              <Pressable
-                key={park.id}
-                style={[styles.parkButton, selected && styles.parkButtonSelected]}
-                onPress={() => setSelectedParkId(park.id)}
-              >
-                <Text style={[styles.parkButtonText, selected && styles.parkButtonTextSelected]}>
-                  {park.name}
-                </Text>
-              </Pressable>
-            );
-          })}
-
-          {parks.length === 0 ? <Text style={styles.emptyParks}>No parks found.</Text> : null}
+    <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + (onClose ? 56 : 48), paddingBottom: insets.bottom + 24 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <View style={{ gap: 6 }}>
+          <Text style={styles.title}>Park wählen</Text>
+          <Text style={styles.sub}>Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein.</Text>
         </View>
-
-        <Text style={styles.label}>Park Password</Text>
-        <TextInput
-          secureTextEntry
-          style={styles.input}
-          placeholder="Enter park password"
-          value={parkPassword}
-          onChangeText={setParkPassword}
-        />
-
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-
-        <Pressable
-          style={[styles.primaryButton, submitting && styles.primaryButtonDisabled]}
-          disabled={submitting}
-          onPress={handleContinue}
-        >
-          {submitting ? (
-            <ActivityIndicator color="#FFFFFF" />
+        <View style={styles.form}>
+          {selected ? (
+            <View style={{ gap: 6 }}>
+              <Text style={styles.label}>Park</Text>
+              <Row title={selected.name} icon="location-outline" right={<Text style={{ ...font.callout, color: colors.brand }}>Ändern</Text>} onPress={() => { setSelected(null); setPassword(''); }} last />
+            </View>
           ) : (
-            <Text style={styles.primaryButtonText}>Continue</Text>
+            <>
+              <Field label="Park" value={query} onChangeText={setQuery} autoCapitalize="none" placeholder="z. B. Wingst" returnKeyType="search" />
+              {hint ? <Text style={styles.hint}>{hint}</Text> : null}
+              {match ? <Row icon="location-outline" title={match.name} chevron onPress={() => { setSelected(match); setQuery(''); }} last /> : null}
+            </>
           )}
-        </Pressable>
-      </View>
-    </View>
+          {selected ? <Field label="Park-Passwort" value={password} onChangeText={setPassword} secure autoCapitalize="none" returnKeyType="go" onSubmitEditing={submit} placeholder="Park-Passwort" /> : null}
+          {error ? <ErrorNote text={error} /> : null}
+          <Button title="Weiter" onPress={submit} loading={busy} />
+          {onClose ? <Button title="Abbrechen" kind="plain" onPress={onClose} /> : <Button title="Abmelden" kind="plain" onPress={() => void signOut()} />}
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: colors.background,
-  },
-  panel: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 18,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
-    gap: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  subtitle: {
-    color: colors.muted,
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  label: {
-    fontSize: 13,
-    color: colors.text,
-    fontWeight: '600',
-  },
-  pickerWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  parkButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: '#F3F4F6',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  parkButtonSelected: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primaryBorder,
-  },
-  parkButtonText: {
-    color: '#1F2937',
-    fontWeight: '500',
-  },
-  parkButtonTextSelected: {
-    color: colors.primaryText,
-  },
-  emptyParks: {
-    color: colors.muted,
-    fontSize: 13,
-  },
-  input: {
-    backgroundColor: '#F9FAFB',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-  },
-  error: {
-    color: colors.danger,
-    fontSize: 13,
-  },
-  primaryButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 10,
-    paddingVertical: 12,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  primaryButtonDisabled: {
-    opacity: 0.65,
-  },
-  primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  loadingWrap: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-    gap: 10,
-  },
-  loadingText: {
-    color: colors.muted,
-  },
+  root: { flex: 1, backgroundColor: colors.bg },
+  scroll: { paddingHorizontal: space.xl, gap: space.xl },
+  title: { ...font.largeTitle, color: colors.ink },
+  sub: { ...font.subhead, color: colors.ink2 },
+  form: { gap: space.lg, backgroundColor: colors.white, borderRadius: radius.lg, padding: space.lg },
+  label: { ...font.footnote, color: colors.ink2, fontWeight: '600', marginLeft: 2 },
+  hint: { ...font.footnote, color: colors.ink2 },
 });
+
+export { Section };
