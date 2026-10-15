@@ -7,8 +7,12 @@ import Animated, { interpolate, useAnimatedRef, useAnimatedScrollHandler, useAni
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, font, HEADER_HEIGHT, space, TAP } from '../theme';
 import { tapHaptic } from './haptics';
+import { HeaderActions } from './HeaderActions';
+import { useWide } from './layout';
 
-export const TAB_BAR_HEIGHT = 58;
+// Schwebende Tab-Leiste: Höhe plus Abstand zum unteren Rand.
+export const TAB_BAR_HEIGHT = 62;
+export const TAB_BAR_GAP = 8;
 
 interface Props {
   title: string;
@@ -20,14 +24,21 @@ interface Props {
   onRefresh?: () => void;
   // true: Seite liegt in der Tab-Leiste, unten bleibt Platz dafür (nichts wird abgeschnitten).
   tabs?: boolean;
+  // Glocke und Konto-Symbol oben rechts (Hauptseiten).
+  actions?: boolean;
+  // Blatt-Seiten (von unten): grauer Hintergrund, Schließen statt Zurück.
+  sheet?: boolean;
   children: ReactNode;
 }
 
 // Eine Seite wie in iOS: großer Titel, der beim Scrollen in eine durchsichtige Kopfzeile übergeht.
 // Inhalt läuft unter der unscharfen Kopfzeile durch. Ziehen zum Aktualisieren, Gummiband-Scrollen
 // und Rand-Wischen zurück kommen vom System.
-export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, children }: Props) {
-  const insets = useSafeAreaInsets();
+export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, children }: Props) {
+  const realInsets = useSafeAreaInsets();
+  const wide = useWide();
+  // Als Blatt (iOS-Modal) liegt die Seite unter der Statusleiste: oben kein Abstand nötig.
+  const insets = sheet ? { ...realInsets, top: 8 } : realInsets;
   const y = useSharedValue(0);
   const topInset = insets.top + HEADER_HEIGHT;
   const isIOS = Platform.OS === 'ios';
@@ -47,10 +58,11 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
   const hairline = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [8, 30], [0, 1], 'clamp') }));
   const blurIn = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [0, 16], [0.0, 1], 'clamp') }));
 
-  const bottom = (tabs ? TAB_BAR_HEIGHT + 14 : 0) + insets.bottom + space.xl;
+  const bottom = (tabs && !wide ? TAB_BAR_HEIGHT + TAB_BAR_GAP + 12 : 0) + insets.bottom + space.xl;
+  const contentWidth = wide ? { width: '100%' as const, maxWidth: 1180, alignSelf: 'center' as const } : null;
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, sheet && { backgroundColor: '#EEF0F3' }]}>
       <Animated.ScrollView
         ref={scrollRef}
         style={styles.scroll}
@@ -66,7 +78,7 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
         contentContainerStyle={{ paddingTop: isIOS ? 0 : topInset, paddingBottom: bottom }}
         refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.ink3} progressViewOffset={topInset} /> : undefined}
       >
-        <View style={styles.titleRow}>
+        <View style={[styles.titleRow, contentWidth, wide && { paddingHorizontal: space.xxl }]}>
           <View style={styles.titleCol}>
             <Text style={styles.largeTitle} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} accessibilityRole="header">
               {title}
@@ -79,7 +91,7 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
           </View>
           {right ? <View style={styles.right}>{right}</View> : null}
         </View>
-        <View style={styles.body}>{children}</View>
+        <View style={[styles.body, contentWidth, wide && { paddingHorizontal: space.xxl }]}>{children}</View>
       </Animated.ScrollView>
 
       {/* Durchsichtige Kopfzeile: unscharfer Hintergrund, kleiner Titel blendet beim Scrollen ein. */}
@@ -111,7 +123,7 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
           <Animated.Text style={[styles.smallTitle, smallTitle]} numberOfLines={1} pointerEvents="none">
             {title}
           </Animated.Text>
-          <View style={[styles.headerSide, { alignItems: 'flex-end' }]} />
+          <View style={[styles.headerSide, { alignItems: 'flex-end' }]}>{actions ? <HeaderActions /> : null}</View>
         </View>
       </View>
     </View>

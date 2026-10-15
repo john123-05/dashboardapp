@@ -7,30 +7,42 @@ type IconName = ComponentProps<typeof Ionicons>['name'];
 export interface PageEntry {
   key: PageKey;
   title: string;
+  short?: string;
   icon: IconName;
   group: 'Betrieb' | 'Marketing' | 'Verwaltung';
-  // Native Bildschirme der App; alles andere öffnet die Seite des Web-Dashboards in der App-Hülle.
-  native?: 'Purchases';
+  // Native Seite der App (Name im Navigator). Ohne `route` öffnet sich die Web-Seite (`path`) in der App.
+  route?: string;
   path?: string;
+  tab?: boolean;
+  modal?: boolean;
 }
 
 // Reihenfolge und Namen wie in der Seitenleiste des Web-Dashboards. Welche Einträge ein Nutzer sieht,
 // entscheidet canSee() aus permissions.ts (Seitenauswahl im CRM).
 export const PAGES: PageEntry[] = [
-  { key: 'purchases', title: 'Käufe', icon: 'receipt-outline', group: 'Betrieb', native: 'Purchases' },
-  { key: 'photos', title: 'Fotos', icon: 'images-outline', group: 'Betrieb', path: '/photos' },
-  { key: 'speed', title: 'Speedmessung', icon: 'speedometer-outline', group: 'Betrieb', path: '/users' },
+  { key: 'overview', title: 'Übersicht', icon: 'home-outline', group: 'Betrieb', route: 'Overview', tab: true },
+  { key: 'revenue', title: 'Umsatz', icon: 'stats-chart-outline', group: 'Betrieb', route: 'Revenue', tab: true },
+  { key: 'health', title: 'Systemzustand', short: 'System', icon: 'pulse-outline', group: 'Betrieb', route: 'Health', tab: true },
+  { key: 'photos', title: 'Fotos', icon: 'images-outline', group: 'Betrieb', route: 'Photos', tab: true },
+  { key: 'purchases', title: 'Käufe', icon: 'receipt-outline', group: 'Betrieb', route: 'Purchases' },
+  { key: 'speed', title: 'Speedmessung', icon: 'speedometer-outline', group: 'Betrieb', route: 'Speed' },
   { key: 'kamera', title: 'Kamera', icon: 'camera-outline', group: 'Betrieb', path: '/kamera' },
   { key: 'marketing', title: 'Marketing und CRM', icon: 'megaphone-outline', group: 'Marketing', path: '/leads' },
   { key: 'personalization', title: 'Personalisierung', icon: 'color-wand-outline', group: 'Marketing', path: '/personalization' },
-  { key: 'shop', title: 'Shop', icon: 'storefront-outline', group: 'Marketing', path: '/shop' },
-  { key: 'configuration', title: 'Konfiguration', icon: 'construct-outline', group: 'Verwaltung', path: '/configuration' },
-  { key: 'tickets', title: 'Support', icon: 'help-buoy-outline', group: 'Verwaltung', path: '/tickets' },
-  { key: 'settings', title: 'Einstellungen', icon: 'settings-outline', group: 'Verwaltung', path: '/settings' },
-  { key: 'team', title: 'Team', icon: 'people-outline', group: 'Verwaltung', path: '/team' },
+  { key: 'shop', title: 'Online-Shop', icon: 'bag-handle-outline', group: 'Marketing', path: '/shop' },
+  { key: 'configuration', title: 'Konfiguration', icon: 'storefront-outline', group: 'Verwaltung', route: 'Configuration', modal: true },
+  { key: 'tickets', title: 'Support', icon: 'help-buoy-outline', group: 'Verwaltung', route: 'Support' },
+  { key: 'settings', title: 'Einstellungen', icon: 'settings-outline', group: 'Verwaltung', route: 'Settings' },
+  { key: 'team', title: 'Mitarbeiter-Zugang', icon: 'people-outline', group: 'Verwaltung', route: 'Team' },
   { key: 'plans', title: 'Pläne und Abrechnung', icon: 'card-outline', group: 'Verwaltung', path: '/plaene' },
 ];
 
 // Wie im Web (src/lib/superAdmin.ts): diese Konten dürfen ohne Park-Passwort zwischen Parks wechseln.
 const SUPER_ADMINS = ['tomnotes.tn@gmail.com', 'john.m.nolting@gmail.com'];
 export const isSuperAdminEmail = (email: string | null | undefined) => !!email && SUPER_ADMINS.includes(email.trim().toLowerCase());
+
+// Eine Seite öffnen: native Seite oder Web-Seite in der App-Hülle.
+export function openPage(nav: { navigate: (name: string, params?: object) => void }, p: PageEntry) {
+  if (p.route) nav.navigate(p.route);
+  else nav.navigate('Web', { path: p.path, title: p.title });
+}

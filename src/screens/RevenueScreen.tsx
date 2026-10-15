@@ -31,6 +31,7 @@ export function RevenueScreen() {
   return (
     <Screen
       tabs
+      actions
       title="Umsatz"
       subtitle={isKioskPark ? 'Verkaufte Fotos am Automaten' : null}
       refreshing={sales.refreshing || revenue.refreshing}

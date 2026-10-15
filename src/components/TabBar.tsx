@@ -1,77 +1,87 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
-import { BlurView } from 'expo-blur';
-import type { ComponentProps } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNotifications } from '../contexts/NotificationsContext';
-import { colors, font } from '../theme';
+import { PAGES } from '../lib/pages';
+import { font } from '../theme';
 import { tapHaptic } from './haptics';
-import { TAB_BAR_HEIGHT } from './Screen';
+import { TAB_BAR_GAP, TAB_BAR_HEIGHT } from './Screen';
 
-type IconName = ComponentProps<typeof Ionicons>['name'];
+export const BAR_GREY = '#2b2b2b';
 
-export const TAB_META: Record<string, { label: string; icon: IconName; iconOn: IconName }> = {
-  Overview: { label: 'Übersicht', icon: 'home-outline', iconOn: 'home' },
-  Revenue: { label: 'Umsatz', icon: 'stats-chart-outline', iconOn: 'stats-chart' },
-  Machines: { label: 'Anlagen', icon: 'hardware-chip-outline', iconOn: 'hardware-chip' },
-  Alerts: { label: 'Meldungen', icon: 'notifications-outline', iconOn: 'notifications' },
-  More: { label: 'Mehr', icon: 'ellipsis-horizontal-circle-outline', iconOn: 'ellipsis-horizontal-circle' },
-};
-
-// Durchsichtige Tab-Leiste unten: Inhalt scheint unscharf durch, sitzt über dem Home-Balken.
-export function TabBar({ state, navigation }: MaterialTopTabBarProps) {
+// Schwebende Tab-Leiste in Dunkelgrau, wie die untere Leiste des Web-Dashboards am Handy.
+// Der letzte Knopf "Mehr" öffnet das Blatt von unten statt einer Seite.
+export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBarProps & { onMore: () => void; moreOpen: boolean }) {
   const insets = useSafeAreaInsets();
-  const { unread } = useNotifications();
+  const bottom = Math.max(insets.bottom - 10, 0) + TAB_BAR_GAP;
   return (
-    <View style={[styles.wrap, { height: TAB_BAR_HEIGHT + insets.bottom }]}>
-      <BlurView intensity={80} tint="systemChromeMaterialLight" style={StyleSheet.absoluteFill} />
-      <View style={styles.hairline} />
-      <View style={[styles.row, { paddingBottom: insets.bottom }]}>
-        {state.routes.map((route, index) => {
-          const focused = state.index === index;
-          const meta = TAB_META[route.name] ?? { label: route.name, icon: 'ellipse-outline' as IconName, iconOn: 'ellipse' as IconName };
-          const badge = route.name === 'Alerts' && unread > 0 ? (unread > 9 ? '9+' : String(unread)) : null;
-          return (
-            <Pressable
-              key={route.key}
-              style={styles.item}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: focused }}
-              accessibilityLabel={meta.label}
-              onPress={() => {
-                const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
-                if (!focused && !event.defaultPrevented) {
-                  tapHaptic();
-                  navigation.navigate(route.name as never);
-                }
-              }}
-            >
-              <View>
-                <Ionicons name={focused ? meta.iconOn : meta.icon} size={25} color={focused ? colors.brand : colors.ink3} />
-                {badge ? (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>{badge}</Text>
-                  </View>
-                ) : null}
-              </View>
-              <Text style={[styles.label, { color: focused ? colors.brand : colors.ink3 }]} numberOfLines={1}>
-                {meta.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+    <View style={[styles.bar, { bottom }]}>
+      {state.routes.map((route, index) => {
+        const focused = state.index === index && !moreOpen;
+        const page = PAGES.find((p) => p.route === route.name);
+        const label = page?.short ?? page?.title ?? route.name;
+        const icon = (page?.icon ?? 'ellipse-outline') as string;
+        return (
+          <Pressable
+            key={route.key}
+            style={styles.item}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: focused }}
+            accessibilityLabel={label}
+            onPress={() => {
+              const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+              if (state.index !== index && !event.defaultPrevented) {
+                tapHaptic();
+                navigation.navigate(route.name as never);
+              }
+            }}
+          >
+            <View style={[styles.iconWrap, focused && styles.iconWrapOn]}>
+              <Ionicons name={(focused ? icon.replace('-outline', '') : icon) as any} size={21} color={focused ? '#fff' : 'rgba(255,255,255,0.58)'} />
+            </View>
+            <Text style={[styles.label, { color: focused ? '#fff' : 'rgba(255,255,255,0.58)' }]} numberOfLines={1}>
+              {label}
+            </Text>
+          </Pressable>
+        );
+      })}
+      <Pressable
+        style={styles.item}
+        accessibilityRole="button"
+        accessibilityLabel="Mehr"
+        accessibilityState={{ expanded: moreOpen }}
+        onPress={() => {
+          tapHaptic();
+          onMore();
+        }}
+      >
+        <View style={[styles.iconWrap, moreOpen && styles.iconWrapOn]}>
+          <Ionicons name="menu" size={22} color={moreOpen ? '#fff' : 'rgba(255,255,255,0.58)'} />
+        </View>
+        <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.58)' }]}>Mehr</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-  hairline: { position: 'absolute', top: 0, left: 0, right: 0, height: StyleSheet.hairlineWidth, backgroundColor: colors.lineStrong },
-  row: { flex: 1, flexDirection: 'row' },
-  item: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2, minHeight: 49 },
+  bar: {
+    position: 'absolute',
+    left: 12,
+    right: 12,
+    height: TAB_BAR_HEIGHT,
+    borderRadius: 22,
+    backgroundColor: BAR_GREY,
+    flexDirection: 'row',
+    paddingHorizontal: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.28,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 12,
+  },
+  item: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 1 },
+  iconWrap: { width: 44, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  iconWrapOn: { backgroundColor: 'rgba(255,255,255,0.14)' },
   label: { ...font.caption, fontSize: 10.5, fontWeight: '600' },
-  badge: { position: 'absolute', top: -4, right: -10, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: colors.err, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4, borderWidth: 1.5, borderColor: colors.white },
-  badgeText: { color: colors.white, fontSize: 10.5, fontWeight: '800' },
 });

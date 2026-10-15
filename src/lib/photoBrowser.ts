@@ -1,0 +1,165 @@
+import { externalSupabase } from './supabase';
+import { todayInTimezone } from './kioskSales';
+import { PREVIEW } from './preview';
+
+export interface BrowsablePhoto {
+  id: string;
+  externalCode: string | null;
+  imageUrl: string | null;
+  capturedAt: string;
+  isPaid: boolean;
+  speedKmh: number | null;
+  /**
+   * Vom Dashboard ausgelöstes Testfoto.
+   *
+   * Sieht aus wie jedes andere Foto, zählt aber nirgends als Verkauf - der
+   * Umsatz lässt diese Zeilen bewusst aus.
+   */
+  isTest: boolean;
+}
+
+const SELECT_COLUMNS =
+  'id, external_code, storage_bucket, storage_path, captured_at, created_at, is_paid, speed_kmh, is_test';
+
+function toImageUrl(bucket: string | null, path: string | null): string | null {
+  if (!bucket || !path) return null;
+  return `https://kvpcwlcfgmsmarjtwpsx.supabase.co/storage/v1/object/public/${bucket}/${path}`;
+}
+
+function toBrowsablePhoto(row: Record<string, unknown>): BrowsablePhoto {
+  const speed = row.speed_kmh as number | null;
+  return {
+    id: row.id as string,
+    externalCode: (row.external_code as string) ?? null,
+    imageUrl: toImageUrl(row.storage_bucket as string | null, row.storage_path as string | null),
+    capturedAt: (row.captured_at ?? row.created_at) as string,
+    isPaid: Boolean(row.is_paid),
+    // 0/null both mean "no real speed measurement" (many rows predate speed
+    // tracking, or the camera doesn't do speed matching) - only show a value
+    // when it's an actual positive reading.
+    speedKmh: typeof speed === 'number' && speed > 0 ? speed : null,
+    isTest: row.is_test === true,
+  };
+}
+
+export async function fetchRecentPhotos(parkId: string, limit = 24): Promise<BrowsablePhoto[]> {
+  if (PREVIEW) return (await import('./mock')).previewPhotos(limit);
+  const { data, error } = await externalSupabase
+    .from('photos')
+    .select(SELECT_COLUMNS)
+    .eq('park_id', parkId)
+    .order('captured_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(error.message);
+  return (data || []).map(toBrowsablePhoto);
+}
+
+// Alle heutigen Geschwindigkeits-Messwerte - unabhaengig davon, ob das Foto
+// gekauft wurde (anders als die Kiosk-Verkaufszahlen, die nur bezahlte
+// Fotos zaehlen). "Heute" ist das Kalenderdatum in der Park-Zeitzone.
+export async function fetchTodaysSpeeds(parkId: string, timezone: string): Promise<number[]> {
+  const today = todayInTimezone(timezone);
+  const { data, error } = await externalSupabase
+    .from('photos')
+    .select('captured_at, created_at, speed_kmh')
+    .eq('park_id', parkId)
+    .order('captured_at', { ascending: false })
+    .limit(1000);
+
+  if (error) throw new Error(error.message);
+
+  const dayFormatter = new Intl.DateTimeFormat('en-CA', { timeZone: timezone });
+  return (data || [])
+    .filter((row) => {
+      const capturedAt = (row.captured_at ?? row.created_at) as string | null;
+      return capturedAt && dayFormatter.format(new Date(capturedAt)) === today;
+    })
+    .map((row) => row.speed_kmh as number | null)
+    .filter((v): v is number => typeof v === 'number' && v > 0);
+}
+
+export async function searchPhotosByCode(parkId: string, code: string): Promise<BrowsablePhoto[]> {
+  if (PREVIEW) return (await import('./mock')).previewPhotos(4);
+  const trimmed = code.trim();
+  if (!trimmed) return [];
+
+  const { data, error } = await externalSupabase
+    .from('photos')
+    .select(SELECT_COLUMNS)
+    .eq('park_id', parkId)
+    .ilike('external_code', `%${trimmed}%`)
+    .order('captured_at', { ascending: false })
+    .limit(48);
+
+  if (error) throw new Error(error.message);
+  return (data || []).map(toBrowsablePhoto);
+}
+
+// Fuzzy time search: given a rough time, return the few photos CLOSEST to it
+// (within a +/- window), so kiosk staff don't have to hit the exact minute.
+export async function searchPhotosByDateTime(
+  parkId: string,
+  isoDateTime: string,
+  opts?: { windowMinutes?: number; limit?: number },
+): Promise<BrowsablePhoto[]> {
+  const center = new Date(isoDateTime);
+  if (Number.isNaN(center.getTime())) return [];
+
+  const windowMinutes = opts?.windowMinutes ?? 10;
+  const limit = opts?.limit ?? 4;
+  const from = new Date(center.getTime() - windowMinutes * 60_000).toISOString();
+  const to = new Date(center.getTime() + windowMinutes * 60_000).toISOString();
+
+  const { data, error } = await externalSupabase
+    .from('photos')
+    .select(SELECT_COLUMNS)
+    .eq('park_id', parkId)
+    .gte('captured_at', from)
+    .lte('captured_at', to)
+    .order('captured_at', { ascending: true })
+    .limit(60);
+
+  if (error) throw new Error(error.message);
+  const rows = (data || []).map(toBrowsablePhoto);
+  // Keep the N closest to the entered time, then show them chronologically.
+  return rows
+    .map((p) => ({ p, dist: Math.abs(new Date(p.capturedAt).getTime() - center.getTime()) }))
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, limit)
+    .map((x) => x.p)
+    .sort((a, b) => new Date(a.capturedAt).getTime() - new Date(b.capturedAt).getTime());
+}
+
+// Per-park claim page. First a fixed mapping (Imst, Tarzans); can become a
+// per-park setting later.
+const CLAIM_BASE_BY_PARK: Record<string, string> = {
+  '85c77b81-9f9b-4b4e-9f70-9c6ffa0b9b14': 'https://liftpictures-fotos.de', // Imster Bergbahnen
+  // liftpictures-fotos-tarzans.de wurde nie registriert; Tarzans laeuft
+  // stattdessen unter /tarzans auf der Imst-Domain (selber bolt.new-Build).
+  'e2da6436-6a83-4c39-add3-5f99eb6bd897': 'https://liftpictures-fotos.de/tarzans', // CSS-Alpine / Tarzans
+  // Gleiches Muster: Plose laeuft unter /plose auf der Imst-Domain.
+  '3b08e092-beb5-46ec-9811-5698e86dd83a': 'https://liftpictures-fotos.de/plose', // Plose
+  '25c1022b-4e2e-4fc4-b54d-72a4ced2522b': 'https://liftpictures-fotos.de/gruenberg', // Gruenberg-Flitzer
+  '91902231-5950-471b-8cc9-a03833f2a318': 'https://liftpictures-fotos.de/serles', // Serlesblitz Mieders
+  '56f864d0-1852-4baf-8167-a51fde746315': 'https://liftpictures-fotos.de/wingst', // Spielpark Wingst
+  '3eed6a5a-eca7-4097-90c2-45c64919e222': 'https://liftpictures-fotos.de/ruegen', // Inselrodelbahn Bergen (Ruegen)
+  '56ee64cf-a350-4010-8309-70412a5cf0bc': 'https://liftpictures-fotos.de/demo', // Demo Park (Liftbase-Demo)
+};
+
+// The park's public claim site itself (no code), e.g. for a CRM "see your
+// live unlock page" link. null for a park with no registered claim site.
+export function claimSiteBaseFor(parkId: string | null): string | null {
+  if (!parkId) return null;
+  return CLAIM_BASE_BY_PARK[parkId] ?? null;
+}
+
+// Claim link a guest can open to get their photo (via email) - the DB code is
+// correct even when the printed QR was mis-assigned, so this rescues the
+// "Foto nicht gefunden" case at the kiosk.
+export function claimLinkFor(parkId: string | null, externalCode: string | null): string | null {
+  if (!parkId || !externalCode) return null;
+  const base = CLAIM_BASE_BY_PARK[parkId];
+  if (!base) return null;
+  return `${base}/claim?code=${encodeURIComponent(externalCode)}`;
+}

@@ -132,3 +132,96 @@ export function previewHealth(): HealthMachine[] {
     },
   ];
 }
+
+// ---- Systemzustand (Form wie operator-liftpic-health) ----
+export function previewMachines() {
+  const now = Date.now();
+  return {
+    machines: [
+      {
+        id: 'm1', machine_id: 'wingst-pc1', machine_label: 'Wingst Automat', last_seen_at: new Date(now - 40000).toISOString(), offline_minutes: 0, reachable: true,
+        probes: [
+          { name: 'Kamera-Software', kind: 'camera', status: 'ok', detail: 'Läuft', since_minutes: 410 },
+          { name: 'Lichtschranke', kind: 'sensor', status: 'ok', detail: 'Läuft', since_minutes: 756 },
+          { name: 'Verkaufsprogramm', kind: 'viewer', status: 'down', detail: 'Nicht gestartet' },
+          { name: 'Drucker', kind: 'printer', status: 'ok', detail: 'Bereit, 0 Aufträge in der Warteschlange' },
+          { name: 'Speicherplatz', kind: 'system', status: 'ok', detail: '154 von 223 GB frei' },
+        ],
+        devices: [
+          { name: 'Kartenterminal', kind: 'terminal', status: 'ok', detail: 'Letzte Zahlung 15:31', idle_minutes: 30, plain: 'Letzte Kartenzahlung um 15:31 Uhr.' },
+          { name: 'Uploader', kind: 'uploader', status: 'ok', detail: '0 in der Warteschlange', idle_minutes: 1 },
+        ],
+        restartable: [
+          { key: 'viewer', name: 'Verkaufsprogramm', tech: 'PhotoViewerFacebook', folge: 'Der Bildschirm am Automaten ist etwa 20 Sekunden schwarz.' },
+          { key: 'camera', name: 'Kamera-Software', tech: '3gerTis', folge: 'Für etwa 30 Sekunden werden keine Fotos aufgenommen.' },
+        ],
+        can_test_photo: true, customer_code: '1717', customer_code_registered: true,
+        agent_version: '0.2.2', queue_count: 0, disk_free_mb: 154000, paper_remaining: 212, paper_capacity: 400, paper_warn_remaining: 30,
+        photos_taken_today: 307, photos_sold_today: 11, pending_restart: null, last_restart_at: null, restart_poll_seconds: 20,
+      },
+    ],
+    history: [
+      { id: 1, machine_id: 'wingst-pc1', occurred_at: new Date(now - 3600000).toISOString(), severity: 'warning', summary: 'Verkaufsprogramm beendet', detail: 'PhotoViewerFacebook.exe' },
+      { id: 2, machine_id: 'wingst-pc1', occurred_at: new Date(now - 7200000).toISOString(), severity: 'info', summary: 'Testfoto aufgenommen', detail: null },
+    ],
+  } as any;
+}
+
+const IMG = 'https://xcrxltiiovpoladpaewd.supabase.co/storage/v1/object/public/test/Copy%20of%20Copy%20of%20Photo-%20und%20Videosystems%20since%202006.jpg';
+export function previewPhotos(n: number) {
+  return Array.from({ length: n }, (_, i) => ({
+    id: `p${i}`,
+    externalCode: String(1717202610141500 + i * 37),
+    imageUrl: IMG,
+    capturedAt: new Date(Date.now() - i * 7 * 60000).toISOString(),
+    isPaid: i % 4 === 0,
+    speedKmh: 28 + ((i * 7) % 15),
+    isTest: false,
+  }));
+}
+
+export function previewSpeed(period: string) {
+  const names = ['Leon', 'Mia', 'Jonas', 'Anna', null, 'Ben', null, 'Emma', 'Paul', 'Lina'];
+  const rows = names.map((n, i) => ({
+    id: `r${i}`, rank: i + 1, speedKmh: 41.8 - i * 1.3, capturedAt: new Date(Date.now() - i * 1800000).toISOString(),
+    day: new Date().toISOString().slice(0, 10), email: n ? `${n.toLowerCase()}@example.de` : `gast${i}@example.de`, claimId: null, hidden: i === 6, displayName: n, avatarUrl: null,
+  }));
+  return {
+    enabled: true, period, date: new Date().toISOString().slice(0, 10), today: new Date().toISOString().slice(0, 10), from: null, to: null,
+    rows, total: rows.length, stats: { count: 307, fastest: 41.8, slowest: 18.2, average: 31.4 },
+    settings: { headline: 'Bestenliste', subline: '', cta_title: '', cta_text: '', winner_text: '', instagram_handle: '', hashtag: '', prize_text: '', show_qr: true, auto_scroll: true, rows: 10, max_speed_kmh: 60, periods: ['day', 'week', 'month', 'all'] },
+  } as any;
+}
+
+export function previewTickets(archived: boolean) {
+  if (archived) return [{ id: 't9', subject: 'Papier nachbestellt', description: 'Erledigt', status: 'closed', priority: 'low', archived_at: new Date().toISOString(), created_at: new Date(Date.now() - 9 * 86400000).toISOString(), updated_at: new Date().toISOString() }] as any;
+  return [
+    { id: 't1', subject: 'Kartenzahlung Wingst', description: 'Kartenzahlungen erscheinen nicht.', status: 'in_progress', priority: 'high', archived_at: null, created_at: new Date(Date.now() - 86400000).toISOString(), updated_at: new Date(Date.now() - 3 * 3600000).toISOString() },
+    { id: 't2', subject: 'Logo auf dem Foto tauschen', description: 'Neues Saisonlogo.', status: 'open', priority: 'medium', archived_at: null, created_at: new Date(Date.now() - 3 * 86400000).toISOString(), updated_at: new Date(Date.now() - 3 * 86400000).toISOString() },
+  ] as any;
+}
+export function previewMessages(ticketId: string) {
+  return [
+    { id: 'a', ticket_id: ticketId, author_role: 'operator', message: 'Kartenzahlungen erscheinen nicht in der Übersicht.', created_at: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'b', ticket_id: ticketId, author_role: 'support', message: 'Das Kartenterminal ist jetzt eingerichtet. Bitte einmal mit einer echten Karte testen.', created_at: new Date(Date.now() - 3 * 3600000).toISOString() },
+  ] as any;
+}
+
+export function previewStaff() {
+  return [
+    { user_id: 'u1', email: 'kasse@spielpark-wingst.de', full_name: 'Kasse Spielpark', created_at: '2026-09-01', allowed_pages: ['photos', 'health'], role_label: 'Team', disabled_at: null, last_sign_in_at: new Date(Date.now() - 2 * 3600000).toISOString() },
+    { user_id: 'u2', email: 'buchhaltung@spielpark-wingst.de', full_name: 'Petra Hansen', created_at: '2026-09-03', allowed_pages: ['overview', 'revenue', 'purchases'], role_label: 'Buchhaltung', disabled_at: null, last_sign_in_at: null },
+  ] as any;
+}
+
+export function previewEquipment() {
+  const it = (id: string, kategorie: string, titel: string, status: string, mehrwert_text: string | null, beschreibung: string) => ({
+    id, kategorie, titel, beschreibung, status, geschaetzter_mehrumsatz_cents: null, mehrwert_text, bestellstatus: null, preview_url: null, sortierung: 0, image_url: IMG, before_image_url: null, after_image_url: null,
+  });
+  return [
+    it('e1', 'Automat', 'Fotoautomat mit Münzprüfer', 'vorhanden', null, 'Verkauf direkt am Ausgang.'),
+    it('e2', 'Verkauf', 'Kartenterminal', 'empfohlen', '890 € · 19 € / Monat', 'Gäste zahlen mit Karte oder Handy. Mehr Spontankäufe.'),
+    it('e3', 'Kamera', 'Video-Kamera', 'empfohlen', '1.490 €', 'Kurzes Video der Fahrt zusätzlich zum Foto.'),
+    it('e4', 'Zubehoer', 'Fotopapier 400 Drucke', 'empfohlen', '89 €', 'Thermo-Fotopapier für den Drucker DS-RX1.'),
+  ] as any;
+}

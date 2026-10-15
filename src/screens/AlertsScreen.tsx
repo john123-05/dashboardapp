@@ -23,12 +23,12 @@ const TONE = {
   info: [colors.infoSoft, colors.info],
 } as const;
 
-export function AlertsScreen() {
+export function AlertsScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const { items, unread, isRead, markAllRead, loading, refreshing, error, reload } = useNotifications();
   return (
     <Screen
-      tabs
       title="Meldungen"
+      onBack={navigation.goBack}
       subtitle={unread > 0 ? `${unread} neu` : 'Alles gelesen'}
       refreshing={refreshing}
       onRefresh={reload}

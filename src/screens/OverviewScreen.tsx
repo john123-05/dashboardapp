@@ -55,6 +55,7 @@ export function OverviewScreen() {
   return (
     <Screen
       tabs
+      actions
       title={parkName ?? 'Übersicht'}
       subtitle={schedule ? `Heute geöffnet ${schedule.open} bis ${schedule.close} Uhr` : openingHoursConfig || openingHours ? 'Heute geschlossen' : formatDayLong(today)}
       refreshing={refreshing}
@@ -98,7 +99,7 @@ export function OverviewScreen() {
       )}
 
       {canSee('health', viewer) ? (
-        <Section title="Anlagen" action="Alle" onAction={() => nav.navigate('Machines')}>
+        <Section title="Systemzustand" action="Alle" onAction={() => nav.navigate('Health')}>
           {health.data && health.data.length > 0 ? (
             <ListCard>
               {health.data.map((m, i) => (
@@ -110,7 +111,7 @@ export function OverviewScreen() {
                   title={m.machine_label || m.machine_id}
                   subtitle={m.reachable ? `Zuletzt ${timeAgo(m.last_seen_at)}` : `Offline seit ${timeAgo(m.last_seen_at).replace('vor ', '')}`}
                   right={<Pill text={m.reachable ? 'Online' : 'Offline'} tone={m.reachable ? 'ok' : 'err'} />}
-                  onPress={() => nav.navigate('Machines')}
+                  onPress={() => nav.navigate('Health')}
                   last={i === health.data!.length - 1}
                 />
               ))}
