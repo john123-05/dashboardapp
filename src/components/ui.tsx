@@ -6,6 +6,7 @@ import type { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { colors, font, radius, shadow, space, TAP } from '../theme';
 import { tapHaptic } from './haptics';
+import { useWide } from './layout';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -58,8 +59,17 @@ export function Kpi({ label, value, sub, tone, icon }: { label: string; value: s
   );
 }
 
-export function KpiGrid({ children }: { children: ReactNode }) {
-  return <View style={styles.kpiGrid}>{children}</View>;
+export function KpiGrid({ children, columns }: { children: ReactNode; columns?: number }) {
+  const wide = useWide();
+  const n = columns ?? (wide ? 4 : 2);
+  const basis = `${Math.floor(100 / n) - 2}%`;
+  return (
+    <View style={styles.kpiGrid}>
+      {Array.isArray(children)
+        ? children.map((c, i) => (c ? <View key={i} style={{ flexBasis: basis as any, flexGrow: 1, minWidth: 0 }}>{c}</View> : null))
+        : children}
+    </View>
+  );
 }
 
 // Listenzeile: mindestens 52 pt hoch, ganze Zeile antippbar, Rückmeldung beim Drücken.
@@ -141,7 +151,7 @@ export function Pill({ text, tone = 'neutral', icon }: { text: string; tone?: 'o
     warn: [colors.warnSoft, colors.warn],
     err: [colors.errSoft, colors.err],
     info: [colors.infoSoft, colors.info],
-    neutral: ['rgba(16,24,40,0.06)', colors.ink2],
+    neutral: [colors.fill, colors.ink2],
   } as const;
   const [bg, fg] = map[tone];
   return (
@@ -166,7 +176,11 @@ export function Segmented<T extends string>({ options, value, onChange }: { opti
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
     <View style={styles.segmented} onLayout={(e: LayoutChangeEvent) => setWidth(e.nativeEvent.layout.width)}>
-      {seg > 0 ? <Animated.View style={[styles.segPill, { width: seg }, pill]} /> : null}
+      {seg > 0 ? (
+        <Animated.View style={[styles.segPillPos, { width: seg }, pill]}>
+          <View style={styles.segPill} />
+        </Animated.View>
+      ) : null}
       {options.map((o) => (
         <Pressable
           key={o.value}
@@ -195,19 +209,24 @@ export function Skeleton({ height = 16, width = '100%', radius: r = 8, style }: 
     o.value = withRepeat(withSequence(withTiming(1, { duration: 700 }), withTiming(0.5, { duration: 700 })), -1);
   }, [o]);
   const a = useAnimatedStyle(() => ({ opacity: o.value }));
-  return <Animated.View style={[{ height, width: width as any, borderRadius: r, backgroundColor: 'rgba(16,24,40,0.08)' }, a, style]} />;
+  // Farbe im inneren View: animierte Views vertragen keine dynamischen Hell/Dunkel-Farben.
+  return (
+    <Animated.View style={[{ height, width: width as any }, a, style]}>
+      <View style={{ flex: 1, borderRadius: r, backgroundColor: colors.fill }} />
+    </Animated.View>
+  );
 }
 
 export function KpiSkeleton() {
   return (
-    <View style={styles.kpiGrid}>
+    <KpiGrid>
       {[0, 1, 2, 3].map((i) => (
         <View key={i} style={styles.kpi}>
           <Skeleton height={12} width="50%" />
           <Skeleton height={28} width="70%" style={{ marginTop: 10 }} />
         </View>
       ))}
-    </View>
+    </KpiGrid>
   );
 }
 
@@ -238,8 +257,8 @@ export function ErrorNote({ text, onRetry }: { text: string; onRetry?: () => voi
 }
 
 export function Button({ title, onPress, loading, kind = 'primary', icon }: { title: string; onPress: () => void; loading?: boolean; kind?: 'primary' | 'plain' | 'danger'; icon?: IconName }) {
-  const bg = kind === 'primary' ? colors.brand : kind === 'danger' ? colors.errSoft : 'rgba(16,24,40,0.06)';
-  const fg = kind === 'primary' ? colors.white : kind === 'danger' ? colors.err : colors.ink;
+  const bg = kind === 'primary' ? colors.brand : kind === 'danger' ? colors.errSoft : colors.fill;
+  const fg = kind === 'primary' ? colors.onBrand : kind === 'danger' ? colors.err : colors.ink;
   return (
     <Pressable
       onPress={() => {
@@ -266,13 +285,13 @@ const styles = StyleSheet.create({
   sectionAction: { minHeight: TAP, justifyContent: 'center', paddingLeft: space.md },
   sectionActionText: { ...font.callout, color: colors.brand },
   kpiGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
-  kpi: { flexBasis: '47.5%', flexGrow: 1, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, gap: 2, ...(shadow as object) },
+  kpi: { flexGrow: 1, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, gap: 2, ...(shadow as object) },
   kpiLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   kpiLabel: { ...font.footnote, color: colors.ink2, flexShrink: 1 },
   kpiValue: { ...font.kpi, color: colors.ink, marginTop: 4 },
   kpiSub: { ...font.caption, marginTop: 2 },
   row: { minHeight: 56, flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.lg, paddingVertical: space.sm, gap: space.md, backgroundColor: colors.card },
-  rowPressed: { backgroundColor: 'rgba(16,24,40,0.05)' },
+  rowPressed: { backgroundColor: colors.fill },
   rowIcon: { width: 32, height: 32, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
   rowText: { flex: 1, minWidth: 0 },
   rowTitle: { ...font.body, color: colors.ink },
@@ -280,11 +299,12 @@ const styles = StyleSheet.create({
   rowRight: { flexShrink: 0, alignItems: 'flex-end', maxWidth: '45%' },
   rowLine: { position: 'absolute', right: 0, bottom: 0, height: StyleSheet.hairlineWidth, backgroundColor: colors.lineStrong },
   badge: { minWidth: 22, height: 22, borderRadius: 11, paddingHorizontal: 6, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
-  badgeText: { color: colors.white, fontSize: 12, fontWeight: '700' },
+  badgeText: { color: colors.onBrand, fontSize: 12, fontWeight: '700' },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 9, paddingVertical: 4, borderRadius: radius.pill, alignSelf: 'flex-start' },
   pillText: { fontSize: 12, fontWeight: '600' },
-  segmented: { flexDirection: 'row', backgroundColor: 'rgba(16,24,40,0.07)', borderRadius: 11, padding: 2, minHeight: 36 },
-  segPill: { position: 'absolute', top: 2, bottom: 2, left: 2, borderRadius: 9, backgroundColor: colors.white, ...(shadow as object) },
+  segmented: { flexDirection: 'row', backgroundColor: colors.fill, borderRadius: 11, padding: 2, minHeight: 36 },
+  segPillPos: { position: 'absolute', top: 2, bottom: 2, left: 2 },
+  segPill: { flex: 1, borderRadius: 9, backgroundColor: colors.white, ...(shadow as object) },
   segItem: { flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 32, paddingHorizontal: 4 },
   segText: { ...font.footnote, color: colors.ink2, fontWeight: '600' },
   segTextActive: { color: colors.ink },

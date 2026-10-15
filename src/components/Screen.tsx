@@ -11,8 +11,8 @@ import { HeaderActions } from './HeaderActions';
 import { useWide } from './layout';
 
 // Schwebende Tab-Leiste: Höhe plus Abstand zum unteren Rand.
-export const TAB_BAR_HEIGHT = 62;
-export const TAB_BAR_GAP = 8;
+export const TAB_BAR_HEIGHT = 58;
+export const TAB_BAR_GAP = 0;
 
 interface Props {
   title: string;
@@ -58,11 +58,11 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
   const hairline = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [8, 30], [0, 1], 'clamp') }));
   const blurIn = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [0, 16], [0.0, 1], 'clamp') }));
 
-  const bottom = (tabs && !wide ? TAB_BAR_HEIGHT + TAB_BAR_GAP + 12 : 0) + insets.bottom + space.xl;
+  const bottom = (tabs && !wide ? TAB_BAR_HEIGHT : 0) + insets.bottom + space.xl;
   const contentWidth = wide ? { width: '100%' as const, maxWidth: 1180, alignSelf: 'center' as const } : null;
 
   return (
-    <View style={[styles.root, sheet && { backgroundColor: '#EEF0F3' }]}>
+    <View style={[styles.root, sheet && { backgroundColor: colors.sheet }]}>
       <Animated.ScrollView
         ref={scrollRef}
         style={styles.scroll}
@@ -97,9 +97,11 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
       {/* Durchsichtige Kopfzeile: unscharfer Hintergrund, kleiner Titel blendet beim Scrollen ein. */}
       <View style={[styles.header, { height: topInset, paddingTop: insets.top }]} pointerEvents="box-none">
         <Animated.View style={[StyleSheet.absoluteFill, blurIn]} pointerEvents="none">
-          <BlurView intensity={70} tint="systemChromeMaterialLight" style={StyleSheet.absoluteFill} />
+          <BlurView intensity={70} tint="systemChromeMaterial" style={StyleSheet.absoluteFill} />
         </Animated.View>
-        <Animated.View style={[styles.hairline, hairline]} pointerEvents="none" />
+        <Animated.View style={[styles.hairlinePos, hairline]} pointerEvents="none">
+          <View style={styles.hairline} />
+        </Animated.View>
         <View style={styles.headerRow} pointerEvents="box-none">
           <View style={styles.headerSide}>
             {onBack ? (
@@ -120,9 +122,11 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
               </Pressable>
             ) : null}
           </View>
-          <Animated.Text style={[styles.smallTitle, smallTitle]} numberOfLines={1} pointerEvents="none">
-            {title}
-          </Animated.Text>
+          <Animated.View style={[{ flex: 1 }, smallTitle]} pointerEvents="none">
+            <Text style={styles.smallTitle} numberOfLines={1}>
+              {title}
+            </Text>
+          </Animated.View>
           <View style={[styles.headerSide, { alignItems: 'flex-end' }]}>{actions ? <HeaderActions /> : null}</View>
         </View>
       </View>
@@ -140,7 +144,8 @@ const styles = StyleSheet.create({
   right: { minHeight: TAP, justifyContent: 'center' },
   body: { paddingHorizontal: space.lg, gap: space.lg },
   header: { position: 'absolute', top: 0, left: 0, right: 0 },
-  hairline: { position: 'absolute', left: 0, right: 0, bottom: 0, height: StyleSheet.hairlineWidth, backgroundColor: colors.lineStrong },
+  hairlinePos: { position: 'absolute', left: 0, right: 0, bottom: 0, height: StyleSheet.hairlineWidth },
+  hairline: { flex: 1, backgroundColor: colors.lineStrong },
   headerRow: { height: HEADER_HEIGHT, flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.sm },
   headerSide: { width: 110, justifyContent: 'center' },
   smallTitle: { flex: 1, textAlign: 'center', ...font.headline, color: colors.ink },

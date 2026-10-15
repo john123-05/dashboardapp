@@ -68,7 +68,7 @@ export function ConfigurationScreen({ navigation }: { navigation: { goBack: () =
             const done = asked.has(it.id) || it.status === 'bestellt';
             return (
               <View key={it.id} style={[styles.product, { width: cardW }]}>
-                <View style={{ height: cardW * 0.75, backgroundColor: '#E9EBEF' }}>
+                <View style={{ height: cardW * 0.75, backgroundColor: colors.subtle }}>
                   {it.image_url ? <Image source={{ uri: it.image_url }} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} /> : null}
                   <View style={{ position: 'absolute', top: 8, left: 8 }}>
                     <Pill tone={st.tone} text={st.label} />
@@ -104,5 +104,5 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   product: { backgroundColor: colors.white, borderRadius: radius.lg, overflow: 'hidden', ...(shadow as object) },
   ask: { marginTop: 8, minHeight: 38, borderRadius: 10, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
-  askDone: { backgroundColor: 'rgba(16,24,40,0.06)' },
+  askDone: { backgroundColor: colors.fill },
 });

@@ -55,7 +55,7 @@ export function BarChart({ data, height = 150, color = colors.brand, format }: {
         <View onLayout={(e: LayoutChangeEvent) => setWidth(e.nativeEvent.layout.width)} style={{ height }}>
           {width > 0 ? (
             <Svg width={width} height={height}>
-              <Line x1={0} x2={width} y1={h} y2={h} stroke={colors.lineStrong} strokeWidth={1} />
+              <Line x1={0} x2={width} y1={h} y2={h} stroke={colors.chartLine} strokeWidth={1} />
               {data.map((d, i) => {
                 const bh = Math.max(d.value > 0 ? 3 : 1, (d.value / max) * (h - 4));
                 return <Rect key={i} x={i * (bw + gap)} y={h - bh} width={bw} height={bh} rx={Math.min(4, bw / 2)} fill={i === active ? color : `${color}55`} />;

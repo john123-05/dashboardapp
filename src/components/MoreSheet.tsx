@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
+import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { PAGES, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
@@ -21,7 +22,9 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const { isOwner, isStaff, allowedPages, fullName, email } = useAuth();
-  const { parkName } = usePark();
+  const { parkName, parkId } = usePark();
+  const ent = useEntitlements(parkId);
+  const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
   const [mounted, setMounted] = useState(open);
   const p = useSharedValue(0);
   const drag = useSharedValue(0);
@@ -107,6 +110,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
                     <Ionicons name={pg.icon} size={20} color="rgba(255,255,255,0.85)" />
                     <Text style={styles.itemText} numberOfLines={1}>
                       {pg.title}
+                      {upgrade(pg.key) ? <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}> (Upgrade)</Text> : null}
                     </Text>
                     {!pg.route ? <Ionicons name="open-outline" size={14} color="rgba(255,255,255,0.35)" /> : null}
                   </Pressable>

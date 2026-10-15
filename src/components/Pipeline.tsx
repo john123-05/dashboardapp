@@ -74,7 +74,7 @@ function Station({ e, aktiv, rot, onPress }: { e: Eintrag; aktiv: boolean; rot: 
   }, [rot, pulse]);
   const glowColor = e.ton === 'warn' ? colors.warn : colors.ok;
   const ring = useAnimatedStyle(() => ({
-    borderColor: rot ? colors.err : glow.value > 0.5 ? glowColor : 'rgba(16,24,40,0.16)',
+    borderColor: rot ? colors.err : glow.value > 0.5 ? glowColor : 'rgba(128,132,145,0.4)',
     shadowColor: rot ? colors.err : glowColor,
     shadowOpacity: rot ? 0.25 + pulse.value * 0.45 : glow.value * 0.6,
     shadowRadius: rot ? 6 + pulse.value * 8 : glow.value * 10,
@@ -90,6 +90,7 @@ function Station({ e, aktiv, rot, onPress }: { e: Eintrag; aktiv: boolean; rot: 
       accessibilityLabel={`${e.name}: ${z.label}`}
     >
       <Animated.View style={[styles.circle, ring]}>
+        <View style={styles.circleFill} />
         <Ionicons name={KIND_ICON[e.kind] ?? 'hardware-chip-outline'} size={17} color={colors.ink2} />
         <View style={[styles.dot, { backgroundColor: z.color }]} />
       </Animated.View>
@@ -106,10 +107,11 @@ function Station({ e, aktiv, rot, onPress }: { e: Eintrag; aktiv: boolean; rot: 
 const styles = StyleSheet.create({
   strip: { paddingHorizontal: 12, paddingVertical: 14 },
   station: { width: 86, alignItems: 'center', gap: 5 },
-  circle: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', shadowOffset: { width: 0, height: 0 } },
-  dot: { position: 'absolute', top: -2, right: -2, width: 12, height: 12, borderRadius: 6, borderWidth: 2, borderColor: colors.white },
+  circle: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center', shadowOffset: { width: 0, height: 0 } },
+  circleFill: { ...StyleSheet.absoluteFillObject, borderRadius: 20, backgroundColor: colors.white },
+  dot: { position: 'absolute', top: -2, right: -2, width: 12, height: 12, borderRadius: 6, borderWidth: 2, borderColor: '#FFFFFF' },
   name: { ...font.caption, fontSize: 11, color: colors.ink2, textAlign: 'center', lineHeight: 13 },
   state: { fontSize: 10, color: colors.ink3 },
-  line: { width: 18, height: 1.5, marginTop: 20, backgroundColor: 'rgba(16,24,40,0.16)', overflow: 'hidden' },
+  line: { width: 18, height: 1.5, marginTop: 20, backgroundColor: 'rgba(128,132,145,0.4)', overflow: 'hidden' },
   flow: { position: 'absolute', top: -0.5, left: 0, width: 18, height: 2.5, borderRadius: 2 },
 });

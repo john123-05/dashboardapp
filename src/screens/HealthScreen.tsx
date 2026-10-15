@@ -243,7 +243,8 @@ function Zeile({ e, m, offen, onToggle, busy, onAuftrag }: {
   };
 
   return (
-    <Animated.View layout={LinearTransition.duration(220)} style={[styles.row, e.ton === 'bad' && { borderColor: '#F6C7C2' }]}>
+    <Animated.View layout={LinearTransition.duration(220)}>
+    <View style={[styles.row, e.ton === 'bad' && { borderColor: '#F6C7C2' }]}>
       <Pressable
         onPress={() => {
           tapHaptic();
@@ -310,6 +311,7 @@ function Zeile({ e, m, offen, onToggle, busy, onAuftrag }: {
           ) : null}
         </Animated.View>
       ) : null}
+    </View>
     </Animated.View>
   );
 }
@@ -341,16 +343,16 @@ function Knopf({ label, icon, onPress, primary, disabled, busy }: { label: strin
 const styles = StyleSheet.create({
   verdictIcon: { width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center' },
   sums: { flexDirection: 'row', gap: space.md, borderTopWidth: 1, borderTopColor: colors.line, paddingHorizontal: space.lg, paddingVertical: space.md },
-  paperTrack: { height: 5, borderRadius: 3, backgroundColor: 'rgba(16,24,40,0.08)', marginTop: 6, overflow: 'hidden' },
-  strip: { backgroundColor: '#F7F8FA', borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.line },
+  paperTrack: { height: 5, borderRadius: 3, backgroundColor: colors.fill, marginTop: 6, overflow: 'hidden' },
+  strip: { backgroundColor: colors.subtle, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.line },
   codeWarn: { backgroundColor: colors.errSoft, borderRadius: radius.md, padding: space.md, gap: 4 },
   row: { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md, backgroundColor: colors.white, overflow: 'hidden' },
   rowHead: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: space.md, paddingVertical: 11, minHeight: 56 },
   rowDot: { width: 9, height: 9, borderRadius: 5 },
   rowBody: { paddingHorizontal: space.md, paddingBottom: space.md, gap: 8 },
-  befund: { backgroundColor: '#F7F8FA', borderRadius: 10, padding: 10, gap: 3 },
+  befund: { backgroundColor: colors.subtle, borderRadius: 10, padding: 10, gap: 3 },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 2 },
-  knopf: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 40, paddingHorizontal: 12, borderRadius: 10, backgroundColor: 'rgba(16,24,40,0.06)' },
+  knopf: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 40, paddingHorizontal: 12, borderRadius: 10, backgroundColor: colors.fill },
   knopfPrimary: { backgroundColor: colors.brand },
   sectionTitle: { ...font.headline, color: colors.ink, paddingHorizontal: space.xs },
   hist: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, paddingHorizontal: space.lg, paddingVertical: 11 },

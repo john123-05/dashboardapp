@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PAGES } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
-import { TAB_BAR_GAP, TAB_BAR_HEIGHT } from './Screen';
+import { TAB_BAR_HEIGHT } from './Screen';
 
 export const BAR_GREY = '#2b2b2b';
 
@@ -13,9 +13,8 @@ export const BAR_GREY = '#2b2b2b';
 // Der letzte Knopf "Mehr" öffnet das Blatt von unten statt einer Seite.
 export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBarProps & { onMore: () => void; moreOpen: boolean }) {
   const insets = useSafeAreaInsets();
-  const bottom = Math.max(insets.bottom - 10, 0) + TAB_BAR_GAP;
   return (
-    <View style={[styles.bar, { bottom }]}>
+    <View style={[styles.bar, { height: TAB_BAR_HEIGHT + insets.bottom, paddingBottom: insets.bottom }]}>
       {state.routes.map((route, index) => {
         const focused = state.index === index && !moreOpen;
         const page = PAGES.find((p) => p.route === route.name);
@@ -36,10 +35,11 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
               }
             }}
           >
+            <View style={[styles.marker, focused && styles.markerOn]} />
             <View style={[styles.iconWrap, focused && styles.iconWrapOn]}>
-              <Ionicons name={(focused ? icon.replace('-outline', '') : icon) as any} size={21} color={focused ? '#fff' : 'rgba(255,255,255,0.58)'} />
+              <Ionicons name={(focused ? icon.replace('-outline', '') : icon) as any} size={22} color={focused ? '#fff' : 'rgba(255,255,255,0.55)'} />
             </View>
-            <Text style={[styles.label, { color: focused ? '#fff' : 'rgba(255,255,255,0.58)' }]} numberOfLines={1}>
+            <Text style={[styles.label, { color: focused ? '#fff' : 'rgba(255,255,255,0.55)', fontWeight: focused ? '700' : '500' }]} numberOfLines={1}>
               {label}
             </Text>
           </Pressable>
@@ -55,33 +55,39 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
           onMore();
         }}
       >
+        <View style={[styles.marker, moreOpen && styles.markerOn]} />
         <View style={[styles.iconWrap, moreOpen && styles.iconWrapOn]}>
-          <Ionicons name="menu" size={22} color={moreOpen ? '#fff' : 'rgba(255,255,255,0.58)'} />
+          <Ionicons name="grid-outline" size={21} color={moreOpen ? '#fff' : 'rgba(255,255,255,0.55)'} />
         </View>
-        <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.58)' }]}>Mehr</Text>
+        <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.55)', fontWeight: moreOpen ? '700' : '500' }]}>Mehr</Text>
       </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // Bis an den unteren Rand: die Leiste füllt auch den Bereich unter dem Home-Balken.
   bar: {
     position: 'absolute',
-    left: 12,
-    right: 12,
-    height: TAB_BAR_HEIGHT,
-    borderRadius: 22,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     backgroundColor: BAR_GREY,
     flexDirection: 'row',
     paddingHorizontal: 6,
     shadowColor: '#000',
-    shadowOpacity: 0.28,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: -4 },
     elevation: 12,
   },
-  item: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 1 },
-  iconWrap: { width: 44, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  item: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2, paddingTop: 2 },
+  // Kleiner oranger Strich oben über dem aktiven Tab.
+  marker: { position: 'absolute', top: 0, width: 22, height: 3, borderBottomLeftRadius: 2, borderBottomRightRadius: 2, backgroundColor: 'transparent' },
+  markerOn: { backgroundColor: '#E8722A' },
+  iconWrap: { width: 48, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   iconWrapOn: { backgroundColor: 'rgba(255,255,255,0.14)' },
   label: { ...font.caption, fontSize: 10.5, fontWeight: '600' },
 });

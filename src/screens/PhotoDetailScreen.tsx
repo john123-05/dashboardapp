@@ -14,7 +14,7 @@ export function PhotoDetailScreen({ route, navigation }: { route: { params: { ph
   const day = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date(p.capturedAt));
   return (
     <Screen sheet title="Foto" onBack={navigation.goBack} backLabel="Schließen">
-      <View style={{ borderRadius: radius.lg, overflow: 'hidden', aspectRatio: 4 / 3, backgroundColor: '#ddd' }}>
+      <View style={{ borderRadius: radius.lg, overflow: 'hidden', aspectRatio: 4 / 3, backgroundColor: colors.subtle }}>
         {p.imageUrl ? <Image source={{ uri: p.imageUrl }} style={{ flex: 1 }} contentFit="cover" transition={150} /> : null}
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>

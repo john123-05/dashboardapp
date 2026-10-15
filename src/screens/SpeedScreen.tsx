@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ActionSheetIOS, Alert, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Locked, SPEED_OFFER } from '../components/Locked';
 import { Screen } from '../components/Screen';
+import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Segmented } from '../components/ui';
 import { tapHaptic } from '../components/haptics';
 import { usePark } from '../contexts/ParkContext';
@@ -32,6 +34,8 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
   const data = useData(parkId ? `speed:${parkId}:${period}:${date}` : null, () => fetchSpeedOverview(parkId!, period, date), [parkId, period, date], 60000);
   const o = data.data;
   const today = todayInTimezone(timezone);
+  const ent = useEntitlements(parkId);
+  const unlocked = speedUnlocked(parkId, ent.has);
 
   function aktion(r: SpeedRow) {
     tapHaptic();
@@ -52,6 +56,8 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
 
   return (
     <Screen title="Speedmessung" subtitle="Bestenliste und Geschwindigkeiten" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+      {!unlocked && !ent.loading ? <Locked {...SPEED_OFFER} /> : null}
+      {unlocked ? (<>
       <Segmented<SpeedPeriod> value={period} onChange={(p) => { setPeriod(p); setDate(today); }} options={PERIODS} />
       {period !== 'all' ? (
         <View style={styles.dateRow}>
@@ -81,7 +87,7 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
       {o && o.rows.length > 0 ? (
         <ListCard>
           {o.rows.map((r, i) => (
-            <Pressable key={r.id} onPress={() => aktion(r)} style={({ pressed }) => [styles.row, i > 0 && styles.line, pressed && { backgroundColor: 'rgba(16,24,40,0.04)' }, r.hidden && { opacity: 0.45 }]}>
+            <Pressable key={r.id} onPress={() => aktion(r)} style={({ pressed }) => [styles.row, i > 0 && styles.line, pressed && { backgroundColor: colors.fill }, r.hidden && { opacity: 0.45 }]}>
               <View style={[styles.rank, r.rank <= 3 && { backgroundColor: MEDAL[r.rank - 1] }]}>
                 <Text style={[styles.rankText, r.rank <= 3 && { color: '#fff' }]}>{r.rank}</Text>
               </View>
@@ -107,6 +113,7 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
       ) : null}
       {o && o.rows.length > 0 ? <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>Antippen, um ein Ergebnis auf der Bestenliste aus- oder einzublenden.</Text> : null}
       {o && !o.enabled ? <Pill tone="warn" text="Die Bestenliste ist für diesen Park noch nicht freigeschaltet." /> : null}
+      </>) : null}
     </Screen>
   );
 }
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
   arrow: { width: TAP, height: TAP, alignItems: 'center', justifyContent: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: space.lg, minHeight: 60 },
   line: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.lineStrong },
-  rank: { width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(16,24,40,0.06)', alignItems: 'center', justifyContent: 'center' },
+  rank: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.fill, alignItems: 'center', justifyContent: 'center' },
   rankText: { fontWeight: '800', color: colors.ink2, fontVariant: ['tabular-nums'] },
   speed: { ...font.headline, color: colors.ink, fontVariant: ['tabular-nums'] },
 });

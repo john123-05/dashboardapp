@@ -5,6 +5,7 @@ import { Screen } from '../components/Screen';
 import { Button, Card, ErrorNote, ListCard, Pill, Row, Section, Skeleton } from '../components/ui';
 import { successHaptic, tapHaptic } from '../components/haptics';
 import { usePark } from '../contexts/ParkContext';
+import { isDeviceRegistered, registerDevice, sendTestPush, unregisterDevice } from '../lib/push';
 import { DEFAULT_SETTINGS, loadNotificationSettings, saveNotificationSettings, type NotificationSettings } from '../lib/notificationSettings';
 import { formatCents } from '../lib/format';
 import { normalizeOpeningHoursConfig } from '../lib/kioskSales';
@@ -43,6 +44,43 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [device, setDevice] = useState(false);
+  const [deviceBusy, setDeviceBusy] = useState(false);
+  const [pushNote, setPushNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (parkId) void isDeviceRegistered(parkId).then(setDevice);
+  }, [parkId]);
+
+  // "Dieses Gerät": App für Push anmelden oder abmelden, wie der Schalter im Web.
+  async function geraetUmschalten(on: boolean) {
+    if (!parkId) return;
+    setDeviceBusy(true);
+    setPushNote(null);
+    try {
+      if (on) {
+        await registerDevice(parkId);
+        // Ohne Park-Schalter kommt nichts an: beim ersten Anmelden mit einschalten.
+        if (s && !s.push_enabled) setS(await saveNotificationSettings(parkId, { ...s, push_enabled: true }));
+      } else await unregisterDevice(parkId);
+      setDevice(on);
+      successHaptic();
+    } catch (e) {
+      setPushNote(e instanceof Error ? e.message : 'Fehlgeschlagen');
+    }
+    setDeviceBusy(false);
+  }
+
+  async function testSenden() {
+    if (!parkId) return;
+    setPushNote(null);
+    try {
+      await sendTestPush(parkId);
+      setPushNote('Test-Benachrichtigung gesendet. Sie kommt in wenigen Sekunden an.');
+    } catch (e) {
+      setPushNote(e instanceof Error ? e.message : 'Senden fehlgeschlagen');
+    }
+  }
 
   useEffect(() => {
     if (!parkId) return;
@@ -83,7 +121,8 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
           </Card>
         ) : (
           <Card padded={false}>
-            <Toggle title="Benachrichtigungen" sub="Meldungen an dein Gerät senden" value={s.push_enabled} onChange={(v) => set({ push_enabled: v })} />
+            <Toggle title="Dieses Gerät" sub={deviceBusy ? 'Wird angemeldet…' : device ? 'Aktiv: Mitteilungen kommen auf dieses iPhone' : 'Mitteilungen auf diesem Gerät empfangen'} value={device} onChange={(v) => void geraetUmschalten(v)} />
+            <Toggle title="Benachrichtigungen für diesen Park" sub="Nur wenn dies aktiv ist, werden die Kategorien unten an dieses Konto gesendet." value={s.push_enabled} onChange={(v) => set({ push_enabled: v })} />
             <Toggle title="Keine Fotos mehr" sub="Wenn während der Öffnungszeit keine Fotos ankommen" value={s.photo_inactivity_enabled} onChange={(v) => set({ photo_inactivity_enabled: v })}>
               {s.photo_inactivity_enabled ? <Stepper value={s.photo_inactivity_minutes} onChange={(v) => set({ photo_inactivity_minutes: v })} min={5} max={240} step={5} suffix="Min." /> : null}
             </Toggle>
@@ -94,7 +133,9 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
             <Toggle title="Störungen am Automaten" sub="Programm oder Gerät fällt aus" value={s.system_health_enabled} onChange={(v) => set({ system_health_enabled: v })} last />
           </Card>
         )}
-        {s ? <Button title={saved ? 'Gespeichert' : 'Speichern'} icon={saved ? 'checkmark' : undefined} onPress={speichern} loading={saving} /> : null}
+        {pushNote ? <Pill tone="info" icon="information-circle" text={pushNote} /> : null}
+        {s ? <Button title={saved ? 'Gespeichert' : 'Benachrichtigungen speichern'} icon={saved ? 'checkmark' : 'notifications-outline'} onPress={speichern} loading={saving} /> : null}
+        {device ? <Button title="Test-Benachrichtigung senden" kind="plain" icon="phone-portrait-outline" onPress={() => void testSenden()} /> : null}
       </Section>
 
       <Section title="Öffnungszeiten" action="Bearbeiten" onAction={() => nav.navigate('Web', { path: '/settings', title: 'Öffnungszeiten' })}>
@@ -136,6 +177,6 @@ function Toggle({ title, sub, value, onChange, last, children }: { title: string
 const styles = StyleSheet.create({
   toggle: { paddingHorizontal: space.lg, paddingVertical: 12, gap: 10, minHeight: 60, justifyContent: 'center' },
   line: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.lineStrong },
-  stepper: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: 'rgba(16,24,40,0.05)', borderRadius: 12 },
+  stepper: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: colors.fill, borderRadius: 12 },
   step: { width: TAP, height: 40, alignItems: 'center', justifyContent: 'center' },
 });

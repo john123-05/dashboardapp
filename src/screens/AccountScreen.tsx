@@ -1,9 +1,11 @@
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import { Alert, Appearance, Text, View } from 'react-native';
 import { initialsOf } from '../components/HeaderActions';
 import { Screen } from '../components/Screen';
-import { Button, Card, ListCard, Row, Section } from '../components/ui';
+import { Button, Card, ListCard, Row, Section, Segmented } from '../components/ui';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
@@ -16,6 +18,10 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
   const { parkName, setPark } = usePark();
   const viewer = { isOwner, isStaff, allowedPages };
   const canSwitch = isSuperAdminEmail(email) || allowedParkIds.length !== 1;
+  const [look, setLook] = useState<'system' | 'light' | 'dark'>('system');
+  useEffect(() => {
+    void AsyncStorage.getItem(APPEARANCE_KEY).then((v) => v && setLook(v as 'system' | 'light' | 'dark'));
+  }, []);
   const links = ['settings', 'team', 'plans', 'tickets'].map((k) => PAGES.find((p) => p.key === k)!).filter((p) => canSee(p.key, viewer));
 
   return (
@@ -43,6 +49,25 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
         </ListCard>
       </Section>
 
+      <Section title="Hilfe">
+        <ListCard>
+          <Row icon="help-circle-outline" title="Hilfe-Center" subtitle="Anleitungen, Fragen, Support" chevron onPress={() => nav.navigate('Help')} />
+          <Row icon="play-circle-outline" title="Rundgang starten" subtitle="Die App in einer Minute" chevron onPress={() => nav.navigate('Tour')} last />
+        </ListCard>
+      </Section>
+
+      <Section title="Erscheinungsbild">
+        <Segmented
+          value={look}
+          onChange={(v) => {
+            setLook(v);
+            applyAppearance(v);
+            void AsyncStorage.setItem(APPEARANCE_KEY, v);
+          }}
+          options={[{ value: 'system', label: 'Wie iPhone' }, { value: 'light', label: 'Hell' }, { value: 'dark', label: 'Dunkel' }]}
+        />
+      </Section>
+
       <View style={{ gap: space.sm }}>
         <Button
           title="Abmelden"
@@ -59,4 +84,9 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
       </View>
     </Screen>
   );
+}
+
+export const APPEARANCE_KEY = 'lp-appearance';
+export function applyAppearance(v: string | null) {
+  Appearance.setColorScheme(v === 'light' || v === 'dark' ? v : null);
 }

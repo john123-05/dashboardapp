@@ -107,7 +107,7 @@ export function WebPageScreen({ route, navigation }: { route: { params: { path: 
         </View>
       ) : null}
       <View style={[styles.header, { height: top, paddingTop: insets.top }]}>
-        <BlurView intensity={70} tint="systemChromeMaterialLight" style={StyleSheet.absoluteFill} />
+        <BlurView intensity={70} tint="systemChromeMaterial" style={StyleSheet.absoluteFill} />
         <View style={styles.hairline} />
         <View style={styles.row}>
           <Pressable

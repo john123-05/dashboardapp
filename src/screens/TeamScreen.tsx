@@ -25,7 +25,7 @@ export function TeamScreen({ navigation }: { navigation: { goBack: () => void } 
             <Row
               key={m.user_id}
               icon="person-outline"
-              iconBg={m.disabled_at ? 'rgba(16,24,40,0.06)' : undefined}
+              iconBg={m.disabled_at ? colors.fill : undefined}
               iconColor={m.disabled_at ? colors.ink3 : undefined}
               title={m.full_name || m.email || 'Mitarbeiter'}
               subtitle={`${m.role_label || 'Eigene Auswahl'} · ${m.allowed_pages ? `${m.allowed_pages.length} Seiten` : 'Standard'} · ${m.last_sign_in_at ? `zuletzt ${timeAgo(m.last_sign_in_at)}` : 'noch nie angemeldet'}`}

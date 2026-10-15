@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
+import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { PAGES, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
@@ -15,7 +16,9 @@ import { BAR_GREY } from './TabBar';
 export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: string | null; onOpen: (p: PageEntry) => void; onAlerts: () => void; onAccount: () => void }) {
   const insets = useSafeAreaInsets();
   const { isOwner, isStaff, allowedPages, fullName, email } = useAuth();
-  const { parkName } = usePark();
+  const { parkName, parkId } = usePark();
+  const ent = useEntitlements(parkId);
+  const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
   const { unread } = useNotifications();
   const viewer = { isOwner, isStaff, allowedPages };
   const visible = PAGES.filter((p) => canSee(p.key, viewer));
@@ -24,7 +27,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
       <View style={styles.brand}>
         <Image source={require('../../assets/icon.png')} style={styles.logo} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Text style={styles.brandName}>Liftpictures</Text>
+          <Text style={styles.brandName}>Liftbase</Text>
           <Text style={styles.park} numberOfLines={1}>
             {parkName}
           </Text>
@@ -51,6 +54,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
                     <Ionicons name={p.icon} size={18} color={on ? '#fff' : 'rgba(255,255,255,0.7)'} />
                     <Text style={[styles.itemText, on && { color: '#fff', fontWeight: '600' }]} numberOfLines={1}>
                       {p.title}
+                      {upgrade(p.key) ? <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}> (Upgrade)</Text> : null}
                     </Text>
                   </Pressable>
                 );

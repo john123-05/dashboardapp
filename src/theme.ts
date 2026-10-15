@@ -1,26 +1,37 @@
-import { Platform } from 'react-native';
+import { DynamicColorIOS, Platform } from 'react-native';
+
+// Hell und dunkel: iOS wechselt diese Farben selbst, wenn das System (oder die App-Einstellung) umschaltet.
+const dyn = (light: string, dark: string) => (Platform.OS === 'ios' ? DynamicColorIOS({ light, dark }) : light) as unknown as string;
 
 // Farben aus dem Web-Dashboard (index.css / tailwind brand). Hell, ruhig, Akzent Orange.
 export const colors = {
-  bg: '#F3F5F8',
-  card: '#FFFFFF',
-  ink: '#101828',
-  ink2: '#475467',
-  ink3: '#98A2B3',
-  line: 'rgba(16, 24, 40, 0.08)',
-  lineStrong: 'rgba(16, 24, 40, 0.14)',
+  bg: dyn('#F3F5F8', '#000000'),
+  card: dyn('#FFFFFF', '#1C1C1E'),
+  ink: dyn('#101828', '#F2F2F7'),
+  ink2: dyn('#475467', '#AEAEB2'),
+  ink3: dyn('#98A2B3', '#6E6E73'),
+  line: dyn('rgba(16, 24, 40, 0.08)', 'rgba(255, 255, 255, 0.08)'),
+  lineStrong: dyn('rgba(16, 24, 40, 0.14)', 'rgba(255, 255, 255, 0.16)'),
+  // Leichte Füllung für Umschalter, Kästchen, neutrale Abzeichen.
+  fill: dyn('rgba(16, 24, 40, 0.06)', 'rgba(255, 255, 255, 0.10)'),
+  subtle: dyn('#F7F8FA', '#2C2C2E'),
+  sheet: dyn('#EEF0F3', '#111113'),
   brand: '#D2561A',
   brandDark: '#C2410C',
-  brandSoft: '#FFF1E8',
+  brandSoft: dyn('#FFF1E8', 'rgba(210, 86, 26, 0.20)'),
   ok: '#12A15F',
-  okSoft: '#E6F6EE',
+  okSoft: dyn('#E6F6EE', 'rgba(18, 161, 95, 0.20)'),
   warn: '#E08A00',
-  warnSoft: '#FFF4DB',
+  warnSoft: dyn('#FFF4DB', 'rgba(224, 138, 0, 0.20)'),
   err: '#E5392D',
-  errSoft: '#FDEAE8',
+  errSoft: dyn('#FDEAE8', 'rgba(229, 57, 45, 0.20)'),
   info: '#2E7CF6',
-  infoSoft: '#E8F0FE',
-  white: '#FFFFFF',
+  infoSoft: dyn('#E8F0FE', 'rgba(46, 124, 246, 0.22)'),
+  // "white" ist die Kartenfläche (dunkel im Dunkelmodus). Weiße Schrift auf Farbe: onBrand.
+  white: dyn('#FFFFFF', '#1C1C1E'),
+  onBrand: '#FFFFFF',
+  // Für Diagramme (SVG braucht feste Farben).
+  chartLine: 'rgba(128, 132, 145, 0.35)',
 };
 
 export const radius = { sm: 10, md: 14, lg: 20, pill: 999 };

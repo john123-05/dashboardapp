@@ -15,10 +15,16 @@ import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
 import { openPage, PAGES } from '../lib/pages';
 import { PREVIEW } from '../lib/preview';
+import * as Notifications from 'expo-notifications';
+import { routeForUrl } from '../lib/push';
 import { AccountScreen } from '../screens/AccountScreen';
 import { AlertsScreen } from '../screens/AlertsScreen';
 import { ConfigurationScreen } from '../screens/ConfigurationScreen';
 import { HealthScreen } from '../screens/HealthScreen';
+import { MarketingScreen } from '../screens/MarketingScreen';
+import { HelpScreen } from '../screens/HelpScreen';
+import { TOUR_SEEN_KEY, TourScreen } from '../screens/TourScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LoginScreen } from '../screens/LoginScreen';
 import { NewTicketScreen } from '../screens/NewTicketScreen';
 import { OverviewScreen } from '../screens/OverviewScreen';
@@ -107,11 +113,13 @@ function pageScreens(S: typeof Inner) {
     <>
       <S.Screen name="Purchases" component={PurchasesScreen as any} />
       <S.Screen name="Speed" component={SpeedScreen as any} />
+      <S.Screen name="Marketing" component={MarketingScreen as any} />
       <S.Screen name="Support" component={SupportScreen as any} />
       <S.Screen name="SupportThread" component={SupportThreadScreen as any} />
       <S.Screen name="Settings" component={SettingsScreen as any} />
       <S.Screen name="Team" component={TeamScreen as any} />
       <S.Screen name="Account" component={AccountScreen as any} />
+      <S.Screen name="Help" component={HelpScreen as any} />
       <S.Screen name="Web" component={WebPageScreen as any} />
       {/* Meldungen gleiten von links herein */}
       <S.Screen name="Alerts" component={AlertsScreen as any} options={{ animation: 'slide_from_left', fullScreenGestureEnabled: false }} />
@@ -128,6 +136,7 @@ function sheetScreens(S: typeof Root) {
       <S.Screen name="TeamEdit" component={TeamEditScreen as any} />
       <S.Screen name="PhotoDetail" component={PhotoDetailScreen as any} />
       <S.Screen name="Park" component={ParkSwitch} />
+      <S.Screen name="Tour" component={TourScreen as any} options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
     </S.Group>
   );
 }
@@ -199,7 +208,7 @@ function usePreviewTour(wide: boolean) {
       tab('Overview'), tab('Revenue'), tab('Health'), tab('Photos'),
       () => DeviceEventEmitter.emit('lp-more', true),
       () => { DeviceEventEmitter.emit('lp-more', false); page('Speed')(); },
-      page('Support'), page('Settings'), page('Team'), page('Alerts'), page('Account'),
+      page('Marketing'), page('Support'), page('Settings'), page('Help'), page('Alerts'), page('Account'),
       () => navRef.navigate('Configuration'),
     ];
     let i = 0;
@@ -211,11 +220,40 @@ function usePreviewTour(wide: boolean) {
   }, [wide]);
 }
 
+// Antippen einer Mitteilung öffnet die passende Seite (auch beim Kaltstart der App).
+function useNotificationTaps(ready: boolean, wide: boolean) {
+  const last = Notifications.useLastNotificationResponse();
+  useEffect(() => {
+    if (!ready || !last) return;
+    const url = (last.notification.request.content.data as { url?: string } | undefined)?.url;
+    const r = routeForUrl(url);
+    const go = () => {
+      if (!navRef.isReady()) return setTimeout(go, 300);
+      const tab = ['Overview', 'Revenue', 'Health', 'Photos'].includes(r.name);
+      if (wide) navRef.navigate('Main', { screen: r.name, params: r.params });
+      else if (tab) navRef.navigate('Tabs', { screen: r.name });
+      else navRef.navigate(r.name, r.params);
+    };
+    go();
+  }, [last, ready, wide]);
+}
+
 export function AppNavigator() {
   const auth = useAuth();
   const park = usePark();
   const wide = useWide();
   usePreviewTour(wide);
+  useNotificationTaps(Boolean(auth.user && park.parkId), wide);
+  // Rundgang beim ersten Start nach der Anmeldung.
+  const signedIn = PREVIEW ? false : Boolean(auth.user && park.parkId);
+  useEffect(() => {
+    if (!signedIn) return;
+    AsyncStorage.getItem(TOUR_SEEN_KEY).then((v) => {
+      if (v) return;
+      const open = () => (navRef.isReady() ? navRef.navigate('Tour') : setTimeout(open, 400));
+      setTimeout(open, 800);
+    });
+  }, [signedIn]);
 
   if (!PREVIEW && (auth.loading || park.loading)) return <Splash />;
   if (!PREVIEW && !auth.user) return <LoginScreen />;

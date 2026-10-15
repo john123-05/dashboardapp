@@ -27,7 +27,7 @@ export const PAGES: PageEntry[] = [
   { key: 'purchases', title: 'Käufe', icon: 'receipt-outline', group: 'Betrieb', route: 'Purchases' },
   { key: 'speed', title: 'Speedmessung', icon: 'speedometer-outline', group: 'Betrieb', route: 'Speed' },
   { key: 'kamera', title: 'Kamera', icon: 'camera-outline', group: 'Betrieb', path: '/kamera' },
-  { key: 'marketing', title: 'Marketing und CRM', icon: 'megaphone-outline', group: 'Marketing', path: '/leads' },
+  { key: 'marketing', title: 'Marketing-CRM', icon: 'megaphone-outline', group: 'Marketing', route: 'Marketing' },
   { key: 'personalization', title: 'Personalisierung', icon: 'color-wand-outline', group: 'Marketing', path: '/personalization' },
   { key: 'shop', title: 'Online-Shop', icon: 'bag-handle-outline', group: 'Marketing', path: '/shop' },
   { key: 'configuration', title: 'Konfiguration', icon: 'storefront-outline', group: 'Verwaltung', route: 'Configuration', modal: true },
