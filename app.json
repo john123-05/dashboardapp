@@ -2,7 +2,7 @@
   "expo": {
     "name": "Liftpictures Dashboard",
     "slug": "dashboardapp",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.john12305.dashboardapp",
-      "buildNumber": "6",
+      "buildNumber": "7",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSPhotoLibraryUsageDescription": "Damit du Logos und Fotos ins Dashboard hochladen kannst.",

@@ -6,6 +6,7 @@ import Animated, { Easing, interpolate, runOnJS, useAnimatedStyle, useSharedValu
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
+import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { PAGES, type PageEntry } from '../lib/pages';
@@ -25,6 +26,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
   const { parkName, parkId } = usePark();
   const ent = useEntitlements(parkId);
   const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
+  const { isDark, toggle } = useLook();
   const [mounted, setMounted] = useState(open);
   const p = useSharedValue(0);
   const drag = useSharedValue(0);
@@ -90,6 +92,17 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.45)" />
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+            onPress={() => {
+              tapHaptic();
+              toggle();
+            }}
+            accessibilityRole="button"
+          >
+            <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={20} color="rgba(255,255,255,0.85)" />
+            <Text style={styles.itemText}>{isDark ? 'Heller Modus' : 'Dunkler Modus'}</Text>
           </Pressable>
           {groups.map((g) => {
             const items = list.filter((pg) => pg.group === g);

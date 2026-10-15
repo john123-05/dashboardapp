@@ -17,6 +17,8 @@ export const TAB_BAR_GAP = 0;
 interface Props {
   title: string;
   subtitle?: string | null;
+  // Kleine Zeile über dem Titel (wie "Dashboard · Park" im Web).
+  kicker?: string | null;
   right?: ReactNode;
   onBack?: () => void;
   backLabel?: string;
@@ -34,7 +36,7 @@ interface Props {
 // Eine Seite wie in iOS: großer Titel, der beim Scrollen in eine durchsichtige Kopfzeile übergeht.
 // Inhalt läuft unter der unscharfen Kopfzeile durch. Ziehen zum Aktualisieren, Gummiband-Scrollen
 // und Rand-Wischen zurück kommen vom System.
-export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, children }: Props) {
+export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, children }: Props) {
   const realInsets = useSafeAreaInsets();
   const wide = useWide();
   // Als Blatt (iOS-Modal) liegt die Seite unter der Statusleiste: oben kein Abstand nötig.
@@ -59,7 +61,8 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
   const blurIn = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [0, 16], [0.0, 1], 'clamp') }));
 
   const bottom = (tabs && !wide ? TAB_BAR_HEIGHT : 0) + insets.bottom + space.xl;
-  const contentWidth = wide ? { width: '100%' as const, maxWidth: 1180, alignSelf: 'center' as const } : null;
+  // Breit wie im Web: volle Breite mit Rand, nicht als schmale Spalte in der Mitte.
+  const contentWidth = wide ? { width: '100%' as const, maxWidth: 1800, alignSelf: 'center' as const } : null;
 
   return (
     <View style={[styles.root, sheet && { backgroundColor: colors.sheet }]}>
@@ -78,9 +81,14 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
         contentContainerStyle={{ paddingTop: isIOS ? 0 : topInset, paddingBottom: bottom }}
         refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.ink3} progressViewOffset={topInset} /> : undefined}
       >
-        <View style={[styles.titleRow, contentWidth, wide && { paddingHorizontal: space.xxl }]}>
+        <View style={[styles.titleRow, contentWidth, wide && { paddingHorizontal: 32, paddingTop: 8, paddingBottom: 20 }]}>
           <View style={styles.titleCol}>
-            <Text style={styles.largeTitle} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} accessibilityRole="header">
+            {kicker ? (
+              <Text style={styles.kicker} numberOfLines={1}>
+                {kicker}
+              </Text>
+            ) : null}
+            <Text style={[styles.largeTitle, wide && styles.largeTitleWide]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} accessibilityRole="header">
               {title}
             </Text>
             {subtitle ? (
@@ -91,7 +99,7 @@ export function Screen({ title, subtitle, right, onBack, backLabel = 'Zurück', 
           </View>
           {right ? <View style={styles.right}>{right}</View> : null}
         </View>
-        <View style={[styles.body, contentWidth, wide && { paddingHorizontal: space.xxl }]}>{children}</View>
+        <View style={[styles.body, contentWidth, wide && { paddingHorizontal: 32 }]}>{children}</View>
       </Animated.ScrollView>
 
       {/* Durchsichtige Kopfzeile: unscharfer Hintergrund, kleiner Titel blendet beim Scrollen ein. */}
@@ -141,6 +149,8 @@ const styles = StyleSheet.create({
   titleCol: { flex: 1, minWidth: 0 },
   largeTitle: { ...font.largeTitle, color: colors.ink },
   subtitle: { ...font.subhead, color: colors.ink2, marginTop: 2 },
+  kicker: { ...font.footnote, color: colors.ink3, marginBottom: 4 },
+  largeTitleWide: { fontSize: 34, lineHeight: 42, fontWeight: '300', letterSpacing: -0.6 },
   right: { minHeight: TAP, justifyContent: 'center' },
   body: { paddingHorizontal: space.lg, gap: space.lg },
   header: { position: 'absolute', top: 0, left: 0, right: 0 },

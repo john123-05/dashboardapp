@@ -11,7 +11,8 @@ import { useWide } from './layout';
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
 export function Card({ children, style, padded = true }: { children: ReactNode; style?: StyleProp<ViewStyle>; padded?: boolean }) {
-  return <View style={[styles.card, padded && styles.cardPad, style]}>{children}</View>;
+  const wide = useWide();
+  return <View style={[styles.card, wide && styles.cardWide, padded && styles.cardPad, style]}>{children}</View>;
 }
 
 export function Section({ title, action, onAction, children }: { title?: string; action?: string; onAction?: () => void; children: ReactNode }) {
@@ -37,8 +38,31 @@ export function Section({ title, action, onAction, children }: { title?: string;
 }
 
 // Zahlenkachel. Alles einzeilig: zu lange Werte werden kleiner statt umzubrechen.
-export function Kpi({ label, value, sub, tone, icon }: { label: string; value: string; sub?: string | null; tone?: 'ok' | 'warn' | 'err'; icon?: IconName }) {
+export function Kpi({ label, value, sub, tone, icon, accent }: { label: string; value: string; sub?: string | null; tone?: 'ok' | 'warn' | 'err'; icon?: IconName; accent?: string }) {
+  const wide = useWide();
   const subColor = tone === 'ok' ? colors.ok : tone === 'warn' ? colors.warn : tone === 'err' ? colors.err : colors.ink2;
+  // Breit wie die Kacheln im Web: Beschriftung links, farbiges Symbol rechts, große dünne Zahl.
+  if (wide) {
+    const a = accent ?? colors.brand;
+    return (
+      <View style={[styles.kpi, styles.kpiWide]}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8 }}>
+          <Text style={{ ...font.callout, fontWeight: '400', color: colors.ink2, flex: 1 }} numberOfLines={2}>
+            {label}
+          </Text>
+          {icon ? (
+            <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: `${a}1F`, alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name={icon} size={17} color={a} />
+            </View>
+          ) : null}
+        </View>
+        <Text style={{ fontSize: 30, lineHeight: 38, fontWeight: '300', color: colors.ink, fontVariant: ['tabular-nums'], marginTop: 10 }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.55}>
+          {value}
+        </Text>
+        {sub ? <Text style={[styles.kpiSub, { color: subColor }]} numberOfLines={1}>{sub}</Text> : null}
+      </View>
+    );
+  }
   return (
     <View style={styles.kpi}>
       <View style={styles.kpiLabelRow}>
@@ -142,7 +166,8 @@ export function Row({
 }
 
 export function ListCard({ children }: { children: ReactNode }) {
-  return <View style={[styles.card, { overflow: 'hidden' }]}>{children}</View>;
+  const wide = useWide();
+  return <View style={[styles.card, wide && styles.cardWide, { overflow: 'hidden' }]}>{children}</View>;
 }
 
 export function Pill({ text, tone = 'neutral', icon }: { text: string; tone?: 'ok' | 'warn' | 'err' | 'info' | 'neutral'; icon?: IconName }) {
@@ -280,12 +305,15 @@ export function Button({ title, onPress, loading, kind = 'primary', icon }: { ti
 const styles = StyleSheet.create({
   card: { backgroundColor: colors.card, borderRadius: radius.lg, ...(shadow as object) },
   cardPad: { padding: space.lg },
+  // Wie die Karten im Web: feiner Rand, kaum Schatten.
+  cardWide: { borderWidth: 1, borderColor: colors.line, shadowOpacity: 0.03 },
   sectionHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.xs, minHeight: 28 },
   sectionTitle: { ...font.headline, color: colors.ink, flexShrink: 1 },
   sectionAction: { minHeight: TAP, justifyContent: 'center', paddingLeft: space.md },
   sectionActionText: { ...font.callout, color: colors.brand },
   kpiGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   kpi: { flexGrow: 1, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, gap: 2, ...(shadow as object) },
+  kpiWide: { padding: 20, borderWidth: 1, borderColor: colors.line, minHeight: 128 },
   kpiLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   kpiLabel: { ...font.footnote, color: colors.ink2, flexShrink: 1 },
   kpiValue: { ...font.kpi, color: colors.ink, marginTop: 4 },

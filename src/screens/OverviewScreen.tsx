@@ -74,7 +74,8 @@ export function OverviewScreen() {
       tabs
       actions
       title={wide && firstName ? `${greeting}, ${firstName}` : parkName ?? 'Übersicht'}
-      subtitle={`${wide ? `Dashboard · ${parkName ?? ''} · ` : ''}${schedule ? `Heute geöffnet ${schedule.open} bis ${schedule.close} Uhr` : openingHoursConfig || openingHours ? 'Heute geschlossen' : formatDayLong(today)}`}
+      kicker={wide ? `Dashboard · ${parkName ?? ''}` : null}
+      subtitle={`${schedule ? `Heute geöffnet ${schedule.open} bis ${schedule.close} Uhr` : openingHoursConfig || openingHours ? 'Heute geschlossen' : formatDayLong(today)}`}
       refreshing={refreshing}
       onRefresh={reload}
     >
@@ -91,20 +92,20 @@ export function OverviewScreen() {
         <>
           {wide ? (
             <KpiGrid columns={screenW >= 1300 ? 6 : 3}>
-              <Kpi icon="card-outline" label="Umsatz heute" value={formatCents(revenueToday ?? todayRow?.revenueCents ?? null)} />
-              <Kpi icon="images-outline" label="Fotos heute verkauft" value={formatNumber(soldToday)} />
-              <Kpi icon="pulse-outline" label="Fotopapier" value={paper.length ? `${Math.min(...paper)}` : '–'} sub={paper.length ? 'Drucke übrig' : null} />
-              <Kpi icon="calendar-outline" label="Fotos im Monat verkauft" value={formatNumber(soldMonth)} />
-              <Kpi icon="cash-outline" label="Monatsumsatz" value={formatCents(revenueMonth)} />
-              <Kpi icon="camera-outline" label="Fotos insgesamt verkauft" value={formatNumber(soldTotal)} />
+              <Kpi icon="card-outline" label="Umsatz heute" accent="#3B82F6" value={formatCents(revenueToday ?? todayRow?.revenueCents ?? null)} />
+              <Kpi icon="images-outline" label="Fotos heute verkauft" accent="#F59E0B" value={formatNumber(soldToday)} />
+              <Kpi icon="pulse-outline" label="Fotopapier" accent="#14B8A6" value={paper.length ? `${Math.min(...paper)}` : '–'} sub={paper.length ? 'Drucke übrig' : null} />
+              <Kpi icon="calendar-outline" label="Fotos im Monat verkauft" accent="#64748B" value={formatNumber(soldMonth)} />
+              <Kpi icon="cash-outline" label="Monatsumsatz" accent="#22C55E" value={formatCents(revenueMonth)} />
+              <Kpi icon="camera-outline" label="Fotos insgesamt verkauft" accent="#A855F7" value={formatNumber(soldTotal)} />
             </KpiGrid>
           ) : null}
           <KpiGrid>
             {!wide ? <Kpi icon="cash-outline" label="Umsatz heute" value={formatCents(revenueToday ?? todayRow?.revenueCents ?? null)} sub={soldToday !== null ? `${formatNumber(soldToday)} Fotos verkauft` : null} /> : null}
             {!wide ? <Kpi icon="images-outline" label="Fotos verkauft" value={formatNumber(soldToday)} sub={todayRow?.expectedCount ? `von ${formatNumber(todayRow.expectedCount)} Fahrten` : null} /> : null}
-            <Kpi icon="speedometer-outline" label="Fahrten heute" value={formatNumber(ridesToday)} />
-            <Kpi icon="trending-up-outline" label="Kaufquote heute" value={formatPercent(conversion)} sub={conversion !== null && conversion < 0.05 ? 'niedrig' : 'Verkauft je Fahrt'} tone={conversion !== null && conversion < 0.05 ? 'warn' : undefined} />
-            {wide ? <Kpi icon="hardware-chip-outline" label="Automaten online" value={`${(health.data ?? []).filter((m) => m.reachable).length}/${(health.data ?? []).length}`} /> : null}
+            <Kpi icon="speedometer-outline" label="Fahrten heute" accent="#6366F1" value={formatNumber(ridesToday)} />
+            <Kpi icon="trending-up-outline" label="Kaufquote heute" accent="#EC4899" value={formatPercent(conversion)} sub={conversion !== null && conversion < 0.05 ? 'niedrig' : 'Verkauft je Fahrt'} tone={conversion !== null && conversion < 0.05 ? 'warn' : undefined} />
+            {wide ? <Kpi icon="hardware-chip-outline" label="Automaten online" accent="#EF4444" value={`${(health.data ?? []).filter((m) => m.reachable).length}/${(health.data ?? []).length}`} /> : null}
           </KpiGrid>
 
           <View style={row}>

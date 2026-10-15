@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { usePark } from '../contexts/ParkContext';
+import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { PAGES, type PageEntry } from '../lib/pages';
@@ -20,6 +21,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
   const ent = useEntitlements(parkId);
   const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
   const { unread } = useNotifications();
+  const { isDark, toggle } = useLook();
   const viewer = { isOwner, isStaff, allowedPages };
   const visible = PAGES.filter((p) => canSee(p.key, viewer));
   return (
@@ -71,6 +73,9 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
           <Text style={[styles.itemText, { flex: 1 }]} numberOfLines={1}>
             {fullName || email}
           </Text>
+        </Pressable>
+        <Pressable onPress={toggle} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel={isDark ? 'Hell' : 'Dunkel'}>
+          <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={19} color="#fff" />
         </Pressable>
         <Pressable onPress={onAlerts} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel="Meldungen">
           <Ionicons name="notifications-outline" size={20} color="#fff" />

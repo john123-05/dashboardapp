@@ -1,8 +1,7 @@
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
-import { Alert, Appearance, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
+import { useLook } from '../contexts/AppearanceContext';
 import { initialsOf } from '../components/HeaderActions';
 import { Screen } from '../components/Screen';
 import { Button, Card, ListCard, Row, Section, Segmented } from '../components/ui';
@@ -18,10 +17,7 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
   const { parkName, setPark } = usePark();
   const viewer = { isOwner, isStaff, allowedPages };
   const canSwitch = isSuperAdminEmail(email) || allowedParkIds.length !== 1;
-  const [look, setLook] = useState<'system' | 'light' | 'dark'>('system');
-  useEffect(() => {
-    void AsyncStorage.getItem(APPEARANCE_KEY).then((v) => v && setLook(v as 'system' | 'light' | 'dark'));
-  }, []);
+  const { look, setLook } = useLook();
   const links = ['settings', 'team', 'plans', 'tickets'].map((k) => PAGES.find((p) => p.key === k)!).filter((p) => canSee(p.key, viewer));
 
   return (
@@ -59,12 +55,8 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
       <Section title="Erscheinungsbild">
         <Segmented
           value={look}
-          onChange={(v) => {
-            setLook(v);
-            applyAppearance(v);
-            void AsyncStorage.setItem(APPEARANCE_KEY, v);
-          }}
-          options={[{ value: 'system', label: 'Wie iPhone' }, { value: 'light', label: 'Hell' }, { value: 'dark', label: 'Dunkel' }]}
+          onChange={setLook}
+          options={[{ value: 'light', label: 'Hell' }, { value: 'dark', label: 'Dunkel' }, { value: 'system', label: 'Wie Gerät' }]}
         />
       </Section>
 
@@ -86,7 +78,3 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
   );
 }
 
-export const APPEARANCE_KEY = 'lp-appearance';
-export function applyAppearance(v: string | null) {
-  Appearance.setColorScheme(v === 'light' || v === 'dark' ? v : null);
-}
