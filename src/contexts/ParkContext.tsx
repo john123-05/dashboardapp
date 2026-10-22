@@ -6,7 +6,7 @@ import type { OpeningHoursConfig } from '../lib/types';
 import { PREVIEW, PREVIEW_PARK } from '../lib/preview';
 import { previewKioskSales } from '../lib/mock';
 import { loadHealth } from '../lib/data';
-import { cameraControlAvailable } from '../lib/camera';
+import { cameraControlAvailable, cameraPageSetting } from '../lib/camera';
 
 interface ParkState {
   loading: boolean;
@@ -20,7 +20,8 @@ interface ParkState {
   openingHoursConfig: OpeningHoursConfig | null;
   kioskLoading: boolean;
   reloadKiosk: () => void;
-  // Wie im Web: die Seite „Kamera“ gibt es nur, solange ein Automat seine Kamera erreichbar meldet.
+  // Wie im Web: die Seite „Kamera“ gibt es nur, solange ein Automat seine Kamera erreichbar meldet
+  // und sie im CRM nicht für diesen Kunden ausgeblendet ist.
   cameraAvailable: boolean | null;
 }
 
@@ -87,9 +88,10 @@ export function ParkProvider({ children }: PropsWithChildren) {
       return;
     }
     let cancelled = false;
+    // Automatisch, sobald ein Automat seine Kamera meldet – außer im CRM für diesen Kunden ausgeblendet.
     const check = () =>
-      loadHealth(park.id)
-        .then((machines) => !cancelled && setCameraAvailable(cameraControlAvailable(machines)))
+      Promise.all([cameraPageSetting(park.id), loadHealth(park.id)])
+        .then(([setting, machines]) => !cancelled && setCameraAvailable(setting !== 'hidden' && cameraControlAvailable(machines)))
         .catch(() => !cancelled && setCameraAvailable(false));
     setCameraAvailable(null);
     void check();

@@ -177,3 +177,15 @@ export function cameraControlAvailable(machines: KameraAutomat[] | undefined): b
     (m) => !!m.camera_settings && !m.camera_settings.fehler && (m.offline_minutes == null || m.offline_minutes <= MAX_OFFLINE_MINUTEN),
   );
 }
+
+/** Einstellung aus dem CRM (park_page_settings): 'hidden' blendet die Kamera-Seite für den Kunden aus. */
+export async function cameraPageSetting(parkId: string): Promise<'auto' | 'hidden'> {
+  if (PREVIEW) return 'auto';
+  try {
+    const data = await callShared<{ camera_page?: string }>('operator-page-settings', { query: { park_id: parkId } });
+    return data?.camera_page === 'hidden' ? 'hidden' : 'auto';
+  } catch {
+    // Function noch nicht deployt oder nicht erreichbar: bisheriges Verhalten.
+    return 'auto';
+  }
+}
