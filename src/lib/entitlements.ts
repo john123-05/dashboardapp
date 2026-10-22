@@ -57,7 +57,13 @@ export function useEntitlements(parkId: string | null) {
     if (need === 'addon') return r.features.includes(f);
     return PLAN_ORDER.indexOf(r.plan) >= PLAN_ORDER.indexOf(need) || r.features.includes(f);
   };
-  return { plan: r.plan, has, loading: q.loading && q.data === undefined, requiredPlan: (f: FeatureKey) => FEATURE_PLAN[f] };
+  // `hasBooked`: im Demo-Park ist alles offen, „Aktiv“ soll aber nur zeigen, was wirklich gebucht ist (wie im Web).
+  const hasBooked = (f: FeatureKey) => {
+    const need = FEATURE_PLAN[f];
+    if (need === 'addon') return r.features.includes(f);
+    return PLAN_ORDER.indexOf(r.plan) >= PLAN_ORDER.indexOf(need) || r.features.includes(f);
+  };
+  return { plan: r.plan, has, hasBooked, isDemo, loading: q.loading && q.data === undefined, reload: q.reload, requiredPlan: (f: FeatureKey) => FEATURE_PLAN[f] };
 }
 
 export function speedUnlocked(parkId: string | null, has: (f: FeatureKey) => boolean) {

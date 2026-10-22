@@ -10,6 +10,7 @@ import {
   type MachineRevenue,
 } from './kioskSales';
 import { PREVIEW } from './preview';
+import type { Kameradaten } from './camera';
 import { previewHealth, previewKioskSales, previewLedger, previewMachineRevenue } from './mock';
 
 export type HealthItem = { name: string; status: string; detail?: string | null; plain?: string | null };
@@ -38,6 +39,8 @@ export type HealthMachine = {
   devices?: HealthItem[];
   ausgeblendet?: string[];
   coin_warnings?: { cent: number; stufe: 'knapp' | 'leer'; text: string }[];
+  camera_settings?: Kameradaten | null;
+  can_test_photo?: boolean;
 };
 
 export const loadKioskSales = (parkId: string): Promise<KioskSalesResponse> =>

@@ -70,7 +70,7 @@ export function OverviewScreen() {
   const col = wide ? { flex: 1, minWidth: 0, gap: space.lg } : { gap: space.lg };
 
   return (
-    <Screen
+    <Screen page="overview"
       tabs
       actions
       title={wide && firstName ? `${greeting}, ${firstName}` : parkName ?? 'Übersicht'}

@@ -1,51 +1,113 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Choice, Notice, TabStrip } from '../components/controls';
+import { successHaptic } from '../components/haptics';
 import { Locked } from '../components/Locked';
 import { Screen } from '../components/Screen';
-import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Row, Section, Segmented, Skeleton } from '../components/ui';
+import { Button, Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Row, Section, Skeleton } from '../components/ui';
 import { usePark } from '../contexts/ParkContext';
+import { fetchSurveyConfig, saveContactSettings, setUnlockMode, type FieldLevel, type UnlockMode } from '../lib/crm';
 import { loadKioskSales } from '../lib/data';
-import { PLAN_LABEL, useEntitlements } from '../lib/entitlements';
+import { PLAN_LABEL, useEntitlements, type FeatureKey } from '../lib/entitlements';
 import { formatDayLong, formatNumber, formatPercent, timeAgo } from '../lib/format';
 import { aggregateByDate, sumDays } from '../lib/kioskSales';
-import { loadLeads, loadSurveyResults, pick, type Lead } from '../lib/marketing';
+import { loadLeads, loadSurveyResults, type Lead } from '../lib/marketing';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
+import { EmailTab } from './marketing/EmailTab';
+import { PixelTab } from './marketing/PixelTab';
+import { SocialTab } from './marketing/SocialTab';
+import { SurveyTab } from './marketing/SurveyTab';
 
-type Tab = 'start' | 'kontakte' | 'umfrage' | 'mehr';
+export type MarketingTab = 'start' | 'kontakte' | 'email' | 'social' | 'umfrage' | 'pixel';
 const flag = (cc?: string | null) => (cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))) : '');
 
-// Marketing-CRM wie im Web (/leads): Start mit Kennzahlen und "Vom Foto zum Kontakt", Kontakte, Umfrage.
-// E-Mail, Social Media und Pixel öffnen die Web-Seiten in der App.
-export function MarketingScreen({ navigation }: { navigation: { goBack: () => void } }) {
+const TABS: { value: MarketingTab; label: string; mode?: UnlockMode; feature?: FeatureKey }[] = [
+  { value: 'start', label: 'Start' },
+  { value: 'kontakte', label: 'Kontakte', mode: 'email', feature: 'crm_contacts' },
+  { value: 'email', label: 'E-Mail', feature: 'email_marketing' },
+  { value: 'social', label: 'Social Media', mode: 'social', feature: 'crm_social' },
+  { value: 'umfrage', label: 'Umfrage', mode: 'survey', feature: 'crm_survey' },
+  { value: 'pixel', label: 'Pixel', feature: 'crm_pixel' },
+];
+const MODE_LABEL: Record<UnlockMode, string> = { email: 'Kontaktdaten (E-Mail)', survey: 'Umfrage', social: 'Social Media' };
+
+// Marketing-CRM wie im Web (/leads/*): alle sechs Reiter nativ. Der grüne Punkt am Reiter zeigt, wie
+// Gäste ihr Foto gerade freischalten; „Für Gäste aktivieren“ stellt das um.
+export function MarketingScreen({ navigation, route }: { navigation: { goBack: () => void }; route?: { params?: { tab?: MarketingTab } } }) {
   const nav = useNavigation<any>();
   const { parkId } = usePark();
   const ent = useEntitlements(parkId);
-  const [tab, setTab] = useState<Tab>('start');
+  const [tab, setTab] = useState<MarketingTab>(route?.params?.tab ?? 'start');
+  // Aus einer Mitteilung oder einem CRM-Hinweis direkt in einen Reiter springen.
+  useEffect(() => {
+    if (route?.params?.tab) setTab(route.params.tab);
+  }, [route?.params?.tab]);
   const leads = useData(parkId ? `leads:${parkId}` : null, () => loadLeads(parkId!), [parkId], 120000);
   const survey = useData(parkId ? `survey:${parkId}` : null, () => loadSurveyResults(parkId!, 30), [parkId], 300000);
   const sales = useData(parkId ? `sales:${parkId}` : null, () => loadKioskSales(parkId!), [parkId], 300000);
+  const config = useData(parkId ? `surveycfg:${parkId}` : null, () => fetchSurveyConfig(parkId!), [parkId], 0);
+  const [switching, setSwitching] = useState(false);
+  const [modeError, setModeError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const all = leads.data ?? [];
   const since = Date.now() - 30 * 86400000;
   const recent = all.filter((l) => new Date(l.created_at).getTime() >= since);
   const optIn = recent.length ? recent.filter((l) => l.opted_in).length / recent.length : null;
   const sold30 = useMemo(() => (sales.data ? sumDays(aggregateByDate(sales.data.days, 0).slice(0, 30)).sold : null), [sales.data]);
+  const mode = config.data?.settings.mode ?? null;
+  const current = TABS.find((t) => t.value === tab)!;
+  const locked = !!current.feature && !ent.loading && !ent.has(current.feature);
 
-  const gate = (feature: 'crm_contacts' | 'crm_survey') =>
-    !ent.loading && !ent.has(feature) ? (
-      <Locked title={`Diese Funktion ist Teil von ${PLAN_LABEL.marketing_starter}`} intro={`Mit ${PLAN_LABEL.marketing_starter} schaltest du sie für deinen Park frei. Alles, was du heute schon nutzt, bleibt dabei unverändert.`} />
-    ) : null;
+  async function activate(m: UnlockMode) {
+    if (!parkId) return;
+    setSwitching(true);
+    setModeError(null);
+    try {
+      await setUnlockMode(parkId, m);
+      successHaptic();
+      config.reload();
+    } catch (e) {
+      // z. B. Umfrage ohne Fragen: die Meldung sagt, was fehlt.
+      setModeError(e instanceof Error ? e.message : 'Umschalten fehlgeschlagen.');
+    }
+    setSwitching(false);
+  }
+
+  const refresh = () => {
+    leads.reload();
+    survey.reload();
+    config.reload();
+    setRefreshKey((k) => k + 1);
+  };
 
   return (
-    <Screen title="Marketing-CRM" subtitle="Aus Fotokäufern werden Kontakte" onBack={navigation.goBack} refreshing={leads.refreshing} onRefresh={() => { leads.reload(); survey.reload(); }}>
-      <Segmented<Tab> value={tab} onChange={setTab} options={[{ value: 'start', label: 'Start' }, { value: 'kontakte', label: 'Kontakte' }, { value: 'umfrage', label: 'Umfrage' }, { value: 'mehr', label: 'Mehr' }]} />
-      {leads.error && !leads.data ? <ErrorNote text={leads.error} onRetry={leads.reload} /> : null}
+    <Screen page="marketing" title="Marketing-CRM" subtitle="Aus Fotokäufern werden Kontakte" onBack={navigation.goBack} refreshing={leads.refreshing} onRefresh={refresh}>
+      <TabStrip<MarketingTab> tabs={TABS.map((t) => ({ value: t.value, label: t.label, dot: !!t.mode && t.mode === mode }))} value={tab} onChange={setTab} />
 
-      {tab === 'start' ? (
+      {current.mode && config.data && !locked ? (
+        <View style={styles.mode}>
+          <Ionicons name={mode === current.mode ? 'radio-button-on' : 'radio-button-off'} size={18} color={mode === current.mode ? colors.ok : colors.ink3} />
+          <Text style={{ ...font.footnote, color: colors.ink, flex: 1 }}>
+            {mode === current.mode ? 'Für Gäste aktiv: so schalten Gäste gerade ihr Foto frei.' : `Gäste schalten gerade per ${MODE_LABEL[mode!]} frei.`}
+          </Text>
+          {mode !== current.mode ? (
+            <Pressable onPress={() => void activate(current.mode!)} disabled={switching} style={styles.modeBtn} hitSlop={6}>
+              <Text style={{ ...font.footnote, color: colors.onBrand, fontWeight: '700' }}>{switching ? '…' : 'Für Gäste aktivieren'}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
+      {modeError ? <ErrorNote text={modeError} /> : null}
+
+      {locked ? (
+        <Locked title={`Diese Funktion ist Teil von ${PLAN_LABEL.marketing_starter}`} intro={`Mit ${PLAN_LABEL.marketing_starter} schaltest du sie für deinen Park frei. Alles, was du heute schon nutzt, bleibt dabei unverändert.`} />
+      ) : tab === 'start' ? (
         <>
+          {leads.error && !leads.data ? <ErrorNote text={leads.error} onRetry={leads.reload} /> : null}
           {leads.loading && !leads.data ? (
             <KpiSkeleton />
           ) : (
@@ -64,63 +126,46 @@ export function MarketingScreen({ navigation }: { navigation: { goBack: () => vo
               <Text style={{ ...font.caption, color: colors.ink3 }}>Letzte 30 Tage</Text>
             </Card>
           </Section>
+          {mode ? (
+            <Section title="Freischalt-Weg">
+              <ListCard>
+                {(['email', 'survey', 'social'] as UnlockMode[]).map((m, i) => (
+                  <Row
+                    key={m}
+                    icon={m === 'email' ? 'mail-outline' : m === 'survey' ? 'clipboard-outline' : 'share-social-outline'}
+                    title={MODE_LABEL[m]}
+                    subtitle={m === mode ? 'Für Gäste aktiv' : 'Antippen zum Öffnen'}
+                    right={m === mode ? <Pill tone="ok" text="Aktiv" /> : null}
+                    chevron
+                    onPress={() => setTab(m === 'email' ? 'kontakte' : m === 'survey' ? 'umfrage' : 'social')}
+                    last={i === 2}
+                  />
+                ))}
+              </ListCard>
+            </Section>
+          ) : null}
           <Section title="Neueste Kontakte" action="Alle" onAction={() => setTab('kontakte')}>
             <LeadList leads={all.slice(0, 5)} loading={leads.loading && !leads.data} />
           </Section>
+          <ListCard>
+            <Row icon="pricetags-outline" title="Preise und Pakete ansehen" chevron onPress={() => nav.navigate('Plans', { group: 'plan' })} last />
+          </ListCard>
         </>
-      ) : null}
-
-      {tab === 'kontakte' ? gate('crm_contacts') ?? <Contacts leads={all} loading={leads.loading && !leads.data} /> : null}
-
-      {tab === 'umfrage'
-        ? gate('crm_survey') ?? (
-            survey.loading && !survey.data ? (
-              <KpiSkeleton />
-            ) : survey.data ? (
-              <>
-                <KpiGrid>
-                  <Kpi label="NPS" value={survey.data.nps !== null ? String(survey.data.nps) : '–'} sub={`${survey.data.promoters} Fans · ${survey.data.detractors} Kritiker`} />
-                  <Kpi label="Durchschnitt" value={survey.data.average_score !== null ? survey.data.average_score.toFixed(1).replace('.', ',') : '–'} sub="von 10" />
-                  <Kpi label="Antworten" value={formatNumber(survey.data.total)} sub="30 Tage" />
-                  <Kpi label="Bewertungs-Link" value={formatNumber(survey.data.review_link_shown)} sub="mal gezeigt" />
-                </KpiGrid>
-                <Section title="Verteilung der Bewertungen">
-                  <Card style={{ gap: 6 }}>
-                    {survey.data.distribution.slice().reverse().map((d) => (
-                      <Funnel key={d.score} label={`${d.score}`} value={d.count} max={Math.max(1, ...survey.data!.distribution.map((x) => x.count))} color={d.score >= 9 ? colors.ok : d.score >= 7 ? colors.warn : colors.err} />
-                    ))}
-                  </Card>
-                </Section>
-                {survey.data.questions.filter((q) => q.answered > 0).map((q) => (
-                  <Card key={q.id} style={{ gap: 6 }}>
-                    <Text style={{ ...font.callout, color: colors.ink, fontWeight: '600' }}>{pick(q.prompt)}</Text>
-                    <Text style={{ ...font.footnote, color: colors.ink2 }}>
-                      {q.answered} Antworten
-                      {typeof q.yes === 'number' ? ` · ${q.yes} Ja, ${q.no ?? 0} Nein` : ''}
-                      {typeof q.average === 'number' ? ` · Schnitt ${q.average.toFixed(1).replace('.', ',')}` : ''}
-                    </Text>
-                  </Card>
-                ))}
-              </>
-            ) : (
-              <Card>
-                <EmptyState icon="clipboard-outline" title="Noch keine Umfrage" text="Lege die Umfrage im Dashboard an. Antworten erscheinen dann hier." />
-              </Card>
-            )
-          )
-        : null}
-
-      {tab === 'mehr' ? (
-        <ListCard>
-          {[
-            { t: 'E-Mail-Kampagnen', p: '/leads/email', i: 'mail-outline' },
-            { t: 'Social Media', p: '/leads/social', i: 'logo-instagram' },
-            { t: 'Umfrage bearbeiten', p: '/leads/umfrage', i: 'create-outline' },
-            { t: 'Pixel installieren', p: '/leads/pixel', i: 'code-slash-outline' },
-          ].map((x, k, arr) => (
-            <Row key={x.p} icon={x.i as any} title={x.t} chevron onPress={() => nav.navigate('Web', { path: x.p, title: x.t })} last={k === arr.length - 1} />
-          ))}
-        </ListCard>
+      ) : tab === 'kontakte' ? (
+        <>
+          {config.data && parkId ? (
+            <ContactSettings key={`cs-${refreshKey}`} parkId={parkId} email={config.data.settings.email_mode} phone={config.data.settings.phone_mode} address={config.data.settings.address_mode} onSaved={config.reload} />
+          ) : null}
+          <Contacts leads={all} loading={leads.loading && !leads.data} />
+        </>
+      ) : tab === 'email' && parkId ? (
+        <EmailTab key={`em-${refreshKey}`} parkId={parkId} />
+      ) : tab === 'social' && parkId ? (
+        <SocialTab key={`so-${refreshKey}`} parkId={parkId} config={config.data ?? null} onSaved={config.reload} />
+      ) : tab === 'umfrage' && parkId ? (
+        <SurveyTab key={`su-${refreshKey}`} parkId={parkId} />
+      ) : tab === 'pixel' && parkId ? (
+        <PixelTab key={`px-${refreshKey}`} parkId={parkId} />
       ) : null}
     </Screen>
   );
@@ -180,8 +225,51 @@ function Contacts({ leads, loading }: { leads: Lead[]; loading: boolean }) {
   );
 }
 
+const LEVELS: { value: FieldLevel; label: string }[] = [
+  { value: 'required', label: 'Pflicht' },
+  { value: 'optional', label: 'Freiwillig' },
+  { value: 'off', label: 'Aus' },
+];
+
+/** Welche Kontaktdaten Gäste beim Freischalten angeben (wie ContactSettings im Web). */
+function ContactSettings({ parkId, email, phone, address, onSaved }: { parkId: string; email: FieldLevel; phone: FieldLevel; address: FieldLevel; onSaved: () => void }) {
+  const [e, setE] = useState(email);
+  const [p, setP] = useState(phone);
+  const [a, setA] = useState(address);
+  const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dirty = e !== email || p !== phone || a !== address;
+  async function save() {
+    setBusy(true);
+    setError(null);
+    try {
+      await saveContactSettings(parkId, e, p, a);
+      successHaptic();
+      setSaved(true);
+      onSaved();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen.');
+    }
+    setBusy(false);
+  }
+  return (
+    <Card style={{ gap: space.md }}>
+      <Text style={{ ...font.headline, color: colors.ink }}>Abgefragte Kontaktdaten</Text>
+      <Choice label="E-Mail-Adresse" options={LEVELS} value={e} onChange={(v) => { setE(v); setSaved(false); }} />
+      <Choice label="Telefonnummer" options={LEVELS} value={p} onChange={(v) => { setP(v); setSaved(false); }} />
+      <Choice label="Hausadresse" options={LEVELS} value={a} onChange={(v) => { setA(v); setSaved(false); }} />
+      {error ? <ErrorNote text={error} /> : null}
+      {saved && !dirty ? <Notice text="Gespeichert – gilt sofort." /> : null}
+      {dirty ? <Button title="Speichern" loading={busy} onPress={() => void save()} /> : null}
+    </Card>
+  );
+}
+
 const styles = StyleSheet.create({
   search: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.card, borderRadius: radius.md, paddingLeft: space.md, paddingRight: 6, minHeight: 50, borderWidth: 1, borderColor: colors.lineStrong },
   input: { flex: 1, ...font.body, fontSize: 16, color: colors.ink },
   chip: { paddingHorizontal: 10, minHeight: 34, borderRadius: 17, justifyContent: 'center', backgroundColor: colors.fill },
+  mode: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: colors.card, borderRadius: radius.md, paddingHorizontal: space.md, paddingVertical: 10, borderWidth: 1, borderColor: colors.line },
+  modeBtn: { backgroundColor: colors.brand, borderRadius: 10, paddingHorizontal: 12, minHeight: 34, justifyContent: 'center' },
 });

@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { DefaultTheme, NavigationContainer, createNavigationContainerRef, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, DeviceEventEmitter, Text, View } from 'react-native';
+import { ActivityIndicator, DeviceEventEmitter, Platform, Text, View } from 'react-native';
 import { useWide } from '../components/layout';
 import { MoreSheet } from '../components/MoreSheet';
 import { Screen } from '../components/Screen';
@@ -13,12 +13,20 @@ import { useAuth } from '../contexts/AuthContext';
 import { NotificationsProvider } from '../contexts/NotificationsContext';
 import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
-import { openPage, PAGES } from '../lib/pages';
+import { openPage, pageAvailable, PAGES } from '../lib/pages';
 import { PREVIEW } from '../lib/preview';
 import * as Notifications from 'expo-notifications';
 import { routeForUrl } from '../lib/push';
 import { AccountScreen } from '../screens/AccountScreen';
 import { AlertsScreen } from '../screens/AlertsScreen';
+import { CameraScreen } from '../screens/CameraScreen';
+import { PersonalizationScreen } from '../screens/PersonalizationScreen';
+import { PlansScreen } from '../screens/PlansScreen';
+import { ShopEditScreen } from '../screens/ShopEditScreen';
+import { ShopScreen } from '../screens/ShopScreen';
+import { CampaignDetailScreen, CampaignEditScreen } from '../screens/marketing/CampaignScreens';
+import { EmailEditScreen } from '../screens/marketing/EmailEditScreen';
+import { SurveyEditScreen } from '../screens/marketing/SurveyEditScreen';
 import { ConfigurationScreen } from '../screens/ConfigurationScreen';
 import { HealthScreen } from '../screens/HealthScreen';
 import { MarketingScreen } from '../screens/MarketingScreen';
@@ -59,7 +67,8 @@ function useViewer() {
 function StartList() {
   const nav = useNavigation<any>();
   const viewer = useViewer();
-  const list = PAGES.filter((p) => canSee(p.key, viewer));
+  const { cameraAvailable } = usePark();
+  const list = PAGES.filter((p) => canSee(p.key, viewer) && pageAvailable(p, { cameraAvailable }));
   return (
     <Screen tabs actions title="Start">
       <ListCard>
@@ -114,6 +123,15 @@ function pageScreens(S: typeof Inner) {
       <S.Screen name="Purchases" component={PurchasesScreen as any} />
       <S.Screen name="Speed" component={SpeedScreen as any} />
       <S.Screen name="Marketing" component={MarketingScreen as any} />
+      <S.Screen name="EmailEdit" component={EmailEditScreen as any} />
+      <S.Screen name="SurveyEdit" component={SurveyEditScreen as any} />
+      <S.Screen name="CampaignDetail" component={CampaignDetailScreen as any} />
+      <S.Screen name="CampaignEdit" component={CampaignEditScreen as any} />
+      <S.Screen name="Camera" component={CameraScreen as any} />
+      <S.Screen name="Personalization" component={PersonalizationScreen as any} />
+      <S.Screen name="Shop" component={ShopScreen as any} />
+      <S.Screen name="ShopEdit" component={ShopEditScreen as any} />
+      <S.Screen name="Plans" component={PlansScreen as any} />
       <S.Screen name="Support" component={SupportScreen as any} />
       <S.Screen name="SupportThread" component={SupportThreadScreen as any} />
       <S.Screen name="Settings" component={SettingsScreen as any} />
@@ -208,7 +226,7 @@ function usePreviewTour(wide: boolean) {
       tab('Overview'), tab('Revenue'), tab('Health'), tab('Photos'),
       () => DeviceEventEmitter.emit('lp-more', true),
       () => { DeviceEventEmitter.emit('lp-more', false); page('Speed')(); },
-      page('Marketing'), page('Support'), page('Settings'), page('Help'), page('Alerts'), page('Account'),
+      page('Camera'), page('Marketing'), page('Personalization'), page('Shop'), page('Plans'), page('Support'), page('Settings'), page('Help'), page('Alerts'), page('Account'),
       () => navRef.navigate('Configuration'),
     ];
     let i = 0;
@@ -220,9 +238,12 @@ function usePreviewTour(wide: boolean) {
   }, [wide]);
 }
 
+// Im Browser (Vorschau) gibt es keine Mitteilungen; Platform.OS ändert sich nie, die Hook-Reihenfolge bleibt fest.
+const useLastResponse = Platform.OS === 'web' ? () => null : Notifications.useLastNotificationResponse;
+
 // Antippen einer Mitteilung öffnet die passende Seite (auch beim Kaltstart der App).
 function useNotificationTaps(ready: boolean, wide: boolean) {
-  const last = Notifications.useLastNotificationResponse();
+  const last = useLastResponse();
   useEffect(() => {
     if (!ready || !last) return;
     const url = (last.notification.request.content.data as { url?: string } | undefined)?.url;

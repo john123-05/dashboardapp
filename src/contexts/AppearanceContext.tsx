@@ -9,7 +9,8 @@ export type Look = 'light' | 'dark' | 'system';
 export const APPEARANCE_KEY = 'lp-appearance';
 
 export function applyAppearance(v: string | null) {
-  Appearance.setColorScheme(v === 'dark' ? 'dark' : v === 'system' ? null : 'light');
+  // Im Browser (Vorschau) gibt es setColorScheme nicht.
+  Appearance.setColorScheme?.(v === 'dark' ? 'dark' : v === 'system' ? null : 'light');
 }
 
 const Ctx = createContext<{ look: Look; setLook: (l: Look) => void; isDark: boolean; toggle: () => void } | null>(null);

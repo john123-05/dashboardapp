@@ -9,6 +9,8 @@ import { colors, font, HEADER_HEIGHT, space, TAP } from '../theme';
 import { tapHaptic } from './haptics';
 import { HeaderActions } from './HeaderActions';
 import { useWide } from './layout';
+import { AnnouncementCard } from './AnnouncementCard';
+import type { PageKey } from '../lib/permissions';
 
 // Schwebende Tab-Leiste: Höhe plus Abstand zum unteren Rand.
 export const TAB_BAR_HEIGHT = 58;
@@ -30,13 +32,15 @@ interface Props {
   actions?: boolean;
   // Blatt-Seiten (von unten): grauer Hintergrund, Schließen statt Zurück.
   sheet?: boolean;
+  // Seite für Hinweise aus dem CRM (park_announcements.pages).
+  page?: PageKey;
   children: ReactNode;
 }
 
 // Eine Seite wie in iOS: großer Titel, der beim Scrollen in eine durchsichtige Kopfzeile übergeht.
 // Inhalt läuft unter der unscharfen Kopfzeile durch. Ziehen zum Aktualisieren, Gummiband-Scrollen
 // und Rand-Wischen zurück kommen vom System.
-export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, children }: Props) {
+export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, page, children }: Props) {
   const realInsets = useSafeAreaInsets();
   const wide = useWide();
   // Als Blatt (iOS-Modal) liegt die Seite unter der Statusleiste: oben kein Abstand nötig.
@@ -99,7 +103,10 @@ export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zu
           </View>
           {right ? <View style={styles.right}>{right}</View> : null}
         </View>
-        <View style={[styles.body, contentWidth, wide && { paddingHorizontal: 32 }]}>{children}</View>
+        <View style={[styles.body, contentWidth, wide && { paddingHorizontal: 32 }]}>
+          {page ? <AnnouncementCard page={page} /> : null}
+          {children}
+        </View>
       </Animated.ScrollView>
 
       {/* Durchsichtige Kopfzeile: unscharfer Hintergrund, kleiner Titel blendet beim Scrollen ein. */}

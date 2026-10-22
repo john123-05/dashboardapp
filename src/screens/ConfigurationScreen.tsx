@@ -41,7 +41,7 @@ export function ConfigurationScreen({ navigation }: { navigation: { goBack: () =
   }
 
   return (
-    <Screen sheet title="Konfiguration" subtitle="Ausstattung und Zubehör für deinen Park" onBack={navigation.goBack} backLabel="Schließen" refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="configuration" sheet title="Konfiguration" subtitle="Ausstattung und Zubehör für deinen Park" onBack={navigation.goBack} backLabel="Schließen" refreshing={data.refreshing} onRefresh={data.reload}>
       <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ flex: 1 }}>
           <Text style={{ ...font.headline, color: colors.ink }}>Fotopapier nachbestellen</Text>

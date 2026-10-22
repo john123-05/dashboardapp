@@ -29,7 +29,7 @@ export function RevenueScreen() {
   const loading = sales.loading && !sales.data;
 
   return (
-    <Screen
+    <Screen page="revenue"
       tabs
       actions
       title="Umsatz"

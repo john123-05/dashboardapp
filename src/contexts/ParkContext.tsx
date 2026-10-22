@@ -5,6 +5,8 @@ import { fetchKioskSales, type OpeningHours } from '../lib/kioskSales';
 import type { OpeningHoursConfig } from '../lib/types';
 import { PREVIEW, PREVIEW_PARK } from '../lib/preview';
 import { previewKioskSales } from '../lib/mock';
+import { loadHealth } from '../lib/data';
+import { cameraControlAvailable } from '../lib/camera';
 
 interface ParkState {
   loading: boolean;
@@ -18,6 +20,8 @@ interface ParkState {
   openingHoursConfig: OpeningHoursConfig | null;
   kioskLoading: boolean;
   reloadKiosk: () => void;
+  // Wie im Web: die Seite „Kamera“ gibt es nur, solange ein Automat seine Kamera erreichbar meldet.
+  cameraAvailable: boolean | null;
 }
 
 const STORAGE_KEY = 'selected_park';
@@ -33,6 +37,7 @@ export function ParkProvider({ children }: PropsWithChildren) {
   const [openingHoursConfig, setOpeningHoursConfig] = useState<OpeningHoursConfig | null>(null);
   const [kioskLoading, setKioskLoading] = useState(true);
   const [nonce, setNonce] = useState(0);
+  const [cameraAvailable, setCameraAvailable] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (PREVIEW) return;
@@ -76,6 +81,25 @@ export function ParkProvider({ children }: PropsWithChildren) {
     };
   }, [park, nonce]);
 
+  useEffect(() => {
+    if (!park) {
+      setCameraAvailable(null);
+      return;
+    }
+    let cancelled = false;
+    const check = () =>
+      loadHealth(park.id)
+        .then((machines) => !cancelled && setCameraAvailable(cameraControlAvailable(machines)))
+        .catch(() => !cancelled && setCameraAvailable(false));
+    setCameraAvailable(null);
+    void check();
+    const timer = setInterval(check, 5 * 60000);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [park, nonce]);
+
   const setPark = useCallback(async (id: string | null, name: string | null) => {
     if (id && name) {
       setParkState({ id, name });
@@ -99,8 +123,9 @@ export function ParkProvider({ children }: PropsWithChildren) {
       openingHoursConfig,
       kioskLoading,
       reloadKiosk: () => setNonce((n) => n + 1),
+      cameraAvailable,
     }),
-    [loading, park, setPark, isKioskPark, priceCents, timezone, openingHours, openingHoursConfig, kioskLoading],
+    [loading, park, setPark, isKioskPark, priceCents, timezone, openingHours, openingHoursConfig, kioskLoading, cameraAvailable],
   );
 
   return <ParkContext.Provider value={value}>{children}</ParkContext.Provider>;

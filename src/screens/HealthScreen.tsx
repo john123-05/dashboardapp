@@ -48,7 +48,7 @@ export function HealthScreen() {
   }
 
   return (
-    <Screen tabs actions title="Systemzustand" refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="health" tabs actions title="Systemzustand" refreshing={data.refreshing} onRefresh={data.reload}>
       {data.error && !data.data ? <ErrorNote text={data.error} onRetry={data.reload} /> : null}
       {notice ? <Pill tone="info" icon="information-circle" text={notice} /> : null}
 

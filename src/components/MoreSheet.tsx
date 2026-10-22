@@ -9,7 +9,7 @@ import { usePark } from '../contexts/ParkContext';
 import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
-import { PAGES, type PageEntry } from '../lib/pages';
+import { PAGES, pageAvailable, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { initialsOf } from './HeaderActions';
@@ -23,7 +23,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const { isOwner, isStaff, allowedPages, fullName, email } = useAuth();
-  const { parkName, parkId } = usePark();
+  const { parkName, parkId, cameraAvailable } = usePark();
   const ent = useEntitlements(parkId);
   const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
   const { isDark, toggle } = useLook();
@@ -58,7 +58,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
 
   if (!mounted) return null;
   const viewer = { isOwner, isStaff, allowedPages };
-  const list = PAGES.filter((pg) => !pg.tab && canSee(pg.key, viewer));
+  const list = PAGES.filter((pg) => !pg.tab && canSee(pg.key, viewer) && pageAvailable(pg, { cameraAvailable }));
   const groups = ['Betrieb', 'Marketing', 'Verwaltung'] as const;
 
   return (

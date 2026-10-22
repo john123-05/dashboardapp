@@ -12,7 +12,7 @@ export function TeamScreen({ navigation }: { navigation: { goBack: () => void } 
   const data = useData('staff', loadStaff, [], 0);
   const staff = data.data ?? [];
   return (
-    <Screen title="Mitarbeiter-Zugang" subtitle="Wer darf welche Seiten sehen" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="team" title="Mitarbeiter-Zugang" subtitle="Wer darf welche Seiten sehen" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
       <Button title="Mitarbeiter einladen" icon="person-add-outline" onPress={() => nav.navigate('TeamEdit', { member: null, onSaved: undefined })} />
       {data.error && !data.data ? <ErrorNote text={data.error} onRetry={data.reload} /> : null}
       {data.loading && !data.data ? (

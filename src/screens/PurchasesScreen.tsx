@@ -33,7 +33,7 @@ export function PurchasesScreen({ navigation }: { navigation: { goBack: () => vo
   }, [purchases, timezone]);
 
   return (
-    <Screen title="Käufe" subtitle="Einzelne Verkäufe am Automaten" onBack={navigation.goBack} refreshing={ledger.refreshing} onRefresh={ledger.reload}>
+    <Screen page="purchases" title="Käufe" subtitle="Einzelne Verkäufe am Automaten" onBack={navigation.goBack} refreshing={ledger.refreshing} onRefresh={ledger.reload}>
       <Segmented<Range> value={range} onChange={setRange} options={[{ value: '0', label: 'Heute' }, { value: '7', label: '7 Tage' }, { value: '30', label: '30 Tage' }]} />
       {ledger.error && !ledger.data ? <ErrorNote text={ledger.error} onRetry={ledger.reload} /> : null}
       {ledger.loading && !ledger.data ? (

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Liftpictures Dashboard",
     "slug": "dashboardapp",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.john12305.dashboardapp",
-      "buildNumber": "7",
+      "buildNumber": "8",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSPhotoLibraryUsageDescription": "Damit du Logos und Fotos ins Dashboard hochladen kannst.",
@@ -47,6 +47,14 @@
         "expo-notifications",
         {
           "color": "#D2561A"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Damit du Logos, Overlays und Fotos ins Dashboard hochladen kannst.",
+          "cameraPermission": "Damit du Fotos direkt aufnehmen und ins Dashboard hochladen kannst.",
+          "microphonePermission": false
         }
       ]
     ]

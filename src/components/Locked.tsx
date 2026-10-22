@@ -21,7 +21,7 @@ export function Locked({ badge = 'Upgrade', title, intro, points }: { badge?: st
           </View>
         </View>
       ))}
-      <Button title="Preise und Pakete ansehen" onPress={() => nav.navigate('Web', { path: '/plaene', title: 'Preise und Pakete' })} />
+      <Button title="Preise und Pakete ansehen" onPress={() => nav.navigate('Plans')} />
     </Card>
   );
 }

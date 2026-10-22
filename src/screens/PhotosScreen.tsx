@@ -62,7 +62,7 @@ export function PhotosScreen() {
   const list = mode === 'neu' ? recent.data ?? [] : results ?? [];
 
   return (
-    <Screen tabs actions title="Fotos" refreshing={recent.refreshing} onRefresh={recent.reload}>
+    <Screen page="photos" tabs actions title="Fotos" refreshing={recent.refreshing} onRefresh={recent.reload}>
       <KpiGrid>
         <Kpi icon="camera-outline" label="Fotos heute" value={formatNumber(today?.expectedCount ?? null)} />
         <Kpi icon="bag-check-outline" label="Verkauft heute" value={formatNumber(today?.soldCount ?? null)} sub={today?.conversionRate != null ? `${formatPercent(today.conversionRate)} Kaufquote` : null} />

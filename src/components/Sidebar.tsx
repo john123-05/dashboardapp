@@ -7,7 +7,7 @@ import { usePark } from '../contexts/ParkContext';
 import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
-import { PAGES, type PageEntry } from '../lib/pages';
+import { PAGES, pageAvailable, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { initialsOf } from './HeaderActions';
@@ -17,13 +17,13 @@ import { BAR_GREY } from './TabBar';
 export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: string | null; onOpen: (p: PageEntry) => void; onAlerts: () => void; onAccount: () => void }) {
   const insets = useSafeAreaInsets();
   const { isOwner, isStaff, allowedPages, fullName, email } = useAuth();
-  const { parkName, parkId } = usePark();
+  const { parkName, parkId, cameraAvailable } = usePark();
   const ent = useEntitlements(parkId);
   const upgrade = (k: string) => (k === 'speed' && !speedUnlocked(parkId, ent.has)) || (k === 'shop' && !ent.has('online_shop'));
   const { unread } = useNotifications();
   const { isDark, toggle } = useLook();
   const viewer = { isOwner, isStaff, allowedPages };
-  const visible = PAGES.filter((p) => canSee(p.key, viewer));
+  const visible = PAGES.filter((p) => canSee(p.key, viewer) && pageAvailable(p, { cameraAvailable }));
   return (
     <View style={[styles.root, { paddingTop: insets.top + 14, paddingBottom: insets.bottom + 12 }]}>
       <View style={styles.brand}>

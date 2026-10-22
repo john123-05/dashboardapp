@@ -55,7 +55,7 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
   const zeitraum = period === 'all' ? 'Alle Fahrten' : period === 'day' ? formatDayLong(date) : o?.from && o?.to ? `${formatDayLong(o.from)} bis ${formatDayLong(o.to)}` : formatDayLong(date);
 
   return (
-    <Screen title="Speedmessung" subtitle="Bestenliste und Geschwindigkeiten" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="speed" title="Speedmessung" subtitle="Bestenliste und Geschwindigkeiten" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
       {!unlocked && !ent.loading ? <Locked {...SPEED_OFFER} /> : null}
       {unlocked ? (<>
       <Segmented<SpeedPeriod> value={period} onChange={(p) => { setPeriod(p); setDate(today); }} options={PERIODS} />

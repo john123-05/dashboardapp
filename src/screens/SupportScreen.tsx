@@ -19,7 +19,7 @@ export function SupportScreen({ navigation }: { navigation: { goBack: () => void
   const tickets = data.data ?? [];
 
   return (
-    <Screen title="Support" subtitle="Anfragen an Liftpictures" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="tickets" title="Support" subtitle="Anfragen an Liftpictures" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
       <View style={{ flexDirection: 'row', gap: space.sm }}>
         <View style={{ flex: 1 }}>
           <Button title="Neue Anfrage" icon="add" onPress={() => nav.navigate('NewTicket', { onDone: undefined })} />

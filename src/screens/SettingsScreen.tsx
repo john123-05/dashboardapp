@@ -112,7 +112,7 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
   const cfg = normalizeOpeningHoursConfig(openingHoursConfig, openingHours);
 
   return (
-    <Screen title="Einstellungen" subtitle={parkName} onBack={navigation.goBack}>
+    <Screen page="settings" title="Einstellungen" subtitle={parkName} onBack={navigation.goBack}>
       <Section title="Benachrichtigungen">
         {err ? <ErrorNote text={err} /> : null}
         {!s ? (

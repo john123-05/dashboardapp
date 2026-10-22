@@ -66,11 +66,17 @@ export async function sendTestPush(parkId: string): Promise<void> {
 
 // Web-Pfad aus der Mitteilung -> Seite in der App.
 export function routeForUrl(url: string | undefined): { name: string; params?: object } {
-  const path = (url || '/').split('?')[0];
+  const path = (url || '/').split('?')[0].replace(/\/$/, '') || '/';
   const map: Record<string, string> = {
     '/': 'Overview', '/revenue': 'Revenue', '/health': 'Health', '/photos': 'Photos', '/purchases': 'Purchases',
     '/users': 'Speed', '/tickets': 'Support', '/settings': 'Settings', '/team': 'Team', '/configuration': 'Configuration', '/leads': 'Marketing',
+    '/kamera': 'Camera', '/personalization': 'Personalization', '/shop': 'Shop', '/shop/bearbeiten': 'ShopEdit', '/shop/preise': 'Plans', '/plaene': 'Plans', '/leads/preise': 'Plans',
   };
+  // CRM-Reiter: /leads/kontakte, /leads/email, /leads/social, /leads/umfrage, /leads/pixel
+  const crm: Record<string, string> = { kontakte: 'kontakte', email: 'email', social: 'social', umfrage: 'umfrage', pixel: 'pixel' };
+  const sub = path.startsWith('/leads/') ? crm[path.slice(7)] : undefined;
+  if (sub) return { name: 'Marketing', params: { tab: sub } };
+  if (path === '/shop/preise') return { name: 'Plans', params: { group: 'shop' } };
   const name = map[path];
   return name ? { name } : { name: 'Web', params: { path, title: 'Liftbase' } };
 }
