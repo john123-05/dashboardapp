@@ -9,6 +9,7 @@ import { formatCents, formatDay, formatDayLong, formatNumber, formatPercent } fr
 import { aggregateByDate, sumDays, toChartSeries } from '../lib/kioskSales';
 import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 type Range = '7' | '30' | '90';
 
@@ -40,7 +41,9 @@ export function RevenueScreen() {
         revenue.reload();
       }}
     >
-      <Segmented<Range> value={range} onChange={setRange} options={[{ value: '7', label: '7 Tage' }, { value: '30', label: '30 Tage' }, { value: '90', label: '90 Tage' }]} />
+      <CoachTarget id="revenue.range">
+        <Segmented<Range> value={range} onChange={setRange} options={[{ value: '7', label: '7 Tage' }, { value: '30', label: '30 Tage' }, { value: '90', label: '90 Tage' }]} />
+      </CoachTarget>
       {sales.error && !sales.data ? <ErrorNote text={sales.error} onRetry={sales.reload} /> : null}
 
       {loading ? (

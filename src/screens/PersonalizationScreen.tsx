@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ActionSheetIOS, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { CardHead, Input, MiniButton, Notice, PickerSheet, SelectRow, SwitchRow } from '../components/controls';
 import { successHaptic, tapHaptic } from '../components/haptics';
@@ -31,7 +31,10 @@ import {
   type SlotId,
 } from '../lib/overlays';
 import { useData } from '../lib/useData';
-import { colors, font, radius, space } from '../theme';
+import { colors, font, HEADER_HEIGHT, radius, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { OverlayStudio } from './OverlayStudioScreen';
 
 const CHECKER = colors.subtle;
 
@@ -59,6 +62,16 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
   const [autoApply, setAutoApply] = useState(true);
   const [message, setMessage] = useState('');
   const [prompt, setPrompt] = useState('');
+  const [studioOpen, setStudioOpen] = useState<{ url: string; nonce: number } | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const scrollBy = useRef<((dy: number) => void) | null>(null);
+  const studioRef = useRef<View>(null);
+  const insets = useSafeAreaInsets();
+  /** Ein Bild ins Studio laden und dorthin scrollen. */
+  const openInStudio = (url: string) => {
+    setStudioOpen({ url, nonce: Date.now() });
+    setTimeout(() => studioRef.current?.measureInWindow((_x, wy) => scrollBy.current?.(wy - (insets.top + HEADER_HEIGHT + 12))), 120);
+  };
 
   const machines = branding.data?.machines ?? [];
   const machine = machines.find((m) => m.id === machineId) ?? machines[0] ?? null;
@@ -200,6 +213,8 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
 
   return (
     <Screen page="personalization"
+      scrollEnabled={!dragging}
+      scrollByRef={scrollBy}
       title="Personalisierung"
       subtitle="Overlays und Bilder am Automaten"
       onBack={navigation.goBack}
@@ -237,6 +252,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
               <Pill tone={online ? 'ok' : 'neutral'} icon="desktop-outline" text={`${machines.length === 1 ? `${machine.machine_label || machine.machine_id} · ` : ''}${online ? 'Verbunden' : minutes === null ? 'noch nie gesehen' : `zuletzt vor ${Math.round(minutes)} Min.`}`} />
             </View>
 
+            <CoachTarget id="perso.slots">
             <SlotRow wide={wide}>
               {SLOTS.map((s) => {
                 const shown = displayFor(s.id, machine, branding.data!.assets, branding.data!.refs);
@@ -260,12 +276,14 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                       <View style={{ flexDirection: 'row', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
                         <MiniButton title="Ändern" tone="brand" icon="swap-horizontal" onPress={() => { setEditing(s.id); setSource(assets.length ? 'gallery' : 'upload'); setFile(null); setStatus(null); }} />
                         <MiniButton title="Stand hinterlegen" icon="time-outline" busy={busy === `ref:${s.id}`} onPress={() => storeReference(s.id)} />
+                        {shown ? <MiniButton title="Im Studio" icon="brush-outline" onPress={() => openInStudio(shown.url)} /> : null}
                       </View>
                     </View>
                   </View>
                 );
               })}
             </SlotRow>
+            </CoachTarget>
             <Text style={styles.hint}>„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.</Text>
 
             {slot ? (
@@ -331,6 +349,15 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
       </Section>
 
       {/* ---------------------------------------------------------- Gespeicherte Overlays */}
+      {/* ---------------------------------------------------------- Overlay-Studio direkt auf der Seite (wie im Web) */}
+      <Section title="Overlay-Studio">
+        <View ref={studioRef} collapsable={false}>
+          <Card>
+            <OverlayStudio embedded openRequest={studioOpen} onSaved={() => overlays.reload()} onDragChange={setDragging} onFullscreen={() => nav.navigate('OverlayStudio')} />
+          </Card>
+        </View>
+      </Section>
+
       <Section title="Gespeicherte Overlays" action="Hochladen" onAction={uploadReady}>
         <Card style={{ gap: space.md }}>
           <CardHead title="Vorschau" sub="So sieht dein aktuelles Foto mit Overlay aus." right={<MiniButton icon="refresh" onPress={() => base.reload()} />} />
@@ -343,7 +370,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
             })}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ ...font.footnote, color: colors.ink2, flex: 1 }}>Antippen zum Anwenden · lange drücken zum Löschen</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2, flex: 1 }}>Antippen zum Anwenden · lange drücken zum Bearbeiten oder Löschen</Text>
             <Pill text={String(assets.length)} />
           </View>
           {overlays.loading && !overlays.data ? (
@@ -361,7 +388,14 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                   <Pressable
                     key={a.id}
                     onPress={() => { tapHaptic(); activate(a); }}
-                    onLongPress={() => { tapHaptic(); remove(a); }}
+                    onLongPress={() => {
+                      tapHaptic();
+                      if (Platform.OS !== 'ios') return remove(a);
+                      ActionSheetIOS.showActionSheetWithOptions({ options: ['Abbrechen', 'Im Studio bearbeiten', 'Löschen'], cancelButtonIndex: 0, destructiveButtonIndex: 2 }, (k) => {
+                        if (k === 1 && a.preview_url) openInStudio(a.preview_url);
+                        if (k === 2) remove(a);
+                      });
+                    }}
                     style={({ pressed }) => [styles.gridTile, { width: gridTile, height: Math.round(gridTile * 0.75) }, on && { borderColor: colors.brand, borderWidth: 2 }, pressed && { opacity: 0.8 }]}
                     accessibilityLabel={on ? 'Aktives Overlay' : 'Overlay anwenden'}
                   >
@@ -390,13 +424,9 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
           <Text style={{ ...font.footnote, color: colors.ink2 }}>Beschreibe kurz, was auf dem Foto stehen soll. Die KI baut daraus ein Overlay passend zu deinem neuesten Foto.</Text>
           <Input label="Nachricht auf dem Foto" value={message} onChangeText={setMessage} placeholder="z. B. Frohe Herbstferien!" />
           <Input label="Gestaltung (optional)" value={prompt} onChangeText={setPrompt} placeholder="z. B. Herbstlaub am Rand, unser Logo unten rechts" multiline />
-          <Button title={busy === 'ai' ? 'Wird erstellt…' : 'Overlay erstellen'} icon="sparkles-outline" loading={busy === 'ai'} onPress={generate} />
+          <Button title={busy === 'ai' ? 'Wird erstellt…' : 'Mit KI erstellen'} icon="sparkles-outline" loading={busy === 'ai'} onPress={generate} />
         </Card>
       </Section>
-
-      <ListCard>
-        <Row icon="brush-outline" title="Overlay-Studio" subtitle="Element für Element gestalten (großer Editor)" chevron onPress={() => nav.navigate('Web', { path: '/personalization', title: 'Overlay-Studio' })} last />
-      </ListCard>
 
       <PickerSheet open={machinePicker} title="Automat" value={machine?.id} options={machines.map((m) => ({ value: m.id, label: m.machine_label || m.machine_id }))} onPick={(id) => { setMachineId(id); setEditing(null); }} onClose={() => setMachinePicker(false)} />
     </Screen>
@@ -414,6 +444,8 @@ function SlotRow({ wide, children }: { wide: boolean; children: React.ReactNode 
 }
 
 const styles = StyleSheet.create({
+  studio: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, borderWidth: 1, borderColor: colors.brand },
+  studioIcon: { width: 48, height: 48, borderRadius: 14, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' },
   lead: { ...font.subhead, color: colors.ink2, marginTop: -4 },
   hint: { ...font.caption, color: colors.ink3, fontWeight: '400' },
   slot: { backgroundColor: colors.card, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.line },

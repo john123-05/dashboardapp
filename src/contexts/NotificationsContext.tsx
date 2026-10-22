@@ -6,12 +6,17 @@ import { usePark } from './ParkContext';
 import { loadHealth, loadSupportReplies } from '../lib/data';
 import { benenne } from '../lib/geraeteNamen';
 import { useData } from '../lib/useData';
+import { fetchAnnouncements, reportAnnouncement } from '../lib/announcements';
 
 // Meldungen wie in der Glocke des Web-Dashboards (src/lib/notificationFeed.ts): Automat offline,
-// Abholcode fehlt, Papier knapp, Gerät ausgefallen, Münzröhre leer und Antworten vom Support.
+// Abholcode fehlt, Papier knapp, Gerät ausgefallen, Münzröhre leer und Antworten vom Support,
+// dazu die Hinweise aus dem Liftpictures-CRM. Alles wird live berechnet: ist eine Störung behoben
+// oder ein Hinweis im CRM gelöscht bzw. abgelaufen, verschwindet die Meldung beim nächsten Abgleich.
 export type FeedItem = {
   id: string;
-  kind: 'support' | 'fault' | 'offline' | 'paper' | 'code' | 'coins';
+  kind: 'support' | 'fault' | 'offline' | 'paper' | 'code' | 'coins' | 'crm';
+  /** Ziel beim Antippen (Pfad wie im Web oder https-Link). */
+  link?: string | null;
   title: string;
   text: string;
   createdAt: string;
@@ -23,6 +28,8 @@ interface Value {
   unread: number;
   isRead: (id: string) => boolean;
   markAllRead: () => void;
+  /** Meldung entfernen; CRM-Hinweise gelten dann für diesen Nutzer überall als geschlossen. */
+  hide: (id: string) => void;
   loading: boolean;
   refreshing: boolean;
   error: string | null;
@@ -32,21 +39,28 @@ interface Value {
 const Ctx = createContext<Value | null>(null);
 
 export function NotificationsProvider({ children }: PropsWithChildren) {
-  const { user } = useAuth();
+  const { user, isOwner, isStaff } = useAuth();
   const { parkId } = usePark();
   const [read, setRead] = useState<string[]>([]);
+  const [hidden, setHidden] = useState<string[]>([]);
   const key = user && parkId ? `lp-notif-read:${user.id}:${parkId}` : 'lp-notif-read:preview';
+  const hiddenKey = `${key}:hidden`;
 
   useEffect(() => {
     AsyncStorage.getItem(key)
       .then((raw) => setRead(raw ? (JSON.parse(raw) as string[]) : []))
       .catch(() => setRead([]));
-  }, [key]);
+    AsyncStorage.getItem(hiddenKey)
+      .then((raw) => setHidden(raw ? (JSON.parse(raw) as string[]) : []))
+      .catch(() => setHidden([]));
+  }, [key, hiddenKey]);
 
   const health = useData(parkId ? `health:${parkId}` : null, () => loadHealth(parkId!), [parkId], 120000);
   const support = useData(parkId ? `support:${parkId}` : null, () => loadSupportReplies(parkId!), [parkId], 120000);
+  // Gleicher Schlüssel wie die Hinweis-Karten auf den Seiten: ein Abruf für beide.
+  const crm = useData(parkId ? `ann:${parkId}` : null, () => fetchAnnouncements(parkId!), [parkId], 120000);
 
-  const items = useMemo<FeedItem[]>(() => {
+  const all = useMemo<FeedItem[]>(() => {
     const out: FeedItem[] = [];
     const now = new Date().toISOString();
     for (const m of health.data ?? []) {
@@ -75,12 +89,27 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
         out.push({ id: `coins-${m.id}-${c.cent}`, kind: 'coins', title: `${name}: Münzen leer`, text: c.text, createdAt: now, severity: 'warning' });
       }
     }
+    for (const a of crm.data ?? []) {
+      if (a.audience !== 'all' && !(a.audience === 'owner' ? isOwner : isStaff)) continue;
+      out.push({ id: `crm-${a.id}`, kind: 'crm', title: a.title, text: a.body, createdAt: now, severity: a.tone === 'warning' ? 'warning' : 'info', link: a.cta_url });
+    }
     for (const s of support.data ?? []) {
       out.push({ id: `support-${s.id}`, kind: 'support', title: s.ticket_subject ? `Support-Antwort: ${s.ticket_subject}` : 'Support-Antwort', text: s.message, createdAt: s.created_at, severity: 'info' });
     }
     const rank = { error: 0, warning: 1, info: 2 } as const;
     return out.sort((a, b) => rank[a.severity] - rank[b.severity] || b.createdAt.localeCompare(a.createdAt));
-  }, [health.data, support.data]);
+  }, [health.data, support.data, crm.data, isOwner, isStaff]);
+  const items = useMemo(() => all.filter((i) => !hidden.includes(i.id)), [all, hidden]);
+
+  // Behobene Störungen vergessen: tritt dieselbe Störung später wieder auf, erscheint sie neu.
+  useEffect(() => {
+    if (!health.data || !support.data || !crm.data || hidden.length === 0) return;
+    const live = new Set(all.map((i) => i.id));
+    const keep = hidden.filter((id) => live.has(id));
+    if (keep.length === hidden.length) return;
+    setHidden(keep);
+    void AsyncStorage.setItem(hiddenKey, JSON.stringify(keep));
+  }, [all, hidden, health.data, support.data, crm.data, hiddenKey]);
 
   const isRead = useCallback((id: string) => read.includes(id), [read]);
   const markAllRead = useCallback(() => {
@@ -88,6 +117,15 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
     setRead(next);
     void AsyncStorage.setItem(key, JSON.stringify(next));
   }, [read, items, key]);
+  const hide = useCallback(
+    (id: string) => {
+      const next = Array.from(new Set([...hidden, id])).slice(-300);
+      setHidden(next);
+      void AsyncStorage.setItem(hiddenKey, JSON.stringify(next));
+      if (id.startsWith('crm-') && parkId) reportAnnouncement(parkId, id.slice(4), 'dismissed');
+    },
+    [hidden, hiddenKey, parkId],
+  );
 
   const value = useMemo<Value>(
     () => ({
@@ -95,15 +133,17 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
       unread: items.filter((i) => !read.includes(i.id)).length,
       isRead,
       markAllRead,
+      hide,
       loading: health.loading && support.loading,
       refreshing: health.refreshing || support.refreshing,
       error: health.error,
       reload: () => {
         health.reload();
         support.reload();
+        crm.reload();
       },
     }),
-    [items, read, isRead, markAllRead, health, support],
+    [items, read, isRead, markAllRead, hide, health, support, crm],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

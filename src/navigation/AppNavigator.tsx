@@ -1,12 +1,14 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { DefaultTheme, NavigationContainer, createNavigationContainerRef, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, DeviceEventEmitter, Platform, Text, View } from 'react-native';
 import { useWide } from '../components/layout';
 import { MoreSheet } from '../components/MoreSheet';
 import { Screen } from '../components/Screen';
 import { Sidebar } from '../components/Sidebar';
+import { CoachOverlay, type CoachStep } from '../components/coach/Coach';
+import { coachSteps } from '../components/coach/steps';
 import { TabBar } from '../components/TabBar';
 import { Button, ListCard, Row } from '../components/ui';
 import { useAuth } from '../contexts/AuthContext';
@@ -21,6 +23,7 @@ import { AccountScreen } from '../screens/AccountScreen';
 import { AlertsScreen } from '../screens/AlertsScreen';
 import { CameraScreen } from '../screens/CameraScreen';
 import { PersonalizationScreen } from '../screens/PersonalizationScreen';
+import { OverlayStudioScreen } from '../screens/OverlayStudioScreen';
 import { PlansScreen } from '../screens/PlansScreen';
 import { ShopEditScreen } from '../screens/ShopEditScreen';
 import { ShopScreen } from '../screens/ShopScreen';
@@ -129,6 +132,7 @@ function pageScreens(S: typeof Inner) {
       <S.Screen name="CampaignEdit" component={CampaignEditScreen as any} />
       <S.Screen name="Camera" component={CameraScreen as any} />
       <S.Screen name="Personalization" component={PersonalizationScreen as any} />
+      <S.Screen name="OverlayStudio" component={OverlayStudioScreen as any} options={{ fullScreenGestureEnabled: false }} />
       <S.Screen name="Shop" component={ShopScreen as any} />
       <S.Screen name="ShopEdit" component={ShopEditScreen as any} />
       <S.Screen name="Plans" component={PlansScreen as any} />
@@ -259,6 +263,23 @@ function useNotificationTaps(ready: boolean, wide: boolean) {
   }, [last, ready, wide]);
 }
 
+// Geführter Rundgang über alle Seiten, die diese Person sehen darf.
+function CoachHost({ wide }: { wide: boolean }) {
+  const viewer = useViewer();
+  const { cameraAvailable } = usePark();
+  const steps = coachSteps(viewer, { wide, cameraAvailable });
+  const go = useCallback(
+    (s: CoachStep) => {
+      if (!navRef.isReady()) return;
+      if (wide) navRef.navigate('Main', { screen: s.route, params: s.params });
+      else if (s.tab) navRef.navigate('Tabs', PAGES.some((p) => p.route === s.route && canSee(p.key, viewer)) ? { screen: s.route } : undefined);
+      else navRef.navigate(s.route, s.params);
+    },
+    [wide, viewer],
+  );
+  return <CoachOverlay steps={steps} go={go} onFinish={() => void AsyncStorage.setItem(TOUR_SEEN_KEY, '1')} />;
+}
+
 export function AppNavigator() {
   const auth = useAuth();
   const park = usePark();
@@ -295,6 +316,7 @@ export function AppNavigator() {
           )}
           {sheetScreens(Root)}
         </Root.Navigator>
+        <CoachHost wide={wide} />
       </NavigationContainer>
     </NotificationsProvider>
   );

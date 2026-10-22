@@ -11,6 +11,7 @@ import { formatDayLong, formatNumber, formatTime } from '../lib/format';
 import { kurzText, loadMachines, orderMachine, seit, urteil, warnText, zusammenfuehren, ZUSTAND, type Eintrag, type Machine } from '../lib/health';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 const TON_ICON = { ok: 'checkmark-circle', warn: 'alert-circle', bad: 'close-circle', ruhig: 'moon', aus: 'remove-circle', unklar: 'help-circle' } as const;
 
@@ -80,7 +81,7 @@ export function HealthScreen() {
       ) : null}
 
       {machines.length > 0 ? (
-        <Segmented value={ansicht} onChange={setAnsicht} options={[{ value: 'wichtig', label: 'Einfache Ansicht' }, { value: 'alle', label: 'Alle Werte' }]} />
+        <CoachTarget id="health.view"><Segmented value={ansicht} onChange={setAnsicht} options={[{ value: 'wichtig', label: 'Einfache Ansicht' }, { value: 'alle', label: 'Alle Werte' }]} /></CoachTarget>
       ) : null}
 
       {machines.map((m) => (

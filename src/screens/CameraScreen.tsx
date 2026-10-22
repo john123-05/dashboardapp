@@ -15,6 +15,7 @@ import { formatTime } from '../lib/format';
 import { fetchRecentPhotos } from '../lib/photoBrowser';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 // Kamera wie im Web (/kamera): Regler stehen auf dem, was die Kamera meldet. Verschieben ändert nur
 // die Vorschau am letzten Foto; erst „An Kamera senden“ schreibt die Werte (mit Sicherung und Neustart).
@@ -317,13 +318,13 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
 
         {wide ? (
           <View style={{ flexDirection: 'row', gap: space.lg, alignItems: 'flex-start' }}>
-            <View style={{ flex: 1.2 }}>{bildKarte}</View>
-            <View style={{ flex: 1 }}>{regler}</View>
+            <CoachTarget id="camera.photo" style={{ flex: 1.2 }}>{bildKarte}</CoachTarget>
+            <CoachTarget id="camera.controls" style={{ flex: 1 }}>{regler}</CoachTarget>
           </View>
         ) : (
           <>
-            {bildKarte}
-            {regler}
+            <CoachTarget id="camera.photo">{bildKarte}</CoachTarget>
+            <CoachTarget id="camera.controls">{regler}</CoachTarget>
           </>
         )}
         {geaendert.length > 0 ? <View style={{ height: 70 }} /> : null}

@@ -10,6 +10,7 @@ import { usePark } from '../contexts/ParkContext';
 import { canSee } from '../lib/permissions';
 import { isSuperAdminEmail, openPage, PAGES } from '../lib/pages';
 import { colors, font, space } from '../theme';
+import { startCoach } from '../components/coach/Coach';
 
 export function AccountScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const nav = useNavigation<any>();
@@ -48,7 +49,7 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
       <Section title="Hilfe">
         <ListCard>
           <Row icon="help-circle-outline" title="Hilfe-Center" subtitle="Anleitungen, Fragen, Support" chevron onPress={() => nav.navigate('Help')} />
-          <Row icon="play-circle-outline" title="Rundgang starten" subtitle="Die App in einer Minute" chevron onPress={() => nav.navigate('Tour')} last />
+          <Row icon="play-circle-outline" title="Rundgang starten" subtitle="Die App in einer Minute" chevron onPress={startCoach} last />
         </ListCard>
       </Section>
 

@@ -1,84 +1,90 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useEffect } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, ZoomIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '../components/ui';
+import { startCoach } from '../components/coach/Coach';
 import { tapHaptic } from '../components/haptics';
-import { TOUR } from '../lib/help';
-import { colors, font, space } from '../theme';
+import { Button } from '../components/ui';
+import { useAuth } from '../contexts/AuthContext';
+import { colors, font, radius, space } from '../theme';
 
-export const TOUR_SEEN_KEY = 'lp-tour-seen-v1';
+export const TOUR_SEEN_KEY = 'lp-tour-seen-v2';
 
-const APP_STEPS = [
-  { title: 'Willkommen bei Liftbase', text: 'Hier hast du deinen Park immer dabei: Umsatz, Fotos, Systemzustand und Gäste. Wische durch den Rundgang, er dauert eine Minute.', icon: 'sparkles-outline' },
-  ...TOUR,
-  { title: 'Glocke und Konto', text: 'Oben rechts die Glocke: Störungen, Papier und Antworten vom Support. Daneben dein Konto mit Einstellungen, Benachrichtigungen, Mitarbeiter-Zugang und Hilfe.', icon: 'notifications-outline' },
-  { title: 'Alles Weitere unter „Mehr“', text: 'Unten rechts öffnet „Mehr“ alle weiteren Seiten. Zwischen den Tabs kannst du seitlich wischen.', icon: 'grid-outline' },
+const POINTS: { icon: any; title: string; text: string }[] = [
+  { icon: 'stats-chart-outline', title: 'Betrieb live', text: 'Umsatz, Fotos und Automaten in Echtzeit.' },
+  { icon: 'megaphone-outline', title: 'Gäste gewinnen', text: 'Kontakte, Umfrage, E-Mails und Social Media.' },
+  { icon: 'color-wand-outline', title: 'Dein Auftritt', text: 'Overlays, Kamera und Online-Shop selbst gestalten.' },
 ];
 
-// Rundgang (wie "Rundgang starten" im Web): beim ersten Start und jederzeit über das Hilfe-Center.
+// Begrüßung beim ersten Start (und über „Rundgang starten“): danach führt der Rundgang Seite für Seite
+// durch die echte App und hebt hervor, was man wo tun kann.
 export function TourScreen({ navigation }: { navigation: { goBack: () => void } }) {
-  const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const [i, setI] = useState(0);
-  const list = useRef<FlatList>(null);
-  const last = i === APP_STEPS.length - 1;
-  const fertig = () => {
+  const { fullName } = useAuth();
+  const first = (fullName ?? '').trim().split(/\s+/)[0];
+  const glow = useSharedValue(1);
+  useEffect(() => {
+    glow.value = withRepeat(withSequence(withTiming(1.08, { duration: 900 }), withTiming(1, { duration: 900 })), -1);
+  }, [glow]);
+  const halo = useAnimatedStyle(() => ({ transform: [{ scale: glow.value }], opacity: 2 - glow.value }));
+
+  const later = () => {
     void AsyncStorage.setItem(TOUR_SEEN_KEY, '1');
     navigation.goBack();
   };
-  const weiter = () => {
+  const start = () => {
     tapHaptic();
-    if (last) return fertig();
-    list.current?.scrollToIndex({ index: i + 1, animated: true });
+    navigation.goBack();
+    setTimeout(startCoach, 450);
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 16 }]}>
-      <View style={styles.top}>
-        <Text style={{ ...font.footnote, color: colors.ink3 }}>
-          {i + 1} von {APP_STEPS.length}
-        </Text>
-        <Pressable onPress={fertig} hitSlop={10}>
-          <Text style={{ ...font.callout, color: colors.brand, fontWeight: '600' }}>Überspringen</Text>
-        </Pressable>
-      </View>
-      <FlatList
-        ref={list}
-        data={APP_STEPS}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(s) => s.title}
-        onMomentumScrollEnd={(e) => setI(Math.round(e.nativeEvent.contentOffset.x / width))}
-        renderItem={({ item }) => (
-          <View style={{ width, paddingHorizontal: space.xxl, justifyContent: 'center', gap: space.lg }}>
-            <View style={styles.icon}>
-              <Ionicons name={item.icon as any} size={44} color={colors.brand} />
-            </View>
-            <Text style={{ ...font.largeTitle, color: colors.ink }}>{item.title}</Text>
-            <Text style={{ ...font.body, fontSize: 18, lineHeight: 26, color: colors.ink2 }}>{item.text}</Text>
+    <View style={[styles.root, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 20 }]}>
+      <Pressable onPress={later} hitSlop={10} style={styles.skip}>
+        <Text style={{ ...font.callout, color: colors.ink3, fontWeight: '600' }}>Später</Text>
+      </Pressable>
+      <View style={{ flex: 1, justifyContent: 'center', gap: space.xl, paddingHorizontal: space.xxl }}>
+        <Animated.View entering={ZoomIn.duration(500).springify().damping(14)} style={{ alignSelf: 'flex-start' }}>
+          <Animated.View style={[styles.halo, halo]} />
+          <View style={styles.icon}>
+            <Ionicons name="sparkles" size={40} color={colors.brand} />
           </View>
-        )}
-      />
-      <View style={styles.dots}>
-        {APP_STEPS.map((s, k) => (
-          <View key={s.title} style={[styles.dot, k === i && styles.dotOn]} />
-        ))}
+        </Animated.View>
+        <Animated.Text entering={FadeInDown.delay(120).duration(450)} style={{ ...font.largeTitle, color: colors.ink }}>
+          {first ? `Willkommen, ${first}!` : 'Willkommen bei Liftbase'}
+        </Animated.Text>
+        <Animated.Text entering={FadeInDown.delay(220).duration(450)} style={{ ...font.body, fontSize: 18, lineHeight: 26, color: colors.ink2 }}>
+          In einer Minute zeigen wir dir jede Seite – direkt in der App, Schritt für Schritt.
+        </Animated.Text>
+        <View style={{ gap: 14 }}>
+          {POINTS.map((p, k) => (
+            <Animated.View key={p.title} entering={FadeInDown.delay(340 + k * 110).duration(420)} style={styles.point}>
+              <View style={styles.pointIcon}>
+                <Ionicons name={p.icon} size={20} color={colors.brand} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ ...font.headline, color: colors.ink }}>{p.title}</Text>
+                <Text style={{ ...font.subhead, color: colors.ink2 }}>{p.text}</Text>
+              </View>
+            </Animated.View>
+          ))}
+        </View>
       </View>
-      <View style={{ paddingHorizontal: space.xl }}>
-        <Button title={last ? 'Los geht’s' : 'Weiter'} onPress={weiter} />
-      </View>
+      <Animated.View entering={FadeInDown.delay(720).duration(420)} style={{ paddingHorizontal: space.xl, gap: 10 }}>
+        <Button title="Rundgang starten" icon="play" onPress={start} />
+        <Button title="Später" kind="plain" onPress={later} />
+      </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: space.xl, minHeight: 44 },
-  icon: { width: 84, height: 84, borderRadius: 24, backgroundColor: colors.brandSoft, alignItems: 'center', justifyContent: 'center' },
-  dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginVertical: space.lg },
-  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.lineStrong },
-  dotOn: { width: 22, backgroundColor: colors.brand },
+  skip: { position: 'absolute', right: space.xl, top: 56, zIndex: 2, minHeight: 44, justifyContent: 'center' },
+  halo: { position: 'absolute', left: -10, top: -10, right: -10, bottom: -10, borderRadius: 34, backgroundColor: colors.brandSoft },
+  icon: { width: 84, height: 84, borderRadius: 24, backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.line },
+  point: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.md, borderWidth: 1, borderColor: colors.line },
+  pointIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.brandSoft, alignItems: 'center', justifyContent: 'center' },
 });

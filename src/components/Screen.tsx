@@ -34,13 +34,17 @@ interface Props {
   sheet?: boolean;
   // Seite für Hinweise aus dem CRM (park_announcements.pages).
   page?: PageKey;
+  // false: Seite steht still (z. B. während im Overlay-Studio ein Element gezogen wird).
+  scrollEnabled?: boolean;
+  // Bekommt eine Funktion, die um dy Punkte weiterscrollt (z. B. bis ein Bereich oben steht).
+  scrollByRef?: { current: ((dy: number) => void) | null };
   children: ReactNode;
 }
 
 // Eine Seite wie in iOS: großer Titel, der beim Scrollen in eine durchsichtige Kopfzeile übergeht.
 // Inhalt läuft unter der unscharfen Kopfzeile durch. Ziehen zum Aktualisieren, Gummiband-Scrollen
 // und Rand-Wischen zurück kommen vom System.
-export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, page, children }: Props) {
+export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, page, scrollEnabled = true, scrollByRef, children }: Props) {
   const realInsets = useSafeAreaInsets();
   const wide = useWide();
   // Als Blatt (iOS-Modal) liegt die Seite unter der Statusleiste: oben kein Abstand nötig.
@@ -49,6 +53,12 @@ export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zu
   const topInset = insets.top + HEADER_HEIGHT;
   const isIOS = Platform.OS === 'ios';
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  if (scrollByRef) {
+    scrollByRef.current = (dy: number) => {
+      const offset = y.value - (isIOS ? topInset : 0);
+      (scrollRef.current as any)?.scrollTo({ y: Math.max(isIOS ? -topInset : 0, offset + dy), animated: true });
+    };
+  }
   // Nur Vorschau: nach 4 s ans Ende scrollen, um den unteren Rand zu prüfen.
   useEffect(() => {
     if (!PREVIEW || process.env.EXPO_PUBLIC_PREVIEW_SCROLL !== '1') return;
@@ -74,6 +84,7 @@ export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zu
         ref={scrollRef}
         style={styles.scroll}
         onScroll={onScroll}
+        scrollEnabled={scrollEnabled}
         scrollEventThrottle={16}
         contentInset={isIOS ? { top: topInset } : undefined}
         contentOffset={isIOS ? { x: 0, y: -topInset } : undefined}

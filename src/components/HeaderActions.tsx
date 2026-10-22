@@ -6,6 +6,7 @@ import { useNotifications } from '../contexts/NotificationsContext';
 import { colors } from '../theme';
 import { tapHaptic } from './haptics';
 import { useWide } from './layout';
+import { CoachTarget } from './coach/Coach';
 
 export function initialsOf(name: string | null | undefined, email: string | null | undefined) {
   return (name || email || '?').split(/[\s@.]+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('');
@@ -29,6 +30,7 @@ export function HeaderActions() {
           </Pressable>
         </>
       ) : null}
+      <CoachTarget id="header.bell">
       <Pressable
         onPress={() => {
           tapHaptic();
@@ -42,6 +44,7 @@ export function HeaderActions() {
         <Ionicons name="notifications-outline" size={22} color={colors.ink} />
         {unread > 0 ? <View style={styles.dot} /> : null}
       </Pressable>
+      </CoachTarget>
       <Pressable
         onPress={() => {
           tapHaptic();

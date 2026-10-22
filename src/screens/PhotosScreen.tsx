@@ -14,6 +14,7 @@ import { aggregateByDate, todayInTimezone } from '../lib/kioskSales';
 import { fetchRecentPhotos, searchPhotosByCode, searchPhotosByDateTime, type BrowsablePhoto } from '../lib/photoBrowser';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 type Mode = 'neu' | 'code' | 'zeit';
 
@@ -68,6 +69,7 @@ export function PhotosScreen() {
         <Kpi icon="bag-check-outline" label="Verkauft heute" value={formatNumber(today?.soldCount ?? null)} sub={today?.conversionRate != null ? `${formatPercent(today.conversionRate)} Kaufquote` : null} />
       </KpiGrid>
 
+      <CoachTarget id="photos.search">
       <Segmented<Mode>
         value={mode}
         onChange={(m) => {
@@ -77,6 +79,7 @@ export function PhotosScreen() {
         }}
         options={[{ value: 'neu', label: 'Neueste' }, { value: 'code', label: 'Bildnummer' }, { value: 'zeit', label: 'Uhrzeit' }]}
       />
+      </CoachTarget>
 
       {mode !== 'neu' ? (
         <View style={styles.searchRow}>

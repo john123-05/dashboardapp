@@ -20,6 +20,7 @@ import { EmailTab } from './marketing/EmailTab';
 import { PixelTab } from './marketing/PixelTab';
 import { SocialTab } from './marketing/SocialTab';
 import { SurveyTab } from './marketing/SurveyTab';
+import { CoachTarget } from '../components/coach/Coach';
 
 export type MarketingTab = 'start' | 'kontakte' | 'email' | 'social' | 'umfrage' | 'pixel';
 const flag = (cc?: string | null) => (cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))) : '');
@@ -86,7 +87,9 @@ export function MarketingScreen({ navigation, route }: { navigation: { goBack: (
 
   return (
     <Screen page="marketing" title="Marketing-CRM" subtitle="Aus Fotokäufern werden Kontakte" onBack={navigation.goBack} refreshing={leads.refreshing} onRefresh={refresh}>
-      <TabStrip<MarketingTab> tabs={TABS.map((t) => ({ value: t.value, label: t.label, dot: !!t.mode && t.mode === mode }))} value={tab} onChange={setTab} />
+      <CoachTarget id="marketing.tabs">
+        <TabStrip<MarketingTab> tabs={TABS.map((t) => ({ value: t.value, label: t.label, dot: !!t.mode && t.mode === mode }))} value={tab} onChange={setTab} />
+      </CoachTarget>
 
       {current.mode && config.data && !locked ? (
         <View style={styles.mode}>

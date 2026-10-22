@@ -1,6 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Linking, Pressable, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { routeForUrl } from '../lib/push';
+import { tapHaptic } from '../components/haptics';
+import { useWide } from '../components/layout';
 import { Screen } from '../components/Screen';
 import { Card, EmptyState, ErrorNote, ListCard, Row, Skeleton } from '../components/ui';
 import { successHaptic } from '../components/haptics';
@@ -16,6 +20,7 @@ const KIND: Record<FeedItem['kind'], IconName> = {
   paper: 'print-outline',
   code: 'qr-code-outline',
   coins: 'logo-euro',
+  crm: 'megaphone-outline',
 };
 const TONE = {
   error: [colors.errSoft, colors.err],
@@ -24,7 +29,16 @@ const TONE = {
 } as const;
 
 export function AlertsScreen({ navigation }: { navigation: { goBack: () => void } }) {
-  const { items, unread, isRead, markAllRead, loading, refreshing, error, reload } = useNotifications();
+  const { items, unread, isRead, markAllRead, hide, loading, refreshing, error, reload } = useNotifications();
+  const nav = useNavigation<any>();
+  const wide = useWide();
+  const open = (link: string) => {
+    if (!link.startsWith('/')) return void Linking.openURL(link);
+    const r = routeForUrl(link);
+    if (wide) nav.navigate('Main', { screen: r.name, params: r.params });
+    else if (['Overview', 'Revenue', 'Health', 'Photos'].includes(r.name)) nav.navigate('Tabs', { screen: r.name });
+    else nav.navigate(r.name, r.params);
+  };
   return (
     <Screen
       title="Meldungen"
@@ -69,7 +83,22 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
                 titleLines={2}
                 subtitle={`${timeAgo(it.createdAt)} · ${it.text}`}
                 subtitleLines={3}
-                right={!isRead(it.id) ? <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brand }} /> : null}
+                onPress={it.link ? () => open(it.link!) : undefined}
+                right={
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    {!isRead(it.id) ? <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brand }} /> : null}
+                    <Pressable
+                      onPress={() => {
+                        tapHaptic();
+                        hide(it.id);
+                      }}
+                      hitSlop={10}
+                      accessibilityLabel="Meldung entfernen"
+                    >
+                      <Ionicons name="close-circle" size={20} color={colors.ink3} />
+                    </Pressable>
+                  </View>
+                }
                 last={i === items.length - 1}
               />
             );
@@ -77,7 +106,7 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
         </ListCard>
       ) : !loading ? (
         <Card>
-          <EmptyState icon="checkmark-circle-outline" title="Alles in Ordnung" text="Keine Störungen, kein Papiermangel, keine offenen Antworten." />
+          <EmptyState icon="checkmark-circle-outline" title="Alles in Ordnung" text="Keine Störungen, kein Papiermangel, keine offenen Antworten. Behobene Störungen verschwinden von selbst." />
         </Card>
       ) : null}
     </Screen>

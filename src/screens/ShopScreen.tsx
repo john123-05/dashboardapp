@@ -18,6 +18,7 @@ import { demoShopUrl, fetchShopOverview, NEW_PRODUCTS, PRODUCT_ICON, PRODUCT_TEX
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { DASHBOARD_URL } from './WebPageScreen';
+import { CoachTarget } from '../components/coach/Coach';
 
 const POTENTIAL_DAYS = 30;
 
@@ -102,6 +103,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
 
       <View style={{ flexDirection: wide ? 'row' : 'column', gap: space.lg, alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: space.lg, alignSelf: 'stretch' }}>
+          <CoachTarget id="shop.own">
           <Section title="Dein Shop" action="Bearbeiten" onAction={() => nav.navigate('ShopEdit')}>
             {shop.loading && !s ? (
               <Skeleton height={160} radius={radius.lg} />
@@ -137,6 +139,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
             ) : null}
             {priceCents ? <Text style={styles.hint}>Zum Vergleich: am Automaten kostet ein Foto {formatCents(priceCents)}.</Text> : null}
           </Section>
+          </CoachTarget>
 
           <Section title="Auswertung">
             <KpiGrid>

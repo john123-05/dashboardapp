@@ -6,6 +6,7 @@ import { PAGES } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { TAB_BAR_HEIGHT } from './Screen';
+import { CoachTarget } from './coach/Coach';
 
 export const BAR_GREY = '#2b2b2b';
 
@@ -45,8 +46,9 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
           </Pressable>
         );
       })}
+      <CoachTarget id="tabbar.more" style={{ flex: 1 }}>
       <Pressable
-        style={styles.item}
+        style={[styles.item, { flex: 1 }]}
         accessibilityRole="button"
         accessibilityLabel="Mehr"
         accessibilityState={{ expanded: moreOpen }}
@@ -61,6 +63,7 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
         </View>
         <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.55)', fontWeight: moreOpen ? '700' : '500' }]}>Mehr</Text>
       </Pressable>
+      </CoachTarget>
     </View>
   );
 }

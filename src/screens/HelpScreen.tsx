@@ -9,6 +9,7 @@ import { tapHaptic } from '../components/haptics';
 import { FAQ, HELP_ARTICLES, SUPPORT_EMAIL } from '../lib/help';
 import { SUPPORT_PHONE, SUPPORT_PHONE_HREF } from '../lib/support';
 import { colors, font, radius, space } from '../theme';
+import { startCoach } from '../components/coach/Coach';
 
 // Hilfe-Center wie im Web (Fragezeichen oben rechts): Suche, Artikel zum Aufklappen, häufige Fragen,
 // Rundgang starten und Support per Anfrage, E-Mail oder Telefon.
@@ -28,7 +29,7 @@ export function HelpScreen({ navigation }: { navigation: { goBack: () => void } 
       </View>
 
       <View style={styles.tiles}>
-        <Tile icon="play-circle-outline" label="Rundgang starten" onPress={() => nav.navigate('Tour')} />
+        <Tile icon="play-circle-outline" label="Rundgang starten" onPress={startCoach} />
         <Tile icon="chatbubbles-outline" label="Anfrage stellen" onPress={() => nav.navigate('NewTicket')} />
         <Tile icon="mail-outline" label="E-Mail" onPress={() => void Linking.openURL(`mailto:${SUPPORT_EMAIL}`)} />
         <Tile icon="call-outline" label="Anrufen" onPress={() => void Linking.openURL(SUPPORT_PHONE_HREF)} />

@@ -12,6 +12,7 @@ import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { initialsOf } from './HeaderActions';
 import { BAR_GREY } from './TabBar';
+import { CoachTarget } from './coach/Coach';
 
 // iPad quer und Mac: Seitenleiste links wie im Web-Dashboard (#2b2b2b, Gruppen Betrieb/Marketing/Verwaltung).
 export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: string | null; onOpen: (p: PageEntry) => void; onAlerts: () => void; onAccount: () => void }) {
@@ -35,6 +36,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
           </Text>
         </View>
       </View>
+      <CoachTarget id="sidebar" style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 10, gap: 14 }} showsVerticalScrollIndicator={false}>
         {(['Betrieb', 'Marketing', 'Verwaltung'] as const).map((g) => {
           const items = visible.filter((p) => p.group === g);
@@ -65,6 +67,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
           );
         })}
       </ScrollView>
+      </CoachTarget>
       <View style={styles.footer}>
         <Pressable onPress={onAccount} style={({ pressed }) => [styles.account, pressed && styles.itemOn]}>
           <View style={styles.avatar}>

@@ -31,6 +31,7 @@ import {
 } from '../lib/catalog';
 import { hasGuestActivity, PLAN_LABEL, useEntitlements, type PlanKey } from '../lib/entitlements';
 import { colors, font, radius, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 const PLAN_ORDER: PlanKey[] = ['basis', 'marketing_starter', 'marketing_pro'];
 
@@ -222,7 +223,9 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
       {error ? <ErrorNote text={error} /> : null}
       {notice ? <Notice tone="info" text={notice} /> : null}
 
-      <TabStrip tabs={tabs} value={shown} onChange={setFilter} />
+      <CoachTarget id="plans.tabs">
+        <TabStrip tabs={tabs} value={shown} onChange={setFilter} />
+      </CoachTarget>
       {ent.plan !== 'basis' && isOwner ? <Button title="Abo und Rechnungen verwalten" icon="card-outline" kind="plain" onPress={() => void manageBilling()} /> : null}
 
       {catalog.loading && !catalog.data ? <Skeleton height={300} radius={radius.lg} /> : null}

@@ -18,6 +18,7 @@ import { aggregateByDate, getEffectiveScheduleForDate, todayInTimezone, toChartS
 import { canSee } from '../lib/permissions';
 import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
+import { CoachTarget } from '../components/coach/Coach';
 
 type Range = '7' | '14' | '30';
 
@@ -100,6 +101,7 @@ export function OverviewScreen() {
               <Kpi icon="camera-outline" label="Fotos insgesamt verkauft" accent="#A855F7" value={formatNumber(soldTotal)} />
             </KpiGrid>
           ) : null}
+          <CoachTarget id="overview.kpis">
           <KpiGrid>
             {!wide ? <Kpi icon="cash-outline" label="Umsatz heute" value={formatCents(revenueToday ?? todayRow?.revenueCents ?? null)} sub={soldToday !== null ? `${formatNumber(soldToday)} Fotos verkauft` : null} /> : null}
             {!wide ? <Kpi icon="images-outline" label="Fotos verkauft" value={formatNumber(soldToday)} sub={todayRow?.expectedCount ? `von ${formatNumber(todayRow.expectedCount)} Fahrten` : null} /> : null}
@@ -107,10 +109,13 @@ export function OverviewScreen() {
             <Kpi icon="trending-up-outline" label="Kaufquote heute" accent="#EC4899" value={formatPercent(conversion)} sub={conversion !== null && conversion < 0.05 ? 'niedrig' : 'Verkauft je Fahrt'} tone={conversion !== null && conversion < 0.05 ? 'warn' : undefined} />
             {wide ? <Kpi icon="hardware-chip-outline" label="Automaten online" accent="#EF4444" value={`${(health.data ?? []).filter((m) => m.reachable).length}/${(health.data ?? []).length}`} /> : null}
           </KpiGrid>
+          </CoachTarget>
 
           <View style={row}>
           <View style={col}>
+          <CoachTarget id="overview.rush">
           <RushHours />
+          </CoachTarget>
           </View>
           <View style={col}>
 
