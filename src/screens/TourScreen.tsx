@@ -47,26 +47,31 @@ export function TourScreen({ navigation }: { navigation: { goBack: () => void } 
       </Pressable>
       <View style={{ flex: 1, justifyContent: 'center', gap: space.xl, paddingHorizontal: space.xxl }}>
         <Animated.View entering={ZoomIn.duration(500).springify().damping(14)} style={{ alignSelf: 'flex-start' }}>
-          <Animated.View style={[styles.halo, halo]} />
+          {/* Animierte Hülle ohne Farbe, die Farbe trägt das innere View (dynamische Farben vertragen animierte Views nicht). */}
+          <Animated.View style={[styles.haloPos, halo]}>
+            <View style={styles.halo} />
+          </Animated.View>
           <View style={styles.icon}>
             <Ionicons name="sparkles" size={40} color={colors.brand} />
           </View>
         </Animated.View>
-        <Animated.Text entering={FadeInDown.delay(120).duration(450)} style={{ ...font.largeTitle, color: colors.ink }}>
-          {first ? `Willkommen, ${first}!` : 'Willkommen bei Liftbase'}
-        </Animated.Text>
-        <Animated.Text entering={FadeInDown.delay(220).duration(450)} style={{ ...font.body, fontSize: 18, lineHeight: 26, color: colors.ink2 }}>
-          In einer Minute zeigen wir dir jede Seite – direkt in der App, Schritt für Schritt.
-        </Animated.Text>
+        <Animated.View entering={FadeInDown.delay(120).duration(450)}>
+          <Text style={{ ...font.largeTitle, color: colors.ink }}>{first ? `Willkommen, ${first}!` : 'Willkommen bei Liftbase'}</Text>
+        </Animated.View>
+        <Animated.View entering={FadeInDown.delay(220).duration(450)}>
+          <Text style={{ ...font.body, fontSize: 18, lineHeight: 26, color: colors.ink2 }}>In einer Minute zeigen wir dir jede Seite – direkt in der App, Schritt für Schritt.</Text>
+        </Animated.View>
         <View style={{ gap: 14 }}>
           {POINTS.map((p, k) => (
-            <Animated.View key={p.title} entering={FadeInDown.delay(340 + k * 110).duration(420)} style={styles.point}>
+            <Animated.View key={p.title} entering={FadeInDown.delay(340 + k * 110).duration(420)}>
+              <View style={styles.point}>
               <View style={styles.pointIcon}>
                 <Ionicons name={p.icon} size={20} color={colors.brand} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={{ ...font.headline, color: colors.ink }}>{p.title}</Text>
                 <Text style={{ ...font.subhead, color: colors.ink2 }}>{p.text}</Text>
+              </View>
               </View>
             </Animated.View>
           ))}
@@ -83,7 +88,8 @@ export function TourScreen({ navigation }: { navigation: { goBack: () => void } 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   skip: { position: 'absolute', right: space.xl, top: 56, zIndex: 2, minHeight: 44, justifyContent: 'center' },
-  halo: { position: 'absolute', left: -10, top: -10, right: -10, bottom: -10, borderRadius: 34, backgroundColor: colors.brandSoft },
+  haloPos: { position: 'absolute', left: -10, top: -10, right: -10, bottom: -10 },
+  halo: { flex: 1, borderRadius: 34, backgroundColor: colors.brandSoft },
   icon: { width: 84, height: 84, borderRadius: 24, backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.line },
   point: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.card, borderRadius: radius.lg, padding: space.md, borderWidth: 1, borderColor: colors.line },
   pointIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.brandSoft, alignItems: 'center', justifyContent: 'center' },

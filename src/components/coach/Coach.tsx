@@ -173,7 +173,9 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
       {/* Fängt Berührungen im freien Feld ab, damit niemand mitten im Rundgang wegnavigiert. */}
       {rect ? <View style={{ position: 'absolute', left: rect.x - PAD, top: rect.y - PAD, width: rect.w + PAD * 2, height: rect.h + PAD * 2 }} /> : null}
 
-      <Animated.View key={i} entering={FadeInDown.duration(320).springify().damping(18)} exiting={FadeOut.duration(120)} style={[styles.card, { left: (W - cardW) / 2, width: cardW }, cardPos, shadow as object]}>
+      {/* Animierte Hülle nur für Lage und Bewegung; Farben im inneren View (dynamische Farben vertragen animierte Views nicht). */}
+      <Animated.View key={i} entering={FadeInDown.duration(320).springify().damping(18)} exiting={FadeOut.duration(120)} style={[styles.cardPos, { left: (W - cardW) / 2, width: cardW }, cardPos]}>
+        <View style={[styles.card, shadow as object]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
           <View style={styles.icon}>
             <Ionicons name={step.icon} size={20} color={colors.brand} />
@@ -201,6 +203,7 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
             {!last ? <Ionicons name="arrow-forward" size={16} color={colors.onBrand} /> : null}
           </Pressable>
         </View>
+        </View>
       </Animated.View>
     </View>
   );
@@ -209,7 +212,8 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
 const styles = StyleSheet.create({
   dim: { position: 'absolute', backgroundColor: 'rgba(8,12,20,0.62)' },
   ring: { position: 'absolute', borderRadius: radius.lg, borderWidth: 3, borderColor: '#F59E5B' },
-  card: { position: 'absolute', backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, gap: 10 },
+  cardPos: { position: 'absolute' },
+  card: { backgroundColor: colors.card, borderRadius: radius.lg, padding: space.lg, gap: 10 },
   icon: { width: 36, height: 36, borderRadius: 10, backgroundColor: colors.brandSoft, alignItems: 'center', justifyContent: 'center' },
   progress: { height: 4, borderRadius: 2, backgroundColor: colors.fill, overflow: 'hidden' },
   btn: { flex: 1, minHeight: 46, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 },
