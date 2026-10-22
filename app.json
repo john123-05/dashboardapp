@@ -43,6 +43,7 @@
     "owner": "impressrank",
     "plugins": [
       "./plugins/withPodTargets",
+      "./plugins/withSceneLifecycle",
       [
         "expo-notifications",
         {
