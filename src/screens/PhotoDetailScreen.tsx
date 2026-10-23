@@ -9,7 +9,7 @@ import { QrCode } from '../components/QrCode';
 import { Screen } from '../components/Screen';
 import { Button, Card, ListCard, Pill, Row } from '../components/ui';
 import { usePark } from '../contexts/ParkContext';
-import { formatDayLong, formatTime } from '../lib/format';
+import { formatDayLong, formatTime, formatDecimal } from '../lib/format';
 import { claimLinkFor, type BrowsablePhoto } from '../lib/photoBrowser';
 import { colors, font, radius, space } from '../theme';
 import { tr } from '../i18n';
@@ -37,7 +37,7 @@ export function PhotoDetailScreen({ route, navigation }: { route: { params: { ph
       <ListCard>
         <Row title={tr('Aufgenommen')} right={<Text style={{ ...font.callout, color: colors.ink }}>{formatDayLong(day)}, {formatTime(p.capturedAt, timezone)}</Text>} />
         <Row title={tr('Bildnummer')} right={<Text style={{ ...font.callout, color: colors.ink, fontVariant: ['tabular-nums'] }}>{p.externalCode ?? '–'}</Text>} />
-        <Row title={tr('Geschwindigkeit')} right={<Text style={{ ...font.callout, color: colors.ink }}>{p.speedKmh ? tr('{0} km/h', p.speedKmh.toFixed(1).replace('.', ',')) : '–'}</Text>} last />
+        <Row title={tr('Geschwindigkeit')} right={<Text style={{ ...font.callout, color: colors.ink }}>{p.speedKmh ? tr('{0} km/h', formatDecimal(p.speedKmh)) : '–'}</Text>} last />
       </ListCard>
       {link ? (
         <Card style={{ gap: space.md }}>

@@ -1263,6 +1263,7 @@ const dict: Record<string, string> = {
   "{0} % der Freischaltungen": "{0} % van de vrijgaven",
   "{0} ({1}) wird beendet und NICHT wieder gestartet. Es bleibt aus, bis du es wieder startest.": "{0} ({1}) wordt afgesloten en NIET opnieuw gestart. Het blijft uit tot je het weer start.",
   "{0} ({1}) wird beendet und neu gestartet.\n\n{2}\n\nNur ausführen, wenn gerade niemand am Automaten steht.": "{0} ({1}) wordt afgesloten en opnieuw gestart.\n\n{2}\n\nAlleen uitvoeren als er niemand bij de automaat staat.",
+  "{0} Antworten": "{0} antwoorden",
   "{0} Automaten offline": "{0} automaten offline",
   "{0} Besucher": "{0} bezoekers",
   "{0} Bilder in den letzten {1} Tagen": "{0} foto's in de laatste {1} dagen",

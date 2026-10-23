@@ -7,7 +7,7 @@ import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Segmented } from '../components/ui';
 import { tapHaptic } from '../components/haptics';
 import { usePark } from '../contexts/ParkContext';
-import { formatDayLong, formatNumber, formatTime } from '../lib/format';
+import { formatDayLong, formatNumber, formatTime, formatDecimal } from '../lib/format';
 import { todayInTimezone } from '../lib/kioskSales';
 import { fetchSpeedOverview, setSpeedResultHidden, shiftDate, type SpeedPeriod, type SpeedRow } from '../lib/speed';
 import { useData } from '../lib/useData';
@@ -20,7 +20,7 @@ const PERIODS: { value: SpeedPeriod; label: string }[] = [
   { value: 'month', get label() { return tr('Monat'); } },
   { value: 'all', get label() { return tr('Allzeit'); } },
 ];
-const kmh = (v: number | null | undefined) => (v === null || v === undefined ? '–' : `${v.toFixed(1).replace('.', ',')} km/h`);
+const kmh = (v: number | null | undefined) => (v === null || v === undefined ? '–' : tr('{0} km/h', formatDecimal(v)));
 const MEDAL = ['#E8B000', '#9AA3AB', '#C98A4B'];
 
 function maskEmail(e: string) {

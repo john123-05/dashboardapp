@@ -1263,6 +1263,7 @@ const dict: Record<string, string> = {
   "{0} % der Freischaltungen": "{0} % no atbloķēšanām",
   "{0} ({1}) wird beendet und NICHT wieder gestartet. Es bleibt aus, bis du es wieder startest.": "{0} ({1}) tiks apturēts un NETIKS restartēts. Tas paliks izslēgts, līdz to atkal palaidīsi.",
   "{0} ({1}) wird beendet und neu gestartet.\n\n{2}\n\nNur ausführen, wenn gerade niemand am Automaten steht.": "{0} ({1}) tiks apturēts un restartēts.\n\n{2}\n\nDari to tikai tad, kad pie automāta neviena nav.",
+  "{0} Antworten": "{0} atbildes",
   "{0} Automaten offline": "{0} automāti bezsaistē",
   "{0} Besucher": "{0} apmeklētāji",
   "{0} Bilder in den letzten {1} Tagen": "{0} attēli pēdējās {1} dienās",

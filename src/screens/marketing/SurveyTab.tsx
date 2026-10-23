@@ -6,7 +6,7 @@ import { BarChart } from '../../components/BarChart';
 import { Bars, CardHead, MiniButton, TabStrip } from '../../components/controls';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Row, Section } from '../../components/ui';
 import { fetchSurveyResults, pickLocalized, type SurveyQuestionResult } from '../../lib/crm';
-import { formatDay, formatNumber } from '../../lib/format';
+import { formatDay, formatNumber, formatDecimal } from '../../lib/format';
 import { useData } from '../../lib/useData';
 import { colors, font, radius, space } from '../../theme';
 import { tr, localeTag } from '../../i18n';
@@ -18,7 +18,7 @@ const PERIODS = [
   { value: '365', get label() { return tr('12 Monate'); } },
 ];
 const scoreColor = (s: number) => (s >= 9 ? colors.ok : s >= 7 ? colors.warn : colors.err);
-const comma = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',');
+const comma = (n: number) => formatDecimal(n, 0, 1);
 
 // Auswertung der Umfrage wie SurveyResultsView im Web: NPS, Verteilung, Antworten je Tag und jede
 // Frage mit ihren Antworten – Freitexte vollständig und durchsuchbar.
@@ -124,7 +124,7 @@ export function SurveyTab({ parkId }: { parkId: string }) {
           {data.timeline.length > 1 ? (
             <Section title={tr('Antworten pro Tag')}>
               <Card>
-                <BarChart data={data.timeline.map((d) => ({ label: d.day.slice(8, 10), value: d.count, caption: `${formatDay(d.day)}${d.avg_score !== null ? ` · Ø ${comma(d.avg_score)}` : ''}` }))} height={120} format={(v) => `${v} Antworten`} />
+                <BarChart data={data.timeline.map((d) => ({ label: d.day.slice(8, 10), value: d.count, caption: `${formatDay(d.day)}${d.avg_score !== null ? ` · Ø ${comma(d.avg_score)}` : ''}` }))} height={120} format={(v) => tr('{0} Antworten', v)} />
               </Card>
             </Section>
           ) : null}

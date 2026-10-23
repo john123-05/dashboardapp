@@ -1,5 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { tr } from '../i18n';
+import { formatDecimal } from './format';
 
 export type PickedImage = { uri: string; name: string; type: string; width: number; height: number; base64: string | null; size: number | null };
 
@@ -42,5 +43,5 @@ export function formatBytes(size: number | null | undefined) {
   if (!size) return null;
   if (size < 1024) return `${size} B`;
   if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`;
-  return `${(size / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
+  return `${formatDecimal(size / (1024 * 1024))} MB`;
 }

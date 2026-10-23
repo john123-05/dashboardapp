@@ -2,6 +2,7 @@ import type { HealthMachine } from './data';
 import { callShared } from './shared';
 import { PREVIEW } from './preview';
 import { tr } from '../i18n';
+import { formatDecimal } from './format';
 
 // Kamera einstellen wie im Web (src/pages/Kamera.tsx). Die Grenzen stehen auch im Agenten und in der
 // Function operator-liftpic-camera; jede Seite prüft selbst.
@@ -73,9 +74,9 @@ export function wertAus(werte: Kamerawerte | undefined, schluessel: string): num
 }
 
 export function anzeige(e: Eigenschaft, wert: number): string {
-  if (e.art === 'schalter') return wert ? 'an' : 'aus';
-  if (e.schluessel === 'Exposure.Value') return `${(wert * 1000).toFixed(2).replace('.', ',')} ms`;
-  return wert.toFixed(e.nachkommastellen ?? 0).replace('.', ',') + (e.einheit ?? '');
+  if (e.art === 'schalter') return wert ? tr('an') : tr('aus');
+  if (e.schluessel === 'Exposure.Value') return `${formatDecimal(wert * 1000, 2)} ms`;
+  return formatDecimal(wert, e.nachkommastellen ?? 0) + (e.einheit ?? '');
 }
 
 const NAMEN: Record<string, string> = {
@@ -91,7 +92,7 @@ export function istWert(werte: Kamerawerte, name: string): string {
   const auto = eintrag['Auto'];
   const wert = eintrag['Value'];
   if (auto !== undefined) teile.push(auto ? tr('automatisch') : tr('von Hand'));
-  if (typeof wert === 'number') teile.push(name === 'Exposure' ? `${(wert * 1000).toFixed(2).replace('.', ',')} ms` : String(Math.round(wert * 100) / 100).replace('.', ','));
+  if (typeof wert === 'number') teile.push(name === 'Exposure' ? `${formatDecimal(wert * 1000, 2)} ms` : formatDecimal(wert, 0, 2));
   const enable = eintrag['Enable'] ?? eintrag['Enabled'];
   if (enable !== undefined && wert === undefined) teile.push(enable ? tr('an') : tr('aus'));
   if (eintrag['Auto Max Value'] !== undefined) teile.push(tr('höchstens {0}', eintrag['Auto Max Value']));

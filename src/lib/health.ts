@@ -6,6 +6,7 @@ import { getFunctionSession } from './functionAuth';
 import { benenne } from './geraeteNamen';
 import { PREVIEW } from './preview';
 import { tr } from '../i18n';
+import { formatDecimal } from './format';
 
 export type Status = 'ok' | 'warn' | 'down' | 'off' | 'unknown' | 'operational' | 'degraded' | 'idle';
 export type Probe = { key?: string; name: string; kind: string; status: Status; detail: string; tech?: string; purpose?: string; since_minutes?: number | null };
@@ -55,7 +56,7 @@ export function seit(min: number | null | undefined): string {
   if (min < 1) return tr('gerade eben');
   if (min < 90) return tr('{0} Min.', Math.round(min));
   const h = min / 60;
-  return h < 48 ? tr('{0} Std.', h.toFixed(1).replace('.', ',')) : tr('{0} Tagen', (h / 24).toFixed(1).replace('.', ','));
+  return h < 48 ? tr('{0} Std.', formatDecimal(h)) : tr('{0} Tagen', formatDecimal(h / 24));
 }
 
 export type Eintrag = {

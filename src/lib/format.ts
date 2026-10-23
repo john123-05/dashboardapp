@@ -20,6 +20,10 @@ export const formatCents = (cents: number | null | undefined, round = false) =>
 export const formatNumber = (n: number | null | undefined) => (n === null || n === undefined ? '–' : fmt().num.format(n));
 export const formatPercent = (ratio: number | null | undefined) => (ratio === null || ratio === undefined ? '–' : fmt().pct.format(ratio));
 
+/** Kommazahl im Format der App-Sprache (8,4 / 8.4). */
+export const formatDecimal = (n: number, min = 1, max = min) =>
+  new Intl.NumberFormat(localeTag(), { minimumFractionDigits: min, maximumFractionDigits: max }).format(n);
+
 export function formatTime(iso: string | null | undefined, timeZone?: string): string {
   if (!iso) return '–';
   const d = new Date(iso);

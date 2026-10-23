@@ -5327,6 +5327,14 @@
 "{0} ({1}) wordt afgesloten en opnieuw gestart.\n\n{2}\n\nAlleen uitvoeren als er niemand bij de automaat staat.",
 "{0} ({1}) tiks apturēts un restartēts.\n\n{2}\n\nDari to tikai tad, kad pie automāta neviena nav."
 ],
+"{0} Antworten": [
+"{0} answers",
+"{0} respuestas",
+"{0} réponses",
+"{0} risposte",
+"{0} antwoorden",
+"{0} atbildes"
+],
 "{0} Automaten offline": [
 "{0} kiosks offline",
 "{0} máquinas sin conexión",

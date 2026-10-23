@@ -2,6 +2,7 @@ import { callShared, formFile } from './shared';
 import type { PickedImage } from './imagePick';
 import { PREVIEW } from './preview';
 import { N_ } from '../i18n';
+import { formatDecimal } from './format';
 
 // Online-Shop wie im Web (src/lib/shop.ts): Function operator-shop-settings im geteilten Projekt.
 // Der öffentliche Shop liegt auf der Abholseite, die Demo unter /demo-shop/<token>.
@@ -78,8 +79,11 @@ export const SHOP_FONTS: { key: string; label: string }[] = [
 export const SHOP_COLORS = ['#C6A233', '#D2561A', '#E5392D', '#DB2777', '#7C3AED', '#2563EB', '#0891B2', '#12A15F', '#65A30D', '#101828'];
 
 export function priceToCents(value: string): number {
-  const normalized = value.replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+  // Akzeptiert 9,90 / 9.90 / 1.234,50 / 1,234.50: das letzte Trennzeichen mit 1–2 Ziffern dahinter ist das Dezimalzeichen.
+  const v = value.replace(/\s/g, '');
+  const m = v.match(/^(.*)[.,](\d{1,2})$/);
+  const normalized = m ? `${m[1].replace(/[.,]/g, '')}.${m[2]}` : v.replace(/[.,]/g, '');
   const n = Number(normalized);
   return Number.isFinite(n) ? Math.round(n * 100) : NaN;
 }
-export const centsToInput = (c: number) => (c / 100).toFixed(2).replace('.', ',');
+export const centsToInput = (c: number) => formatDecimal(c / 100, 2).replace(/\s/g, '');
