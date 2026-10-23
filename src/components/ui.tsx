@@ -7,6 +7,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, w
 import { colors, font, radius, shadow, space, TAP } from '../theme';
 import { tapHaptic } from './haptics';
 import { useWide } from './layout';
+import { tr } from '../i18n';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -274,7 +275,7 @@ export function ErrorNote({ text, onRetry }: { text: string; onRetry?: () => voi
       </Text>
       {onRetry ? (
         <Pressable onPress={onRetry} hitSlop={10} style={{ minHeight: TAP, justifyContent: 'center' }}>
-          <Text style={styles.errorRetry}>Erneut</Text>
+          <Text style={styles.errorRetry}>{tr('Erneut')}</Text>
         </Pressable>
       ) : null}
     </View>

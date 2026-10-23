@@ -1,4 +1,5 @@
-// Datenmodell des Overlay-Studios wie im Web (src/components/overlay/model.ts + templates.ts).
+
+import { tr } from '../i18n';// Datenmodell des Overlay-Studios wie im Web (src/components/overlay/model.ts + templates.ts).
 // Koordinaten leben in einem Entwurfsraster mit fester Breite DISPLAY_W; gespeichert wird als PNG in
 // der echten Formatauflösung. Schriften: solche, die auf jedem iPhone vorhanden sind.
 
@@ -37,12 +38,12 @@ export type El = TextEl | ImageEl | RectEl | EllipseEl | TriangleEl | StarEl | L
 export type Format = { id: string; label: string; w: number; h: number };
 // 4:3 in der Auflösung, die der Automat für Foto-Overlays erwartet.
 export const FORMATS: Format[] = [
-  { id: '4:3', label: 'Foto-Overlay 4:3', w: 2362, h: 1772 },
+  { id: '4:3', get label() { return tr('Foto-Overlay 4:3'); }, w: 2362, h: 1772 },
   { id: '3:2', label: '3:2', w: 1620, h: 1080 },
-  { id: '16:9', label: 'Breit 16:9', w: 1920, h: 1080 },
-  { id: '1:1', label: 'Quadrat 1:1', w: 1080, h: 1080 },
-  { id: '3:4', label: 'Hochformat 3:4', w: 1200, h: 1600 },
-  { id: '9:16', label: 'Story 9:16', w: 1080, h: 1920 },
+  { id: '16:9', get label() { return tr('Breit 16:9'); }, w: 1920, h: 1080 },
+  { id: '1:1', get label() { return tr('Quadrat 1:1'); }, w: 1080, h: 1080 },
+  { id: '3:4', get label() { return tr('Hochformat 3:4'); }, w: 1200, h: 1600 },
+  { id: '9:16', get label() { return tr('Story 9:16'); }, w: 1080, h: 1920 },
 ];
 export const displayHeight = (f: Format) => Math.round(DISPLAY_W * (f.h / f.w));
 
@@ -84,20 +85,20 @@ export function starPoints(w: number, h: number): [number, number][] {
 const W = DISPLAY_W;
 export type Template = { id: string; label: string; build: (h: number, title: string, tagline: string) => El[] };
 export const TEMPLATES: Template[] = [
-  { id: 'frame', label: 'Rahmen', build: (h, title) => [makeFrame(24, W, h, { strokeWidth: 6 }), makeText(W - 48, h - 84, title, 30, { align: 'right', autoAnchor: 'right' })] },
+  { id: 'frame', get label() { return tr('Rahmen'); }, build: (h, title) => [makeFrame(24, W, h, { strokeWidth: 6 }), makeText(W - 48, h - 84, title, 30, { align: 'right', autoAnchor: 'right' })] },
   {
     id: 'banner',
-    label: 'Banner unten',
+    get label() { return tr('Banner unten'); },
     build: (h, title, tagline) => [
       makeRect(0, h - 190, W, 190, { fill: 'rgba(0,0,0,0)', gradientTo: '#000000', gradientDir: 'down', radius: 0, opacity: 0.85 }),
       makeText(40, h - 128, title, 48, { fontWeight: 900 }),
       makeText(42, h - 66, tagline, 22, { fontWeight: 400, shadow: false }),
     ],
   },
-  { id: 'badge', label: 'Abzeichen', build: (_h, title) => [makeText(32, 32, title, 26, { bgColor: '#c2410c', bgPadding: 14, shadow: false })] },
+  { id: 'badge', get label() { return tr('Abzeichen'); }, build: (_h, title) => [makeText(32, 32, title, 26, { bgColor: '#c2410c', bgPadding: 14, shadow: false })] },
   {
     id: 'polaroid',
-    label: 'Polaroid',
+    get label() { return tr('Polaroid'); },
     build: (h, title) => [
       makeFrame(0, W, h, { strokeWidth: 28 }),
       makeRect(0, h - 110, W, 110, { fill: '#ffffff', radius: 0 }),
@@ -106,7 +107,7 @@ export const TEMPLATES: Template[] = [
   },
   {
     id: 'double',
-    label: 'Doppelrahmen',
+    get label() { return tr('Doppelrahmen'); },
     build: (h, title) => [
       makeFrame(20, W, h, { strokeWidth: 4 }),
       makeFrame(36, W, h, { strokeWidth: 2, opacity: 0.8 }),
@@ -116,7 +117,7 @@ export const TEMPLATES: Template[] = [
   },
   {
     id: 'circle',
-    label: 'Kreis-Stempel',
+    get label() { return tr('Kreis-Stempel'); },
     build: (h, title) => [
       makeEllipse(W - 200, h - 200, 160, { fill: '#c2410c', stroke: '#ffffff', strokeWidth: 4 }),
       makeText(W - 120, h - 136, title.slice(0, 14), 22, { shadow: false, align: 'center', fontWeight: 900, autoAnchor: 'center' }),

@@ -1,6 +1,7 @@
 import type { HealthMachine } from './data';
 import { callShared } from './shared';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 // Kamera einstellen wie im Web (src/pages/Kamera.tsx). Die Grenzen stehen auch im Agenten und in der
 // Function operator-liftpic-camera; jede Seite prüft selbst.
@@ -38,28 +39,28 @@ export type Eigenschaft = {
 const hell = (f: (neu: number, alt: number) => number): Vorschau => ({ art: 'hell', faktor: f });
 
 export const EIGENSCHAFTEN: Eigenschaft[] = [
-  { schluessel: 'Exposure.Auto', titel: 'Belichtung automatisch', art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, erklaerung: 'Die Kamera regelt die Belichtungszeit selbst nach. Ausschalten nur, wenn das Licht immer gleich ist – sonst werden Bilder bei Sonne und Wolken unterschiedlich.' },
-  { schluessel: 'Exposure.Value', titel: 'Belichtungszeit', art: 'zahl', von: 0.0002, bis: 0.02, schritt: 0.0001, nachkommastellen: 2, vorschau: hell((n, a) => n / (a || n)), erklaerung: 'Wie lange der Sensor Licht sammelt. Länger heißt heller, aber auch mehr Bewegungsunschärfe – bei einer Rodelbahn der entscheidende Kompromiss.' },
-  { schluessel: 'Exposure.Auto Reference', titel: 'Ziel-Helligkeit', art: 'zahl', von: 30, bis: 200, schritt: 1, vorschau: hell((n, a) => n / (a || n)), erklaerung: 'Worauf die automatische Belichtung hinregelt. Höher heißt hellere Bilder. Der wirksamste Regler, solange die Automatik an ist.' },
-  { schluessel: 'Gain.Auto', titel: 'Verstärkung automatisch', art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, erklaerung: 'Hebt das Signal an, wenn zu wenig Licht da ist. Kostet Bildrauschen.' },
-  { schluessel: 'Gain.Auto Max Value', titel: 'Verstärkung höchstens', art: 'zahl', von: 0, bis: 96, schritt: 1, vorschau: null, erklaerung: 'Die Obergrenze für die Verstärkung. Niedriger heißt sauberere, aber dunklere Bilder bei schlechtem Licht.' },
-  { schluessel: 'Saturation.Value', titel: 'Sättigung', art: 'zahl', von: 0, bis: 200, schritt: 1, vorschau: { art: 'saettigung', faktor: (n, a) => n / (a || 100) }, erklaerung: 'Wie kräftig die Farben sind. 100 ist neutral.' },
-  { schluessel: 'Gamma.Value', titel: 'Gamma', art: 'zahl', von: 0.3, bis: 2.5, schritt: 0.01, nachkommastellen: 2, vorschau: null, erklaerung: 'Verteilt die Helligkeit ungleichmäßig: hebt Schatten an, ohne die Lichter auszubrennen. Kleiner als 1 heißt heller.' },
-  { schluessel: 'Brightness.Value', titel: 'Helligkeit', art: 'zahl', von: -64, bis: 64, schritt: 1, vorschau: hell((n, a) => 1 + (n - a) / 128), erklaerung: 'Hebt oder senkt das ganze Bild gleichmäßig – ohne Einfluss auf die Schärfe.' },
-  { schluessel: 'Contrast.Value', titel: 'Kontrast', art: 'zahl', von: -64, bis: 64, schritt: 1, vorschau: { art: 'kontrast', faktor: (n, a) => 1 + (n - a) / 128 }, erklaerung: 'Der Abstand zwischen hell und dunkel. Zu viel frisst Zeichnung in Schatten und Himmel.' },
-  { schluessel: 'Hue.Value', titel: 'Farbton', art: 'zahl', von: -30, bis: 30, schritt: 1, einheit: '°', vorschau: { art: 'farbton', grad: (n, a) => n - a }, erklaerung: 'Dreht alle Farben im Kreis. Zum Ausgleichen eines Farbstichs, nicht zum Gestalten.' },
-  { schluessel: 'WhiteBalance.Auto', titel: 'Weißabgleich automatisch', art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, erklaerung: 'Gleicht die Farbe des Lichts aus, damit Weiß weiß bleibt – morgens anders als mittags.' },
-  { schluessel: 'Highlight Reduction.Enable', titel: 'Spitzlichter dämpfen', art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, erklaerung: 'Rettet Zeichnung in ausgefressenen hellen Stellen – Himmel, Schnee, Sonnenreflexe auf dem Helm. Bei Gegenlicht der interessanteste Schalter.' },
-  { schluessel: 'Tone Mapping.Enable', titel: 'Tone Mapping', art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, erklaerung: 'Holt Schatten und Lichter gleichzeitig zurück. Macht kontrastreiche Bilder ausgewogener, kann aber flau wirken.' },
-  { schluessel: 'Sharpness.Value', titel: 'Schärfe', art: 'zahl', von: 0, bis: 100, schritt: 1, vorschau: null, erklaerung: 'Betont Kanten nach der Aufnahme. Zu viel erzeugt harte Ränder und verstärkt Rauschen. Lässt sich hier nicht vorab zeigen.' },
-  { schluessel: 'Denoise.Value', titel: 'Rauschminderung', art: 'zahl', von: 0, bis: 100, schritt: 1, vorschau: null, erklaerung: 'Glättet Bildrauschen, kostet aber Feinzeichnung. Lässt sich hier nicht vorab zeigen.' },
+  { schluessel: 'Exposure.Auto', get titel() { return tr('Belichtung automatisch'); }, art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, get erklaerung() { return tr('Die Kamera regelt die Belichtungszeit selbst nach. Ausschalten nur, wenn das Licht immer gleich ist – sonst werden Bilder bei Sonne und Wolken unterschiedlich.'); } },
+  { schluessel: 'Exposure.Value', get titel() { return tr('Belichtungszeit'); }, art: 'zahl', von: 0.0002, bis: 0.02, schritt: 0.0001, nachkommastellen: 2, vorschau: hell((n, a) => n / (a || n)), get erklaerung() { return tr('Wie lange der Sensor Licht sammelt. Länger heißt heller, aber auch mehr Bewegungsunschärfe – bei einer Rodelbahn der entscheidende Kompromiss.'); } },
+  { schluessel: 'Exposure.Auto Reference', get titel() { return tr('Ziel-Helligkeit'); }, art: 'zahl', von: 30, bis: 200, schritt: 1, vorschau: hell((n, a) => n / (a || n)), get erklaerung() { return tr('Worauf die automatische Belichtung hinregelt. Höher heißt hellere Bilder. Der wirksamste Regler, solange die Automatik an ist.'); } },
+  { schluessel: 'Gain.Auto', get titel() { return tr('Verstärkung automatisch'); }, art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, get erklaerung() { return tr('Hebt das Signal an, wenn zu wenig Licht da ist. Kostet Bildrauschen.'); } },
+  { schluessel: 'Gain.Auto Max Value', get titel() { return tr('Verstärkung höchstens'); }, art: 'zahl', von: 0, bis: 96, schritt: 1, vorschau: null, get erklaerung() { return tr('Die Obergrenze für die Verstärkung. Niedriger heißt sauberere, aber dunklere Bilder bei schlechtem Licht.'); } },
+  { schluessel: 'Saturation.Value', get titel() { return tr('Sättigung'); }, art: 'zahl', von: 0, bis: 200, schritt: 1, vorschau: { art: 'saettigung', faktor: (n, a) => n / (a || 100) }, get erklaerung() { return tr('Wie kräftig die Farben sind. 100 ist neutral.'); } },
+  { schluessel: 'Gamma.Value', get titel() { return tr('Gamma'); }, art: 'zahl', von: 0.3, bis: 2.5, schritt: 0.01, nachkommastellen: 2, vorschau: null, get erklaerung() { return tr('Verteilt die Helligkeit ungleichmäßig: hebt Schatten an, ohne die Lichter auszubrennen. Kleiner als 1 heißt heller.'); } },
+  { schluessel: 'Brightness.Value', get titel() { return tr('Helligkeit'); }, art: 'zahl', von: -64, bis: 64, schritt: 1, vorschau: hell((n, a) => 1 + (n - a) / 128), get erklaerung() { return tr('Hebt oder senkt das ganze Bild gleichmäßig – ohne Einfluss auf die Schärfe.'); } },
+  { schluessel: 'Contrast.Value', get titel() { return tr('Kontrast'); }, art: 'zahl', von: -64, bis: 64, schritt: 1, vorschau: { art: 'kontrast', faktor: (n, a) => 1 + (n - a) / 128 }, get erklaerung() { return tr('Der Abstand zwischen hell und dunkel. Zu viel frisst Zeichnung in Schatten und Himmel.'); } },
+  { schluessel: 'Hue.Value', get titel() { return tr('Farbton'); }, art: 'zahl', von: -30, bis: 30, schritt: 1, einheit: '°', vorschau: { art: 'farbton', grad: (n, a) => n - a }, get erklaerung() { return tr('Dreht alle Farben im Kreis. Zum Ausgleichen eines Farbstichs, nicht zum Gestalten.'); } },
+  { schluessel: 'WhiteBalance.Auto', get titel() { return tr('Weißabgleich automatisch'); }, art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, get erklaerung() { return tr('Gleicht die Farbe des Lichts aus, damit Weiß weiß bleibt – morgens anders als mittags.'); } },
+  { schluessel: 'Highlight Reduction.Enable', get titel() { return tr('Spitzlichter dämpfen'); }, art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, get erklaerung() { return tr('Rettet Zeichnung in ausgefressenen hellen Stellen – Himmel, Schnee, Sonnenreflexe auf dem Helm. Bei Gegenlicht der interessanteste Schalter.'); } },
+  { schluessel: 'Tone Mapping.Enable', get titel() { return tr('Tone Mapping'); }, art: 'schalter', von: 0, bis: 1, schritt: 1, vorschau: null, get erklaerung() { return tr('Holt Schatten und Lichter gleichzeitig zurück. Macht kontrastreiche Bilder ausgewogener, kann aber flau wirken.'); } },
+  { schluessel: 'Sharpness.Value', get titel() { return tr('Schärfe'); }, art: 'zahl', von: 0, bis: 100, schritt: 1, vorschau: null, get erklaerung() { return tr('Betont Kanten nach der Aufnahme. Zu viel erzeugt harte Ränder und verstärkt Rauschen. Lässt sich hier nicht vorab zeigen.'); } },
+  { schluessel: 'Denoise.Value', get titel() { return tr('Rauschminderung'); }, art: 'zahl', von: 0, bis: 100, schritt: 1, vorschau: null, get erklaerung() { return tr('Glättet Bildrauschen, kostet aber Feinzeichnung. Lässt sich hier nicht vorab zeigen.'); } },
 ];
 
 export const GRUPPEN: { id: string; titel: string; sub: string; icon: 'sunny-outline' | 'color-palette-outline' | 'contrast-outline' | 'aperture-outline'; schluessel: string[] }[] = [
-  { id: 'exposure', titel: 'Belichtung', sub: 'Wie hell das Bild wird', icon: 'sunny-outline', schluessel: ['Exposure.Auto', 'Exposure.Value', 'Exposure.Auto Reference', 'Gain.Auto', 'Gain.Auto Max Value'] },
-  { id: 'color', titel: 'Farbe', sub: 'Farbkraft und Farbstich', icon: 'color-palette-outline', schluessel: ['WhiteBalance.Auto', 'Saturation.Value', 'Hue.Value'] },
-  { id: 'contrast', titel: 'Kontrast & Dynamik', sub: 'Schatten, Lichter und Tiefe', icon: 'contrast-outline', schluessel: ['Brightness.Value', 'Contrast.Value', 'Gamma.Value', 'Highlight Reduction.Enable', 'Tone Mapping.Enable'] },
-  { id: 'sharp', titel: 'Schärfe & Rauschen', sub: 'Feinzeichnung und Körnung', icon: 'aperture-outline', schluessel: ['Sharpness.Value', 'Denoise.Value'] },
+  { id: 'exposure', get titel() { return tr('Belichtung'); }, get sub() { return tr('Wie hell das Bild wird'); }, icon: 'sunny-outline', schluessel: ['Exposure.Auto', 'Exposure.Value', 'Exposure.Auto Reference', 'Gain.Auto', 'Gain.Auto Max Value'] },
+  { id: 'color', get titel() { return tr('Farbe'); }, get sub() { return tr('Farbkraft und Farbstich'); }, icon: 'color-palette-outline', schluessel: ['WhiteBalance.Auto', 'Saturation.Value', 'Hue.Value'] },
+  { id: 'contrast', get titel() { return tr('Kontrast & Dynamik'); }, get sub() { return tr('Schatten, Lichter und Tiefe'); }, icon: 'contrast-outline', schluessel: ['Brightness.Value', 'Contrast.Value', 'Gamma.Value', 'Highlight Reduction.Enable', 'Tone Mapping.Enable'] },
+  { id: 'sharp', get titel() { return tr('Schärfe & Rauschen'); }, get sub() { return tr('Feinzeichnung und Körnung'); }, icon: 'aperture-outline', schluessel: ['Sharpness.Value', 'Denoise.Value'] },
 ];
 
 // Ab wann der Automat als nicht verbunden gilt (wie lib/cameraControl.ts im Web).
@@ -78,8 +79,8 @@ export function anzeige(e: Eigenschaft, wert: number): string {
 }
 
 const NAMEN: Record<string, string> = {
-  Exposure: 'Belichtung', Gain: 'Verstärkung', Saturation: 'Sättigung', Gamma: 'Gamma', Brightness: 'Helligkeit', Contrast: 'Kontrast',
-  Hue: 'Farbton', WhiteBalance: 'Weißabgleich', 'Highlight Reduction': 'Spitzlichter dämpfen', 'Tone Mapping': 'Tone Mapping', Sharpness: 'Schärfe', Denoise: 'Rauschminderung',
+  get Exposure() { return tr('Belichtung'); }, get Gain() { return tr('Verstärkung'); }, get Saturation() { return tr('Sättigung'); }, get Gamma() { return tr('Gamma'); }, get Brightness() { return tr('Helligkeit'); }, get Contrast() { return tr('Kontrast'); },
+  get Hue() { return tr('Farbton'); }, get WhiteBalance() { return tr('Weißabgleich'); }, get 'Highlight Reduction'() { return tr('Spitzlichter dämpfen'); }, get 'Tone Mapping'() { return tr('Tone Mapping'); }, get Sharpness() { return tr('Schärfe'); }, get Denoise() { return tr('Rauschminderung'); },
 };
 export const nameLabel = (name: string) => NAMEN[name] ?? name;
 
@@ -89,12 +90,12 @@ export function istWert(werte: Kamerawerte, name: string): string {
   const teile: string[] = [];
   const auto = eintrag['Auto'];
   const wert = eintrag['Value'];
-  if (auto !== undefined) teile.push(auto ? 'automatisch' : 'von Hand');
+  if (auto !== undefined) teile.push(auto ? tr('automatisch') : tr('von Hand'));
   if (typeof wert === 'number') teile.push(name === 'Exposure' ? `${(wert * 1000).toFixed(2).replace('.', ',')} ms` : String(Math.round(wert * 100) / 100).replace('.', ','));
   const enable = eintrag['Enable'] ?? eintrag['Enabled'];
-  if (enable !== undefined && wert === undefined) teile.push(enable ? 'an' : 'aus');
-  if (eintrag['Auto Max Value'] !== undefined) teile.push(`höchstens ${eintrag['Auto Max Value']}`);
-  if (eintrag['Auto Reference'] !== undefined) teile.push(`Sollwert ${eintrag['Auto Reference']}`);
+  if (enable !== undefined && wert === undefined) teile.push(enable ? tr('an') : tr('aus'));
+  if (eintrag['Auto Max Value'] !== undefined) teile.push(tr('höchstens {0}', eintrag['Auto Max Value']));
+  if (eintrag['Auto Reference'] !== undefined) teile.push(tr('Sollwert {0}', eintrag['Auto Reference']));
   return teile.length ? teile.join(' · ') : '—';
 }
 
@@ -161,7 +162,7 @@ export async function cameraSend(parkId: string, machineConfigId: string, werte:
     await callShared('operator-liftpic-camera', { method: 'POST', body: { park_id: parkId, machine_config_id: machineConfigId, werte, neustart: true }, raw: true });
   } catch (e: any) {
     const abgelehnt = e?.body?.data?.abgelehnt as Record<string, string> | undefined;
-    if (abgelehnt) throw new Error(`Abgelehnt: ${Object.entries(abgelehnt).map(([k, g]) => `${k} (${g})`).join(', ')}`);
+    if (abgelehnt) throw new Error(tr('Abgelehnt: {0}', Object.entries(abgelehnt).map(([k, g]) => `${k} (${g})`).join(', ')));
     throw e;
   }
 }

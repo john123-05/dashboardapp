@@ -9,8 +9,9 @@ import { ASSIGNABLE_PAGES, ROLE_PRESETS, STAFF_DEFAULT_PAGES, type PageKey } fro
 import { PAGES } from '../lib/pages';
 import { createStaff, deleteStaff, setStaffActive, updateStaff, type StaffMember } from '../lib/team';
 import { colors, font, space } from '../theme';
+import { tr } from '../i18n';
 
-const PRESET_LABEL: Record<string, string> = { operations: 'Betriebsleitung', accounting: 'Buchhaltung', marketing: 'Marketing', tech: 'Technik', crew: 'Team' };
+const PRESET_LABEL: Record<string, string> = { get operations() { return tr('Betriebsleitung'); }, get accounting() { return tr('Buchhaltung'); }, get marketing() { return tr('Marketing'); }, get tech() { return tr('Technik'); }, get crew() { return tr('Team'); } };
 const titleOf = (k: PageKey) => PAGES.find((p) => p.key === k)?.title ?? k;
 
 export function TeamEditScreen({ route, navigation }: { route: { params: { member: StaffMember | null } }; navigation: { goBack: () => void } }) {
@@ -30,7 +31,7 @@ export function TeamEditScreen({ route, navigation }: { route: { params: { membe
 
   async function speichern() {
     setErr(null);
-    if (!m && (!name.trim() || !email.trim() || password.length < 8)) return setErr('Bitte Name, E-Mail und ein Passwort mit mindestens 8 Zeichen eingeben.');
+    if (!m && (!name.trim() || !email.trim() || password.length < 8)) return setErr(tr('Bitte Name, E-Mail und ein Passwort mit mindestens 8 Zeichen eingeben.'));
     setBusy(true);
     try {
       if (m) await updateStaff(m.user_id, { role_label: role, allowed_pages: pages });
@@ -38,22 +39,22 @@ export function TeamEditScreen({ route, navigation }: { route: { params: { membe
       successHaptic();
       navigation.goBack();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Speichern fehlgeschlagen');
+      setErr(e instanceof Error ? e.message : tr('Speichern fehlgeschlagen'));
     }
     setBusy(false);
   }
 
   return (
-    <Screen sheet title={m ? (m.full_name || m.email || 'Zugang') : 'Mitarbeiter einladen'} subtitle={m?.email} onBack={navigation.goBack} backLabel="Abbrechen">
+    <Screen sheet title={m ? (m.full_name || m.email || tr('Zugang')) : tr('Mitarbeiter einladen')} subtitle={m?.email} onBack={navigation.goBack} backLabel={tr('Abbrechen')}>
       {!m ? (
         <Card style={{ gap: space.lg }}>
-          <Field label="Name" value={name} onChangeText={setName} placeholder="Vor- und Nachname" textContentType="name" />
-          <Field label="E-Mail" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder="name@firma.de" />
-          <Field label="Passwort (mindestens 8 Zeichen)" value={password} onChangeText={setPassword} secure autoCapitalize="none" textContentType="newPassword" placeholder="Passwort für die Person" />
+          <Field label={tr('Name')} value={name} onChangeText={setName} placeholder={tr('Vor- und Nachname')} textContentType="name" />
+          <Field label={tr('E-Mail')} value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder={tr('name@firma.de')} />
+          <Field label={tr('Passwort (mindestens 8 Zeichen)')} value={password} onChangeText={setPassword} secure autoCapitalize="none" textContentType="newPassword" placeholder={tr('Passwort für die Person')} />
         </Card>
       ) : null}
 
-      <Section title="Rolle als Vorlage">
+      <Section title={tr('Rolle als Vorlage')}>
         <View style={styles.chips}>
           {ROLE_PRESETS.map((r) => {
             const on = role === PRESET_LABEL[r.id];
@@ -74,7 +75,7 @@ export function TeamEditScreen({ route, navigation }: { route: { params: { membe
         </View>
       </Section>
 
-      <Section title="Welche Seiten darf die Person sehen?">
+      <Section title={tr('Welche Seiten darf die Person sehen?')}>
         <Card padded={false}>
           {ASSIGNABLE_PAGES.map((p, i) => {
             const on = pages.includes(p.key);
@@ -89,27 +90,27 @@ export function TeamEditScreen({ route, navigation }: { route: { params: { membe
       </Section>
 
       {err ? <ErrorNote text={err} /> : null}
-      <Button title={m ? 'Speichern' : 'Zugang anlegen'} onPress={speichern} loading={busy} />
+      <Button title={m ? tr('Speichern') : tr('Zugang anlegen')} onPress={speichern} loading={busy} />
 
       {m ? (
         <View style={{ gap: space.sm }}>
           <Button
-            title={m.disabled_at ? 'Aktivieren' : 'Deaktivieren'}
+            title={m.disabled_at ? tr('Aktivieren') : tr('Deaktivieren')}
             kind="plain"
             icon="power-outline"
             onPress={async () => {
-              await setStaffActive(m.user_id, Boolean(m.disabled_at)).catch((e) => Alert.alert('Fehler', String(e?.message ?? e)));
+              await setStaffActive(m.user_id, Boolean(m.disabled_at)).catch((e) => Alert.alert(tr('Fehler'), String(e?.message ?? e)));
               navigation.goBack();
             }}
           />
           <Button
-            title="Zugang entfernen"
+            title={tr('Zugang entfernen')}
             kind="danger"
             icon="trash-outline"
             onPress={() =>
-              Alert.alert('Zugang entfernen?', `${m.full_name || m.email} kann sich danach nicht mehr anmelden. Das lässt sich nicht rückgängig machen.`, [
-                { text: 'Abbrechen', style: 'cancel' },
-                { text: 'Entfernen', style: 'destructive', onPress: async () => { await deleteStaff(m.user_id).catch(() => undefined); navigation.goBack(); } },
+              Alert.alert(tr('Zugang entfernen?'), tr('{0} kann sich danach nicht mehr anmelden. Das lässt sich nicht rückgängig machen.', m.full_name || m.email), [
+                { text: tr('Abbrechen'), style: 'cancel' },
+                { text: tr('Entfernen'), style: 'destructive', onPress: async () => { await deleteStaff(m.user_id).catch(() => undefined); navigation.goBack(); } },
               ])
             }
           />

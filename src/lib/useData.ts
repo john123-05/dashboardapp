@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { tr } from '../i18n';
 
 // Kleiner Zwischenspeicher: beim Wechsel zwischen Tabs erscheinen sofort die letzten Zahlen,
 // im Hintergrund wird aktualisiert (kein Springen, kein leerer Bildschirm).
@@ -27,7 +28,7 @@ export function useData<T>(key: string | null, loader: () => Promise<T>, deps: u
         setError(null);
       } catch (e) {
         if (mine !== seq.current) return;
-        setError(e instanceof Error ? e.message : 'Fehler beim Laden');
+        setError(e instanceof Error ? e.message : tr('Fehler beim Laden'));
       } finally {
         if (mine === seq.current) {
           setLoading(false);

@@ -7,6 +7,7 @@ import { loadHealth, loadSupportReplies } from '../lib/data';
 import { benenne } from '../lib/geraeteNamen';
 import { useData } from '../lib/useData';
 import { fetchAnnouncements, reportAnnouncement } from '../lib/announcements';
+import { tr } from '../i18n';
 
 // Meldungen wie in der Glocke des Web-Dashboards (src/lib/notificationFeed.ts): Automat offline,
 // Abholcode fehlt, Papier knapp, Gerät ausgefallen, Münzröhre leer und Antworten vom Support,
@@ -66,14 +67,14 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
     for (const m of health.data ?? []) {
       const name = m.machine_label || m.machine_id;
       if (!m.reachable) {
-        out.push({ id: `offline-${m.id}`, kind: 'offline', title: `${name} ist offline`, text: 'Der Automat meldet sich nicht mehr. Bitte Strom und Internet am Automaten prüfen.', createdAt: m.last_seen_at ?? now, severity: 'error' });
+        out.push({ id: `offline-${m.id}`, kind: 'offline', title: tr('{0} ist offline', name), text: tr('Der Automat meldet sich nicht mehr. Bitte Strom und Internet am Automaten prüfen.'), createdAt: m.last_seen_at ?? now, severity: 'error' });
       }
       if (m.customer_code_registered === false) {
-        out.push({ id: `code-${m.id}-${m.customer_code ?? ''}`, kind: 'code', title: `${name}: Abholcode ${m.customer_code ?? ''} unbekannt`, text: 'Die Nummer des Automaten ist im Park nicht eingetragen. Fotos können so nicht freigeschaltet werden.', createdAt: now, severity: 'error' });
+        out.push({ id: `code-${m.id}-${m.customer_code ?? ''}`, kind: 'code', title: tr('{0}: Abholcode {1} unbekannt', name, m.customer_code ?? ''), text: tr('Die Nummer des Automaten ist im Park nicht eingetragen. Fotos können so nicht freigeschaltet werden.'), createdAt: now, severity: 'error' });
       }
       const warnAt = m.paper_warn_remaining ?? 30;
       if (typeof m.paper_remaining === 'number' && m.paper_remaining <= warnAt) {
-        out.push({ id: `paper-${m.id}`, kind: 'paper', title: `${name}: Papier wird knapp`, text: `Noch ${m.paper_remaining} Drucke übrig. Bitte bald eine neue Rolle einlegen.`, createdAt: now, severity: 'warning' });
+        out.push({ id: `paper-${m.id}`, kind: 'paper', title: tr('{0}: Papier wird knapp', name), text: tr('Noch {0} Drucke übrig. Bitte bald eine neue Rolle einlegen.', m.paper_remaining), createdAt: now, severity: 'warning' });
       }
       const seen = new Set<string>();
       for (const d of [...(m.probes ?? []), ...(m.devices ?? [])]) {
@@ -82,11 +83,11 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
         const device = benenne(d.name).klar;
         if (seen.has(device)) continue;
         seen.add(device);
-        out.push({ id: `fault-${m.id}-${device}`, kind: 'fault', title: `${device}: Störung (${name})`, text: d.plain || d.detail || 'Das Gerät meldet eine Störung.', createdAt: now, severity: 'error' });
+        out.push({ id: `fault-${m.id}-${device}`, kind: 'fault', title: tr('{0}: Störung ({1})', device, name), text: d.plain || d.detail || tr('Das Gerät meldet eine Störung.'), createdAt: now, severity: 'error' });
       }
       for (const c of m.coin_warnings ?? []) {
         if (c.stufe !== 'leer') continue;
-        out.push({ id: `coins-${m.id}-${c.cent}`, kind: 'coins', title: `${name}: Münzen leer`, text: c.text, createdAt: now, severity: 'warning' });
+        out.push({ id: `coins-${m.id}-${c.cent}`, kind: 'coins', title: tr('{0}: Münzen leer', name), text: c.text, createdAt: now, severity: 'warning' });
       }
     }
     for (const a of crm.data ?? []) {
@@ -94,7 +95,7 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
       out.push({ id: `crm-${a.id}`, kind: 'crm', title: a.title, text: a.body, createdAt: now, severity: a.tone === 'warning' ? 'warning' : 'info', link: a.cta_url });
     }
     for (const s of support.data ?? []) {
-      out.push({ id: `support-${s.id}`, kind: 'support', title: s.ticket_subject ? `Support-Antwort: ${s.ticket_subject}` : 'Support-Antwort', text: s.message, createdAt: s.created_at, severity: 'info' });
+      out.push({ id: `support-${s.id}`, kind: 'support', title: s.ticket_subject ? tr('Support-Antwort: {0}', s.ticket_subject) : tr('Support-Antwort'), text: s.message, createdAt: s.created_at, severity: 'info' });
     }
     const rank = { error: 0, warning: 1, info: 2 } as const;
     return out.sort((a, b) => rank[a.severity] - rank[b.severity] || b.createdAt.localeCompare(a.createdAt));
@@ -150,6 +151,6 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
 
 export function useNotifications() {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('useNotifications außerhalb von NotificationsProvider');
+  if (!ctx) throw new Error(tr('useNotifications außerhalb von NotificationsProvider'));
   return ctx;
 }

@@ -5,6 +5,7 @@ import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { benenne } from './geraeteNamen';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 export type Status = 'ok' | 'warn' | 'down' | 'off' | 'unknown' | 'operational' | 'degraded' | 'idle';
 export type Probe = { key?: string; name: string; kind: string; status: Status; detail: string; tech?: string; purpose?: string; since_minutes?: number | null };
@@ -30,12 +31,12 @@ export type Machine = {
 
 export type Ton = 'ok' | 'warn' | 'bad' | 'ruhig' | 'aus' | 'unklar';
 export const ZUSTAND: Record<Ton, { label: string; text: string; color: string; soft: string; rang: number }> = {
-  bad: { label: 'Ausgefallen', text: 'Arbeitet nicht mehr.', color: '#E5392D', soft: '#FDEAE8', rang: 5 },
-  warn: { label: 'Eingeschränkt', text: 'Läuft, meldet aber ein Problem.', color: '#E08A00', soft: '#FFF4DB', rang: 4 },
-  ok: { label: 'Läuft', text: 'Arbeitet normal.', color: '#12A15F', soft: '#E6F6EE', rang: 3 },
-  ruhig: { label: 'Ruhig', text: 'Läuft, meldet aber länger nichts. Nachts normal.', color: '#38A3D9', soft: '#E7F5FC', rang: 2 },
-  aus: { label: 'Aus', text: 'Nicht gestartet oder nicht angeschlossen.', color: '#98A2B3', soft: '#F2F4F7', rang: 1 },
-  unklar: { label: 'Unklar', text: 'Zustand nicht ermittelbar.', color: '#98A2B3', soft: '#F2F4F7', rang: 0 },
+  bad: { get label() { return tr('Ausgefallen'); }, get text() { return tr('Arbeitet nicht mehr.'); }, color: '#E5392D', soft: '#FDEAE8', rang: 5 },
+  warn: { get label() { return tr('Eingeschränkt'); }, get text() { return tr('Läuft, meldet aber ein Problem.'); }, color: '#E08A00', soft: '#FFF4DB', rang: 4 },
+  ok: { get label() { return tr('Läuft'); }, get text() { return tr('Arbeitet normal.'); }, color: '#12A15F', soft: '#E6F6EE', rang: 3 },
+  ruhig: { get label() { return tr('Ruhig'); }, get text() { return tr('Läuft, meldet aber länger nichts. Nachts normal.'); }, color: '#38A3D9', soft: '#E7F5FC', rang: 2 },
+  aus: { get label() { return tr('Aus'); }, get text() { return tr('Nicht gestartet oder nicht angeschlossen.'); }, color: '#98A2B3', soft: '#F2F4F7', rang: 1 },
+  unklar: { get label() { return tr('Unklar'); }, get text() { return tr('Zustand nicht ermittelbar.'); }, color: '#98A2B3', soft: '#F2F4F7', rang: 0 },
 };
 
 export function ton(s: Status): Ton {
@@ -50,11 +51,11 @@ export function ton(s: Status): Ton {
 const ORDER = ['camera', 'process', 'viewer', 'cash', 'terminal', 'printer', 'uploader', 'network', 'config', 'mail', 'system'];
 
 export function seit(min: number | null | undefined): string {
-  if (min === null || min === undefined) return 'unbekannt';
-  if (min < 1) return 'gerade eben';
-  if (min < 90) return `${Math.round(min)} Min.`;
+  if (min === null || min === undefined) return tr('unbekannt');
+  if (min < 1) return tr('gerade eben');
+  if (min < 90) return tr('{0} Min.', Math.round(min));
   const h = min / 60;
-  return h < 48 ? `${h.toFixed(1).replace('.', ',')} Std.` : `${(h / 24).toFixed(1).replace('.', ',')} Tagen`;
+  return h < 48 ? tr('{0} Std.', h.toFixed(1).replace('.', ',')) : tr('{0} Tagen', (h / 24).toFixed(1).replace('.', ','));
 }
 
 export type Eintrag = {
@@ -111,13 +112,13 @@ export function zusammenfuehren(m: Machine): Eintrag[] {
 export function kurzText(e: Eintrag): string {
   const g = e.gemessen;
   if (g) {
-    if (g.status === 'off') return 'Nicht gestartet';
-    if (g.since_minutes !== null && g.since_minutes !== undefined) return `Läuft seit ${seit(g.since_minutes)}`;
+    if (g.status === 'off') return tr('Nicht gestartet');
+    if (g.since_minutes !== null && g.since_minutes !== undefined) return tr('Läuft seit {0}', seit(g.since_minutes));
     return g.detail;
   }
   const p = e.protokoll;
   if (p) {
-    if (p.idle_minutes !== null && p.idle_minutes > 240) return `Letzte Meldung vor ${seit(p.idle_minutes)}`;
+    if (p.idle_minutes !== null && p.idle_minutes > 240) return tr('Letzte Meldung vor {0}', seit(p.idle_minutes));
     return p.plain || p.detail;
   }
   return 'Keine Angabe';
@@ -129,7 +130,7 @@ export function warnText(e: Eintrag): string | null {
     if (p) return p.plain || p.detail;
     return e.gemessen?.detail || null;
   }
-  if (e.gemessen?.status === 'ok' && e.protokoll?.status === 'idle') return `Still seit ${seit(e.protokoll.idle_minutes)}`;
+  if (e.gemessen?.status === 'ok' && e.protokoll?.status === 'idle') return tr('Still seit {0}', seit(e.protokoll.idle_minutes));
   return null;
 }
 
@@ -142,15 +143,15 @@ export function urteil(machines: Machine[]): Urteil | null {
   const warn = eintraege.filter((e) => e.ton === 'warn');
   const offline = machines.filter((m) => !m.reachable);
   if (offline.length === machines.length) {
-    return { ton: 'bad', titel: 'Der Automat meldet sich nicht', text: 'Seit einigen Minuten kommen keine Daten mehr an. Prüfe Strom und Internetverbindung am Automaten.' };
+    return { ton: 'bad', titel: tr('Der Automat meldet sich nicht'), text: tr('Seit einigen Minuten kommen keine Daten mehr an. Prüfe Strom und Internetverbindung am Automaten.') };
   }
   if (machines.some((m) => m.customer_code_registered === false)) {
-    return { ton: 'bad', titel: 'Abholcode nicht hinterlegt', text: 'Fotos werden einem fremden Park zugeordnet. Details unten beim Automaten.' };
+    return { ton: 'bad', titel: tr('Abholcode nicht hinterlegt'), text: tr('Fotos werden einem fremden Park zugeordnet. Details unten beim Automaten.') };
   }
-  if (bad.length) return { ton: 'bad', titel: bad.length === 1 ? '1 Störung' : `${bad.length} Störungen`, text: `Betroffen: ${bad.map((e) => e.name).join(', ')}.` };
-  if (warn.length) return { ton: 'warn', titel: warn.length === 1 ? '1 Warnung' : `${warn.length} Warnungen`, text: `Betroffen: ${warn.map((e) => e.name).join(', ')}. Der Verkauf läuft weiter.` };
-  if (eintraege.length === 0) return { ton: 'unklar', titel: 'Keine Gerätedaten', text: 'Dieser Automat meldet noch keinen Zustand seiner Programme. Fotos und Umsatz laufen davon unberührt.' };
-  return { ton: 'ok', titel: 'Alles in Ordnung', text: 'Alle Programme und Geräte am Automaten arbeiten normal.' };
+  if (bad.length) return { ton: 'bad', titel: bad.length === 1 ? tr('1 Störung') : tr('{0} Störungen', bad.length), text: tr('Betroffen: {0}.', bad.map((e) => e.name).join(', ')) };
+  if (warn.length) return { ton: 'warn', titel: warn.length === 1 ? tr('1 Warnung') : tr('{0} Warnungen', warn.length), text: tr('Betroffen: {0}. Der Verkauf läuft weiter.', warn.map((e) => e.name).join(', ')) };
+  if (eintraege.length === 0) return { ton: 'unklar', titel: tr('Keine Gerätedaten'), text: tr('Dieser Automat meldet noch keinen Zustand seiner Programme. Fotos und Umsatz laufen davon unberührt.') };
+  return { ton: 'ok', titel: tr('Alles in Ordnung'), text: tr('Alle Programme und Geräte am Automaten arbeiten normal.') };
 }
 
 const HEALTH_URL = `${EXTERNAL_SUPABASE_URL}/functions/v1/operator-liftpic-health`;
@@ -158,7 +159,7 @@ const ASSETS_URL = `${EXTERNAL_SUPABASE_URL}/functions/v1/operator-liftpic-asset
 
 async function headers() {
   const { data: { session } } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Sitzung abgelaufen. Bitte neu anmelden.');
+  if (!session?.access_token) throw new Error(tr('Sitzung abgelaufen. Bitte neu anmelden.'));
   return { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY };
 }
 
@@ -169,7 +170,7 @@ export async function loadMachines(parkId: string): Promise<{ machines: Machine[
   }
   const res = await fetch(`${HEALTH_URL}?park_id=${encodeURIComponent(parkId)}`, { headers: await headers() });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return { machines: (body?.data?.machines ?? []) as Machine[], history: (body?.data?.history ?? []) as HistoryEntry[] };
 }
 
@@ -182,5 +183,5 @@ export async function orderMachine(parkId: string, machineConfigId: string, mode
     body: JSON.stringify({ park_id: parkId, machine_config_id: machineConfigId, mode, target }),
   });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
 }

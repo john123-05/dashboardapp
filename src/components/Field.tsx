@@ -3,6 +3,7 @@ import { forwardRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { TextInputProps } from 'react-native';
 import { colors, font, radius, space } from '../theme';
+import { tr } from '../i18n';
 
 // Eingabefeld mit 52 pt Höhe, großer Schrift (iOS zoomt unter 16 pt) und Anzeigen-Knopf für Passwörter.
 export const Field = forwardRef<TextInput, TextInputProps & { label: string; secure?: boolean }>(function Field({ label, secure, style, ...rest }, ref) {
@@ -20,7 +21,7 @@ export const Field = forwardRef<TextInput, TextInputProps & { label: string; sec
           {...rest}
         />
         {secure ? (
-          <Pressable onPress={() => setShown((s) => !s)} hitSlop={10} style={styles.eye} accessibilityLabel={shown ? 'Passwort verbergen' : 'Passwort anzeigen'}>
+          <Pressable onPress={() => setShown((s) => !s)} hitSlop={10} style={styles.eye} accessibilityLabel={shown ? tr('Passwort verbergen') : tr('Passwort anzeigen')}>
             <Ionicons name={shown ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.ink3} />
           </Pressable>
         ) : null}

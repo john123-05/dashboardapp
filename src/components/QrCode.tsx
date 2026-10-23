@@ -1,6 +1,7 @@
 import QRCode from 'qrcode';
 import { useMemo } from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
+import { tr } from '../i18n';
 
 // QR-Code als SVG, ohne Bild-Umweg: dunkle Module als ein Pfad, immer schwarz auf weiß (auch im
 // Dunkelmodus, sonst lesen manche Kameras ihn nicht).
@@ -21,7 +22,7 @@ export function QrCode({ value, size = 180, margin = 2 }: { value: string; size?
     }
   }, [value, margin]);
   return (
-    <Svg width={size} height={size} viewBox={`0 0 ${count} ${count}`} accessibilityLabel="QR-Code">
+    <Svg width={size} height={size} viewBox={`0 0 ${count} ${count}`} accessibilityLabel={tr('QR-Code')}>
       <Rect x={0} y={0} width={count} height={count} fill="#FFFFFF" />
       {path ? <Path d={path} fill="#000000" /> : null}
     </Svg>

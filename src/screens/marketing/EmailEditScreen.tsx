@@ -22,9 +22,10 @@ import {
 } from '../../lib/crm';
 import { colors, font, radius, space } from '../../theme';
 import { EMAIL_STATUS } from './EmailTab';
+import { tr, localeTag } from '../../i18n';
 
 const LANGS = ['de', 'en', 'es', 'fr', 'it', 'nl', 'lv', 'pl', 'cs', 'pt', 'tr'];
-const BLOCK_LABEL: Record<EmailBlock['type'], string> = { heading: 'Überschrift', text: 'Text', image: 'Bild', button: 'Button', divider: 'Trennlinie' };
+const BLOCK_LABEL: Record<EmailBlock['type'], string> = { get heading() { return tr('Überschrift'); }, get text() { return tr('Text'); }, get image() { return tr('Bild'); }, get button() { return tr('Button'); }, get divider() { return tr('Trennlinie'); } };
 const NEW: EmailDraft = { name: '', subject: '', preheader: '', language: null, segment: {}, html: '', body_json: [{ type: 'heading', text: '' }, { type: 'text', text: '' }] };
 
 function emptyBlock(type: EmailBlock['type']): EmailBlock {
@@ -39,7 +40,7 @@ function emptyBlock(type: EmailBlock['type']): EmailBlock {
 export function EmailEditScreen({ navigation, route }: { navigation: { goBack: () => void }; route: { params?: { id?: string; template?: AutomationType } } }) {
   const { parkId, parkName } = usePark();
   const template = route.params?.template;
-  const [draft, setDraft] = useState<EmailDraft | null>(route.params?.id ? null : { ...NEW, name: template === 'welcome' ? 'Willkommens-Mail' : template === 'season_start' ? 'Saisonstart-Mail' : '', template_for: template });
+  const [draft, setDraft] = useState<EmailDraft | null>(route.params?.id ? null : { ...NEW, name: template === 'welcome' ? tr('Willkommens-Mail') : template === 'season_start' ? tr('Saisonstart-Mail') : '', template_for: template });
   const [id, setId] = useState<string | undefined>(route.params?.id);
   const [status, setStatus] = useState<keyof typeof EMAIL_STATUS>('draft');
   const [view, setView] = useState<'edit' | 'preview'>('edit');
@@ -71,7 +72,7 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
 
   if (!draft) {
     return (
-      <Screen title="E-Mail" onBack={navigation.goBack} backLabel="CRM">
+      <Screen title={tr('E-Mail')} onBack={navigation.goBack} backLabel={tr('CRM')}>
         {error ? <ErrorNote text={error} /> : <Skeleton height={260} radius={radius.lg} />}
       </Screen>
     );
@@ -122,11 +123,13 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
       return count;
     }).then((count) => {
       if (count === null) return;
-      const when = scheduled ? `Am ${new Date(scheduled).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' })} an` : 'Jetzt an';
-      Alert.alert(scheduled ? 'E-Mail planen?' : 'Jetzt senden?', `${when} ${count} Empfänger senden? Das lässt sich nicht zurücknehmen.`, [
-        { text: 'Abbrechen', style: 'cancel' },
+      const question = scheduled
+        ? tr('Am {0} an {1} Empfänger senden? Das lässt sich nicht zurücknehmen.', new Date(scheduled).toLocaleString(localeTag(), { dateStyle: 'medium', timeStyle: 'short' }), count)
+        : tr('Jetzt an {0} Empfänger senden? Das lässt sich nicht zurücknehmen.', count);
+      Alert.alert(scheduled ? tr('E-Mail planen?') : tr('Jetzt senden?'), question, [
+        { text: tr('Abbrechen'), style: 'cancel' },
         {
-          text: scheduled ? 'Planen' : 'Senden',
+          text: scheduled ? tr('Planen') : tr('Senden'),
           style: 'destructive',
           onPress: () =>
             void run('send', async () => {
@@ -134,7 +137,7 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
               if (!saved) return;
               await sendEmailCampaign(parkId, saved, scheduled ?? undefined);
               successHaptic();
-              setNotice('Die E-Mail ist eingereiht und geht in den nächsten Minuten raus.');
+              setNotice(tr('Die E-Mail ist eingereiht und geht in den nächsten Minuten raus.'));
               setTimeout(navigation.goBack, 1400);
             }),
         },
@@ -144,33 +147,33 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
 
   const editor = (
     <>
-      {locked ? <Notice tone="info" text={`Diese E-Mail ist ${EMAIL_STATUS[status].text.toLowerCase()} und nicht mehr bearbeitbar.`} /> : null}
-      {isTemplate ? <Notice tone="info" text="Das ist die Vorlage dieser Automation. Sie wird nie als Ganzes verschickt." /> : null}
+      {locked ? <Notice tone="info" text={tr('Diese E-Mail ist {0} und nicht mehr bearbeitbar.', EMAIL_STATUS[status].text.toLowerCase())} /> : null}
+      {isTemplate ? <Notice tone="info" text={tr('Das ist die Vorlage dieser Automation. Sie wird nie als Ganzes verschickt.')} /> : null}
       <View pointerEvents={locked ? 'none' : 'auto'} style={{ gap: space.lg, opacity: locked ? 0.7 : 1 }}>
         <Card style={{ gap: space.md }}>
-          <Input label="Interner Name" value={draft.name} onChangeText={(name) => patch({ name })} />
-          <Input label="Betreff" value={draft.subject} onChangeText={(subject) => patch({ subject })} />
-          <Input label="Vorschautext (erscheint neben dem Betreff)" value={draft.preheader} onChangeText={(preheader) => patch({ preheader })} />
+          <Input label={tr('Interner Name')} value={draft.name} onChangeText={(name) => patch({ name })} />
+          <Input label={tr('Betreff')} value={draft.subject} onChangeText={(subject) => patch({ subject })} />
+          <Input label={tr('Vorschautext (erscheint neben dem Betreff)')} value={draft.preheader} onChangeText={(preheader) => patch({ preheader })} />
         </Card>
         {!isTemplate ? (
-          <Section title="Empfänger">
+          <Section title={tr('Empfänger')}>
             <Card style={{ gap: space.md }}>
-              {segments.length ? <SelectRow label="Nur Segment" value={segments.find((s) => s.id === draft.segment.segment_id)?.name ?? 'Kein Segment'} onPress={() => setPicker('segment')} /> : null}
-              <SelectRow label="Sprache der Empfänger" value={draft.language ? draft.language.toUpperCase() : 'Alle Sprachen'} onPress={() => setPicker('lang')} />
-              <DateTimeInput label="Nur Gäste seit" value={draft.segment.since ?? null} onChange={(since) => patch({ segment: { ...draft.segment, since: since ?? undefined } })} />
+              {segments.length ? <SelectRow label={tr('Nur Segment')} value={segments.find((s) => s.id === draft.segment.segment_id)?.name ?? 'Kein Segment'} onPress={() => setPicker('segment')} /> : null}
+              <SelectRow label={tr('Sprache der Empfänger')} value={draft.language ? draft.language.toUpperCase() : 'Alle Sprachen'} onPress={() => setPicker('lang')} />
+              <DateTimeInput label={tr('Nur Gäste seit')} value={draft.segment.since ?? null} onChange={(since) => patch({ segment: { ...draft.segment, since: since ?? undefined } })} />
               <Input
-                label="Nur Länder (z. B. DE, AT)"
+                label={tr('Nur Länder (z. B. DE, AT)')}
                 value={(draft.segment.countries ?? []).join(', ')}
                 autoCapitalize="characters"
                 onChangeText={(t) => patch({ segment: { ...draft.segment, countries: t.split(/[ ,;]+/).map((c) => c.trim().toUpperCase()).filter(Boolean) } })}
               />
-              {audience !== null ? <Notice tone="info" text={`${audience} Gäste würden diese E-Mail bekommen (nur mit Einwilligung).`} /> : null}
-              <Button title="Empfänger prüfen" icon="people-outline" kind="plain" loading={busy === 'audience'} onPress={() => void run('audience', async () => parkId && setAudience((await previewAudience(parkId, draft.language, draft.segment)).count))} />
+              {audience !== null ? <Notice tone="info" text={tr('{0} Gäste würden diese E-Mail bekommen (nur mit Einwilligung).', audience)} /> : null}
+              <Button title={tr('Empfänger prüfen')} icon="people-outline" kind="plain" loading={busy === 'audience'} onPress={() => void run('audience', async () => parkId && setAudience((await previewAudience(parkId, draft.language, draft.segment)).count))} />
             </Card>
           </Section>
         ) : null}
-        <Section title="Inhalt">
-          <Text style={styles.hint}>Platzhalter: {'{{name}}'} = Vorname des Gastes, {'{{park}}'} = Name deines Parks.</Text>
+        <Section title={tr('Inhalt')}>
+          <Text style={styles.hint}>{tr('Platzhalter: ')}{'{{name}}'} {tr('= Vorname des Gastes, ')}{'{{park}}'} {tr('= Name deines Parks.')}</Text>
           {draft.body_json.map((b, i) => (
             <Card key={i} style={{ gap: 10 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -179,32 +182,32 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
                 <MiniButton icon="arrow-down" onPress={() => move(i, 1)} disabled={i === draft.body_json.length - 1} />
                 <MiniButton icon="trash-outline" tone="danger" onPress={() => patch({ body_json: draft.body_json.filter((_, k) => k !== i) })} />
               </View>
-              {b.type === 'heading' ? <Input value={b.text} onChangeText={(text) => setBlock(i, { ...b, text })} placeholder="Überschrift" /> : null}
-              {b.type === 'text' ? <Input value={b.text} onChangeText={(text) => setBlock(i, { ...b, text })} placeholder="Text" multiline /> : null}
+              {b.type === 'heading' ? <Input value={b.text} onChangeText={(text) => setBlock(i, { ...b, text })} placeholder={tr('Überschrift')} /> : null}
+              {b.type === 'text' ? <Input value={b.text} onChangeText={(text) => setBlock(i, { ...b, text })} placeholder={tr('Text')} multiline /> : null}
               {b.type === 'image' ? (
                 <>
-                  <Input value={b.url} onChangeText={(url) => setBlock(i, { ...b, url })} placeholder="Bild-Adresse (https://…)" autoCapitalize="none" keyboardType="url" />
-                  <Input value={b.alt} onChangeText={(alt) => setBlock(i, { ...b, alt })} placeholder="Beschreibung des Bildes" />
+                  <Input value={b.url} onChangeText={(url) => setBlock(i, { ...b, url })} placeholder={tr('Bild-Adresse (https://…)')} autoCapitalize="none" keyboardType="url" />
+                  <Input value={b.alt} onChangeText={(alt) => setBlock(i, { ...b, alt })} placeholder={tr('Beschreibung des Bildes')} />
                 </>
               ) : null}
               {b.type === 'button' ? (
                 <>
-                  <Input value={b.label} onChangeText={(label) => setBlock(i, { ...b, label })} placeholder="Beschriftung" />
-                  <Input value={b.url} onChangeText={(url) => setBlock(i, { ...b, url })} placeholder="Link (https://…)" autoCapitalize="none" keyboardType="url" />
+                  <Input value={b.label} onChangeText={(label) => setBlock(i, { ...b, label })} placeholder={tr('Beschriftung')} />
+                  <Input value={b.url} onChangeText={(url) => setBlock(i, { ...b, url })} placeholder={tr('Link (https://…)')} autoCapitalize="none" keyboardType="url" />
                 </>
               ) : null}
               {b.type === 'divider' ? <View style={{ height: 1, backgroundColor: colors.lineStrong }} /> : null}
             </Card>
           ))}
-          <Button title="Block hinzufügen" icon="add" kind="plain" onPress={() => setPicker('block')} />
+          <Button title={tr('Block hinzufügen')} icon="add" kind="plain" onPress={() => setPicker('block')} />
         </Section>
       </View>
     </>
   );
 
   return (
-    <Screen title={draft.name || 'Neue E-Mail'} subtitle={draft.subject || undefined} onBack={navigation.goBack} backLabel="CRM" right={<Pill tone={EMAIL_STATUS[status].tone} text={EMAIL_STATUS[status].text} />}>
-      <Segmented value={view} onChange={setView} options={[{ value: 'edit', label: 'Bearbeiten' }, { value: 'preview', label: 'Vorschau' }]} />
+    <Screen title={draft.name || tr('Neue E-Mail')} subtitle={draft.subject || undefined} onBack={navigation.goBack} backLabel={tr('CRM')} right={<Pill tone={EMAIL_STATUS[status].tone} text={EMAIL_STATUS[status].text} />}>
+      <Segmented value={view} onChange={setView} options={[{ value: 'edit', label: tr('Bearbeiten') }, { value: 'preview', label: tr('Vorschau') }]} />
       {error ? <ErrorNote text={error} /> : null}
       {notice ? <Notice text={notice} /> : null}
 
@@ -220,25 +223,25 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
         </Card>
       )}
 
-      <Text style={styles.hint}>Angeschrieben werden nur Gäste, die der Werbung zugestimmt haben. Jede E-Mail enthält einen Abmelde-Link.</Text>
+      <Text style={styles.hint}>{tr('Angeschrieben werden nur Gäste, die der Werbung zugestimmt haben. Jede E-Mail enthält einen Abmelde-Link.')}</Text>
       {!locked ? (
         <View style={{ gap: 10 }}>
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <View style={{ flex: 1 }}>
-              <Button title="Speichern" kind="plain" loading={busy === 'save'} onPress={() => (nameMissing ? setError('Bitte gib einen internen Namen ein.') : void run('save', async () => { await persist(); successHaptic(); setNotice('Gespeichert.'); }))} />
+              <Button title={tr('Speichern')} kind="plain" loading={busy === 'save'} onPress={() => (nameMissing ? setError(tr('Bitte gib einen internen Namen ein.')) : void run('save', async () => { await persist(); successHaptic(); setNotice(tr('Gespeichert.')); }))} />
             </View>
             <View style={{ flex: 1 }}>
               <Button
-                title="Test an mich"
+                title={tr('Test an mich')}
                 kind="plain"
                 icon="flask-outline"
                 loading={busy === 'test'}
                 onPress={() =>
                   nameMissing
-                    ? setError('Bitte gib einen internen Namen ein.')
+                    ? setError(tr('Bitte gib einen internen Namen ein.'))
                     : void run('test', async () => {
                         const saved = await persist();
-                        if (saved && parkId) setNotice(`Test gesendet an ${(await sendTestEmail(parkId, saved)).to}.`);
+                        if (saved && parkId) setNotice(tr('Test gesendet an {0}.', (await sendTestEmail(parkId, saved)).to));
                       })
                 }
               />
@@ -246,19 +249,19 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
           </View>
           {!isTemplate ? (
             <Card style={{ gap: space.md }}>
-              <DateTimeInput label="Senden am (leer = sofort)" value={scheduled} onChange={setScheduled} quick={[{ label: 'Sofort', iso: null }, { label: 'Morgen 10:00', iso: tomorrowAt(10) }, { label: 'Morgen 18:00', iso: tomorrowAt(18) }]} />
-              <Button title={scheduled ? 'Senden planen' : 'Jetzt senden'} icon="paper-plane-outline" loading={busy === 'send'} onPress={() => (nameMissing ? setError('Bitte gib einen internen Namen ein.') : send())} />
+              <DateTimeInput label={tr('Senden am (leer = sofort)')} value={scheduled} onChange={setScheduled} quick={[{ label: tr('Sofort'), iso: null }, { label: tr('Morgen 10:00'), iso: tomorrowAt(10) }, { label: tr('Morgen 18:00'), iso: tomorrowAt(18) }]} />
+              <Button title={scheduled ? tr('Senden planen') : tr('Jetzt senden')} icon="paper-plane-outline" loading={busy === 'send'} onPress={() => (nameMissing ? setError(tr('Bitte gib einen internen Namen ein.')) : send())} />
             </Card>
           ) : null}
           {id && !isTemplate ? (
             <Button
-              title="E-Mail löschen"
+              title={tr('E-Mail löschen')}
               kind="danger"
               icon="trash-outline"
               onPress={() =>
-                Alert.alert('Diese E-Mail löschen?', undefined, [
-                  { text: 'Abbrechen', style: 'cancel' },
-                  { text: 'Löschen', style: 'destructive', onPress: () => void run('delete', async () => { if (parkId) await deleteEmailCampaign(parkId, id); navigation.goBack(); }) },
+                Alert.alert(tr('Diese E-Mail löschen?'), undefined, [
+                  { text: tr('Abbrechen'), style: 'cancel' },
+                  { text: tr('Löschen'), style: 'destructive', onPress: () => void run('delete', async () => { if (parkId) await deleteEmailCampaign(parkId, id); navigation.goBack(); }) },
                 ])
               }
             />
@@ -266,9 +269,9 @@ export function EmailEditScreen({ navigation, route }: { navigation: { goBack: (
         </View>
       ) : null}
 
-      <PickerSheet open={picker === 'lang'} title="Sprache der Empfänger" value={draft.language ?? ''} options={[{ value: '', label: 'Alle Sprachen' }, ...LANGS.map((l) => ({ value: l, label: l.toUpperCase() }))]} onPick={(v) => patch({ language: v || null })} onClose={() => setPicker(null)} />
-      <PickerSheet open={picker === 'segment'} title="Nur Segment" value={draft.segment.segment_id ?? ''} options={[{ value: '', label: 'Kein Segment' }, ...segments.map((s) => ({ value: s.id, label: s.name, sub: `${s.member_count} Kontakte` }))]} onPick={(v) => patch({ segment: { ...draft.segment, segment_id: v || undefined } })} onClose={() => setPicker(null)} />
-      <PickerSheet open={picker === 'block'} title="Block hinzufügen" options={(Object.keys(BLOCK_LABEL) as EmailBlock['type'][]).map((t) => ({ value: t, label: BLOCK_LABEL[t] }))} onPick={(t) => patch({ body_json: [...draft.body_json, emptyBlock(t)] })} onClose={() => setPicker(null)} />
+      <PickerSheet open={picker === 'lang'} title={tr('Sprache der Empfänger')} value={draft.language ?? ''} options={[{ value: '', label: tr('Alle Sprachen') }, ...LANGS.map((l) => ({ value: l, label: l.toUpperCase() }))]} onPick={(v) => patch({ language: v || null })} onClose={() => setPicker(null)} />
+      <PickerSheet open={picker === 'segment'} title={tr('Nur Segment')} value={draft.segment.segment_id ?? ''} options={[{ value: '', label: tr('Kein Segment') }, ...segments.map((s) => ({ value: s.id, label: s.name, sub: tr('{0} Kontakte', s.member_count) }))]} onPick={(v) => patch({ segment: { ...draft.segment, segment_id: v || undefined } })} onClose={() => setPicker(null)} />
+      <PickerSheet open={picker === 'block'} title={tr('Block hinzufügen')} options={(Object.keys(BLOCK_LABEL) as EmailBlock['type'][]).map((t) => ({ value: t, label: BLOCK_LABEL[t] }))} onPick={(t) => patch({ body_json: [...draft.body_json, emptyBlock(t)] })} onClose={() => setPicker(null)} />
     </Screen>
   );
 }

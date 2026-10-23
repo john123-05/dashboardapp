@@ -7,6 +7,7 @@ import { colors } from '../theme';
 import { tapHaptic } from './haptics';
 import { useWide } from './layout';
 import { CoachTarget } from './coach/Coach';
+import { tr } from '../i18n';
 
 export function initialsOf(name: string | null | undefined, email: string | null | undefined) {
   return (name || email || '?').split(/[\s@.]+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('');
@@ -22,10 +23,10 @@ export function HeaderActions() {
     <View style={[styles.row, wide && styles.wideBar]}>
       {wide ? (
         <>
-          <Pressable onPress={() => nav.navigate('Help')} style={styles.btn} accessibilityLabel="Hilfe">
+          <Pressable onPress={() => nav.navigate('Help')} style={styles.btn} accessibilityLabel={tr('Hilfe')}>
             <Ionicons name="help-circle-outline" size={22} color={colors.ink} />
           </Pressable>
-          <Pressable onPress={() => nav.navigate('Settings')} style={styles.btn} accessibilityLabel="Einstellungen">
+          <Pressable onPress={() => nav.navigate('Settings')} style={styles.btn} accessibilityLabel={tr('Einstellungen')}>
             <Ionicons name="settings-outline" size={21} color={colors.ink} />
           </Pressable>
         </>
@@ -39,7 +40,7 @@ export function HeaderActions() {
         hitSlop={6}
         style={styles.btn}
         accessibilityRole="button"
-        accessibilityLabel={unread > 0 ? `Meldungen, ${unread} neu` : 'Meldungen'}
+        accessibilityLabel={unread > 0 ? tr('Meldungen, {0} neu', unread) : tr('Meldungen')}
       >
         <Ionicons name="notifications-outline" size={22} color={colors.ink} />
         {unread > 0 ? <View style={styles.dot} /> : null}
@@ -53,7 +54,7 @@ export function HeaderActions() {
         hitSlop={6}
         style={styles.btn}
         accessibilityRole="button"
-        accessibilityLabel="Konto und Einstellungen"
+        accessibilityLabel={tr('Konto und Einstellungen')}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <View style={styles.avatar}>

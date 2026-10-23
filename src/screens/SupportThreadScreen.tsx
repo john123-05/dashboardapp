@@ -10,6 +10,7 @@ import { formatDayLong, formatTime } from '../lib/format';
 import { archiveTicket, loadTicketMessages, replyTicket, STATUS_LABEL, type SupportTicket } from '../lib/support';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
+import { tr } from '../i18n';
 
 export function SupportThreadScreen({ route, navigation }: { route: { params: { ticket: SupportTicket } }; navigation: { goBack: () => void } }) {
   const t = route.params.ticket;
@@ -31,7 +32,7 @@ export function SupportThreadScreen({ route, navigation }: { route: { params: { 
       successHaptic();
       msgs.reload();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Senden fehlgeschlagen');
+      setErr(e instanceof Error ? e.message : tr('Senden fehlgeschlagen'));
     }
     setSending(false);
   }
@@ -41,7 +42,7 @@ export function SupportThreadScreen({ route, navigation }: { route: { params: { 
       <View style={{ flex: 1 }}>
         <Screen
           title={t.subject}
-          subtitle={`${STATUS_LABEL[t.status]} · seit ${formatDayLong(t.created_at.slice(0, 10))}`}
+          subtitle={tr('{0} · seit {1}', STATUS_LABEL[t.status], formatDayLong(t.created_at.slice(0, 10)))}
           onBack={navigation.goBack}
           refreshing={msgs.refreshing}
           onRefresh={msgs.reload}
@@ -49,9 +50,9 @@ export function SupportThreadScreen({ route, navigation }: { route: { params: { 
             <Pressable
               hitSlop={8}
               onPress={() =>
-                Alert.alert(t.archived_at ? 'Aus dem Archiv holen?' : 'Anfrage archivieren?', undefined, [
-                  { text: 'Abbrechen', style: 'cancel' },
-                  { text: t.archived_at ? 'Zurückholen' : 'Archivieren', onPress: async () => { await archiveTicket(parkId!, t.id, !t.archived_at).catch(() => undefined); navigation.goBack(); } },
+                Alert.alert(t.archived_at ? tr('Aus dem Archiv holen?') : tr('Anfrage archivieren?'), undefined, [
+                  { text: tr('Abbrechen'), style: 'cancel' },
+                  { text: t.archived_at ? tr('Zurückholen') : tr('Archivieren'), onPress: async () => { await archiveTicket(parkId!, t.id, !t.archived_at).catch(() => undefined); navigation.goBack(); } },
                 ])
               }
             >
@@ -70,11 +71,11 @@ export function SupportThreadScreen({ route, navigation }: { route: { params: { 
             const mine = m.author_role === 'operator';
             return (
               <View key={m.id} style={{ alignItems: mine ? 'flex-end' : 'flex-start', gap: 3 }}>
-                {!mine ? <Pill tone="info" text="Liftpictures Support" /> : null}
+                {!mine ? <Pill tone="info" text={tr('Liftpictures Support')} /> : null}
                 <View style={[styles.bubble, mine ? styles.mine : styles.theirs]}>
                   <Text style={mine ? styles.mineText : styles.theirsText}>{m.message}</Text>
                 </View>
-                <Text style={styles.time}>{formatTime(m.created_at, timezone)} Uhr</Text>
+                <Text style={styles.time}>{formatTime(m.created_at, timezone)} {tr('Uhr')}</Text>
               </View>
             );
           })}
@@ -83,8 +84,8 @@ export function SupportThreadScreen({ route, navigation }: { route: { params: { 
       <View style={[styles.composer, { paddingBottom: Math.max(insets.bottom, 10) }]}>
         {err ? <Text style={{ ...font.caption, color: colors.err, marginBottom: 4 }}>{err}</Text> : null}
         <View style={styles.inputRow}>
-          <TextInput value={text} onChangeText={setText} placeholder="Antwort schreiben…" placeholderTextColor={colors.ink3} multiline style={styles.input} />
-          <Pressable onPress={senden} disabled={!text.trim() || sending} style={[styles.send, (!text.trim() || sending) && { opacity: 0.4 }]} accessibilityLabel="Senden">
+          <TextInput value={text} onChangeText={setText} placeholder={tr('Antwort schreiben…')} placeholderTextColor={colors.ink3} multiline style={styles.input} />
+          <Pressable onPress={senden} disabled={!text.trim() || sending} style={[styles.send, (!text.trim() || sending) && { opacity: 0.4 }]} accessibilityLabel={tr('Senden')}>
             {sending ? <ActivityIndicator color="#fff" /> : <Ionicons name="arrow-up" size={20} color="#fff" />}
           </Pressable>
         </View>

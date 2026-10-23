@@ -10,6 +10,7 @@ import { colors, font, radius, shadow, space, TAP } from '../theme';
 import { successHaptic, tapHaptic } from './haptics';
 import { TAB_BAR_HEIGHT } from './Screen';
 import { useWide } from './layout';
+import { tr } from '../i18n';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -115,7 +116,7 @@ export function LocalizedInput({ label, value, onChange, multiline }: { label: s
       <TextInput
         value={value[lang] ?? ''}
         onChangeText={(t) => onChange({ ...value, [lang]: t })}
-        placeholder={lang === 'de' ? 'Deutsch' : 'English'}
+        placeholder={lang === 'de' ? tr('Deutsch') : tr('English')}
         placeholderTextColor={colors.ink3}
         multiline={multiline}
         style={[styles.input, multiline && { minHeight: 76, paddingTop: 12, textAlignVertical: 'top' }]}
@@ -153,7 +154,7 @@ export function PickerSheet<T extends string>({ open, title, options, value, onP
         <View style={styles.sheetHead}>
           <Text style={{ ...font.headline, color: colors.ink, flex: 1 }}>{title}</Text>
           <Pressable onPress={onClose} hitSlop={10} style={{ minHeight: TAP, justifyContent: 'center' }}>
-            <Text style={{ ...font.body, color: colors.brand, fontWeight: '600' }}>Fertig</Text>
+            <Text style={{ ...font.body, color: colors.brand, fontWeight: '600' }}>{tr('Fertig')}</Text>
           </Pressable>
         </View>
         <ScrollView contentContainerStyle={{ padding: space.lg, paddingBottom: insets.bottom + 24 }}>
@@ -197,7 +198,7 @@ export function SelectRow({ label, value, onPress }: { label: string; value: str
 }
 
 /** Feste Leiste unten für ungespeicherte Änderungen (über der Tab-Leiste). */
-export function SaveBar({ visible, text, saveLabel = 'Speichern', onSave, onDiscard, busy, tabs }: { visible: boolean; text: string; saveLabel?: string; onSave: () => void; onDiscard?: () => void; busy?: boolean; tabs?: boolean }) {
+export function SaveBar({ visible, text, saveLabel, onSave, onDiscard, busy, tabs }: { visible: boolean; text: string; saveLabel?: string; onSave: () => void; onDiscard?: () => void; busy?: boolean; tabs?: boolean }) {
   const insets = useSafeAreaInsets();
   const wide = useWide();
   if (!visible) return null;
@@ -206,11 +207,11 @@ export function SaveBar({ visible, text, saveLabel = 'Speichern', onSave, onDisc
       <Text style={{ ...font.callout, color: colors.ink, flex: 1 }} numberOfLines={2}>{text}</Text>
       {onDiscard ? (
         <Pressable onPress={() => { tapHaptic(); onDiscard(); }} disabled={busy} style={styles.saveGhost} hitSlop={6}>
-          <Text style={{ ...font.callout, color: colors.ink2, fontWeight: '600' }}>Verwerfen</Text>
+          <Text style={{ ...font.callout, color: colors.ink2, fontWeight: '600' }}>{tr('Verwerfen')}</Text>
         </Pressable>
       ) : null}
       <Pressable onPress={() => { if (!busy) { tapHaptic(); onSave(); } }} style={({ pressed }) => [styles.saveBtn, pressed && { opacity: 0.85 }]}>
-        {busy ? <ActivityIndicator color={colors.onBrand} /> : <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{saveLabel}</Text>}
+        {busy ? <ActivityIndicator color={colors.onBrand} /> : <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{saveLabel ?? tr('Speichern')}</Text>}
       </Pressable>
     </View>
   );
@@ -288,7 +289,7 @@ export function Slider({ value, min, max, step, onChange, origin, accent = color
   };
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <Pressable onPress={() => nudge(-1)} disabled={value <= min} style={[styles.nudge, value <= min && { opacity: 0.35 }]} accessibilityLabel="Weniger" hitSlop={6}>
+      <Pressable onPress={() => nudge(-1)} disabled={value <= min} style={[styles.nudge, value <= min && { opacity: 0.35 }]} accessibilityLabel={tr('Weniger')} hitSlop={6}>
         <Ionicons name="remove" size={18} color={colors.ink} />
       </Pressable>
       <GestureDetector gesture={gesture}>
@@ -303,7 +304,7 @@ export function Slider({ value, min, max, step, onChange, origin, accent = color
           </Animated.View>
         </View>
       </GestureDetector>
-      <Pressable onPress={() => nudge(1)} disabled={value >= max} style={[styles.nudge, value >= max && { opacity: 0.35 }]} accessibilityLabel="Mehr" hitSlop={6}>
+      <Pressable onPress={() => nudge(1)} disabled={value >= max} style={[styles.nudge, value >= max && { opacity: 0.35 }]} accessibilityLabel={tr('Mehr')} hitSlop={6}>
         <Ionicons name="add" size={18} color={colors.ink} />
       </Pressable>
     </View>
@@ -432,7 +433,7 @@ export function DateTimeInput({ label, value, onChange, quick = [] }: { label: s
           setBad(iso === undefined);
           if (iso !== undefined) onChange(iso);
         }}
-        placeholder="TT.MM.JJJJ HH:MM"
+        placeholder={tr('TT.MM.JJJJ HH:MM')}
         placeholderTextColor={colors.ink3}
         keyboardType="numbers-and-punctuation"
         style={[styles.input, bad && { borderColor: colors.err }]}
@@ -446,7 +447,7 @@ export function DateTimeInput({ label, value, onChange, quick = [] }: { label: s
           ))}
         </View>
       ) : null}
-      {bad ? <Text style={{ ...font.caption, color: colors.err }}>Bitte so eingeben: 24.12.2026 18:00</Text> : null}
+      {bad ? <Text style={{ ...font.caption, color: colors.err }}>{tr('Bitte so eingeben: 24.12.2026 18:00')}</Text> : null}
     </View>
   );
 }

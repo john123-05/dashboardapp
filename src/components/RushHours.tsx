@@ -12,6 +12,7 @@ import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
 import { tapHaptic } from './haptics';
 import { Card, Segmented, Skeleton } from './ui';
+import { tr } from '../i18n';
 
 const RIDE = '#3B82F6';
 const SALE = '#F97316';
@@ -51,23 +52,23 @@ export function RushHours() {
   return (
     <Card style={{ gap: space.md }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <Text style={{ ...font.headline, color: colors.ink }}>Stoßzeiten</Text>
+        <Text style={{ ...font.headline, color: colors.ink }}>{tr('Stoßzeiten')}</Text>
         <View style={{ width: 170 }}>
-          <Segmented value={tag} onChange={(v) => { setTag(v); setSel(null); }} options={[{ value: 'heute', label: 'Heute' }, { value: 'gestern', label: 'Gestern' }]} />
+          <Segmented value={tag} onChange={(v) => { setTag(v); setSel(null); }} options={[{ value: 'heute', label: tr('Heute') }, { value: 'gestern', label: tr('Gestern') }]} />
         </View>
       </View>
       <View style={{ flexDirection: 'row', gap: space.lg }}>
-        <Stat color={RIDE} label="Fahrten" value={active ? active.rides : totals.rides} />
-        <Stat color={SALE} label="Verkäufe" value={active ? active.sold : totals.sold} />
+        <Stat color={RIDE} label={tr('Fahrten')} value={active ? active.rides : totals.rides} />
+        <Stat color={SALE} label={tr('Verkäufe')} value={active ? active.sold : totals.sold} />
         <View style={{ flex: 1 }}>
-          <Text style={{ ...font.caption, color: colors.ink3 }} numberOfLines={1}>Kaufquote</Text>
+          <Text style={{ ...font.caption, color: colors.ink3 }} numberOfLines={1}>{tr('Kaufquote')}</Text>
           <Text style={{ ...font.headline, color: colors.ink, fontVariant: ['tabular-nums'] }} numberOfLines={1}>
             {formatPercent((active ? active.rides : totals.rides) > 0 ? (active ? active.sold / active.rides : totals.sold / totals.rides) : null)}
           </Text>
         </View>
       </View>
       <Text style={{ ...font.footnote, color: colors.ink2, marginTop: -6 }} numberOfLines={1}>
-        {active ? `${String(active.hour).padStart(2, '0')}:00 bis ${String(active.hour + 1).padStart(2, '0')}:00 Uhr` : peak && peak.rides > 0 ? `Meiste Fahrten um ${String(peak.hour).padStart(2, '0')}:00 Uhr` : 'Antippen zeigt die Stunde'}
+        {active ? tr('{0}:00 bis {1}:00 Uhr', String(active.hour).padStart(2, '0'), String(active.hour + 1).padStart(2, '0')) : peak && peak.rides > 0 ? tr('Meiste Fahrten um {0}:00 Uhr', String(peak.hour).padStart(2, '0')) : tr('Antippen zeigt die Stunde')}
       </Text>
       <View onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ height: H + 18 }}>
         {data.loading && !data.data ? (
@@ -89,7 +90,7 @@ export function RushHours() {
             </Svg>
             <View style={{ position: 'absolute', left: 0, top: 0, width: w, height: H, flexDirection: 'row' }}>
               {hours.map((h, i) => (
-                <Pressable key={h.hour} style={{ flex: 1 }} onPress={() => { tapHaptic(); setSel(sel === i ? null : i); }} accessibilityLabel={`${h.hour} Uhr`} />
+                <Pressable key={h.hour} style={{ flex: 1 }} onPress={() => { tapHaptic(); setSel(sel === i ? null : i); }} accessibilityLabel={tr('{0} Uhr', h.hour)} />
               ))}
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>

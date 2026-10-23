@@ -11,6 +11,7 @@ import { HeaderActions } from './HeaderActions';
 import { useWide } from './layout';
 import { AnnouncementCard } from './AnnouncementCard';
 import type { PageKey } from '../lib/permissions';
+import { tr } from '../i18n';
 
 // Schwebende Tab-Leiste: Höhe plus Abstand zum unteren Rand.
 export const TAB_BAR_HEIGHT = 58;
@@ -44,7 +45,8 @@ interface Props {
 // Eine Seite wie in iOS: großer Titel, der beim Scrollen in eine durchsichtige Kopfzeile übergeht.
 // Inhalt läuft unter der unscharfen Kopfzeile durch. Ziehen zum Aktualisieren, Gummiband-Scrollen
 // und Rand-Wischen zurück kommen vom System.
-export function Screen({ title, subtitle, kicker, right, onBack, backLabel = 'Zurück', refreshing, onRefresh, tabs, actions, sheet, page, scrollEnabled = true, scrollByRef, children }: Props) {
+export function Screen({ title, subtitle, kicker, right, onBack, backLabel: backLabelProp, refreshing, onRefresh, tabs, actions, sheet, page, scrollEnabled = true, scrollByRef, children }: Props) {
+  const backLabel = backLabelProp ?? tr('Zurück');
   const realInsets = useSafeAreaInsets();
   const wide = useWide();
   // Als Blatt (iOS-Modal) liegt die Seite unter der Statusleiste: oben kein Abstand nötig.

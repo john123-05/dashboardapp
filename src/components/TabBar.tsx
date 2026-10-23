@@ -7,6 +7,7 @@ import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { TAB_BAR_HEIGHT } from './Screen';
 import { CoachTarget } from './coach/Coach';
+import { tr } from '../i18n';
 
 export const BAR_GREY = '#2b2b2b';
 
@@ -50,7 +51,7 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
       <Pressable
         style={[styles.item, { flex: 1 }]}
         accessibilityRole="button"
-        accessibilityLabel="Mehr"
+        accessibilityLabel={tr('Mehr')}
         accessibilityState={{ expanded: moreOpen }}
         onPress={() => {
           tapHaptic();
@@ -61,7 +62,7 @@ export function TabBar({ state, navigation, onMore, moreOpen }: MaterialTopTabBa
         <View style={[styles.iconWrap, moreOpen && styles.iconWrapOn]}>
           <Ionicons name="grid-outline" size={21} color={moreOpen ? '#fff' : 'rgba(255,255,255,0.55)'} />
         </View>
-        <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.55)', fontWeight: moreOpen ? '700' : '500' }]}>Mehr</Text>
+        <Text style={[styles.label, { color: moreOpen ? '#fff' : 'rgba(255,255,255,0.55)', fontWeight: moreOpen ? '700' : '500' }]}>{tr('Mehr')}</Text>
       </Pressable>
       </CoachTarget>
     </View>

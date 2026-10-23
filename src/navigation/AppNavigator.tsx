@@ -52,11 +52,14 @@ import { TeamEditScreen } from '../screens/TeamEditScreen';
 import { TeamScreen } from '../screens/TeamScreen';
 import { WebPageScreen } from '../screens/WebPageScreen';
 import { colors, font } from '../theme';
+import { tr, useLanguage } from '../i18n';
 
 const Root = createNativeStackNavigator();
 const Inner = createNativeStackNavigator();
 const Tabs = createMaterialTopTabNavigator();
 const navRef = createNavigationContainerRef<any>();
+// Navigationsstand für den Neuaufbau nach einem Sprachwechsel: man bleibt auf der Seite, auf der man war.
+let savedNavState: any;
 const theme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: colors.bg, primary: colors.brand } };
 
 const TAB_SCREENS: Record<string, React.ComponentType<any>> = { Overview: OverviewScreen, Revenue: RevenueScreen, Health: HealthScreen, Photos: PhotosScreen };
@@ -73,7 +76,7 @@ function StartList() {
   const { cameraAvailable } = usePark();
   const list = PAGES.filter((p) => canSee(p.key, viewer) && pageAvailable(p, { cameraAvailable }));
   return (
-    <Screen tabs actions title="Start">
+    <Screen tabs actions title={tr('Start')}>
       <ListCard>
         {list.map((p, i) => (
           <Row key={p.key} icon={p.icon} title={p.title} chevron onPress={() => openPage(nav, p)} last={i === list.length - 1} />
@@ -206,10 +209,10 @@ function NoAccess() {
   const { signOut, email } = useAuth();
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg, padding: 32, gap: 10 }}>
-      <Text style={{ ...font.title, color: colors.ink, textAlign: 'center' }}>Kein Zugang</Text>
-      <Text style={{ ...font.subhead, color: colors.ink2, textAlign: 'center' }}>Das Konto {email ?? ''} ist noch keiner Organisation zugeordnet. Bitte wende dich an Liftpictures.</Text>
+      <Text style={{ ...font.title, color: colors.ink, textAlign: 'center' }}>{tr('Kein Zugang')}</Text>
+      <Text style={{ ...font.subhead, color: colors.ink2, textAlign: 'center' }}>{tr('Das Konto {0} ist noch keiner Organisation zugeordnet. Bitte wende dich an Liftpictures.', email ?? '')}</Text>
       <View style={{ width: 220, marginTop: 8 }}>
-        <Button title="Abmelden" kind="plain" onPress={() => void signOut()} />
+        <Button title={tr('Abmelden')} kind="plain" onPress={() => void signOut()} />
       </View>
     </View>
   );
@@ -281,6 +284,7 @@ function CoachHost({ wide }: { wide: boolean }) {
 }
 
 export function AppNavigator() {
+  const lang = useLanguage();
   const auth = useAuth();
   const park = usePark();
   const wide = useWide();
@@ -298,13 +302,13 @@ export function AppNavigator() {
   }, [signedIn]);
 
   if (!PREVIEW && (auth.loading || park.loading)) return <Splash />;
-  if (!PREVIEW && !auth.user) return <LoginScreen />;
+  if (!PREVIEW && !auth.user) return <LoginScreen key={lang} />;
   if (!PREVIEW && !auth.hasOrg) return <NoAccess />;
-  if (!PREVIEW && !park.parkId) return <ParkAccessScreen />;
+  if (!PREVIEW && !park.parkId) return <ParkAccessScreen key={lang} />;
 
   return (
     <NotificationsProvider>
-      <NavigationContainer ref={navRef} theme={theme}>
+      <NavigationContainer key={lang} ref={navRef} theme={theme} initialState={savedNavState} onStateChange={(s) => (savedNavState = s)}>
         <Root.Navigator screenOptions={{ headerShown: false, gestureEnabled: true, fullScreenGestureEnabled: true, contentStyle: { backgroundColor: colors.bg } }}>
           {wide ? (
             <Root.Screen name="Main" component={WideShell} />

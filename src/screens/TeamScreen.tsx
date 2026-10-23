@@ -6,14 +6,15 @@ import { timeAgo } from '../lib/format';
 import { loadStaff } from '../lib/team';
 import { useData } from '../lib/useData';
 import { colors, font } from '../theme';
+import { tr } from '../i18n';
 
 export function TeamScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const nav = useNavigation<any>();
   const data = useData('staff', loadStaff, [], 0);
   const staff = data.data ?? [];
   return (
-    <Screen page="team" title="Mitarbeiter-Zugang" subtitle="Wer darf welche Seiten sehen" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
-      <Button title="Mitarbeiter einladen" icon="person-add-outline" onPress={() => nav.navigate('TeamEdit', { member: null, onSaved: undefined })} />
+    <Screen page="team" title={tr('Mitarbeiter-Zugang')} subtitle={tr('Wer darf welche Seiten sehen')} onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+      <Button title={tr('Mitarbeiter einladen')} icon="person-add-outline" onPress={() => nav.navigate('TeamEdit', { member: null, onSaved: undefined })} />
       {data.error && !data.data ? <ErrorNote text={data.error} onRetry={data.reload} /> : null}
       {data.loading && !data.data ? (
         <Card>
@@ -27,9 +28,9 @@ export function TeamScreen({ navigation }: { navigation: { goBack: () => void } 
               icon="person-outline"
               iconBg={m.disabled_at ? colors.fill : undefined}
               iconColor={m.disabled_at ? colors.ink3 : undefined}
-              title={m.full_name || m.email || 'Mitarbeiter'}
-              subtitle={`${m.role_label || 'Eigene Auswahl'} · ${m.allowed_pages ? `${m.allowed_pages.length} Seiten` : 'Standard'} · ${m.last_sign_in_at ? `zuletzt ${timeAgo(m.last_sign_in_at)}` : 'noch nie angemeldet'}`}
-              right={<Pill tone={m.disabled_at ? 'neutral' : 'ok'} text={m.disabled_at ? 'Deaktiviert' : 'Aktiv'} />}
+              title={m.full_name || m.email || tr('Mitarbeiter')}
+              subtitle={`${m.role_label || tr('Eigene Auswahl')} · ${m.allowed_pages ? tr('{0} Seiten', m.allowed_pages.length) : tr('Standard')} · ${m.last_sign_in_at ? tr('zuletzt {0}', timeAgo(m.last_sign_in_at)) : tr('noch nie angemeldet')}`}
+              right={<Pill tone={m.disabled_at ? 'neutral' : 'ok'} text={m.disabled_at ? tr('Deaktiviert') : tr('Aktiv')} />}
               chevron
               onPress={() => nav.navigate('TeamEdit', { member: m })}
               last={i === staff.length - 1}
@@ -38,10 +39,10 @@ export function TeamScreen({ navigation }: { navigation: { goBack: () => void } 
         </ListCard>
       ) : (
         <Card>
-          <EmptyState icon="people-outline" title="Noch keine Mitarbeiter" text="Lade die erste Person ein. Sie sieht nur die Seiten, die du freigibst." />
+          <EmptyState icon="people-outline" title={tr('Noch keine Mitarbeiter')} text={tr('Lade die erste Person ein. Sie sieht nur die Seiten, die du freigibst.')} />
         </Card>
       )}
-      <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>Mitarbeiter melden sich mit ihrer E-Mail und ihrem Passwort in der App oder im Web an.</Text>
+      <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>{tr('Mitarbeiter melden sich mit ihrer E-Mail und ihrem Passwort in der App oder im Web an.')}</Text>
     </Screen>
   );
 }

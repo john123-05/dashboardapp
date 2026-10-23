@@ -12,6 +12,7 @@ import { invokeEdgeFunction } from '../lib/edgeFunctions';
 import { isSuperAdminEmail } from '../lib/pages';
 import { supabase } from '../lib/supabase';
 import { colors, font, radius, space } from '../theme';
+import { tr } from '../i18n';
 
 type Park = { id: string; name: string };
 const LAST_PARK_KEY = 'lp-last-park';
@@ -49,7 +50,7 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
       const [listed, accessible] = await Promise.all([invokeEdgeFunction<{ parks: Park[] }>('external-parks'), supabase.from('parks').select('id')]);
       if (!active) return;
       if (listed.error || !listed.data) {
-        setError(listed.error || 'Parks konnten nicht geladen werden');
+        setError(listed.error || tr('Parks konnten nicht geladen werden'));
         setList([]);
         return;
       }
@@ -89,20 +90,20 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
   }
 
   async function submit() {
-    if (!selected) return setError('Bitte zuerst einen Park wählen.');
-    if (!password) return setError('Bitte das Park-Passwort eingeben.');
+    if (!selected) return setError(tr('Bitte zuerst einen Park wählen.'));
+    if (!password) return setError(tr('Bitte das Park-Passwort eingeben.'));
     setError(null);
     setBusy(true);
     const { data: ok, error: err } = await supabase.rpc('verify_park_access', { p_park_id: selected.id, p_password: password });
     setBusy(false);
-    if (err || !ok) return setError('Das Park-Passwort stimmt nicht.');
+    if (err || !ok) return setError(tr('Das Park-Passwort stimmt nicht.'));
     await AsyncStorage.setItem(LAST_PARK_KEY, JSON.stringify(selected)).catch(() => undefined);
     await pick(selected);
   }
 
   if (superAdmin) {
     return (
-      <Screen title="Park wählen" onBack={onClose}>
+      <Screen title={tr('Park wählen')} onBack={onClose}>
         {error ? <ErrorNote text={error} /> : null}
         {list === null ? (
           <Card>
@@ -111,7 +112,7 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
         ) : (
           <ListCard>
             {list.map((p, i) => (
-              <Row key={p.id} icon="location-outline" title={p.name} right={p.id === parkId ? <Text style={{ ...font.callout, color: colors.brand }}>Aktiv</Text> : null} onPress={() => pick(p)} last={i === list.length - 1} />
+              <Row key={p.id} icon="location-outline" title={p.name} right={p.id === parkId ? <Text style={{ ...font.callout, color: colors.brand }}>{tr('Aktiv')}</Text> : null} onPress={() => pick(p)} last={i === list.length - 1} />
             ))}
           </ListCard>
         )}
@@ -120,32 +121,32 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
   }
 
   const hint =
-    state === 'short' ? 'Mindestens 2 Buchstaben eingeben.' : state === 'none' ? 'Kein Park gefunden.' : state === 'many' ? 'Mehrere Parks passen, bitte genauer tippen.' : state === 'loading' ? 'Suche…' : null;
+    state === 'short' ? tr('Mindestens 2 Buchstaben eingeben.') : state === 'none' ? tr('Kein Park gefunden.') : state === 'many' ? tr('Mehrere Parks passen, bitte genauer tippen.') : state === 'loading' ? tr('Suche…') : null;
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + (onClose ? 56 : 48), paddingBottom: insets.bottom + 24 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={{ gap: 6 }}>
-          <Text style={styles.title}>Park wählen</Text>
-          <Text style={styles.sub}>Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein.</Text>
+          <Text style={styles.title}>{tr('Park wählen')}</Text>
+          <Text style={styles.sub}>{tr('Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein.')}</Text>
         </View>
         <View style={styles.form}>
           {selected ? (
             <View style={{ gap: 6 }}>
-              <Text style={styles.label}>Park</Text>
-              <Row title={selected.name} icon="location-outline" right={<Text style={{ ...font.callout, color: colors.brand }}>Ändern</Text>} onPress={() => { setSelected(null); setPassword(''); }} last />
+              <Text style={styles.label}>{tr('Park')}</Text>
+              <Row title={selected.name} icon="location-outline" right={<Text style={{ ...font.callout, color: colors.brand }}>{tr('Ändern')}</Text>} onPress={() => { setSelected(null); setPassword(''); }} last />
             </View>
           ) : (
             <>
-              <Field label="Park" value={query} onChangeText={setQuery} autoCapitalize="none" placeholder="z. B. Wingst" returnKeyType="search" />
+              <Field label={tr('Park')} value={query} onChangeText={setQuery} autoCapitalize="none" placeholder={tr('z. B. Wingst')} returnKeyType="search" />
               {hint ? <Text style={styles.hint}>{hint}</Text> : null}
               {match ? <Row icon="location-outline" title={match.name} chevron onPress={() => { setSelected(match); setQuery(''); }} last /> : null}
             </>
           )}
-          {selected ? <Field label="Park-Passwort" value={password} onChangeText={setPassword} secure autoCapitalize="none" returnKeyType="go" onSubmitEditing={submit} placeholder="Park-Passwort" /> : null}
+          {selected ? <Field label={tr('Park-Passwort')} value={password} onChangeText={setPassword} secure autoCapitalize="none" returnKeyType="go" onSubmitEditing={submit} placeholder={tr('Park-Passwort')} /> : null}
           {error ? <ErrorNote text={error} /> : null}
-          <Button title="Weiter" onPress={submit} loading={busy} />
-          {onClose ? <Button title="Abbrechen" kind="plain" onPress={onClose} /> : <Button title="Abmelden" kind="plain" onPress={() => void signOut()} />}
+          <Button title={tr('Weiter')} onPress={submit} loading={busy} />
+          {onClose ? <Button title={tr('Abbrechen')} kind="plain" onPress={onClose} /> : <Button title={tr('Abmelden')} kind="plain" onPress={() => void signOut()} />}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -154,7 +155,8 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  scroll: { paddingHorizontal: space.xl, gap: space.xl },
+  // Auf iPad und Mac schmal und mittig wie die Anmeldung.
+  scroll: { paddingHorizontal: space.xl, gap: space.xl, width: '100%', maxWidth: 520, alignSelf: 'center' },
   title: { ...font.largeTitle, color: colors.ink },
   sub: { ...font.subhead, color: colors.ink2 },
   form: { gap: space.lg, backgroundColor: colors.white, borderRadius: radius.lg, padding: space.lg },

@@ -19,11 +19,12 @@ import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { DASHBOARD_URL } from './WebPageScreen';
 import { CoachTarget } from '../components/coach/Coach';
+import { tr, localeTag } from '../i18n';
 
 const POTENTIAL_DAYS = 30;
 
-export const productLabel = (p: { key: string; label: string }) => PRODUCT_TEXT[p.key]?.[0] ?? p.label;
-export const productDesc = (p: { key: string; description: string }) => PRODUCT_TEXT[p.key]?.[1] ?? p.description;
+export const productLabel = (p: { key: string; label: string }) => (PRODUCT_TEXT[p.key] ? tr(PRODUCT_TEXT[p.key][0]) : p.label);
+export const productDesc = (p: { key: string; description: string }) => (PRODUCT_TEXT[p.key] ? tr(PRODUCT_TEXT[p.key][1]) : p.description);
 
 // Online-Shop wie im Web (/shop): wie viele Bilder nie verkauft wurden, der eigene Shop, Live-Vorschau
 // mit QR-Code zum Selbst-Ausprobieren. Bearbeiten öffnet den Editor (ShopEdit).
@@ -58,43 +59,43 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
 
   return (
     <Screen page="shop"
-      title="Online-Shop"
+      title={tr('Online-Shop')}
       subtitle={s?.shop_name || parkName}
       onBack={navigation.goBack}
       refreshing={shop.refreshing}
       onRefresh={() => { shop.reload(); sales.reload(); }}
-      right={<Pill tone={requestedAt ? 'ok' : 'warn'} text={requestedAt ? 'Aktivierung angefragt' : 'Testmodus'} />}
+      right={<Pill tone={requestedAt ? 'ok' : 'warn'} text={requestedAt ? tr('Aktivierung angefragt') : tr('Testmodus')} />}
     >
       {shop.error && !shop.data ? <ErrorNote text={shop.error} onRetry={shop.reload} /> : null}
 
       {isKioskPark ? (
         <Card style={{ gap: space.md }}>
-          {!ent.loading && !ent.has('online_shop') && !requestedAt ? <Pill tone="warn" icon="lock-closed" text="Upgrade" /> : null}
+          {!ent.loading && !ent.has('online_shop') && !requestedAt ? <Pill tone="warn" icon="lock-closed" text={tr('Upgrade')} /> : null}
           {!potential ? (
             <Skeleton height={90} />
           ) : potential.reliable ? (
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: space.lg }}>
-              <Fact value={`${potential.soldPercent} %`} text="deiner Besucher kaufen ihr Bild sofort am Automaten." note={`${formatNumber(potential.sold)} Bilder in den letzten ${POTENTIAL_DAYS} Tagen`} />
-              <Fact value={`${potential.unsoldPercent} %`} green text="deiner Bilder sind vorhanden – wurden aber nie wieder zum Kauf angeboten." note={`${formatNumber(potential.unsold)} unverkaufte Bilder`} />
+              <Fact value={`${potential.soldPercent} %`} text={tr('deiner Besucher kaufen ihr Bild sofort am Automaten.')} note={tr('{0} Bilder in den letzten {1} Tagen', formatNumber(potential.sold), POTENTIAL_DAYS)} />
+              <Fact value={`${potential.unsoldPercent} %`} green text={tr('deiner Bilder sind vorhanden – wurden aber nie wieder zum Kauf angeboten.')} note={tr('{0} unverkaufte Bilder', formatNumber(potential.unsold))} />
               {redemptions && redemptions.total >= 10 ? (
-                <Fact value={`${Math.round((redemptions.delayed / redemptions.total) * 100)} %`} text="lösen ihr Bild erst am nächsten Tag oder nach Parkschluss digital ein." note={`${formatNumber(redemptions.delayed)} von ${formatNumber(redemptions.total)} Einlösungen`} />
+                <Fact value={`${Math.round((redemptions.delayed / redemptions.total) * 100)} %`} text={tr('lösen ihr Bild erst am nächsten Tag oder nach Parkschluss digital ein.')} note={tr('{0} von {1} Einlösungen', formatNumber(redemptions.delayed), formatNumber(redemptions.total))} />
               ) : null}
             </View>
           ) : (
-            <Text style={{ ...font.subhead, color: colors.ink2 }}>Sobald die Fahrtenzählung deines Parks läuft, siehst du hier live, wie viele deiner Bilder nie verkauft wurden.</Text>
+            <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Sobald die Fahrtenzählung deines Parks läuft, siehst du hier live, wie viele deiner Bilder nie verkauft wurden.')}</Text>
           )}
           {potential ? (
             <>
               <View style={styles.divider} />
               <Text style={{ fontSize: 19, lineHeight: 26, fontWeight: '300', color: colors.ink }}>
                 {potential.reliable
-                  ? `Biete ${formatNumber(potential.unsold)} unverkaufte Bilder deinen Kunden erneut zum Kauf an – als Download oder personalisiert auf Tasse, T-Shirt & Co.`
-                  : 'Biete deine unverkauften Bilder deinen Kunden erneut zum Kauf an – als Download oder auf Tasse, T-Shirt & Co.'}
+                  ? tr('Biete {0} unverkaufte Bilder deinen Kunden erneut zum Kauf an – als Download oder personalisiert auf Tasse, T-Shirt & Co.', formatNumber(potential.unsold))
+                  : tr('Biete deine unverkauften Bilder deinen Kunden erneut zum Kauf an – als Download oder auf Tasse, T-Shirt & Co.')}
               </Text>
               {requestedAt ? (
-                <Pill tone="ok" icon="checkmark-circle" text={`Angefragt am ${requestedAt.toLocaleDateString('de-DE')}`} />
+                <Pill tone="ok" icon="checkmark-circle" text={tr('Angefragt am {0}', requestedAt.toLocaleDateString(localeTag()))} />
               ) : (
-                <Button title="Preise ansehen" icon="pricetags-outline" onPress={() => nav.navigate('Plans', { group: 'shop' })} />
+                <Button title={tr('Preise ansehen')} icon="pricetags-outline" onPress={() => nav.navigate('Plans', { group: 'shop' })} />
               )}
             </>
           ) : null}
@@ -104,7 +105,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
       <View style={{ flexDirection: wide ? 'row' : 'column', gap: space.lg, alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: space.lg, alignSelf: 'stretch' }}>
           <CoachTarget id="shop.own">
-          <Section title="Dein Shop" action="Bearbeiten" onAction={() => nav.navigate('ShopEdit')}>
+          <Section title={tr('Dein Shop')} action={tr('Bearbeiten')} onAction={() => nav.navigate('ShopEdit')}>
             {shop.loading && !s ? (
               <Skeleton height={160} radius={radius.lg} />
             ) : s ? (
@@ -112,12 +113,12 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
                   <View style={styles.logo}>{s.logo_url ? <Image source={{ uri: s.logo_url }} style={StyleSheet.absoluteFill} contentFit="contain" /> : <Ionicons name="image-outline" size={20} color={colors.ink3} />}</View>
                   <View style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={{ ...font.headline, color: colors.ink }} numberOfLines={1}>{s.shop_name || parkName || 'Foto-Shop'}</Text>
-                    <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>{s.welcome_text || 'Hol dir dein Foto von heute – als Download, Abzug oder auf Tasse, T-Shirt und mehr.'}</Text>
+                    <Text style={{ ...font.headline, color: colors.ink }} numberOfLines={1}>{s.shop_name || parkName || tr('Foto-Shop')}</Text>
+                    <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>{s.welcome_text || tr('Hol dir dein Foto von heute – als Download, Abzug oder auf Tasse, T-Shirt und mehr.')}</Text>
                   </View>
                   <View style={[styles.swatch, { backgroundColor: s.accent_color }]} />
                 </View>
-                <Text style={{ ...font.footnote, color: colors.ink3 }}>{active.length} Produkte aktiv</Text>
+                <Text style={{ ...font.footnote, color: colors.ink3 }}>{active.length} {tr('Produkte aktiv')}</Text>
               </Card>
             ) : null}
             {s ? (
@@ -129,28 +130,28 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
                     iconColor={s.accent_color}
                     iconBg={colors.fill}
                     title={productLabel(p)}
-                    badge={NEW_PRODUCTS.includes(p.key) ? 'Neu' : null}
+                    badge={NEW_PRODUCTS.includes(p.key) ? tr('Neu') : null}
                     right={<Text style={{ ...font.callout, color: colors.ink, fontVariant: ['tabular-nums'] }}>{formatCents(p.price_cents)}</Text>}
                     last={i === active.length - 1}
                   />
                 ))}
-                {active.length === 0 ? <Row title="Noch kein Produkt aktiv" subtitle="Im Editor einschalten" onPress={() => nav.navigate('ShopEdit')} chevron last /> : null}
+                {active.length === 0 ? <Row title={tr('Noch kein Produkt aktiv')} subtitle={tr('Im Editor einschalten')} onPress={() => nav.navigate('ShopEdit')} chevron last /> : null}
               </ListCard>
             ) : null}
-            {priceCents ? <Text style={styles.hint}>Zum Vergleich: am Automaten kostet ein Foto {formatCents(priceCents)}.</Text> : null}
+            {priceCents ? <Text style={styles.hint}>{tr('Zum Vergleich: am Automaten kostet ein Foto ')}{formatCents(priceCents)}.</Text> : null}
           </Section>
           </CoachTarget>
 
-          <Section title="Auswertung">
+          <Section title={tr('Auswertung')}>
             <KpiGrid>
-              <Kpi icon="cart-outline" label="Bestellungen" value={hasSales ? formatNumber(revenue?.salesCount ?? 0) : '–'} sub={hasSales ? 'nur Testkäufe' : 'kommt mit der Freischaltung'} />
-              <Kpi icon="cash-outline" label="Umsatz" value={hasSales ? formatCents(revenue?.totalCents ?? 0) : '–'} sub={hasSales ? 'nur Testkäufe' : 'kommt mit der Freischaltung'} />
+              <Kpi icon="cart-outline" label={tr('Bestellungen')} value={hasSales ? formatNumber(revenue?.salesCount ?? 0) : '–'} sub={hasSales ? tr('nur Testkäufe') : tr('kommt mit der Freischaltung')} />
+              <Kpi icon="cash-outline" label={tr('Umsatz')} value={hasSales ? formatCents(revenue?.totalCents ?? 0) : '–'} sub={hasSales ? tr('nur Testkäufe') : tr('kommt mit der Freischaltung')} />
             </KpiGrid>
           </Section>
 
           <ListCard>
-            <Row icon="pricetags-outline" title="Preise und Pakete ansehen" subtitle="Drei Wege, den Shop freizuschalten" chevron onPress={() => nav.navigate('Plans', { group: 'shop' })} />
-            <Row icon="create-outline" title="Shop bearbeiten" subtitle="Design, Texte, Produkte und Preise" chevron onPress={() => nav.navigate('ShopEdit')} last />
+            <Row icon="pricetags-outline" title={tr('Preise und Pakete ansehen')} subtitle={tr('Drei Wege, den Shop freizuschalten')} chevron onPress={() => nav.navigate('Plans', { group: 'shop' })} />
+            <Row icon="create-outline" title={tr('Shop bearbeiten')} subtitle={tr('Design, Texte, Produkte und Preise')} chevron onPress={() => nav.navigate('ShopEdit')} last />
           </ListCard>
         </View>
 
@@ -165,10 +166,10 @@ export function ShopPreview({ settings, version = 0 }: { settings: ShopSettings;
   const [mode, setMode] = useState<'phone' | 'qr'>('phone');
   const url = demoShopUrl(settings);
   return (
-    <Section title="Live-Vorschau">
+    <Section title={tr('Live-Vorschau')}>
       <Card style={{ gap: space.md }}>
-        <CardHead title="So sehen deine Gäste den Shop" right={<MiniButton icon="share-outline" onPress={() => void Share.share({ message: url, url })} />} />
-        <Segmented<'phone' | 'qr'> value={mode} onChange={setMode} options={[{ value: 'phone', label: 'Handy' }, { value: 'qr', label: 'QR-Code' }]} />
+        <CardHead title={tr('So sehen deine Gäste den Shop')} right={<MiniButton icon="share-outline" onPress={() => void Share.share({ message: url, url })} />} />
+        <Segmented<'phone' | 'qr'> value={mode} onChange={setMode} options={[{ value: 'phone', label: tr('Handy') }, { value: 'qr', label: tr('QR-Code') }]} />
         {mode === 'phone' ? (
           <View style={styles.frame}>
             <WebView key={`${settings.demo_token}-${version}`} source={{ uri: `${DASHBOARD_URL}/demo-shop/${settings.demo_token}?embed=1` }} style={{ flex: 1, backgroundColor: '#fff' }} applicationNameForUserAgent="LiftpicturesDashboardApp/1.5" nestedScrollEnabled />
@@ -178,10 +179,10 @@ export function ShopPreview({ settings, version = 0 }: { settings: ShopSettings;
             <View style={styles.qrBox}>
               <QrCode value={url} size={220} />
             </View>
-            <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>Mit einem anderen Handy scannen und den Shop selbst ausprobieren – inklusive Test-Checkout mit der Karte 4242 4242 4242 4242.</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>{tr('Mit einem anderen Handy scannen und den Shop selbst ausprobieren – inklusive Test-Checkout mit der Karte 4242 4242 4242 4242.')}</Text>
           </View>
         )}
-        <Button title="Demo im Browser öffnen" icon="open-outline" kind="plain" onPress={() => void Linking.openURL(url)} />
+        <Button title={tr('Demo im Browser öffnen')} icon="open-outline" kind="plain" onPress={() => void Linking.openURL(url)} />
       </Card>
     </Section>
   );

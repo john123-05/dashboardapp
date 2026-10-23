@@ -2,6 +2,7 @@ import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { PREVIEW } from './preview';
 import { useData } from './useData';
+import { tr } from '../i18n';
 
 // Freischaltungen wie im Web (src/lib/plans.ts): Plan (Basis, Marketing Starter, Marketing Pro)
 // plus Add-ons (Online-Shop, Speedmessung). Fehler sperren nicht (Entscheidung 10.10.2026).
@@ -16,7 +17,7 @@ export const FEATURE_PLAN: Record<FeatureKey, PlanKey | 'addon'> = {
   team_permissions: 'marketing_pro', reports_pro: 'marketing_pro', online_shop: 'addon', speed: 'addon', demo: 'addon',
 };
 const PLAN_ORDER: PlanKey[] = ['basis', 'marketing_starter', 'marketing_pro'];
-export const PLAN_LABEL: Record<PlanKey, string> = { basis: 'Basis', marketing_starter: 'Marketing Starter', marketing_pro: 'Marketing Pro' };
+export const PLAN_LABEL: Record<PlanKey, string> = { get basis() { return tr('Basis'); }, get marketing_starter() { return tr('Marketing Starter'); }, get marketing_pro() { return tr('Marketing Pro'); } };
 
 // Parks mit Gäste-Aktivität (Speedmessung inklusive), wie GUEST_ACTIVITY_PARK_IDS im Web.
 const GUEST_ACTIVITY_PARK_IDS = new Set([
@@ -37,12 +38,12 @@ function resolve(row: Row | null, parkId: string) {
 async function fetchRow(parkId: string): Promise<Row | null> {
   if (PREVIEW) return null;
   const { data: { session } } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Missing session');
+  if (!session?.access_token) throw new Error(tr('Missing session'));
   // Die Function heißt im Editor "operator-entitlements", ihre Adresse ist "hyper-processor" (siehe Web).
   const res = await fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/hyper-processor?park_id=${encodeURIComponent(parkId)}`, {
     headers: { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY },
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error(tr('HTTP {0}', res.status));
   const body = await res.json();
   return (body?.data ?? null) as Row | null;
 }

@@ -9,12 +9,13 @@ import { Button, ErrorNote } from '../components/ui';
 import { successHaptic } from '../components/haptics';
 import { useAuth } from '../contexts/AuthContext';
 import { colors, font, radius, space } from '../theme';
+import { tr } from '../i18n';
 
 function friendly(message: string): string {
   const m = message.toLowerCase();
-  if (m.includes('invalid login') || m.includes('invalid credentials')) return 'E-Mail oder Passwort stimmt nicht.';
-  if (m.includes('email not confirmed')) return 'Bitte bestätige zuerst deine E-Mail-Adresse.';
-  if (m.includes('network') || m.includes('fetch')) return 'Keine Verbindung. Bitte Internet prüfen.';
+  if (m.includes('invalid login') || m.includes('invalid credentials')) return tr('E-Mail oder Passwort stimmt nicht.');
+  if (m.includes('email not confirmed')) return tr('Bitte bestätige zuerst deine E-Mail-Adresse.');
+  if (m.includes('network') || m.includes('fetch')) return tr('Keine Verbindung. Bitte Internet prüfen.');
   return message;
 }
 
@@ -29,7 +30,7 @@ export function LoginScreen() {
 
   async function submit() {
     if (!email.trim() || !password) {
-      setError('Bitte E-Mail und Passwort eingeben.');
+      setError(tr('Bitte E-Mail und Passwort eingeben.'));
       return;
     }
     setError(null);
@@ -49,22 +50,22 @@ export function LoginScreen() {
       <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 56, paddingBottom: insets.bottom + 24 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.head}>
           <Image source={require('../../assets/icon.png')} style={styles.logo} />
-          <Text style={styles.title}>Liftbase</Text>
-          <Text style={styles.sub}>Dein Park. Immer dabei.</Text>
+          <Text style={styles.title}>{tr('Liftbase')}</Text>
+          <Text style={styles.sub}>{tr('Dein Park. Immer dabei.')}</Text>
         </View>
         <BlurView intensity={60} tint="systemThickMaterial" style={styles.form}>
-          <Text style={{ ...font.headline, color: colors.ink }}>Anmelden</Text>
-          <Field label="E-Mail" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="username" returnKeyType="next" onSubmitEditing={() => pw.current?.focus()} placeholder="name@firma.de" />
-          <Field ref={pw} label="Passwort" value={password} onChangeText={setPassword} secure autoCapitalize="none" autoComplete="current-password" textContentType="password" returnKeyType="go" onSubmitEditing={submit} placeholder="Passwort" />
+          <Text style={{ ...font.headline, color: colors.ink }}>{tr('Anmelden')}</Text>
+          <Field label={tr('E-Mail')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="username" returnKeyType="next" onSubmitEditing={() => pw.current?.focus()} placeholder={tr('name@firma.de')} />
+          <Field ref={pw} label={tr('Passwort')} value={password} onChangeText={setPassword} secure autoCapitalize="none" autoComplete="current-password" textContentType="password" returnKeyType="go" onSubmitEditing={submit} placeholder={tr('Passwort')} />
           {error ? <ErrorNote text={error} /> : null}
-          <Button title="Anmelden" onPress={submit} loading={busy} />
+          <Button title={tr('Anmelden')} onPress={submit} loading={busy} />
           <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} hitSlop={8} style={{ alignSelf: 'center', minHeight: 36, justifyContent: 'center' }}>
-            <Text style={{ ...font.footnote, color: colors.ink2 }}>Passwort vergessen?</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Passwort vergessen?')}</Text>
           </Pressable>
         </BlurView>
         <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
           <Text style={{ ...font.callout, color: '#fff' }}>
-            Noch kein Zugang? <Text style={{ fontWeight: '700' }}>Demo anfragen</Text>
+            {tr('Noch kein Zugang? ')}<Text style={{ fontWeight: '700' }}>{tr('Demo anfragen')}</Text>
           </Text>
         </Pressable>
       </ScrollView>
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
   logo: { width: 72, height: 72, borderRadius: 18 },
   title: { ...font.largeTitle, color: '#fff' },
   sub: { ...font.subhead, color: 'rgba(255,255,255,0.8)', textAlign: 'center' },
-  form: { gap: space.lg, borderRadius: 24, padding: space.xl, overflow: 'hidden' },
+  // Auf iPad und Mac nicht über die ganze Breite: feste Höchstbreite, mittig.
+  form: { gap: space.lg, borderRadius: 24, padding: space.xl, overflow: 'hidden', width: '100%', maxWidth: 440, alignSelf: 'center' },
   scrollMax: {},
 });

@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { PREVIEW } from '../lib/preview';
+import { tr } from '../i18n';
 
 // Rollen und Seitenrechte wie im Web-Dashboard (src/contexts/AuthContext.tsx):
 // Inhaber sehen alles, Mitarbeiter nur die im CRM freigegebenen Seiten (allowed_pages).
@@ -133,6 +134,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth außerhalb von AuthProvider');
+  if (!ctx) throw new Error(tr('useAuth außerhalb von AuthProvider'));
   return ctx;
 }

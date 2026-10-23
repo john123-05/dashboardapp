@@ -16,6 +16,7 @@ import { fetchRecentPhotos } from '../lib/photoBrowser';
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
+import { tr } from '../i18n';
 
 // Kamera wie im Web (/kamera): Regler stehen auf dem, was die Kamera meldet. Verschieben ändert nur
 // die Vorschau am letzten Foto; erst „An Kamera senden“ schreibt die Werte (mit Sicherung und Neustart).
@@ -72,10 +73,10 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
   function senden() {
     if (!automat || !parkId || geaendert.length === 0) return;
     const liste = geaendert.map((e) => `${e.titel}: ${anzeige(e, wertAus(kamera!.werte, e.schluessel)!)} → ${anzeige(e, entwurf[e.schluessel])}`).join('\n');
-    Alert.alert('Änderungen an die Kamera senden?', `${liste}\n\nDie Kamerasoftware startet danach neu – für einige Sekunden entstehen keine Fotos. Der Automat sichert vorher die alten Werte.`, [
-      { text: 'Abbrechen', style: 'cancel' },
+    Alert.alert(tr('Änderungen an die Kamera senden?'), tr('{0}\n\nDie Kamerasoftware startet danach neu – für einige Sekunden entstehen keine Fotos. Der Automat sichert vorher die alten Werte.', liste), [
+      { text: tr('Abbrechen'), style: 'cancel' },
       {
-        text: 'An Kamera senden',
+        text: tr('An Kamera senden'),
         onPress: async () => {
           setBusy('senden');
           setFehler(null);
@@ -85,9 +86,9 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
             for (const e of geaendert) werte[e.schluessel] = entwurf[e.schluessel];
             await cameraSend(parkId, automat.id, werte);
             successHaptic();
-            setHinweis('Auftrag abgelegt. Der Automat holt ihn sich binnen zwei Minuten, schreibt die Werte und startet die Kamera neu. Das Ergebnis steht danach im Verlauf unter Systemzustand – auch wenn etwas abgelehnt wurde.');
+            setHinweis(tr('Auftrag abgelegt. Der Automat holt ihn sich binnen zwei Minuten, schreibt die Werte und startet die Kamera neu. Das Ergebnis steht danach im Verlauf unter Systemzustand – auch wenn etwas abgelehnt wurde.'));
           } catch (e) {
-            setFehler(e instanceof Error ? e.message : 'Auftrag fehlgeschlagen.');
+            setFehler(e instanceof Error ? e.message : tr('Auftrag fehlgeschlagen.'));
           }
           setBusy(null);
         },
@@ -97,19 +98,19 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
 
   function testfoto() {
     if (!automat || !parkId) return;
-    Alert.alert('Testfoto auslösen?', 'Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette. Es erscheint nach etwa einer Minute hier.', [
-      { text: 'Abbrechen', style: 'cancel' },
+    Alert.alert(tr('Testfoto auslösen?'), tr('Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette. Es erscheint nach etwa einer Minute hier.'), [
+      { text: tr('Abbrechen'), style: 'cancel' },
       {
-        text: 'Testfoto auslösen',
+        text: tr('Testfoto auslösen'),
         onPress: async () => {
           setBusy('testfoto');
           setFehler(null);
           try {
             await triggerTestPhoto(parkId, automat.id);
             successHaptic();
-            setHinweis('Testfoto beauftragt. Es dauert bis zu einer Minute – dann auf „Bild neu laden“ tippen oder nach unten ziehen.');
+            setHinweis(tr('Testfoto beauftragt. Es dauert bis zu einer Minute – dann auf „Bild neu laden“ tippen oder nach unten ziehen.'));
           } catch (e) {
-            setFehler(e instanceof Error ? e.message : 'Auftrag fehlgeschlagen.');
+            setFehler(e instanceof Error ? e.message : tr('Auftrag fehlgeschlagen.'));
           }
           setBusy(null);
         },
@@ -125,7 +126,7 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
 
   if (machines.loading && !machines.data) {
     return (
-      <Screen page="kamera" title="Kamera" subtitle="Einstellungen und Bildkontrolle" onBack={navigation.goBack}>
+      <Screen page="kamera" title={tr('Kamera')} subtitle={tr('Einstellungen und Bildkontrolle')} onBack={navigation.goBack}>
         <Skeleton height={240} radius={radius.lg} />
         <Skeleton height={120} radius={radius.lg} />
       </Screen>
@@ -134,10 +135,10 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
 
   if (!automat || !kamera) {
     return (
-      <Screen page="kamera" title="Kamera" subtitle="Einstellungen und Bildkontrolle" onBack={navigation.goBack} refreshing={machines.refreshing} onRefresh={reload}>
+      <Screen page="kamera" title={tr('Kamera')} subtitle={tr('Einstellungen und Bildkontrolle')} onBack={navigation.goBack} refreshing={machines.refreshing} onRefresh={reload}>
         {machines.error ? <ErrorNote text={machines.error} onRetry={machines.reload} /> : null}
         <Card>
-          <EmptyState icon="camera-outline" title="Keine Kamera gemeldet" text="Für diesen Park meldet kein Automat eine Kamerasoftware. Die Seite erscheint von selbst, sobald einer es tut." />
+          <EmptyState icon="camera-outline" title={tr('Keine Kamera gemeldet')} text={tr('Für diesen Park meldet kein Automat eine Kamerasoftware. Die Seite erscheint von selbst, sobald einer es tut.')} />
         </Card>
       </Screen>
     );
@@ -151,20 +152,20 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
   const bildKarte = (
     <Card style={{ gap: space.md }}>
       <CardHead
-        title="Letztes Foto"
-        sub={bild ? `aufgenommen ${formatTime(bild.capturedAt, timezone)}${bild.isTest ? ' · Testfoto' : ''}` : 'noch keins vorhanden'}
-        right={matrix ? <View style={{ width: 170 }}><Segmented<'v' | 'o'> value={original ? 'o' : 'v'} onChange={(v) => setOriginal(v === 'o')} options={[{ value: 'v', label: 'Vorschau' }, { value: 'o', label: 'Original' }]} /></View> : null}
+        title={tr('Letztes Foto')}
+        sub={bild ? tr('aufgenommen {0}{1}', formatTime(bild.capturedAt, timezone), bild.isTest ? tr(' · Testfoto') : '') : tr('noch keins vorhanden')}
+        right={matrix ? <View style={{ width: 170 }}><Segmented<'v' | 'o'> value={original ? 'o' : 'v'} onChange={(v) => setOriginal(v === 'o')} options={[{ value: 'v', label: tr('Vorschau') }, { value: 'o', label: tr('Original') }]} /></View> : null}
       />
       {bild?.imageUrl ? (
         <PreviewImage uri={bild.imageUrl} width={imgW} matrix={!original ? matrix : null} />
       ) : (
         <View style={styles.noPhoto}>
-          <Text style={{ ...font.subhead, color: colors.ink2, textAlign: 'center' }}>Für diesen Park liegt noch kein Foto vor.</Text>
+          <Text style={{ ...font.subhead, color: colors.ink2, textAlign: 'center' }}>{tr('Für diesen Park liegt noch kein Foto vor.')}</Text>
         </View>
       )}
       {verlauf.length > 1 ? (
         <View style={{ gap: 6 }}>
-          <Text style={{ ...font.caption, color: colors.ink3 }}>Letzte Testfotos</Text>
+          <Text style={{ ...font.caption, color: colors.ink3 }}>{tr('Letzte Testfotos')}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
             {verlauf.map((v) => (
               <Pressable key={v.id} onPress={() => { tapHaptic(); setBildUrl(v.imageUrl); }} style={[styles.thumb, bild?.id === v.id && { borderColor: colors.brand, borderWidth: 2 }]}>
@@ -176,23 +177,22 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
       ) : null}
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <View style={{ flex: 1 }}>
-          <Button title="Bild neu laden" icon="refresh" kind="plain" onPress={() => { setBildUrl(null); photos.reload(); }} />
+          <Button title={tr('Bild neu laden')} icon="refresh" kind="plain" onPress={() => { setBildUrl(null); photos.reload(); }} />
         </View>
         {automat.can_test_photo ? (
           <View style={{ flex: 1 }}>
-            <Button title={busy === 'testfoto' ? 'Wird ausgelöst…' : 'Testfoto'} icon="camera-outline" kind="plain" loading={busy === 'testfoto'} onPress={testfoto} />
+            <Button title={busy === 'testfoto' ? tr('Wird ausgelöst…') : tr('Testfoto')} icon="camera-outline" kind="plain" loading={busy === 'testfoto'} onPress={testfoto} />
           </View>
         ) : null}
       </View>
       <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400' }}>
-        Kein Livebild: die Kamera hängt am Automaten, nicht am Internet. Die Vorschau ist eine Annäherung am fertigen Bild, keine Aufnahme mit den neuen Werten.
-      </Text>
+        {tr('Kein Livebild: die Kamera hängt am Automaten, nicht am Internet. Die Vorschau ist eine Annäherung am fertigen Bild, keine Aufnahme mit den neuen Werten.')}</Text>
     </Card>
   );
 
   const regler = (
     <View style={{ gap: space.md }}>
-      {belichtungAuto ? <Notice tone="warn" text="Die Belichtung steht auf automatisch. Die Belichtungszeit von Hand zu setzen bleibt dann wirkungslos – wirksam ist die Ziel-Helligkeit. Oder die Automatik ausschalten." /> : null}
+      {belichtungAuto ? <Notice tone="warn" text={tr('Die Belichtung steht auf automatisch. Die Belichtungszeit von Hand zu setzen bleibt dann wirkungslos – wirksam ist die Ziel-Helligkeit. Oder die Automatik ausschalten.')} /> : null}
       {gruppen.map((g) => {
         const anzahl = g.regler.filter((e) => geaendert.includes(e)).length;
         const auf = offen[g.id] ?? true;
@@ -206,7 +206,7 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
                 <Text style={{ ...font.headline, color: colors.ink }}>{g.titel}</Text>
                 <Text style={{ ...font.footnote, color: colors.ink2 }}>{g.sub}</Text>
               </View>
-              {anzahl > 0 ? <Pill tone="warn" text={`${anzahl} geändert`} /> : null}
+              {anzahl > 0 ? <Pill tone="warn" text={tr('{0} geändert', anzahl)} /> : null}
               <Ionicons name={auf ? 'chevron-up' : 'chevron-down'} size={18} color={colors.ink3} />
             </Pressable>
             {auf
@@ -221,16 +221,16 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
                         <Text style={{ ...font.callout, color: colors.ink, flex: 1 }} numberOfLines={1}>
                           {e.titel}
                         </Text>
-                        {!e.vorschau && e.art === 'zahl' ? <Pill text="ohne Vorschau" /> : null}
+                        {!e.vorschau && e.art === 'zahl' ? <Pill text={tr('ohne Vorschau')} /> : null}
                         {anders ? (
-                          <Pressable onPress={() => { tapHaptic(); setze(e, alt); }} hitSlop={8} accessibilityLabel={`Zurücksetzen: ${e.titel}`}>
+                          <Pressable onPress={() => { tapHaptic(); setze(e, alt); }} hitSlop={8} accessibilityLabel={tr('Zurücksetzen: {0}', e.titel)}>
                             <Ionicons name="arrow-undo-outline" size={17} color={colors.ink3} />
                           </Pressable>
                         ) : null}
                         <View style={[styles.value, anders && { backgroundColor: colors.brandSoft }]}>
                           <Text style={[styles.valueText, anders && { color: colors.brand, fontWeight: '700' }]}>{anzeige(e, jetzt)}</Text>
                         </View>
-                        <Pressable onPress={() => { tapHaptic(); setErklaert((a) => ({ ...a, [e.schluessel]: !zeigt })); }} hitSlop={8} accessibilityLabel={`Erklärung: ${e.titel}`}>
+                        <Pressable onPress={() => { tapHaptic(); setErklaert((a) => ({ ...a, [e.schluessel]: !zeigt })); }} hitSlop={8} accessibilityLabel={tr('Erklärung: {0}', e.titel)}>
                           <Ionicons name={zeigt ? 'information-circle' : 'information-circle-outline'} size={20} color={zeigt ? colors.ink : colors.ink3} />
                         </Pressable>
                       </View>
@@ -243,7 +243,7 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
                           <Slider value={jetzt} min={e.von} max={e.bis} step={e.schritt} origin={alt} onChange={(v) => setze(e, v)} />
                         </View>
                       )}
-                      {anders ? <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400' }}>Kamera: {anzeige(e, alt)}</Text> : null}
+                      {anders ? <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400' }}>{tr('Kamera: ')}{anzeige(e, alt)}</Text> : null}
                       {zeigt ? <Text style={styles.explain}>{e.erklaerung}</Text> : null}
                     </View>
                   );
@@ -256,10 +256,10 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
       <Card padded={false} style={{ overflow: 'hidden' }}>
         <Pressable onPress={() => { tapHaptic(); setTechnik((v) => !v); }} style={({ pressed }) => [styles.groupHead, pressed && { backgroundColor: colors.fill }]}>
           <View style={{ flex: 1 }}>
-            <Text style={{ ...font.headline, color: colors.ink }}>Technische Werte</Text>
+            <Text style={{ ...font.headline, color: colors.ink }}>{tr('Technische Werte')}</Text>
             <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>
-              Gelesen aus {kamera.quelle ?? '—'}
-              {kamera.programm ? `, gesteuert von ${kamera.programm}` : ''}
+              {tr('Gelesen aus ')}{kamera.quelle ?? '—'}
+              {kamera.programm ? tr(', gesteuert von {0}', kamera.programm) : ''}
             </Text>
           </View>
           <Ionicons name={technik ? 'chevron-up' : 'chevron-down'} size={18} color={colors.ink3} />
@@ -275,8 +275,7 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
                 </View>
               ))}
             <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400', marginTop: 4 }}>
-              Nicht alles, was die Kamera kann, steht hier. Auslöser, Blitzausgang und Netzwerkeinstellungen bleiben bewusst außen vor – sie gehören zur Verkabelung der Anlage, nicht zur Bildgestaltung.
-            </Text>
+              {tr('Nicht alles, was die Kamera kann, steht hier. Auslöser, Blitzausgang und Netzwerkeinstellungen bleiben bewusst außen vor – sie gehören zur Verkabelung der Anlage, nicht zur Bildgestaltung.')}</Text>
           </View>
         ) : null}
       </Card>
@@ -286,23 +285,23 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
   return (
     <View style={{ flex: 1 }}>
       <Screen page="kamera"
-        title="Kamera"
-        subtitle={untertitel || 'Einstellungen und Bildkontrolle'}
+        title={tr('Kamera')}
+        subtitle={untertitel || tr('Einstellungen und Bildkontrolle')}
         onBack={navigation.goBack}
         refreshing={machines.refreshing || photos.refreshing}
         onRefresh={reload}
-        right={<Pill tone={verbunden ? 'ok' : 'warn'} icon={verbunden ? 'radio-button-on' : 'cloud-offline-outline'} text={verbunden ? 'Verbunden' : `Seit ${Math.round(automat.offline_minutes ?? 0)} Min. getrennt`} />}
+        right={<Pill tone={verbunden ? 'ok' : 'warn'} icon={verbunden ? 'radio-button-on' : 'cloud-offline-outline'} text={verbunden ? tr('Verbunden') : tr('Seit {0} Min. getrennt', Math.round(automat.offline_minutes ?? 0))} />}
       >
-        {mitKamera.length > 1 ? <SelectRow label="Automat" value={automat.machine_label || automat.machine_id} onPress={() => setPicker(true)} /> : null}
+        {mitKamera.length > 1 ? <SelectRow label={tr('Automat')} value={automat.machine_label || automat.machine_id} onPress={() => setPicker(true)} /> : null}
         {fehler ? <ErrorNote text={fehler} /> : null}
         {hinweis ? <Notice text={hinweis} /> : null}
-        {kamera.fehler ? <Notice tone="warn" text={`Die Einstellungen konnten nicht gelesen werden: ${kamera.fehler}`} /> : null}
+        {kamera.fehler ? <Notice tone="warn" text={tr('Die Einstellungen konnten nicht gelesen werden: {0}', kamera.fehler)} /> : null}
 
         <View style={[styles.steps, wide && { flexDirection: 'row' }]}>
           {[
-            ['Regler verschieben', 'Die Wirkung siehst du sofort am Foto.'],
-            ['Vorher und nachher vergleichen', 'Mit „Original“ wechselst du zurück zum unveränderten Bild.'],
-            ['An Kamera senden', 'Erst dann wird die Kamera umgestellt – die alten Werte werden vorher gesichert.'],
+            [tr('Regler verschieben'), tr('Die Wirkung siehst du sofort am Foto.')],
+            [tr('Vorher und nachher vergleichen'), tr('Mit „Original“ wechselst du zurück zum unveränderten Bild.')],
+            [tr('An Kamera senden'), tr('Erst dann wird die Kamera umgestellt – die alten Werte werden vorher gesichert.')],
           ].map(([t, s], i) => (
             <View key={t} style={[styles.step, wide && { flex: 1 }]}>
               <View style={styles.stepNo}>
@@ -331,8 +330,8 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
       </Screen>
       <SaveBar
         visible={geaendert.length > 0}
-        text={`${geaendert.length} ${geaendert.length === 1 ? 'Änderung' : 'Änderungen'} bereit`}
-        saveLabel="An Kamera senden"
+        text={geaendert.length === 1 ? tr('1 Änderung bereit') : tr('{0} Änderungen bereit', geaendert.length)}
+        saveLabel={tr('An Kamera senden')}
         busy={busy === 'senden'}
         onSave={senden}
         onDiscard={() => {
@@ -342,7 +341,7 @@ export function CameraScreen({ navigation }: { navigation: { goBack: () => void 
       />
       <PickerSheet
         open={picker}
-        title="Automat"
+        title={tr('Automat')}
         value={automat.id}
         options={mitKamera.map((m) => ({ value: m.id, label: m.machine_label || m.machine_id, sub: m.camera_settings?.modell ?? undefined }))}
         onPick={(id) => setGewaehlt(id)}

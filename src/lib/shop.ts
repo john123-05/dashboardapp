@@ -1,6 +1,7 @@
 import { callShared, formFile } from './shared';
 import type { PickedImage } from './imagePick';
 import { PREVIEW } from './preview';
+import { N_ } from '../i18n';
 
 // Online-Shop wie im Web (src/lib/shop.ts): Function operator-shop-settings im geteilten Projekt.
 // Der öffentliche Shop liegt auf der Abholseite, die Demo unter /demo-shop/<token>.
@@ -48,17 +49,17 @@ export const demoShopUrl = (s: ShopSettings) => `${PUBLIC_SHOP_URL}/demo-shop/${
 
 // Namen der Produkte wie im Web-Wörterbuch (shop.catalog.*); unbekannte Schlüssel behalten den Server-Text.
 export const PRODUCT_TEXT: Record<string, [string, string]> = {
-  digital: ['Digitaler Download', 'Dein Foto in voller Auflösung zum Herunterladen'],
-  print: ['Fotoabzug 13×18', 'Hochglanzabzug, per Post zu dir nach Hause'],
-  postcard: ['Postkarte', 'Dein Foto als Postkarte mit Park-Logo'],
-  magnet: ['Kühlschrankmagnet', 'Erinnerung für jeden Tag'],
-  mug: ['Tasse', 'Keramiktasse mit deinem Foto, spülmaschinenfest'],
-  tshirt: ['T-Shirt', 'Bio-Baumwolle, dein Foto auf der Brust'],
-  daypass: ['Tagespass', 'Alle deine Fotos des Tages als Download'],
-  poster: ['Poster 30×40', 'Dein Foto groß an der Wand, matt gedruckt'],
-  canvas: ['Leinwand 30×40', 'Auf Keilrahmen gespannt, fertig zum Aufhängen'],
-  keychain: ['Schlüsselanhänger', 'Dein Foto immer dabei'],
-  puzzle: ['Puzzle (120 Teile)', 'Dein Foto zum Zusammensetzen'],
+  digital: [N_('Digitaler Download'), N_('Dein Foto in voller Auflösung zum Herunterladen')],
+  print: [N_('Fotoabzug 13×18'), N_('Hochglanzabzug, per Post zu dir nach Hause')],
+  postcard: [N_('Postkarte'), N_('Dein Foto als Postkarte mit Park-Logo')],
+  magnet: [N_('Kühlschrankmagnet'), N_('Erinnerung für jeden Tag')],
+  mug: [N_('Tasse'), N_('Keramiktasse mit deinem Foto, spülmaschinenfest')],
+  tshirt: [N_('T-Shirt'), N_('Bio-Baumwolle, dein Foto auf der Brust')],
+  daypass: [N_('Tagespass'), N_('Alle deine Fotos des Tages als Download')],
+  poster: [N_('Poster 30×40'), N_('Dein Foto groß an der Wand, matt gedruckt')],
+  canvas: [N_('Leinwand 30×40'), N_('Auf Keilrahmen gespannt, fertig zum Aufhängen')],
+  keychain: [N_('Schlüsselanhänger'), N_('Dein Foto immer dabei')],
+  puzzle: [N_('Puzzle (120 Teile)'), N_('Dein Foto zum Zusammensetzen')],
 };
 export const NEW_PRODUCTS = ['poster', 'canvas', 'keychain', 'puzzle'];
 export const PRODUCT_ICON: Record<string, string> = {

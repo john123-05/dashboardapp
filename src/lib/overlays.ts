@@ -3,6 +3,7 @@ import { callShared, formFile } from './shared';
 import { invokeEdgeFunction } from './edgeFunctions';
 import { base64ToBytes, type PickedImage } from './imagePick';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 // Personalisierung wie im Web (src/pages/Personalization.tsx + components/AutomatBranding.tsx):
 // gespeicherte Overlays (Bucket `overlays`, Operator-Projekt), "Sofort Overlay"-Kampagnen und die
@@ -55,7 +56,7 @@ export async function uploadOverlay(parkId: string, userId: string, img: { bytes
 }
 
 export function pickedToUpload(p: PickedImage) {
-  if (!p.base64) throw new Error('Bild konnte nicht gelesen werden.');
+  if (!p.base64) throw new Error(tr('Bild konnte nicht gelesen werden.'));
   return { bytes: base64ToBytes(p.base64), type: p.type, name: p.name, width: p.width || null, height: p.height || null };
 }
 
@@ -112,9 +113,9 @@ export async function latestPhotoUrl(parkId: string): Promise<string | null> {
 // ---------------------------------------------------------------- Bilder am Automaten
 
 export const SLOTS = [
-  { id: 'viewer_overlay_png', label: 'Foto-Overlay', desc: 'Rahmen oder Wasserzeichen, das auf dem verkauften Foto liegt.', tip: 'Am besten PNG mit transparentem Hintergrund, Seitenverhältnis 4:3 (z. B. 2362 × 1772 px).' },
-  { id: 'viewer_main_logo', label: 'Automat-Logo', desc: 'Logo auf dem Verkaufsbildschirm des Automaten.', tip: 'PNG mit transparentem Hintergrund.' },
-  { id: 'viewer_background', label: 'Hintergrund', desc: 'Hintergrundbild des Verkaufsbildschirms.', tip: 'Querformat, etwa 2100 × 1200 px.' },
+  { id: 'viewer_overlay_png', get label() { return tr('Foto-Overlay'); }, get desc() { return tr('Rahmen oder Wasserzeichen, das auf dem verkauften Foto liegt.'); }, get tip() { return tr('Am besten PNG mit transparentem Hintergrund, Seitenverhältnis 4:3 (z. B. 2362 × 1772 px).'); } },
+  { id: 'viewer_main_logo', get label() { return tr('Automat-Logo'); }, get desc() { return tr('Logo auf dem Verkaufsbildschirm des Automaten.'); }, get tip() { return tr('PNG mit transparentem Hintergrund.'); } },
+  { id: 'viewer_background', get label() { return tr('Hintergrund'); }, get desc() { return tr('Hintergrundbild des Verkaufsbildschirms.'); }, get tip() { return tr('Querformat, etwa 2100 × 1200 px.'); } },
 ] as const;
 export type SlotId = (typeof SLOTS)[number]['id'];
 
@@ -136,7 +137,7 @@ export async function loadBranding(parkId: string): Promise<{ machines: Branding
     data = await callShared('operator-liftpic-assets', { query: { park_id: parkId } });
   } catch (e: any) {
     if (e?.status === 404) return { machines: [], assets: [], refs: {}, notDeployed: true };
-    throw new Error(`Die Automaten konnten nicht geladen werden (${e?.message ?? 'unbekannter Fehler'}).`);
+    throw new Error(tr('Die Automaten konnten nicht geladen werden ({0}).', e?.message ?? tr('unbekannter Fehler')));
   }
   // Der Bucket der Automaten-Dateien ist öffentlich: getPublicUrl, nicht signieren.
   const assets = (data.assets ?? []).map((a) => ({
@@ -201,13 +202,13 @@ export async function sendToSlot(parkId: string, machineConfigId: string, slot: 
     form.append('file', formFile({ uri: source.picked.uri, name: source.picked.name, type: source.picked.type }));
   } else {
     // Gespeichertes Overlay: über die signierte Adresse als Datei weiterreichen.
-    if (!source.overlay.preview_url) throw new Error('Das gespeicherte Overlay ist nicht erreichbar.');
+    if (!source.overlay.preview_url) throw new Error(tr('Das gespeicherte Overlay ist nicht erreichbar.'));
     form.append('file', formFile({ uri: source.overlay.preview_url, name: basename(source.overlay.path), type: source.overlay.mime_type || 'image/png' }));
   }
   try {
     await callShared('operator-liftpic-assets', { method: 'POST', form, raw: true });
   } catch (e) {
-    throw new Error(`Der Server hat die Übertragung abgelehnt: ${e instanceof Error ? e.message : String(e)}`);
+    throw new Error(tr('Der Server hat die Übertragung abgelehnt: {0}', e instanceof Error ? e.message : String(e)));
   }
 }
 

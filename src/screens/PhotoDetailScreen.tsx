@@ -12,6 +12,7 @@ import { usePark } from '../contexts/ParkContext';
 import { formatDayLong, formatTime } from '../lib/format';
 import { claimLinkFor, type BrowsablePhoto } from '../lib/photoBrowser';
 import { colors, font, radius, space } from '../theme';
+import { tr } from '../i18n';
 
 export function PhotoDetailScreen({ route, navigation }: { route: { params: { photo: BrowsablePhoto } }; navigation: { goBack: () => void } }) {
   const p = route.params.photo;
@@ -25,23 +26,23 @@ export function PhotoDetailScreen({ route, navigation }: { route: { params: { ph
   const bigSize = Math.min(width, height) - 64;
 
   return (
-    <Screen sheet title="Foto" onBack={navigation.goBack} backLabel="Schließen">
+    <Screen sheet title={tr('Foto')} onBack={navigation.goBack} backLabel={tr('Schließen')}>
       <View style={{ borderRadius: radius.lg, overflow: 'hidden', aspectRatio: 4 / 3, backgroundColor: colors.subtle }}>
         {p.imageUrl ? <Image source={{ uri: p.imageUrl }} style={{ flex: 1 }} contentFit="cover" transition={150} /> : null}
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>
-        <Pill tone={p.isPaid ? 'ok' : 'neutral'} icon={p.isPaid ? 'checkmark' : 'time-outline'} text={p.isPaid ? 'Gekauft' : 'Nicht gekauft'} />
-        {p.isTest ? <Pill tone="info" text="Testfoto" /> : null}
+        <Pill tone={p.isPaid ? 'ok' : 'neutral'} icon={p.isPaid ? 'checkmark' : 'time-outline'} text={p.isPaid ? tr('Gekauft') : tr('Nicht gekauft')} />
+        {p.isTest ? <Pill tone="info" text={tr('Testfoto')} /> : null}
       </View>
       <ListCard>
-        <Row title="Aufgenommen" right={<Text style={{ ...font.callout, color: colors.ink }}>{formatDayLong(day)}, {formatTime(p.capturedAt, timezone)}</Text>} />
-        <Row title="Bildnummer" right={<Text style={{ ...font.callout, color: colors.ink, fontVariant: ['tabular-nums'] }}>{p.externalCode ?? '–'}</Text>} />
-        <Row title="Geschwindigkeit" right={<Text style={{ ...font.callout, color: colors.ink }}>{p.speedKmh ? `${p.speedKmh.toFixed(1).replace('.', ',')} km/h` : '–'}</Text>} last />
+        <Row title={tr('Aufgenommen')} right={<Text style={{ ...font.callout, color: colors.ink }}>{formatDayLong(day)}, {formatTime(p.capturedAt, timezone)}</Text>} />
+        <Row title={tr('Bildnummer')} right={<Text style={{ ...font.callout, color: colors.ink, fontVariant: ['tabular-nums'] }}>{p.externalCode ?? '–'}</Text>} />
+        <Row title={tr('Geschwindigkeit')} right={<Text style={{ ...font.callout, color: colors.ink }}>{p.speedKmh ? tr('{0} km/h', p.speedKmh.toFixed(1).replace('.', ',')) : '–'}</Text>} last />
       </ListCard>
       {link ? (
         <Card style={{ gap: space.md }}>
-          <Text style={{ ...font.headline, color: colors.ink }}>Abhol-Link</Text>
-          <Text style={{ ...font.footnote, color: colors.ink2 }}>Der Gast scannt den QR-Code mit seinem Handy und holt sich sein Foto ab – auch wenn der gedruckte Code nicht funktioniert.</Text>
+          <Text style={{ ...font.headline, color: colors.ink }}>{tr('Abhol-Link')}</Text>
+          <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Der Gast scannt den QR-Code mit seinem Handy und holt sich sein Foto ab – auch wenn der gedruckte Code nicht funktioniert.')}</Text>
           <Pressable
             onPress={() => {
               tapHaptic();
@@ -49,22 +50,22 @@ export function PhotoDetailScreen({ route, navigation }: { route: { params: { ph
             }}
             style={({ pressed }) => [styles.qrCard, pressed && { opacity: 0.85 }]}
             accessibilityRole="button"
-            accessibilityLabel="QR-Code groß zeigen"
+            accessibilityLabel={tr('QR-Code groß zeigen')}
           >
             <QrCode value={link} size={196} />
             <View style={styles.enlarge}>
               <Ionicons name="expand-outline" size={14} color="#475467" />
-              <Text style={{ ...font.caption, color: '#475467' }}>Antippen zum Vergrößern</Text>
+              <Text style={{ ...font.caption, color: '#475467' }}>{tr('Antippen zum Vergrößern')}</Text>
             </View>
           </Pressable>
-          <Button title="QR-Code groß zeigen" icon="qr-code-outline" onPress={() => setBig(true)} />
+          <Button title={tr('QR-Code groß zeigen')} icon="qr-code-outline" onPress={() => setBig(true)} />
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <View style={{ flex: 1 }}>
-              <Button title="Teilen" icon="share-outline" kind="plain" onPress={() => void Share.share({ message: link, url: link })} />
+              <Button title={tr('Teilen')} icon="share-outline" kind="plain" onPress={() => void Share.share({ message: link, url: link })} />
             </View>
             <View style={{ flex: 1 }}>
               <Button
-                title={copied ? 'Kopiert' : 'Kopieren'}
+                title={copied ? tr('Kopiert') : tr('Kopieren')}
                 icon={copied ? 'checkmark' : 'copy-outline'}
                 kind="plain"
                 onPress={() => {
@@ -77,21 +78,21 @@ export function PhotoDetailScreen({ route, navigation }: { route: { params: { ph
               />
             </View>
           </View>
-          <Button title="Im Browser öffnen" icon="open-outline" kind="plain" onPress={() => void Linking.openURL(link)} />
+          <Button title={tr('Im Browser öffnen')} icon="open-outline" kind="plain" onPress={() => void Linking.openURL(link)} />
         </Card>
       ) : null}
 
       {/* Bildschirmfüllend und immer weiß, damit jede Handykamera den Code sofort liest. */}
       <Modal visible={big} animationType="fade" presentationStyle="fullScreen" onRequestClose={() => setBig(false)} supportedOrientations={['portrait', 'landscape']}>
-        <Pressable style={[styles.full, { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]} onPress={() => setBig(false)} accessibilityLabel="Schließen">
+        <Pressable style={[styles.full, { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]} onPress={() => setBig(false)} accessibilityLabel={tr('Schließen')}>
           <View style={styles.fullHead}>
-            <Text style={styles.fullTitle}>Foto abholen</Text>
+            <Text style={styles.fullTitle}>{tr('Foto abholen')}</Text>
             <Ionicons name="close-circle" size={30} color="#98A2B3" />
           </View>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 18 }}>
             {link ? <QrCode value={link} size={bigSize} margin={3} /> : null}
-            <Text style={styles.fullCode}>Bildnummer {p.externalCode}</Text>
-            <Text style={styles.fullHint}>Mit der Handykamera scannen · Antippen zum Schließen</Text>
+            <Text style={styles.fullCode}>{tr('Bildnummer ')}{p.externalCode}</Text>
+            <Text style={styles.fullHint}>{tr('Mit der Handykamera scannen · Antippen zum Schließen')}</Text>
           </View>
         </Pressable>
       </Modal>

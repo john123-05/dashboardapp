@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppState } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 
 // Betreiber-Projekt: Anmeldung, Park-Zugang, Mitgliedschaften (wie im Web-Dashboard).
@@ -18,6 +19,13 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     persistSession: true,
     detectSessionInUrl: false,
   },
+});
+
+// Wie von Supabase für React Native empfohlen: Token nur im Vordergrund automatisch erneuern und beim
+// Zurückkehren in die App sofort prüfen (sonst geht die erste Anfrage mit einem abgelaufenen Token raus).
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') void supabase.auth.startAutoRefresh();
+  else void supabase.auth.stopAutoRefresh();
 });
 
 // Nur-Lese-Zugriff auf das geteilte Projekt ohne Anmeldung (wie externalSupabase im Web).

@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useLook } from '../contexts/AppearanceContext';
 import { initialsOf } from '../components/HeaderActions';
@@ -11,6 +12,8 @@ import { canSee } from '../lib/permissions';
 import { isSuperAdminEmail, openPage, PAGES } from '../lib/pages';
 import { colors, font, space } from '../theme';
 import { startCoach } from '../components/coach/Coach';
+import { PickerSheet } from '../components/controls';
+import { getChosenLanguage, LANGUAGES, setLanguage, tr, useLanguage, type Language } from '../i18n';
 
 export function AccountScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const nav = useNavigation<any>();
@@ -19,10 +22,13 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
   const viewer = { isOwner, isStaff, allowedPages };
   const canSwitch = isSuperAdminEmail(email) || allowedParkIds.length !== 1;
   const { look, setLook } = useLook();
+  const lang = useLanguage();
+  const [langOpen, setLangOpen] = useState(false);
+  const chosenLang = getChosenLanguage();
   const links = ['settings', 'team', 'plans', 'tickets'].map((k) => PAGES.find((p) => p.key === k)!).filter((p) => canSee(p.key, viewer));
 
   return (
-    <Screen title="Konto" onBack={navigation.goBack}>
+    <Screen title={tr('Konto')} onBack={navigation.goBack}>
       <Card style={{ alignItems: 'center', gap: 6 }}>
         <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: '#2b2b2b', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ color: '#fff', fontSize: 22, fontWeight: '700' }}>{initialsOf(fullName, email)}</Text>
@@ -31,49 +37,74 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
           {fullName || email}
         </Text>
         {fullName ? <Text style={{ ...font.subhead, color: colors.ink2 }}>{email}</Text> : null}
-        <Text style={{ ...font.caption, color: colors.ink3 }}>{isOwner ? 'Inhaber' : isStaff ? 'Mitarbeiter' : 'Mitglied'}</Text>
+        <Text style={{ ...font.caption, color: colors.ink3 }}>{isOwner ? tr('Inhaber') : isStaff ? tr('Mitarbeiter') : tr('Mitglied')}</Text>
       </Card>
 
       <ListCard>
-        <Row icon="location-outline" title={parkName ?? 'Kein Park'} subtitle={canSwitch ? 'Park wechseln' : 'Aktueller Park'} chevron={canSwitch} onPress={canSwitch ? () => nav.navigate('Park') : undefined} last />
+        <Row icon="location-outline" title={parkName ?? tr('Kein Park')} subtitle={canSwitch ? tr('Park wechseln') : tr('Aktueller Park')} chevron={canSwitch} onPress={canSwitch ? () => nav.navigate('Park') : undefined} last />
       </ListCard>
 
-      <Section title="Einstellungen">
+      <Section title={tr('Einstellungen')}>
         <ListCard>
           {links.map((p, i) => (
-            <Row key={p.key} icon={p.icon} title={p.title} subtitle={p.key === 'settings' ? 'Benachrichtigungen, Öffnungszeiten' : null} chevron onPress={() => openPage(nav, p)} last={i === links.length - 1} />
+            <Row key={p.key} icon={p.icon} title={p.title} subtitle={p.key === 'settings' ? tr('Benachrichtigungen, Öffnungszeiten') : null} chevron onPress={() => openPage(nav, p)} last={i === links.length - 1} />
           ))}
         </ListCard>
       </Section>
 
-      <Section title="Hilfe">
+      <Section title={tr('Hilfe')}>
         <ListCard>
-          <Row icon="help-circle-outline" title="Hilfe-Center" subtitle="Anleitungen, Fragen, Support" chevron onPress={() => nav.navigate('Help')} />
-          <Row icon="play-circle-outline" title="Rundgang starten" subtitle="Die App in einer Minute" chevron onPress={startCoach} last />
+          <Row icon="help-circle-outline" title={tr('Hilfe-Center')} subtitle={tr('Anleitungen, Fragen, Support')} chevron onPress={() => nav.navigate('Help')} />
+          <Row icon="play-circle-outline" title={tr('Rundgang starten')} subtitle={tr('Die App in einer Minute')} chevron onPress={startCoach} last />
         </ListCard>
       </Section>
 
-      <Section title="Erscheinungsbild">
+      <Section title={tr('Erscheinungsbild')}>
         <Segmented
           value={look}
           onChange={setLook}
-          options={[{ value: 'light', label: 'Hell' }, { value: 'dark', label: 'Dunkel' }, { value: 'system', label: 'Wie Gerät' }]}
+          options={[{ value: 'light', label: tr('Hell') }, { value: 'dark', label: tr('Dunkel') }, { value: 'system', label: tr('Wie Gerät') }]}
         />
       </Section>
 
+      <Section title={tr('Sprache')}>
+        <ListCard>
+          <Row
+            icon="language-outline"
+            title={LANGUAGES.find((l) => l.value === lang)?.label ?? lang}
+            subtitle={chosenLang ? null : tr('Wie das Gerät')}
+            chevron
+            onPress={() => setLangOpen(true)}
+            last
+          />
+        </ListCard>
+      </Section>
+      <PickerSheet<Language | 'device'>
+        open={langOpen}
+        title={tr('Sprache')}
+        value={chosenLang ?? 'device'}
+        options={[{ value: 'device', label: tr('Wie das Gerät') }, ...LANGUAGES]}
+        onPick={(v) => {
+          setLangOpen(false);
+          // erst nach dem Schließen des Blatts umstellen; danach wird die App neu gezeichnet
+          setTimeout(() => void setLanguage(v === 'device' ? null : v), 400);
+        }}
+        onClose={() => setLangOpen(false)}
+      />
+
       <View style={{ gap: space.sm }}>
         <Button
-          title="Abmelden"
+          title={tr('Abmelden')}
           kind="danger"
           icon="log-out-outline"
           onPress={() =>
-            Alert.alert('Abmelden', 'Möchtest du dich abmelden?', [
-              { text: 'Abbrechen', style: 'cancel' },
-              { text: 'Abmelden', style: 'destructive', onPress: async () => { await setPark(null, null); await signOut(); } },
+            Alert.alert(tr('Abmelden'), tr('Möchtest du dich abmelden?'), [
+              { text: tr('Abbrechen'), style: 'cancel' },
+              { text: tr('Abmelden'), style: 'destructive', onPress: async () => { await setPark(null, null); await signOut(); } },
             ])
           }
         />
-        <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>Liftpictures Dashboard {Constants.expoConfig?.version ?? ''}</Text>
+        <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>{tr('Liftpictures Dashboard ')}{Constants.expoConfig?.version ?? ''}</Text>
       </View>
     </Screen>
   );

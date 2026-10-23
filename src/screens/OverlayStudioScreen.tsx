@@ -40,6 +40,7 @@ import { activateOverlay, latestPhotoUrl, uploadOverlay } from '../lib/overlays'
 import { PREVIEW } from '../lib/preview';
 import { useData } from '../lib/useData';
 import { colors, font, HEADER_HEIGHT, radius, space, TAP } from '../theme';
+import { tr, localeTag } from '../i18n';
 
 type Tool = 'vorlagen' | 'text' | 'formen' | 'bilder' | 'format' | 'ebenen' | 'auswahl';
 const SNAP = 8;
@@ -79,8 +80,8 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
   const [measured, setMeasured] = useState<Measured>({});
   const [showPhoto, setShowPhoto] = useState(true);
   const [guides, setGuides] = useState<{ v: boolean; h: boolean }>({ v: false, h: false });
-  const [title, setTitle] = useState(parkName ?? 'Mein Park');
-  const [tagline, setTagline] = useState('Danke für deinen Besuch!');
+  const [title, setTitle] = useState(parkName ?? tr('Mein Park'));
+  const [tagline, setTagline] = useState(tr('Danke für deinen Besuch!'));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -249,38 +250,38 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
   async function save(use: boolean) {
     if (!parkId || !user) return;
     if (els.filter((e) => !e.hidden).length === 0) {
-      setError('Das Overlay ist noch leer.');
+      setError(tr('Das Overlay ist noch leer.'));
       return;
     }
     setSaving(true);
     setError(null);
     setSel(null);
     try {
-      if (PREVIEW || !svgRef.current?.toDataURL) throw new Error('Speichern geht nur in der App auf dem iPhone oder iPad.');
+      if (PREVIEW || !svgRef.current?.toDataURL) throw new Error(tr('Speichern geht nur in der App auf dem iPhone oder iPad.'));
       // Kurz warten, bis die Auswahl-Markierung weg ist (sie liegt ohnehin außerhalb der SVG-Fläche).
       await new Promise((r) => setTimeout(r, 80));
       // iOS zeichnet in Bildschirm-Auflösung (2x/3x): durch den Pixel-Faktor teilen, damit das PNG genau
       // die Formatgröße hat (2362 × 1772 für den Automaten) und nicht ein Vielfaches davon.
       const ratio = PixelRatio.get();
       const b64 = await new Promise<string | undefined>((resolve) => svgRef.current.toDataURL((data?: string) => resolve(data), { width: Math.round(format.w / ratio), height: Math.round(format.h / ratio) }));
-      if (!b64) throw new Error('Das Bild konnte nicht erzeugt werden. Bitte erneut versuchen.');
+      if (!b64) throw new Error(tr('Das Bild konnte nicht erzeugt werden. Bitte erneut versuchen.'));
       const asset = await uploadOverlay(parkId, user.id, { bytes: base64ToBytes(b64), type: 'image/png', name: `studio-${Date.now()}.png`, width: format.w, height: format.h });
       if (use) await activateOverlay(parkId, asset);
       successHaptic();
       onSaved?.();
-      const text = use ? 'Es liegt ab jetzt auf den neuen Fotos. Du findest es unter „Gespeicherte Overlays“.' : 'Du findest es unter „Gespeicherte Overlays“ und kannst es dort jederzeit verwenden.';
-      Alert.alert(use ? 'Overlay ist aktiv' : 'Overlay gespeichert', text, onClose ? [{ text: 'Weiter gestalten', style: 'cancel' }, { text: 'Zur Personalisierung', onPress: onClose }] : [{ text: 'OK' }]);
+      const text = use ? tr('Es liegt ab jetzt auf den neuen Fotos. Du findest es unter „Gespeicherte Overlays“.') : tr('Du findest es unter „Gespeicherte Overlays“ und kannst es dort jederzeit verwenden.');
+      Alert.alert(use ? tr('Overlay ist aktiv') : tr('Overlay gespeichert'), text, onClose ? [{ text: tr('Weiter gestalten'), style: 'cancel' }, { text: tr('Zur Personalisierung'), onPress: onClose }] : [{ text: tr('OK') }]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Speichern fehlgeschlagen.');
+      setError(e instanceof Error ? e.message : tr('Speichern fehlgeschlagen.'));
     }
     setSaving(false);
   }
 
   function askSave() {
-    Alert.alert('Overlay speichern', `Als PNG in ${format.w} × ${format.h} px.`, [
-      { text: 'Abbrechen', style: 'cancel' },
-      { text: 'Nur speichern', onPress: () => void save(false) },
-      { text: 'Speichern & verwenden', style: 'default', onPress: () => void save(true) },
+    Alert.alert(tr('Overlay speichern'), tr('Als PNG in {0} × {1} px.', format.w, format.h), [
+      { text: tr('Abbrechen'), style: 'cancel' },
+      { text: tr('Nur speichern'), onPress: () => void save(false) },
+      { text: tr('Speichern & verwenden'), style: 'default', onPress: () => void save(true) },
     ]);
   }
 
@@ -353,13 +354,13 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
   );
 
   const tabs: { value: Tool; label: string; icon: any }[] = [
-    ...(selected ? [{ value: 'auswahl' as Tool, label: 'Auswahl', icon: 'options-outline' }] : []),
-    { value: 'vorlagen', label: 'Vorlagen', icon: 'albums-outline' },
-    { value: 'text', label: 'Text', icon: 'text-outline' },
-    { value: 'formen', label: 'Formen', icon: 'shapes-outline' },
-    { value: 'bilder', label: 'Bilder', icon: 'image-outline' },
-    { value: 'ebenen', label: 'Ebenen', icon: 'layers-outline' },
-    { value: 'format', label: 'Format', icon: 'crop-outline' },
+    ...(selected ? [{ value: 'auswahl' as Tool, label: tr('Ausgewählt'), icon: 'options-outline' }] : []),
+    { value: 'vorlagen', label: tr('Vorlagen'), icon: 'albums-outline' },
+    { value: 'text', label: tr('Text'), icon: 'text-outline' },
+    { value: 'formen', label: tr('Formen'), icon: 'shapes-outline' },
+    { value: 'bilder', label: tr('Bilder'), icon: 'image-outline' },
+    { value: 'ebenen', label: tr('Ebenen'), icon: 'layers-outline' },
+    { value: 'format', label: tr('Format'), icon: 'crop-outline' },
   ];
   const current = tool === 'auswahl' && !selected ? 'vorlagen' : tool;
 
@@ -370,8 +371,8 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
 
       {current === 'vorlagen' ? (
         <View style={{ gap: space.md }}>
-          <Input label="Titel" value={title} onChangeText={setTitle} />
-          <Input label="Unterzeile" value={tagline} onChangeText={setTagline} />
+          <Input label={tr('Titel')} value={title} onChangeText={setTitle} />
+          <Input label={tr('Unterzeile')} value={tagline} onChangeText={setTagline} />
           <View style={styles.grid}>
             {TEMPLATES.map((t) => {
               const tw = wide ? (panelW - 10) / 2 : (winW - space.lg * (embedded ? 4 : 2) - 10) / 2;
@@ -385,7 +386,7 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
                       commit(t.build(dh, title || ' ', tagline || ' '));
                       setSel(null);
                     };
-                    if (els.length) Alert.alert('Vorlage verwenden?', 'Die aktuelle Gestaltung wird ersetzt. Mit „Rückgängig“ kommst du zurück.', [{ text: 'Abbrechen', style: 'cancel' }, { text: 'Ersetzen', onPress: apply }]);
+                    if (els.length) Alert.alert(tr('Vorlage verwenden?'), tr('Die aktuelle Gestaltung wird ersetzt. Mit „Rückgängig“ kommst du zurück.'), [{ text: tr('Abbrechen'), style: 'cancel' }, { text: tr('Ersetzen'), onPress: apply }]);
                     else apply();
                   }}
                   style={({ pressed }) => [styles.tpl, { width: tw }, pressed && { opacity: 0.8 }]}
@@ -406,23 +407,23 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
 
       {current === 'text' ? (
         <View style={{ gap: 10 }}>
-          <AddRow icon="text" label="Überschrift" sub="Groß und fett" onPress={() => add(makeText(60, 60, title || 'Überschrift', 56, { fontWeight: 900 }))} />
-          <AddRow icon="reorder-three-outline" label="Text" sub="Normale Zeile" onPress={() => add(makeText(60, 140, tagline || 'Dein Text', 30, { fontWeight: 400 }))} />
-          <AddRow icon="pricetag-outline" label="Etikett" sub="Text auf Farbfläche" onPress={() => add(makeText(40, 40, 'NEU', 26, { bgColor: '#c2410c', shadow: false }))} />
-          <AddRow icon="calendar-outline" label="Datum" sub="Heutiges Datum" onPress={() => add(makeText(40, dh - 80, new Date().toLocaleDateString('de-DE'), 24, { fontWeight: 400 }))} />
+          <AddRow icon="text" label={tr('Überschrift')} sub={tr('Groß und fett')} onPress={() => add(makeText(60, 60, title || tr('Überschrift'), 56, { fontWeight: 900 }))} />
+          <AddRow icon="reorder-three-outline" label={tr('Text')} sub={tr('Normale Zeile')} onPress={() => add(makeText(60, 140, tagline || 'Dein Text', 30, { fontWeight: 400 }))} />
+          <AddRow icon="pricetag-outline" label={tr('Etikett')} sub={tr('Text auf Farbfläche')} onPress={() => add(makeText(40, 40, 'NEU', 26, { bgColor: '#c2410c', shadow: false }))} />
+          <AddRow icon="calendar-outline" label={tr('Datum')} sub={tr('Heutiges Datum')} onPress={() => add(makeText(40, dh - 80, new Date().toLocaleDateString(localeTag()), 24, { fontWeight: 400 }))} />
         </View>
       ) : null}
 
       {current === 'formen' ? (
         <View style={styles.grid}>
           {[
-            { icon: 'square-outline', label: 'Rechteck', make: () => makeRect(DISPLAY_W / 2 - 120, dh / 2 - 60, 240, 120) },
-            { icon: 'ellipse-outline', label: 'Kreis', make: () => makeEllipse(DISPLAY_W / 2 - 80, dh / 2 - 80, 160) },
-            { icon: 'triangle-outline', label: 'Dreieck', make: () => makeTriangle(DISPLAY_W / 2 - 80, dh / 2 - 70, 160) },
-            { icon: 'star-outline', label: 'Stern', make: () => makeStar(DISPLAY_W / 2 - 80, dh / 2 - 80, 160) },
-            { icon: 'remove-outline', label: 'Linie', make: () => makeLine(DISPLAY_W / 2 - 150, dh / 2, 300) },
-            { icon: 'scan-outline', label: 'Rahmen', make: () => makeFrame(24, DISPLAY_W, dh) },
-            { icon: 'contrast-outline', label: 'Verlauf unten', make: () => makeRect(0, dh - 200, DISPLAY_W, 200, { fill: 'rgba(0,0,0,0)', gradientTo: '#000000', radius: 0, opacity: 0.85 }) },
+            { icon: 'square-outline', label: tr('Rechteck'), make: () => makeRect(DISPLAY_W / 2 - 120, dh / 2 - 60, 240, 120) },
+            { icon: 'ellipse-outline', label: tr('Kreis'), make: () => makeEllipse(DISPLAY_W / 2 - 80, dh / 2 - 80, 160) },
+            { icon: 'triangle-outline', label: tr('Dreieck'), make: () => makeTriangle(DISPLAY_W / 2 - 80, dh / 2 - 70, 160) },
+            { icon: 'star-outline', label: tr('Stern'), make: () => makeStar(DISPLAY_W / 2 - 80, dh / 2 - 80, 160) },
+            { icon: 'remove-outline', label: tr('Linie'), make: () => makeLine(DISPLAY_W / 2 - 150, dh / 2, 300) },
+            { icon: 'scan-outline', label: tr('Rahmen'), make: () => makeFrame(24, DISPLAY_W, dh) },
+            { icon: 'contrast-outline', label: tr('Verlauf unten'), make: () => makeRect(0, dh - 200, DISPLAY_W, 200, { fill: 'rgba(0,0,0,0)', gradientTo: '#000000', radius: 0, opacity: 0.85 }) },
           ].map((s) => (
             <Pressable key={s.label} onPress={() => add(s.make())} style={({ pressed }) => [styles.shape, pressed && { opacity: 0.75 }]}>
               <Ionicons name={s.icon as any} size={24} color={colors.ink} />
@@ -434,15 +435,15 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
 
       {current === 'bilder' ? (
         <View style={{ gap: 10 }}>
-          <AddRow icon="image-outline" label="Logo oder Bild" sub="Aus deinen Fotos, PNG mit Transparenz am besten" onPress={() => void addPicture()} />
-          <Text style={styles.hint}>Bilder bleiben im Entwurf auf diesem Gerät gespeichert, bis du das Overlay speicherst.</Text>
+          <AddRow icon="image-outline" label={tr('Logo oder Bild')} sub={tr('Aus deinen Fotos, PNG mit Transparenz am besten')} onPress={() => void addPicture()} />
+          <Text style={styles.hint}>{tr('Bilder bleiben im Entwurf auf diesem Gerät gespeichert, bis du das Overlay speicherst.')}</Text>
         </View>
       ) : null}
 
       {current === 'format' ? (
         <View style={{ gap: space.md }}>
           <Choice
-            label="Format"
+            label={tr('Format')}
             options={FORMATS.map((f) => ({ value: f.id, label: f.label }))}
             value={format.id}
             onChange={(id) => {
@@ -451,27 +452,26 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
             }}
           />
           <Text style={styles.hint}>
-            {format.w} × {format.h} px. Für den Automaten ist „Foto-Overlay 4:3“ richtig.
-          </Text>
+            {format.w} × {format.h} {tr('px. Für den Automaten ist „Foto-Overlay 4:3“ richtig.')}</Text>
           <View style={styles.switchRow}>
-            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>Letztes Foto als Hintergrund</Text>
+            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>{tr('Letztes Foto als Hintergrund')}</Text>
             <Switch value={showPhoto} onValueChange={(v) => { tapHaptic(); setShowPhoto(v); }} trackColor={{ true: colors.ok, false: undefined }} />
           </View>
-          <Text style={styles.hint}>Nur zur Vorschau – gespeichert wird das Overlay mit transparentem Hintergrund.</Text>
-          <MiniButton title="Alles leeren" icon="trash-outline" tone="danger" disabled={!els.length} onPress={() => Alert.alert('Alles leeren?', 'Alle Elemente werden entfernt. Mit „Rückgängig“ kommst du zurück.', [{ text: 'Abbrechen', style: 'cancel' }, { text: 'Leeren', style: 'destructive', onPress: () => { commit([]); setSel(null); } }])} />
+          <Text style={styles.hint}>{tr('Nur zur Vorschau – gespeichert wird das Overlay mit transparentem Hintergrund.')}</Text>
+          <MiniButton title={tr('Alles leeren')} icon="trash-outline" tone="danger" disabled={!els.length} onPress={() => Alert.alert(tr('Alles leeren?'), tr('Alle Elemente werden entfernt. Mit „Rückgängig“ kommst du zurück.'), [{ text: tr('Abbrechen'), style: 'cancel' }, { text: tr('Leeren'), style: 'destructive', onPress: () => { commit([]); setSel(null); } }])} />
         </View>
       ) : null}
 
       {current === 'ebenen' ? (
         els.length === 0 ? (
-          <Text style={styles.hint}>Noch keine Elemente. Starte mit einer Vorlage oder füge Text hinzu.</Text>
+          <Text style={styles.hint}>{tr('Noch keine Elemente. Starte mit einer Vorlage oder füge Text hinzu.')}</Text>
         ) : (
           <View style={styles.layers}>
             {[...els].reverse().map((el, k, arr) => (
               <Pressable key={el.id} onPress={() => { tapHaptic(); setSel(el.id); setTool('auswahl'); }} style={[styles.layer, k < arr.length - 1 && styles.layerLine, el.id === sel && { backgroundColor: colors.brandSoft }]}>
                 <Ionicons name={LAYER_ICON[el.type] as any} size={18} color={colors.ink2} />
                 <Text style={{ ...font.callout, color: el.hidden ? colors.ink3 : colors.ink, flex: 1 }} numberOfLines={1}>
-                  {el.type === 'text' ? el.text.split('\n')[0] || 'Text' : LAYER_NAME[el.type]}
+                  {el.type === 'text' ? el.text.split('\n')[0] || tr('Text') : LAYER_NAME[el.type]}
                 </Text>
                 <Pressable onPress={() => patch(el.id, { hidden: !el.hidden })} hitSlop={8}>
                   <Ionicons name={el.hidden ? 'eye-off-outline' : 'eye-outline'} size={19} color={colors.ink3} />
@@ -491,19 +491,19 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
 
   const actions = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-      <Pressable onPress={undo} disabled={!past.current.length} hitSlop={6} style={styles.icon} accessibilityLabel="Rückgängig">
+      <Pressable onPress={undo} disabled={!past.current.length} hitSlop={6} style={styles.icon} accessibilityLabel={tr('Rückgängig')}>
         <Ionicons name="arrow-undo" size={20} color={past.current.length ? colors.ink : colors.ink3} />
       </Pressable>
-      <Pressable onPress={redo} disabled={!future.current.length} hitSlop={6} style={styles.icon} accessibilityLabel="Wiederholen">
+      <Pressable onPress={redo} disabled={!future.current.length} hitSlop={6} style={styles.icon} accessibilityLabel={tr('Wiederholen')}>
         <Ionicons name="arrow-redo" size={20} color={future.current.length ? colors.ink : colors.ink3} />
       </Pressable>
       {embedded && onFullscreen ? (
-        <Pressable onPress={() => { tapHaptic(); onFullscreen(); }} hitSlop={6} style={styles.icon} accessibilityLabel="Vollbild">
+        <Pressable onPress={() => { tapHaptic(); onFullscreen(); }} hitSlop={6} style={styles.icon} accessibilityLabel={tr('Vollbild')}>
           <Ionicons name="expand-outline" size={20} color={colors.ink} />
         </Pressable>
       ) : null}
-      <Pressable onPress={askSave} disabled={saving} style={styles.save} accessibilityLabel="Speichern">
-        {saving ? <ActivityIndicator color={colors.onBrand} size="small" /> : <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>Speichern</Text>}
+      <Pressable onPress={askSave} disabled={saving} style={styles.save} accessibilityLabel={tr('Speichern')}>
+        {saving ? <ActivityIndicator color={colors.onBrand} size="small" /> : <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{tr('Speichern')}</Text>}
       </Pressable>
     </View>
   );
@@ -513,8 +513,8 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
       <View style={{ gap: space.md }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <View style={{ flex: 1, minWidth: 0 }}>
-            <Text style={{ ...font.headline, color: colors.ink }}>Overlay erstellen</Text>
-            <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>Element für Element bauen – ziehen, vergrößern, speichern.</Text>
+            <Text style={{ ...font.headline, color: colors.ink }}>{tr('Overlay erstellen')}</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>{tr('Element für Element bauen – ziehen, vergrößern, speichern.')}</Text>
           </View>
           {actions}
         </View>
@@ -537,13 +537,12 @@ export function OverlayStudio({ embedded = false, openRequest, onClose, onSaved,
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <View style={[styles.header, { paddingTop: insets.top, height: insets.top + HEADER_HEIGHT }]}>
         <BlurView intensity={70} tint="systemChromeMaterial" style={StyleSheet.absoluteFill} />
-        <Pressable onPress={onClose} hitSlop={8} style={styles.headBtn} accessibilityLabel="Zurück">
+        <Pressable onPress={onClose} hitSlop={8} style={styles.headBtn} accessibilityLabel={tr('Zurück')}>
           <Ionicons name="chevron-back" size={26} color={colors.brand} />
-          <Text style={{ ...font.body, color: colors.brand }}>Zurück</Text>
+          <Text style={{ ...font.body, color: colors.brand }}>{tr('Zurück')}</Text>
         </Pressable>
         <Text style={{ ...font.headline, color: colors.ink, flex: 1, textAlign: 'center' }} numberOfLines={1}>
-          Overlay-Studio
-        </Text>
+          {tr('Overlay-Studio')}</Text>
         {actions}
       </View>
 
@@ -631,7 +630,7 @@ function ElementBox({ el, box, scale, on, onSelect, onBegin, onMove, onResize, o
 }
 
 const LAYER_ICON: Record<El['type'], string> = { text: 'text-outline', image: 'image-outline', rect: 'square-outline', ellipse: 'ellipse-outline', triangle: 'triangle-outline', star: 'star-outline', line: 'remove-outline', frame: 'scan-outline' };
-const LAYER_NAME: Record<El['type'], string> = { text: 'Text', image: 'Bild', rect: 'Rechteck', ellipse: 'Kreis', triangle: 'Dreieck', star: 'Stern', line: 'Linie', frame: 'Rahmen' };
+const LAYER_NAME: Record<El['type'], string> = { get text() { return tr('Text'); }, get image() { return tr('Bild'); }, get rect() { return tr('Rechteck'); }, get ellipse() { return tr('Kreis'); }, get triangle() { return tr('Dreieck'); }, get star() { return tr('Stern'); }, get line() { return tr('Linie'); }, get frame() { return tr('Rahmen'); } };
 
 function AddRow({ icon, label, sub, onPress }: { icon: any; label: string; sub: string; onPress: () => void }) {
   return (
@@ -660,7 +659,7 @@ function Swatches({ value, onChange, allowNone }: { value: string | null; onChan
           </Pressable>
         ) : null}
         {SWATCHES.map((c) => (
-          <Pressable key={c} onPress={() => { tapHaptic(); onChange(c); }} style={[styles.swatch, { backgroundColor: c }, value?.toLowerCase() === c && styles.swatchOn]} accessibilityLabel={`Farbe ${c}`} />
+          <Pressable key={c} onPress={() => { tapHaptic(); onChange(c); }} style={[styles.swatch, { backgroundColor: c }, value?.toLowerCase() === c && styles.swatchOn]} accessibilityLabel={tr('Farbe {0}', c)} />
         ))}
       </View>
       <TextInput
@@ -711,21 +710,21 @@ function Properties({ el, patch, commit, onDone, measured }: { el: El; patch: (p
   return (
     <View style={{ gap: space.md }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        <MiniButton title="Kopie" icon="copy-outline" onPress={() => commit((cur) => [...cur, { ...el, id: uid(), x: el.x + 24, y: el.y + 24 } as El])} />
-        <MiniButton title="Nach vorn" icon="arrow-up" onPress={() => move(1)} />
-        <MiniButton title="Nach hinten" icon="arrow-down" onPress={() => move(-1)} />
-        <MiniButton title="Mitte" icon="locate-outline" onPress={() => patch({ x: Math.round((DISPLAY_W - box.w) / 2) })} />
-        <MiniButton title={el.locked ? 'Entsperren' : 'Sperren'} icon={el.locked ? 'lock-open-outline' : 'lock-closed-outline'} onPress={() => patch({ locked: !el.locked })} />
-        <MiniButton title="Löschen" icon="trash-outline" tone="danger" onPress={() => { commit((cur) => cur.filter((e) => e.id !== el.id)); onDone(); }} />
+        <MiniButton title={tr('Kopie')} icon="copy-outline" onPress={() => commit((cur) => [...cur, { ...el, id: uid(), x: el.x + 24, y: el.y + 24 } as El])} />
+        <MiniButton title={tr('Nach vorn')} icon="arrow-up" onPress={() => move(1)} />
+        <MiniButton title={tr('Nach hinten')} icon="arrow-down" onPress={() => move(-1)} />
+        <MiniButton title={tr('Mitte')} icon="locate-outline" onPress={() => patch({ x: Math.round((DISPLAY_W - box.w) / 2) })} />
+        <MiniButton title={el.locked ? tr('Entsperren') : tr('Sperren')} icon={el.locked ? 'lock-open-outline' : 'lock-closed-outline'} onPress={() => patch({ locked: !el.locked })} />
+        <MiniButton title={tr('Löschen')} icon="trash-outline" tone="danger" onPress={() => { commit((cur) => cur.filter((e) => e.id !== el.id)); onDone(); }} />
       </View>
 
       {el.type === 'text' ? (
         <>
-          <Input label="Text" value={el.text} onChangeText={(text) => live({ text })} multiline />
-          <Field label={`Größe · ${el.fontSize}`}>
+          <Input label={tr('Text')} value={el.text} onChangeText={(text) => live({ text })} multiline />
+          <Field label={tr('Größe · {0}', el.fontSize)}>
             <Slider value={el.fontSize} min={8} max={240} step={1} onChange={(fontSize) => live({ fontSize })} />
           </Field>
-          <Field label="Schrift">
+          <Field label={tr('Schrift')}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
               {FONTS.map((f) => (
                 <Pressable key={f} onPress={() => { tapHaptic(); patch({ fontFamily: f }); }} style={[styles.fontChip, el.fontFamily === f && styles.fontChipOn]}>
@@ -734,82 +733,82 @@ function Properties({ el, patch, commit, onDone, measured }: { el: El; patch: (p
               ))}
             </ScrollView>
           </Field>
-          <Choice label="Stärke" options={[{ value: '400', label: 'Normal' }, { value: '700', label: 'Fett' }, { value: '900', label: 'Extra' }]} value={String(el.fontWeight)} onChange={(v) => patch({ fontWeight: Number(v) as 400 })} />
-          <Choice label="Ausrichtung" options={[{ value: 'left', label: 'Links' }, { value: 'center', label: 'Mitte' }, { value: 'right', label: 'Rechts' }]} value={el.align} onChange={(align) => patch({ align })} />
-          <Field label="Farbe">
+          <Choice label={tr('Stärke')} options={[{ value: '400', label: tr('Normal') }, { value: '700', label: tr('Fett') }, { value: '900', label: tr('Extra') }]} value={String(el.fontWeight)} onChange={(v) => patch({ fontWeight: Number(v) as 400 })} />
+          <Choice label={tr('Ausrichtung')} options={[{ value: 'left', label: tr('Links') }, { value: 'center', label: tr('Mitte') }, { value: 'right', label: tr('Rechts') }]} value={el.align} onChange={(align) => patch({ align })} />
+          <Field label={tr('Farbe')}>
             <Swatches value={el.fill} onChange={(c) => patch({ fill: c ?? '#ffffff' })} />
           </Field>
-          <Field label="Farbfläche dahinter">
+          <Field label={tr('Farbfläche dahinter')}>
             <Swatches value={el.bgColor} onChange={(bgColor) => patch({ bgColor })} allowNone />
           </Field>
-          <Field label={`Abstand der Buchstaben · ${el.letterSpacing}`}>
+          <Field label={tr('Abstand der Buchstaben · {0}', el.letterSpacing)}>
             <Slider value={el.letterSpacing} min={0} max={20} step={1} onChange={(letterSpacing) => live({ letterSpacing })} />
           </Field>
-          <Field label={`Kontur · ${el.strokeWidth}`}>
+          <Field label={tr('Kontur · {0}', el.strokeWidth)}>
             <Slider value={el.strokeWidth} min={0} max={12} step={1} onChange={(strokeWidth) => live({ strokeWidth })} />
           </Field>
           {el.strokeWidth > 0 ? <Swatches value={el.strokeColor} onChange={(c) => patch({ strokeColor: c ?? '#000000' })} /> : null}
           <View style={styles.switchRow}>
-            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>Schatten</Text>
+            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>{tr('Schatten')}</Text>
             <Switch value={el.shadow} onValueChange={(shadow) => { tapHaptic(); patch({ shadow }); }} trackColor={{ true: colors.ok, false: undefined }} />
           </View>
           <View style={styles.switchRow}>
-            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>Kursiv</Text>
+            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>{tr('Kursiv')}</Text>
             <Switch value={el.italic} onValueChange={(italic) => { tapHaptic(); patch({ italic }); }} trackColor={{ true: colors.ok, false: undefined }} />
           </View>
         </>
       ) : null}
 
       {el.type === 'rect' || el.type === 'ellipse' || el.type === 'triangle' || el.type === 'star' ? (
-        <Field label="Füllung">
+        <Field label={tr('Füllung')}>
           <Swatches value={el.fill} onChange={(c) => patch({ fill: c ?? 'rgba(0,0,0,0)' })} allowNone={el.type === 'rect'} />
         </Field>
       ) : null}
       {el.type === 'rect' ? (
         <>
-          <Field label="Verlauf nach">
+          <Field label={tr('Verlauf nach')}>
             <Swatches value={el.gradientTo} onChange={(gradientTo) => patch({ gradientTo })} allowNone />
           </Field>
-          {el.gradientTo ? <Choice label="Richtung" options={[{ value: 'down', label: 'Nach unten' }, { value: 'up', label: 'Nach oben' }, { value: 'right', label: 'Nach rechts' }, { value: 'left', label: 'Nach links' }]} value={el.gradientDir} onChange={(gradientDir) => patch({ gradientDir })} /> : null}
-          <Field label={`Ecken · ${el.radius}`}>
+          {el.gradientTo ? <Choice label={tr('Richtung')} options={[{ value: 'down', label: tr('Nach unten') }, { value: 'up', label: tr('Nach oben') }, { value: 'right', label: tr('Nach rechts') }, { value: 'left', label: tr('Nach links') }]} value={el.gradientDir} onChange={(gradientDir) => patch({ gradientDir })} /> : null}
+          <Field label={tr('Ecken · {0}', el.radius)}>
             <Slider value={el.radius} min={0} max={120} step={1} onChange={(r) => live({ radius: r })} />
           </Field>
         </>
       ) : null}
       {el.type === 'rect' || el.type === 'ellipse' || el.type === 'frame' || el.type === 'line' ? (
         <>
-          <Field label={`${el.type === 'line' ? 'Stärke' : 'Rand'} · ${el.strokeWidth}`}>
+          <Field label={`${el.type === 'line' ? tr('Stärke') : tr('Rand')} · ${el.strokeWidth}`}>
             <Slider value={el.strokeWidth} min={el.type === 'line' || el.type === 'frame' ? 1 : 0} max={60} step={1} onChange={(strokeWidth) => live({ strokeWidth })} />
           </Field>
-          <Field label={el.type === 'line' ? 'Farbe' : 'Randfarbe'}>
+          <Field label={el.type === 'line' ? tr('Farbe') : tr('Randfarbe')}>
             <Swatches value={el.stroke} onChange={(c) => patch({ stroke: c ?? '#ffffff' })} />
           </Field>
         </>
       ) : null}
       {el.type === 'frame' ? (
-        <Field label={`Ecken · ${el.radius}`}>
+        <Field label={tr('Ecken · {0}', el.radius)}>
           <Slider value={el.radius} min={0} max={120} step={1} onChange={(r) => live({ radius: r })} />
         </Field>
       ) : null}
       {el.type === 'image' ? (
         <>
-          <Field label={`Ecken · ${el.radius}`}>
+          <Field label={tr('Ecken · {0}', el.radius)}>
             <Slider value={el.radius} min={0} max={200} step={1} onChange={(r) => live({ radius: r })} />
           </Field>
           <View style={styles.switchRow}>
-            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>Spiegeln</Text>
+            <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>{tr('Spiegeln')}</Text>
             <Switch value={el.flipX} onValueChange={(flipX) => { tapHaptic(); patch({ flipX }); }} trackColor={{ true: colors.ok, false: undefined }} />
           </View>
         </>
       ) : null}
 
-      <Field label={`Deckkraft · ${Math.round(el.opacity * 100)} %`}>
+      <Field label={tr('Deckkraft · {0} %', Math.round(el.opacity * 100))}>
         <Slider value={Math.round(el.opacity * 100)} min={5} max={100} step={1} onChange={(v) => live({ opacity: v / 100 })} />
       </Field>
-      <Field label={`Drehung · ${el.rotation || 0}°`}>
+      <Field label={tr('Drehung · {0}°', el.rotation || 0)}>
         <Slider value={el.rotation || 0} min={-180} max={180} step={1} origin={0} onChange={(rotation) => live({ rotation })} />
       </Field>
-      <Text style={styles.hint}>Auf der Fläche ziehen zum Verschieben, Griff unten rechts zum Vergrößern. In der Mitte rastet das Element ein.</Text>
+      <Text style={styles.hint}>{tr('Auf der Fläche ziehen zum Verschieben, Griff unten rechts zum Vergrößern. In der Mitte rastet das Element ein.')}</Text>
     </View>
   );
 }

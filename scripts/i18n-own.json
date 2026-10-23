@@ -1,0 +1,5746 @@
+{
+" (Version {0})": [
+" (version {0})",
+" (versión {0})",
+" (version {0})",
+" (versione {0})",
+" (versie {0})",
+" (versija {0})"
+],
+" Hinterlegt sind: {0}.": [
+" Stored: {0}.",
+" Guardados: {0}.",
+" Enregistrés : {0}.",
+" Salvati: {0}.",
+" Opgeslagen: {0}.",
+" Saglabāti: {0}."
+],
+" von {0} Fahrten": [
+" of {0} rides",
+" de {0} viajes",
+" sur {0} trajets",
+" su {0} corse",
+" van {0} ritten",
+" no {0} braucieniem"
+],
+" · Bild {0}": [
+" · image {0}",
+" · imagen {0}",
+" · image {0}",
+" · immagine {0}",
+" · beeld {0}",
+" · attēls {0}"
+],
+" · Frage entfernt": [
+" · question removed",
+" · pregunta eliminada",
+" · question supprimée",
+" · domanda rimossa",
+" · vraag verwijderd",
+" · jautājums noņemts"
+],
+" · Testfoto": [
+" · test photo",
+" · foto de prueba",
+" · photo test",
+" · foto di prova",
+" · testfoto",
+" · testa foto"
+],
+" · Wert {0}": [
+" · value {0}",
+" · valor {0}",
+" · valeur {0}",
+" · valore {0}",
+" · waarde {0}",
+" · vērtība {0}"
+],
+" · ausgeblendet": [
+" · hidden",
+" · oculto",
+" · masqué",
+" · nascosto",
+" · verborgen",
+" · paslēpts"
+],
+" · bis {0}": [
+" · until {0}",
+" · hasta {0}",
+" · jusqu'au {0}",
+" · fino al {0}",
+" · tot {0}",
+" · līdz {0}"
+],
+" · seit {0}": [
+" · for {0}",
+" · desde hace {0}",
+" · depuis {0}",
+" · da {0}",
+" · sinds {0}",
+" · kopš {0}"
+],
+" · {0} % geöffnet": [
+" · {0} % opened",
+" · {0} % abiertos",
+" · {0} % ouverts",
+" · {0} % aperte",
+" · {0} % geopend",
+" · {0} % atvērti"
+],
+" · {0} Ausnahmen": [
+" · {0} exceptions",
+" · {0} excepciones",
+" · {0} exceptions",
+" · {0} eccezioni",
+" · {0} uitzonderingen",
+" · {0} izņēmumi"
+],
+" · {0} in der Upload-Warteschlange": [
+" · {0} in the upload queue",
+" · {0} en la cola de subida",
+" · {0} dans la file d'envoi",
+" · {0} in coda di caricamento",
+" · {0} in de uploadwachtrij",
+" · {0} augšupielādes rindā"
+],
+" · {0} unbekannt": [
+" · {0} unknown",
+" · {0} desconocido",
+" · {0} inconnu",
+" · {0} sconosciuto",
+" · {0} onbekend",
+" · {0} nezināms"
+],
+" – zum Vergleich: am Automaten kostet ein Foto {0}": [
+" – for comparison: a photo costs {0} at the kiosk",
+" – a modo de comparación: en la máquina una foto cuesta {0}",
+" – à titre de comparaison : une photo coûte {0} à la borne",
+" – per confronto: al distributore una foto costa {0}",
+" – ter vergelijking: bij de automaat kost een foto {0}",
+" – salīdzinājumam: automātā foto maksā {0}"
+],
+"#euerhashtag": [
+"#yourhashtag",
+"#tuhashtag",
+"#votrehashtag",
+"#iltuohashtag",
+"#jullie_hashtag",
+"#jusuhashtags"
+],
+"(Upgrade)": [
+"(upgrade)",
+"(mejora)",
+"(mise à niveau)",
+"(upgrade)",
+"(upgrade)",
+"(uzlabojums)"
+],
+"(in Entwicklung)": [
+"(in development)",
+"(en desarrollo)",
+"(en développement)",
+"(in sviluppo)",
+"(in ontwikkeling)",
+"(izstrādē)"
+],
+"+ {0} Einrichtung": [
+"+ {0} setup",
+"+ {0} de instalación",
+"+ {0} de mise en service",
+"+ {0} di attivazione",
+"+ {0} inrichting",
+"+ {0} ierīkošana"
+],
+", gesteuert von {0}": [
+", controlled by {0}",
+", controlado por {0}",
+", piloté par {0}",
+", controllato da {0}",
+", aangestuurd door {0}",
+", ko vada {0}"
+],
+"/Monat": [
+"/month",
+"/mes",
+"/mois",
+"/mese",
+"/maand",
+"/mēn."
+],
+"1 Automat offline": [
+"1 kiosk offline",
+"1 máquina sin conexión",
+"1 borne hors ligne",
+"1 distributore offline",
+"1 automaat offline",
+"1 automāts bezsaistē"
+],
+"1 Monat geschenkt": [
+"1 month free",
+"1 mes gratis",
+"1 mois offert",
+"1 mese in omaggio",
+"1 maand gratis",
+"1 mēnesis dāvanā"
+],
+"1 Änderung bereit": [
+"1 change ready",
+"1 cambio listo",
+"1 modification prête",
+"1 modifica pronta",
+"1 wijziging klaar",
+"1 izmaiņa gatava"
+],
+"14 Tage": [
+"14 days",
+"14 días",
+"14 jours",
+"14 giorni",
+"14 dagen",
+"14 dienas"
+],
+"= Name deines Parks.": [
+"= your park's name.",
+"= nombre de tu parque.",
+"= nom de ton parc.",
+"= nome del tuo parco.",
+"= naam van je park.",
+"= tava parka nosaukums."
+],
+"= Vorname des Gastes, ": [
+"= guest's first name, ",
+"= nombre del visitante, ",
+"= prénom du visiteur, ",
+"= nome dell'ospite, ",
+"= voornaam van de gast, ",
+"= viesa vārds, "
+],
+"@euer_profil": [
+"@your_profile",
+"@tu_perfil",
+"@votre_profil",
+"@il_tuo_profilo",
+"@jullie_profiel",
+"@jusu_profils"
+],
+"AW-123456789": [
+"AW-123456789",
+"AW-123456789",
+"AW-123456789",
+"AW-123456789",
+"AW-123456789",
+"AW-123456789"
+],
+"Abgefragte Kontaktdaten": [
+"Contact details requested",
+"Datos de contacto solicitados",
+"Coordonnées demandées",
+"Dati di contatto richiesti",
+"Gevraagde contactgegevens",
+"Pieprasītie kontaktdati"
+],
+"Abgelehnt: {0}": [
+"Rejected: {0}",
+"Rechazado: {0}",
+"Refusé : {0}",
+"Rifiutato: {0}",
+"Afgewezen: {0}",
+"Noraidīts: {0}"
+],
+"Abhol-Link": [
+"Pickup link",
+"Enlace de recogida",
+"Lien de récupération",
+"Link per il ritiro",
+"Ophaallink",
+"Saņemšanas saite"
+],
+"Abholcode": [
+"Pickup code",
+"Código de recogida",
+"Code de récupération",
+"Codice di ritiro",
+"Ophaalcode",
+"Saņemšanas kods"
+],
+"Abholcode ": [
+"Pickup code ",
+"Código de recogida ",
+"Code de récupération ",
+"Codice di ritiro ",
+"Ophaalcode ",
+"Saņemšanas kods "
+],
+"Abholcode {0} ist nicht hinterlegt": [
+"Pickup code {0} isn't registered",
+"El código de recogida {0} no está registrado",
+"Le code de récupération {0} n'est pas enregistré",
+"Il codice di ritiro {0} non è registrato",
+"Ophaalcode {0} is niet ingesteld",
+"Saņemšanas kods {0} nav reģistrēts"
+],
+"Absender": [
+"Sender",
+"Remitente",
+"Expéditeur",
+"Mittente",
+"Afzender",
+"Sūtītājs"
+],
+"Abstand der Buchstaben · {0}": [
+"Letter spacing · {0}",
+"Espaciado de letras · {0}",
+"Espacement des lettres · {0}",
+"Spaziatura lettere · {0}",
+"Letterafstand · {0}",
+"Burtu atstarpe · {0}"
+],
+"Abzeichen": [
+"Badge",
+"Distintivo",
+"Badge",
+"Badge",
+"Badge",
+"Žetons"
+],
+"Aktion: {0}": [
+"Offer: {0}",
+"Promoción: {0}",
+"Offre : {0}",
+"Promozione: {0}",
+"Actie: {0}",
+"Akcija: {0}"
+],
+"Aktiv: Mitteilungen kommen auf dieses iPhone": [
+"Active: notifications arrive on this iPhone",
+"Activo: las notificaciones llegan a este iPhone",
+"Actif : les notifications arrivent sur cet iPhone",
+"Attivo: le notifiche arrivano su questo iPhone",
+"Actief: meldingen komen op deze iPhone",
+"Aktīvs: paziņojumi pienāk uz šo iPhone"
+],
+"Aktives Overlay": [
+"Active overlay",
+"Overlay activo",
+"Overlay actif",
+"Overlay attivo",
+"Actieve overlay",
+"Aktīvais pārklājums"
+],
+"Aktueller Park": [
+"Current park",
+"Parque actual",
+"Parc actuel",
+"Parco attuale",
+"Huidig park",
+"Pašreizējais parks"
+],
+"Akzentfarbe": [
+"Accent colour",
+"Color de acento",
+"Couleur d'accent",
+"Colore d'accento",
+"Accentkleur",
+"Akcenta krāsa"
+],
+"Alle Elemente werden entfernt. Mit „Rückgängig“ kommst du zurück.": [
+"All elements will be removed. Use “Undo” to go back.",
+"Se eliminarán todos los elementos. Con «Deshacer» vuelves atrás.",
+"Tous les éléments seront supprimés. « Annuler » permet de revenir en arrière.",
+"Tutti gli elementi verranno rimossi. Con «Annulla» torni indietro.",
+"Alle elementen worden verwijderd. Met ‘Ongedaan maken’ ga je terug.",
+"Visi elementi tiks noņemti. Ar “Atsaukt” vari atgriezties."
+],
+"Alle Fahrten": [
+"All rides",
+"Todos los viajes",
+"Tous les trajets",
+"Tutte le corse",
+"Alle ritten",
+"Visi braucieni"
+],
+"Alle Preise zzgl. MwSt. Anfragen sind unverbindlich – wir melden uns persönlich.": [
+"All prices excl. VAT. Requests are non-binding – we'll get in touch personally.",
+"Todos los precios sin IVA. Las solicitudes no son vinculantes: te contactaremos personalmente.",
+"Tous les prix s'entendent HT. Les demandes sont sans engagement – nous te recontactons personnellement.",
+"Tutti i prezzi IVA esclusa. Le richieste non sono vincolanti: ti contatteremo personalmente.",
+"Alle prijzen excl. btw. Aanvragen zijn vrijblijvend – we nemen persoonlijk contact op.",
+"Visas cenas bez PVN. Pieprasījumi nav saistoši – mēs sazināsimies personīgi."
+],
+"Alle Seiten links": [
+"All pages on the left",
+"Todas las páginas a la izquierda",
+"Toutes les pages à gauche",
+"Tutte le pagine a sinistra",
+"Alle pagina's links",
+"Visas lapas pa kreisi"
+],
+"Alle Werte": [
+"All values",
+"Todos los valores",
+"Toutes les valeurs",
+"Tutti i valori",
+"Alle waarden",
+"Visas vērtības"
+],
+"Alle gelesen": [
+"All read",
+"Todo leído",
+"Tout lu",
+"Tutto letto",
+"Alles gelezen",
+"Viss izlasīts"
+],
+"Alle {0} anzeigen": [
+"Show all {0}",
+"Mostrar los {0}",
+"Afficher les {0}",
+"Mostra tutti i {0}",
+"Alle {0} tonen",
+"Rādīt visus {0}"
+],
+"Alles": [
+"All",
+"Todo",
+"Tout",
+"Tutto",
+"Alles",
+"Viss"
+],
+"Alles Weitere unter „Mehr“": [
+"Everything else under “More”",
+"Todo lo demás en «Más»",
+"Tout le reste sous « Plus »",
+"Tutto il resto in «Altro»",
+"Al het andere onder ‘Meer’",
+"Viss pārējais sadaļā “Vairāk”"
+],
+"Alles gelesen": [
+"All read",
+"Todo leído",
+"Tout lu",
+"Tutto letto",
+"Alles gelezen",
+"Viss izlasīts"
+],
+"Alles leeren": [
+"Clear all",
+"Vaciar todo",
+"Tout effacer",
+"Svuota tutto",
+"Alles leegmaken",
+"Notīrīt visu"
+],
+"Alles leeren?": [
+"Clear everything?",
+"¿Vaciar todo?",
+"Tout effacer ?",
+"Svuotare tutto?",
+"Alles leegmaken?",
+"Notīrīt visu?"
+],
+"Als PNG in {0} × {1} px.": [
+"As PNG at {0} × {1} px.",
+"Como PNG de {0} × {1} px.",
+"En PNG de {0} × {1} px.",
+"Come PNG da {0} × {1} px.",
+"Als PNG van {0} × {1} px.",
+"Kā PNG {0} × {1} px."
+],
+"Am {0} an {1} Empfänger senden? Das lässt sich nicht zurücknehmen.": [
+"Send to {1} recipients on {0}? This cannot be undone.",
+"¿Enviar a {1} destinatarios el {0}? No se puede deshacer.",
+"Envoyer à {1} destinataires le {0} ? Cette action est irréversible.",
+"Inviare a {1} destinatari il {0}? Non si può annullare.",
+"Op {0} naar {1} ontvangers sturen? Dit kan niet ongedaan worden gemaakt.",
+"Sūtīt {1} adresātiem {0}? To nevar atsaukt."
+],
+"Anfrage archivieren?": [
+"Archive request?",
+"¿Archivar la solicitud?",
+"Archiver la demande ?",
+"Archiviare la richiesta?",
+"Aanvraag archiveren?",
+"Arhivēt pieprasījumu?"
+],
+"Anfrage senden": [
+"Send request",
+"Enviar solicitud",
+"Envoyer la demande",
+"Invia richiesta",
+"Aanvraag versturen",
+"Sūtīt pieprasījumu"
+],
+"Anfrage stellen": [
+"Make a request",
+"Hacer una solicitud",
+"Faire une demande",
+"Invia una richiesta",
+"Aanvraag doen",
+"Iesniegt pieprasījumu"
+],
+"Anfragen an Liftpictures": [
+"Requests to Liftpictures",
+"Solicitudes a Liftpictures",
+"Demandes à Liftpictures",
+"Richieste a Liftpictures",
+"Aanvragen aan Liftpictures",
+"Pieprasījumi Liftpictures"
+],
+"Anfragen ansehen": [
+"View requests",
+"Ver solicitudes",
+"Voir les demandes",
+"Vedi richieste",
+"Aanvragen bekijken",
+"Skatīt pieprasījumus"
+],
+"Angefragt am {0}": [
+"Requested on {0}",
+"Solicitado el {0}",
+"Demandé le {0}",
+"Richiesto il {0}",
+"Aangevraagd op {0}",
+"Pieprasīts {0}"
+],
+"Anleitungen": [
+"Guides",
+"Guías",
+"Guides",
+"Guide",
+"Handleidingen",
+"Pamācības"
+],
+"Anleitungen, Fragen, Support": [
+"Guides, questions, support",
+"Guías, preguntas, soporte",
+"Guides, questions, support",
+"Guide, domande, assistenza",
+"Handleidingen, vragen, support",
+"Pamācības, jautājumi, atbalsts"
+],
+"Anschlüsse": [
+"Connections",
+"Conexiones",
+"Connexions",
+"Collegamenti",
+"Aansluitingen",
+"Savienojumi"
+],
+"Antippen zeigt die Stunde": [
+"Tap to see the hour",
+"Toca para ver la hora",
+"Touche pour voir l'heure",
+"Tocca per vedere l'ora",
+"Tik om het uur te zien",
+"Pieskaries, lai redzētu stundu"
+],
+"Antippen zum Anwenden · lange drücken zum Bearbeiten oder Löschen": [
+"Tap to apply · long-press to edit or delete",
+"Toca para aplicar · mantén pulsado para editar o eliminar",
+"Touche pour appliquer · appui long pour modifier ou supprimer",
+"Tocca per applicare · tieni premuto per modificare o eliminare",
+"Tik om toe te passen · lang drukken om te bewerken of te verwijderen",
+"Pieskaries, lai lietotu · turi, lai rediģētu vai dzēstu"
+],
+"Antippen zum Vergrößern": [
+"Tap to enlarge",
+"Toca para ampliar",
+"Touche pour agrandir",
+"Tocca per ingrandire",
+"Tik om te vergroten",
+"Pieskaries, lai palielinātu"
+],
+"Antippen zum Öffnen": [
+"Tap to open",
+"Toca para abrir",
+"Touche pour ouvrir",
+"Tocca per aprire",
+"Tik om te openen",
+"Pieskaries, lai atvērtu"
+],
+"Antippen, um ein Ergebnis auf der Bestenliste aus- oder einzublenden.": [
+"Tap to hide or show a result on the leaderboard.",
+"Toca para ocultar o mostrar un resultado en la clasificación.",
+"Touche pour masquer ou afficher un résultat dans le classement.",
+"Tocca per nascondere o mostrare un risultato in classifica.",
+"Tik om een resultaat op de ranglijst te verbergen of te tonen.",
+"Pieskaries, lai paslēptu vai parādītu rezultātu līderu sarakstā."
+],
+"Antwort hinzufügen": [
+"Add answer",
+"Añadir respuesta",
+"Ajouter une réponse",
+"Aggiungi risposta",
+"Antwoord toevoegen",
+"Pievienot atbildi"
+],
+"Antwort {0}": [
+"Answer {0}",
+"Respuesta {0}",
+"Réponse {0}",
+"Risposta {0}",
+"Antwoord {0}",
+"Atbilde {0}"
+],
+"Antworten": [
+"Answers",
+"Respuestas",
+"Réponses",
+"Risposte",
+"Antwoorden",
+"Atbildes"
+],
+"Antworten je Frage": [
+"Answers per question",
+"Respuestas por pregunta",
+"Réponses par question",
+"Risposte per domanda",
+"Antwoorden per vraag",
+"Atbildes katram jautājumam"
+],
+"Antworten vom Support": [
+"Replies from support",
+"Respuestas del soporte",
+"Réponses du support",
+"Risposte dell'assistenza",
+"Antwoorden van support",
+"Atbalsta atbildes"
+],
+"Arbeitsspeicher": [
+"Memory",
+"Memoria",
+"Mémoire vive",
+"Memoria",
+"Werkgeheugen",
+"Operatīvā atmiņa"
+],
+"Arbeitsspeicher des PCs.": [
+"The PC's memory.",
+"Memoria del PC.",
+"Mémoire vive du PC.",
+"Memoria del PC.",
+"Werkgeheugen van de pc.",
+"Datora operatīvā atmiņa."
+],
+"Archiv": [
+"Archive",
+"Archivo",
+"Archives",
+"Archivio",
+"Archief",
+"Arhīvs"
+],
+"Archiv ist leer": [
+"Archive is empty",
+"El archivo está vacío",
+"Les archives sont vides",
+"L'archivio è vuoto",
+"Archief is leeg",
+"Arhīvs ir tukšs"
+],
+"Art der Frage": [
+"Question type",
+"Tipo de pregunta",
+"Type de question",
+"Tipo di domanda",
+"Soort vraag",
+"Jautājuma veids"
+],
+"Auf dem PC: ": [
+"On the PC: ",
+"En el PC: ",
+"Sur le PC : ",
+"Sul PC: ",
+"Op de pc: ",
+"Datorā: "
+],
+"Auf der Bestenliste ausblenden": [
+"Hide on leaderboard",
+"Ocultar en la clasificación",
+"Masquer dans le classement",
+"Nascondi in classifica",
+"Verbergen op ranglijst",
+"Paslēpt līderu sarakstā"
+],
+"Auf der Fläche ziehen zum Verschieben, Griff unten rechts zum Vergrößern. In der Mitte rastet das Element ein.": [
+"Drag on the canvas to move, use the handle at the bottom right to resize. The element snaps to the centre.",
+"Arrastra sobre el lienzo para mover y usa el tirador de abajo a la derecha para ampliar. En el centro el elemento se ajusta.",
+"Fais glisser sur la zone pour déplacer, utilise la poignée en bas à droite pour agrandir. Au centre, l'élément s'aimante.",
+"Trascina sull'area per spostare, usa la maniglia in basso a destra per ingrandire. Al centro l'elemento si aggancia.",
+"Sleep op het vlak om te verplaatsen, gebruik de greep rechtsonder om te vergroten. In het midden klikt het element vast.",
+"Velc pa laukumu, lai pārvietotu, ar rokturi apakšā pa labi – lai palielinātu. Centrā elements piesaistās."
+],
+"Aufgenommen": [
+"Captured",
+"Tomada",
+"Prise",
+"Scattata",
+"Opgenomen",
+"Uzņemts"
+],
+"Auftritt": [
+"Presence",
+"Presencia",
+"Présence",
+"Immagine",
+"Uitstraling",
+"Tēls"
+],
+"Aus Fotokäufern werden Kontakte": [
+"Photo buyers become contacts",
+"Los compradores de fotos se convierten en contactos",
+"Les acheteurs de photos deviennent des contacts",
+"Gli acquirenti di foto diventano contatti",
+"Fotokopers worden contacten",
+"Foto pircēji kļūst par kontaktiem"
+],
+"Aus Fotos wählen": [
+"Choose from photos",
+"Elegir de fotos",
+"Choisir dans les photos",
+"Scegli dalle foto",
+"Kiezen uit foto's",
+"Izvēlēties no fotoattēliem"
+],
+"Aus deinen Fotos, PNG mit Transparenz am besten": [
+"From your photos, ideally a PNG with transparency",
+"De tus fotos, mejor un PNG con transparencia",
+"Depuis tes photos, idéalement un PNG avec transparence",
+"Dalle tue foto, meglio un PNG con trasparenza",
+"Uit je foto's, het liefst een PNG met transparantie",
+"No taviem fotoattēliem, vislabāk PNG ar caurspīdīgumu"
+],
+"Aus dem Archiv holen?": [
+"Restore from archive?",
+"¿Recuperar del archivo?",
+"Sortir des archives ?",
+"Ripristinare dall'archivio?",
+"Uit archief halen?",
+"Atjaunot no arhīva?"
+],
+"Aus dem Protokoll": [
+"From the log",
+"Del registro",
+"D'après le journal",
+"Dal registro",
+"Uit het logboek",
+"No žurnāla"
+],
+"Ausgewählt": [
+"Selected",
+"Seleccionado",
+"Sélection",
+"Selezionato",
+"Geselecteerd",
+"Atlasīts"
+],
+"Auslösen": [
+"Trigger",
+"Disparar",
+"Déclencher",
+"Scatta",
+"Activeren",
+"Iedarbināt"
+],
+"Ausrichtung": [
+"Alignment",
+"Alineación",
+"Alignement",
+"Allineamento",
+"Uitlijning",
+"Līdzinājums"
+],
+"Ausstattung und Zubehör für deinen Park": [
+"Equipment and accessories for your park",
+"Equipamiento y accesorios para tu parque",
+"Équipement et accessoires pour ton parc",
+"Dotazione e accessori per il tuo parco",
+"Uitrusting en accessoires voor je park",
+"Aprīkojums un piederumi tavam parkam"
+],
+"Automaten": [
+"Kiosks",
+"Máquinas",
+"Bornes",
+"Distributori",
+"Automaten",
+"Automāti"
+],
+"Automaten online": [
+"Kiosks online",
+"Máquinas en línea",
+"Bornes en ligne",
+"Distributori online",
+"Automaten online",
+"Automāti tiešsaistē"
+],
+"Beginn (leer = sofort)": [
+"Start (empty = immediately)",
+"Inicio (vacío = inmediatamente)",
+"Début (vide = immédiatement)",
+"Inizio (vuoto = subito)",
+"Start (leeg = direct)",
+"Sākums (tukšs = nekavējoties)"
+],
+"Benachrichtigungen, Öffnungszeiten": [
+"Notifications, opening hours",
+"Notificaciones, horario",
+"Notifications, horaires",
+"Notifiche, orari di apertura",
+"Meldingen, openingstijden",
+"Paziņojumi, darba laiks"
+],
+"Beschreibe kurz, was auf dem Foto stehen soll. Die KI baut daraus ein Overlay passend zu deinem neuesten Foto.": [
+"Briefly describe what should appear on the photo. The AI builds an overlay from it that fits your latest photo.",
+"Describe brevemente qué debe aparecer en la foto. La IA crea a partir de ello un overlay adaptado a tu foto más reciente.",
+"Décris brièvement ce qui doit figurer sur la photo. L'IA en fait un overlay adapté à ta dernière photo.",
+"Descrivi brevemente cosa deve comparire sulla foto. L'IA crea un overlay adatto alla tua foto più recente.",
+"Beschrijf kort wat er op de foto moet staan. De AI maakt er een overlay van die past bij je nieuwste foto.",
+"Īsi apraksti, kam jābūt foto. MI no tā izveidos pārklājumu, kas der tavam jaunākajam foto."
+],
+"Beschreibung des Bildes": [
+"Image description",
+"Descripción de la imagen",
+"Description de l'image",
+"Descrizione dell'immagine",
+"Beschrijving van de afbeelding",
+"Attēla apraksts"
+],
+"Bestellt": [
+"Ordered",
+"Pedido",
+"Commandé",
+"Ordinato",
+"Besteld",
+"Pasūtīts"
+],
+"Bestenliste und Geschwindigkeiten": [
+"Leaderboard and speeds",
+"Clasificación y velocidades",
+"Classement et vitesses",
+"Classifica e velocità",
+"Ranglijst en snelheden",
+"Līderu saraksts un ātrumi"
+],
+"Betrieb, Marketing und Verwaltung – wie im Web-Dashboard. Unten dein Konto, Hell/Dunkel und die Glocke.": [
+"Operations, marketing and admin – just like the web dashboard. At the bottom: your account, light/dark and the bell.",
+"Operación, marketing y administración, como en el panel web. Abajo: tu cuenta, claro/oscuro y la campana.",
+"Exploitation, marketing et administration – comme dans le tableau de bord web. En bas : ton compte, clair/sombre et la cloche.",
+"Gestione, marketing e amministrazione, come nella dashboard web. In basso: il tuo account, chiaro/scuro e la campanella.",
+"Bedrijf, marketing en beheer – net als in het webdashboard. Onderaan je account, licht/donker en de bel.",
+"Darbība, mārketings un pārvaldība – kā tīmekļa panelī. Apakšā tavs konts, gaišais/tumšais režīms un zvans."
+],
+"Betroffen: {0}.": [
+"Affected: {0}.",
+"Afectado: {0}.",
+"Concerné : {0}.",
+"Interessato: {0}.",
+"Betreft: {0}.",
+"Skarts: {0}."
+],
+"Betroffen: {0}. Der Verkauf läuft weiter.": [
+"Affected: {0}. Sales continue.",
+"Afectado: {0}. La venta continúa.",
+"Concerné : {0}. La vente continue.",
+"Interessato: {0}. La vendita continua.",
+"Betreft: {0}. De verkoop gaat door.",
+"Skarts: {0}. Pārdošana turpinās."
+],
+"Bezahlterminal für EC und Kreditkarte.": [
+"Payment terminal for debit and credit cards.",
+"Terminal de pago para tarjetas de débito y crédito.",
+"Terminal de paiement pour cartes bancaires.",
+"Terminale di pagamento per bancomat e carte di credito.",
+"Betaalterminal voor pin- en creditcards.",
+"Maksājumu terminālis debetkartēm un kredītkartēm."
+],
+"Biete {0} unverkaufte Bilder deinen Kunden erneut zum Kauf an – als Download oder personalisiert auf Tasse, T-Shirt & Co.": [
+"Offer {0} unsold photos to your customers again – as a download or personalised on mugs, T-shirts and more.",
+"Vuelve a ofrecer {0} fotos no vendidas a tus clientes: como descarga o personalizadas en tazas, camisetas y más.",
+"Propose à nouveau {0} photos invendues à tes clients – en téléchargement ou personnalisées sur mug, T-shirt et plus.",
+"Riproponi {0} foto invendute ai tuoi clienti, come download o personalizzate su tazze, magliette e altro.",
+"Bied {0} onverkochte foto's opnieuw aan je klanten aan – als download of gepersonaliseerd op mok, T-shirt en meer.",
+"Piedāvā {0} nepārdotus foto klientiem vēlreiz – lejupielādei vai personalizētus uz krūzes, T-krekla u. c."
+],
+"Bild einstellen": [
+"Adjust image",
+"Ajustar imagen",
+"Régler l'image",
+"Regola immagine",
+"Beeld instellen",
+"Iestatīt attēlu"
+],
+"Bild konnte nicht gelesen werden.": [
+"Image could not be read.",
+"No se pudo leer la imagen.",
+"Impossible de lire l'image.",
+"Impossibile leggere l'immagine.",
+"Afbeelding kon niet worden gelezen.",
+"Attēlu nevarēja nolasīt."
+],
+"Bild wählen": [
+"Choose image",
+"Elegir imagen",
+"Choisir une image",
+"Scegli immagine",
+"Afbeelding kiezen",
+"Izvēlēties attēlu"
+],
+"Bild-Auslieferung": [
+"Image delivery",
+"Entrega de imágenes",
+"Livraison des images",
+"Consegna immagini",
+"Beeldlevering",
+"Attēlu piegāde"
+],
+"Bilder": [
+"Images",
+"Imágenes",
+"Images",
+"Immagini",
+"Afbeeldingen",
+"Attēli"
+],
+"Bilder bleiben im Entwurf auf diesem Gerät gespeichert, bis du das Overlay speicherst.": [
+"Images stay in the draft on this device until you save the overlay.",
+"Las imágenes se guardan en el borrador de este dispositivo hasta que guardes el overlay.",
+"Les images restent dans le brouillon sur cet appareil jusqu'à ce que tu enregistres l'overlay.",
+"Le immagini restano nella bozza su questo dispositivo finché non salvi l'overlay.",
+"Afbeeldingen blijven in het concept op dit apparaat tot je de overlay opslaat.",
+"Attēli paliek melnrakstā šajā ierīcē, līdz saglabā pārklājumu."
+],
+"Bildnummer": [
+"Image number",
+"Número de imagen",
+"Numéro d'image",
+"Numero immagine",
+"Beeldnummer",
+"Attēla numurs"
+],
+"Bildnummer ": [
+"Image number ",
+"Número de imagen ",
+"Numéro d'image ",
+"Numero immagine ",
+"Beeldnummer ",
+"Attēla numurs "
+],
+"Bildnummer, z. B. 0412": [
+"Image number, e.g. 0412",
+"Número de imagen, p. ej. 0412",
+"Numéro d'image, p. ex. 0412",
+"Numero immagine, ad es. 0412",
+"Beeldnummer, bijv. 0412",
+"Attēla numurs, piem., 0412"
+],
+"Bildschirm am Automaten: Fotos, Zahlung, Druck.": [
+"Kiosk screen: photos, payment, printing.",
+"Pantalla de la máquina: fotos, pago, impresión.",
+"Écran de la borne : photos, paiement, impression.",
+"Schermo del distributore: foto, pagamento, stampa.",
+"Scherm bij de automaat: foto's, betaling, afdruk.",
+"Automāta ekrāns: foto, maksājums, druka."
+],
+"Bisherige Antworten bleiben in der Auswertung erhalten.": [
+"Previous answers remain in the results.",
+"Las respuestas anteriores se mantienen en el análisis.",
+"Les réponses précédentes restent dans l'analyse.",
+"Le risposte precedenti restano nell'analisi.",
+"Eerdere antwoorden blijven in de analyse.",
+"Iepriekšējās atbildes paliek rezultātos."
+],
+"Bitte Betreff und Beschreibung ausfüllen.": [
+"Please fill in subject and description.",
+"Rellena el asunto y la descripción.",
+"Merci de renseigner l'objet et la description.",
+"Compila oggetto e descrizione.",
+"Vul onderwerp en beschrijving in.",
+"Lūdzu, aizpildi tēmu un aprakstu."
+],
+"Bitte E-Mail und Passwort eingeben.": [
+"Please enter email and password.",
+"Introduce el correo y la contraseña.",
+"Saisis l'e-mail et le mot de passe.",
+"Inserisci e-mail e password.",
+"Voer e-mail en wachtwoord in.",
+"Lūdzu, ievadi e-pastu un paroli."
+],
+"Bitte Internetverbindung prüfen.": [
+"Please check your internet connection.",
+"Comprueba tu conexión a internet.",
+"Vérifie ta connexion internet.",
+"Controlla la connessione a internet.",
+"Controleer je internetverbinding.",
+"Lūdzu, pārbaudi interneta savienojumu."
+],
+"Bitte Name, E-Mail und ein Passwort mit mindestens 8 Zeichen eingeben.": [
+"Please enter a name, email and a password of at least 8 characters.",
+"Introduce nombre, correo y una contraseña de al menos 8 caracteres.",
+"Saisis un nom, un e-mail et un mot de passe d'au moins 8 caractères.",
+"Inserisci nome, e-mail e una password di almeno 8 caratteri.",
+"Voer naam, e-mail en een wachtwoord van minstens 8 tekens in.",
+"Lūdzu, ievadi vārdu, e-pastu un paroli ar vismaz 8 rakstzīmēm."
+],
+"Bitte bestätige zuerst deine E-Mail-Adresse.": [
+"Please confirm your email address first.",
+"Primero confirma tu dirección de correo.",
+"Confirme d'abord ton adresse e-mail.",
+"Conferma prima il tuo indirizzo e-mail.",
+"Bevestig eerst je e-mailadres.",
+"Lūdzu, vispirms apstiprini e-pasta adresi."
+],
+"Bitte das Park-Passwort eingeben.": [
+"Please enter the park password.",
+"Introduce la contraseña del parque.",
+"Saisis le mot de passe du parc.",
+"Inserisci la password del parco.",
+"Voer het parkwachtwoord in.",
+"Lūdzu, ievadi parka paroli."
+],
+"Bitte eine Uhrzeit wie 14:30 eingeben.": [
+"Please enter a time like 14:30.",
+"Introduce una hora como 14:30.",
+"Saisis une heure comme 14:30.",
+"Inserisci un orario come 14:30.",
+"Voer een tijd in zoals 14:30.",
+"Lūdzu, ievadi laiku, piem., 14:30."
+],
+"Bitte einen gültigen Preis für „{0}“ eingeben.": [
+"Please enter a valid price for “{0}”.",
+"Introduce un precio válido para «{0}».",
+"Saisis un prix valide pour « {0} ».",
+"Inserisci un prezzo valido per «{0}».",
+"Voer een geldige prijs in voor ‘{0}’.",
+"Lūdzu, ievadi derīgu cenu “{0}”."
+],
+"Bitte gib der Kampagne einen Namen.": [
+"Please give the campaign a name.",
+"Ponle un nombre a la campaña.",
+"Donne un nom à la campagne.",
+"Dai un nome alla campagna.",
+"Geef de campagne een naam.",
+"Lūdzu, piešķir kampaņai nosaukumu."
+],
+"Bitte gib eine Nachricht oder eine Beschreibung ein.": [
+"Please enter a message or a description.",
+"Introduce un mensaje o una descripción.",
+"Saisis un message ou une description.",
+"Inserisci un messaggio o una descrizione.",
+"Voer een bericht of beschrijving in.",
+"Lūdzu, ievadi ziņu vai aprakstu."
+],
+"Bitte gib einen internen Namen ein.": [
+"Please enter an internal name.",
+"Introduce un nombre interno.",
+"Saisis un nom interne.",
+"Inserisci un nome interno.",
+"Voer een interne naam in.",
+"Lūdzu, ievadi iekšējo nosaukumu."
+],
+"Bitte so eingeben: 24.12.2026 18:00": [
+"Please enter like this: 24.12.2026 18:00",
+"Introdúcelo así: 24.12.2026 18:00",
+"Saisis comme ceci : 24.12.2026 18:00",
+"Inserisci così: 24.12.2026 18:00",
+"Voer zo in: 24.12.2026 18:00",
+"Ievadi šādi: 24.12.2026 18:00"
+],
+"Bitte wähle zuerst ein Bild.": [
+"Please choose an image first.",
+"Primero elige una imagen.",
+"Choisis d'abord une image.",
+"Scegli prima un'immagine.",
+"Kies eerst een afbeelding.",
+"Lūdzu, vispirms izvēlies attēlu."
+],
+"Bitte zuerst einen Park wählen.": [
+"Please choose a park first.",
+"Primero elige un parque.",
+"Choisis d'abord un parc.",
+"Scegli prima un parco.",
+"Kies eerst een park.",
+"Lūdzu, vispirms izvēlies parku."
+],
+"Block hinzufügen": [
+"Add block",
+"Añadir bloque",
+"Ajouter un bloc",
+"Aggiungi blocco",
+"Blok toevoegen",
+"Pievienot bloku"
+],
+"Breit 16:9": [
+"Wide 16:9",
+"Panorámico 16:9",
+"Large 16:9",
+"Largo 16:9",
+"Breed 16:9",
+"Plats 16:9"
+],
+"Buchen kann der Inhaber des Kontos.": [
+"Only the account owner can book.",
+"Solo el titular de la cuenta puede contratar.",
+"Seul le titulaire du compte peut réserver.",
+"Può prenotare solo il titolare dell'account.",
+"Alleen de accounteigenaar kan boeken.",
+"Pasūtīt var konta īpašnieks."
+],
+"Danke für deinen Besuch!": [
+"Thanks for your visit!",
+"¡Gracias por tu visita!",
+"Merci de ta visite !",
+"Grazie per la visita!",
+"Bedankt voor je bezoek!",
+"Paldies par apmeklējumu!"
+],
+"Das Bild konnte nicht erzeugt werden. Bitte erneut versuchen.": [
+"The image could not be created. Please try again.",
+"No se pudo crear la imagen. Inténtalo de nuevo.",
+"Impossible de générer l'image. Réessaie.",
+"Impossibile creare l'immagine. Riprova.",
+"De afbeelding kon niet worden gemaakt. Probeer het opnieuw.",
+"Attēlu nevarēja izveidot. Lūdzu, mēģini vēlreiz."
+],
+"Das Gerät meldet eine Störung.": [
+"The device reports a fault.",
+"El dispositivo informa de una avería.",
+"L'appareil signale une panne.",
+"Il dispositivo segnala un guasto.",
+"Het apparaat meldt een storing.",
+"Ierīce ziņo par traucējumu."
+],
+"Das Konto ": [
+"The account ",
+"La cuenta ",
+"Le compte ",
+"L'account ",
+"Het account ",
+"Konts "
+],
+"Das Konto {0} ist noch keiner Organisation zugeordnet. Bitte wende dich an Liftpictures.": [
+"The account {0} isn't assigned to an organisation yet. Please contact Liftpictures.",
+"La cuenta {0} aún no está asignada a ninguna organización. Ponte en contacto con Liftpictures.",
+"Le compte {0} n'est encore rattaché à aucune organisation. Contacte Liftpictures.",
+"L'account {0} non è ancora assegnato a nessuna organizzazione. Contatta Liftpictures.",
+"Het account {0} is nog niet aan een organisatie gekoppeld. Neem contact op met Liftpictures.",
+"Konts {0} vēl nav piesaistīts nevienai organizācijai. Lūdzu, sazinies ar Liftpictures."
+],
+"Das Overlay ist noch leer.": [
+"The overlay is still empty.",
+"El overlay todavía está vacío.",
+"L'overlay est encore vide.",
+"L'overlay è ancora vuoto.",
+"De overlay is nog leeg.",
+"Pārklājums vēl ir tukšs."
+],
+"Das Park-Passwort stimmt nicht.": [
+"The park password is incorrect.",
+"La contraseña del parque no es correcta.",
+"Le mot de passe du parc est incorrect.",
+"La password del parco non è corretta.",
+"Het parkwachtwoord klopt niet.",
+"Parka parole nav pareiza."
+],
+"Das Verkaufsprogramm wird sofort beendet und neu gestartet. Etwa 15 Sekunden lang kann kein Foto verkauft werden. Nur ausführen, wenn gerade niemand am Automaten steht.": [
+"The sales program will be closed and restarted immediately. No photos can be sold for about 15 seconds. Only do this when nobody is at the kiosk.",
+"El programa de venta se cerrará y reiniciará de inmediato. Durante unos 15 segundos no se podrá vender ninguna foto. Hazlo solo cuando no haya nadie en la máquina.",
+"Le programme de vente sera immédiatement fermé puis redémarré. Pendant environ 15 secondes, aucune photo ne pourra être vendue. À faire uniquement quand personne n'est à la borne.",
+"Il programma di vendita verrà chiuso e riavviato subito. Per circa 15 secondi non si potranno vendere foto. Eseguire solo quando nessuno è al distributore.",
+"Het verkoopprogramma wordt direct afgesloten en opnieuw gestart. Ongeveer 15 seconden kan er geen foto worden verkocht. Alleen uitvoeren als er niemand bij de automaat staat.",
+"Pārdošanas programma tiks nekavējoties aizvērta un restartēta. Apmēram 15 sekundes nevarēs pārdot foto. Dari to tikai tad, kad pie automāta neviena nav."
+],
+"Das gespeicherte Overlay ist nicht erreichbar.": [
+"The saved overlay cannot be reached.",
+"No se puede acceder al overlay guardado.",
+"L'overlay enregistré est inaccessible.",
+"L'overlay salvato non è raggiungibile.",
+"De opgeslagen overlay is niet bereikbaar.",
+"Saglabātais pārklājums nav pieejams."
+],
+"Das letzte echte Foto vom Automaten. Mit „Testfoto“ löst du eine Aufnahme aus und siehst sie nach etwa einer Minute.": [
+"The latest real photo from the kiosk. “Test photo” triggers a shot, which you'll see after about a minute.",
+"La última foto real de la máquina. Con «Foto de prueba» disparas una toma y la ves en aproximadamente un minuto.",
+"La dernière vraie photo de la borne. « Photo test » déclenche une prise de vue, visible après environ une minute.",
+"L'ultima foto reale del distributore. Con «Foto di prova» scatti una foto e la vedi dopo circa un minuto.",
+"De laatste echte foto van de automaat. Met ‘Testfoto’ maak je een opname die je na ongeveer een minuut ziet.",
+"Pēdējais īstais foto no automāta. Ar “Testa foto” uzņem kadru un redzi to pēc apmēram minūtes."
+],
+"Dashboard · {0}": [
+"Dashboard · {0}",
+"Panel · {0}",
+"Tableau de bord · {0}",
+"Dashboard · {0}",
+"Dashboard · {0}",
+"Panelis · {0}"
+],
+"Datenbank": [
+"Database",
+"Base de datos",
+"Base de données",
+"Database",
+"Database",
+"Datubāze"
+],
+"Deckkraft · {0} %": [
+"Opacity · {0} %",
+"Opacidad · {0} %",
+"Opacité · {0} %",
+"Opacità · {0} %",
+"Dekking · {0} %",
+"Necaurredzamība · {0} %"
+],
+"Dein Monatskontingent ist fast aufgebraucht. Mit einem größeren Plan oder Zusatz-E-Mails bekommst du mehr.": [
+"Your monthly allowance is almost used up. A bigger plan or extra emails gives you more.",
+"Tu cupo mensual está casi agotado. Con un plan mayor o correos adicionales tendrás más.",
+"Ton quota mensuel est presque épuisé. Un forfait plus grand ou des e-mails supplémentaires t'en donnent plus.",
+"La tua quota mensile è quasi esaurita. Con un piano più grande o e-mail aggiuntive ne ottieni di più.",
+"Je maandtegoed is bijna op. Met een groter plan of extra e-mails krijg je meer.",
+"Tavs mēneša limits ir gandrīz izsmelts. Ar lielāku plānu vai papildu e-pastiem saņemsi vairāk."
+],
+"Dein Park. Immer dabei.": [
+"Your park. Always with you.",
+"Tu parque. Siempre contigo.",
+"Ton parc. Toujours avec toi.",
+"Il tuo parco. Sempre con te.",
+"Je park. Altijd bij je.",
+"Tavs parks. Vienmēr līdzi."
+],
+"Dein Plan, Aktionen und alles, was du dazubuchen kannst. Anfragen landen direkt bei uns.": [
+"Your plan, offers and everything you can add. Requests come straight to us.",
+"Tu plan, promociones y todo lo que puedes contratar. Las solicitudes nos llegan directamente.",
+"Ton forfait, les offres et tout ce que tu peux ajouter. Les demandes nous parviennent directement.",
+"Il tuo piano, le promozioni e tutto ciò che puoi aggiungere. Le richieste arrivano direttamente a noi.",
+"Je plan, acties en alles wat je erbij kunt boeken. Aanvragen komen direct bij ons binnen.",
+"Tavs plāns, akcijas un viss, ko vari pievienot. Pieprasījumi nonāk tieši pie mums."
+],
+"Dein Tag auf einen Blick": [
+"Your day at a glance",
+"Tu día de un vistazo",
+"Ta journée en un coup d'œil",
+"La tua giornata in breve",
+"Je dag in één oogopslag",
+"Tava diena vienā skatienā"
+],
+"Demo anfragen": [
+"Request a demo",
+"Solicitar demo",
+"Demander une démo",
+"Richiedi una demo",
+"Demo aanvragen",
+"Pieprasīt demo"
+],
+"Den Rundgang findest du jederzeit wieder unter Konto → „Rundgang starten“ und im Hilfe-Center.": [
+"You can find the tour again any time under Account → “Start tour” and in the Help Center.",
+"Puedes volver a ver el recorrido en Cuenta → «Iniciar recorrido» y en el Centro de ayuda.",
+"Tu retrouves la visite à tout moment sous Compte → « Démarrer la visite » et dans le centre d'aide.",
+"Trovi il tour in qualsiasi momento in Account → «Avvia tour» e nel Centro assistenza.",
+"Je vindt de rondleiding altijd terug onder Account → ‘Rondleiding starten’ en in het helpcentrum.",
+"Ekskursiju vienmēr atradīsi sadaļā Konts → “Sākt ekskursiju” un palīdzības centrā."
+],
+"Der Automat meldet sich nicht mehr. Bitte Strom und Internet am Automaten prüfen.": [
+"The kiosk is no longer reporting. Please check power and internet at the kiosk.",
+"La máquina ya no responde. Comprueba la corriente e internet en la máquina.",
+"La borne ne répond plus. Vérifie l'alimentation et internet sur la borne.",
+"Il distributore non risponde più. Controlla corrente e internet al distributore.",
+"De automaat meldt zich niet meer. Controleer stroom en internet bij de automaat.",
+"Automāts vairs neziņo. Lūdzu, pārbaudi strāvu un internetu pie automāta."
+],
+"Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette bis zum Upload.": [
+"The kiosk will now take a photo and send it through the whole chain up to the upload.",
+"La máquina tomará ahora una foto y la enviará por toda la cadena hasta la subida.",
+"La borne prend maintenant une photo et l'envoie à travers toute la chaîne jusqu'à l'envoi.",
+"Il distributore scatta ora una foto e la invia lungo tutta la catena fino al caricamento.",
+"De automaat maakt nu een foto en stuurt die door de hele keten tot aan de upload.",
+"Automāts tagad uzņems foto un nosūtīs to pa visu ķēdi līdz augšupielādei."
+],
+"Der Gast scannt den QR-Code mit seinem Handy und holt sich sein Foto ab – auch wenn der gedruckte Code nicht funktioniert.": [
+"The guest scans the QR code with their phone and picks up their photo – even if the printed code doesn't work.",
+"El visitante escanea el código QR con su móvil y recoge su foto, aunque el código impreso no funcione.",
+"Le visiteur scanne le QR code avec son téléphone et récupère sa photo – même si le code imprimé ne fonctionne pas.",
+"L'ospite scansiona il codice QR con il telefono e ritira la sua foto, anche se il codice stampato non funziona.",
+"De gast scant de QR-code met zijn telefoon en haalt zijn foto op – ook als de gedrukte code niet werkt.",
+"Viesis noskenē QR kodu ar telefonu un saņem savu foto – pat ja drukātais kods nedarbojas."
+],
+"Der Server hat die Übertragung abgelehnt: {0}": [
+"The server rejected the transfer: {0}",
+"El servidor rechazó la transferencia: {0}",
+"Le serveur a refusé le transfert : {0}",
+"Il server ha rifiutato il trasferimento: {0}",
+"De server heeft de overdracht geweigerd: {0}",
+"Serveris noraidīja pārsūtīšanu: {0}"
+],
+"Design, Texte, Produkte und Preise": [
+"Design, texts, products and prices",
+"Diseño, textos, productos y precios",
+"Design, textes, produits et prix",
+"Design, testi, prodotti e prezzi",
+"Ontwerp, teksten, producten en prijzen",
+"Dizains, teksti, produkti un cenas"
+],
+"Details": [
+"Details",
+"Detalles",
+"Détails",
+"Dettagli",
+"Details",
+"Informācija"
+],
+"Deutsch": [
+"Deutsch",
+"Deutsch",
+"Deutsch",
+"Deutsch",
+"Deutsch",
+"Deutsch"
+],
+"Die App in einer Minute": [
+"The app in one minute",
+"La app en un minuto",
+"L'app en une minute",
+"L'app in un minuto",
+"De app in één minuut",
+"Lietotne vienā minūtē"
+],
+"Die Automaten konnten nicht geladen werden ({0}).": [
+"The kiosks could not be loaded ({0}).",
+"No se pudieron cargar las máquinas ({0}).",
+"Impossible de charger les bornes ({0}).",
+"Impossibile caricare i distributori ({0}).",
+"De automaten konden niet worden geladen ({0}).",
+"Automātus nevarēja ielādēt ({0})."
+],
+"Die Bahn hat heute geschlossen.": [
+"The ride is closed today.",
+"La atracción está cerrada hoy.",
+"L'attraction est fermée aujourd'hui.",
+"L'attrazione oggi è chiusa.",
+"De baan is vandaag gesloten.",
+"Atrakcija šodien ir slēgta."
+],
+"Die Bahn hat heute geöffnet.": [
+"The ride is open today.",
+"La atracción está abierta hoy.",
+"L'attraction est ouverte aujourd'hui.",
+"L'attrazione oggi è aperta.",
+"De baan is vandaag open.",
+"Atrakcija šodien ir atvērta."
+],
+"Die Bestenliste ist für diesen Park noch nicht freigeschaltet.": [
+"The leaderboard isn't enabled for this park yet.",
+"La clasificación aún no está activada para este parque.",
+"Le classement n'est pas encore activé pour ce parc.",
+"La classifica non è ancora attiva per questo parco.",
+"De ranglijst is voor dit park nog niet vrijgegeven.",
+"Līderu saraksts šim parkam vēl nav aktivizēts."
+],
+"Die Buchung ist im Browser geöffnet. Wenn du zurück in die App wechselst, wird dein Plan neu geladen.": [
+"The booking is open in your browser. When you return to the app, your plan will reload.",
+"La contratación está abierta en el navegador. Al volver a la app se recargará tu plan.",
+"La réservation est ouverte dans le navigateur. Quand tu reviens dans l'app, ton forfait est rechargé.",
+"La prenotazione è aperta nel browser. Quando torni all'app, il tuo piano verrà ricaricato.",
+"De boeking is geopend in de browser. Als je teruggaat naar de app, wordt je plan opnieuw geladen.",
+"Pasūtījums ir atvērts pārlūkā. Kad atgriezīsies lietotnē, tavs plāns tiks pārlādēts."
+],
+"Die Einstellungen konnten nicht gelesen werden: {0}": [
+"The settings could not be read: {0}",
+"No se pudieron leer los ajustes: {0}",
+"Impossible de lire les réglages : {0}",
+"Impossibile leggere le impostazioni: {0}",
+"De instellingen konden niet worden gelezen: {0}",
+"Iestatījumus nevarēja nolasīt: {0}"
+],
+"Die KI hat kein Overlay geliefert. Bitte mit einer anderen Beschreibung erneut versuchen.": [
+"The AI didn't return an overlay. Please try again with a different description.",
+"La IA no ha generado ningún overlay. Inténtalo de nuevo con otra descripción.",
+"L'IA n'a fourni aucun overlay. Réessaie avec une autre description.",
+"L'IA non ha restituito alcun overlay. Riprova con un'altra descrizione.",
+"De AI heeft geen overlay geleverd. Probeer het opnieuw met een andere beschrijving.",
+"MI nesniedza pārklājumu. Lūdzu, mēģini vēlreiz ar citu aprakstu."
+],
+"Die Mail geht jetzt an alle Gäste mit Einwilligung. Das lässt sich nicht zurücknehmen.": [
+"The email will now go to all guests who gave consent. This cannot be undone.",
+"El correo se enviará ahora a todos los visitantes con consentimiento. No se puede deshacer.",
+"L'e-mail part maintenant à tous les visiteurs ayant donné leur accord. Action irréversible.",
+"L'e-mail verrà inviata ora a tutti gli ospiti con consenso. Non si può annullare.",
+"De mail gaat nu naar alle gasten met toestemming. Dit kan niet ongedaan worden gemaakt.",
+"E-pasts tagad tiks nosūtīts visiem viesiem ar piekrišanu. To nevar atsaukt."
+],
+"Die Nummer des Automaten ist im Park nicht eingetragen. Fotos können so nicht freigeschaltet werden.": [
+"The kiosk number isn't registered in the park. Photos can't be unlocked like this.",
+"El número de la máquina no está registrado en el parque. Así no se pueden desbloquear fotos.",
+"Le numéro de la borne n'est pas enregistré dans le parc. Les photos ne peuvent pas être débloquées.",
+"Il numero del distributore non è registrato nel parco. Così le foto non possono essere sbloccate.",
+"Het nummer van de automaat staat niet in het park. Zo kunnen foto's niet worden vrijgegeven.",
+"Automāta numurs parkā nav reģistrēts. Tā foto nevar atbloķēt."
+],
+"Die Online-Abrechnung ist für deinen Park noch nicht eingerichtet. Wir melden uns persönlich.": [
+"Online billing isn't set up for your park yet. We'll get in touch personally.",
+"La facturación en línea aún no está configurada para tu parque. Te contactaremos personalmente.",
+"La facturation en ligne n'est pas encore configurée pour ton parc. Nous te recontactons personnellement.",
+"La fatturazione online non è ancora configurata per il tuo parco. Ti contatteremo personalmente.",
+"Online facturatie is voor je park nog niet ingericht. We nemen persoonlijk contact op.",
+"Tiešsaistes norēķini tavam parkam vēl nav iestatīti. Mēs sazināsimies personīgi."
+],
+"Die Pläne": [
+"The plans",
+"Los planes",
+"Les forfaits",
+"I piani",
+"De plannen",
+"Plāni"
+],
+"Die Saisonstart-Mail ist eingereiht ({0} Empfänger).": [
+"The season-start email is queued ({0} recipients).",
+"El correo de inicio de temporada está en cola ({0} destinatarios).",
+"L'e-mail de début de saison est en file d'attente ({0} destinataires).",
+"L'e-mail di inizio stagione è in coda ({0} destinatari).",
+"De seizoensstartmail staat in de wachtrij ({0} ontvangers).",
+"Sezonas sākuma e-pasts ir rindā ({0} adresāti)."
+],
+"Die aktuelle Gestaltung wird ersetzt. Mit „Rückgängig“ kommst du zurück.": [
+"The current design will be replaced. Use “Undo” to go back.",
+"El diseño actual será sustituido. Con «Deshacer» vuelves atrás.",
+"La mise en page actuelle sera remplacée. « Annuler » permet de revenir en arrière.",
+"Il design attuale verrà sostituito. Con «Annulla» torni indietro.",
+"Het huidige ontwerp wordt vervangen. Met ‘Ongedaan maken’ ga je terug.",
+"Pašreizējais dizains tiks aizstāts. Ar “Atsaukt” vari atgriezties."
+],
+"Die hinterlegt unser Team individuell für deinen Park, basierend auf deinen Analyse-Daten.": [
+"Our team sets these up individually for your park, based on your analytics data.",
+"Nuestro equipo las configura individualmente para tu parque, según tus datos de análisis.",
+"Notre équipe les définit individuellement pour ton parc, à partir de tes données d'analyse.",
+"Il nostro team le imposta individualmente per il tuo parco, in base ai tuoi dati di analisi.",
+"Ons team stelt die individueel in voor je park, op basis van je analysegegevens.",
+"Mūsu komanda tos iestata individuāli tavam parkam, balstoties uz tavas analītikas datiem."
+],
+"Die neuesten Fotos, oder gezielt nach Bildnummer und Uhrzeit. Ein Foto antippen zeigt den QR-Code, mit dem der Gast es sich abholt.": [
+"The latest photos, or search by image number and time. Tapping a photo shows the QR code the guest uses to pick it up.",
+"Las fotos más recientes, o busca por número de imagen y hora. Al tocar una foto se muestra el código QR con el que el visitante la recoge.",
+"Les photos les plus récentes, ou recherche par numéro d'image et heure. Touche une photo pour afficher le QR code avec lequel le visiteur la récupère.",
+"Le foto più recenti, o cerca per numero immagine e orario. Toccando una foto si vede il codice QR con cui l'ospite la ritira.",
+"De nieuwste foto's, of zoek op beeldnummer en tijd. Tik op een foto voor de QR-code waarmee de gast hem ophaalt.",
+"Jaunākie foto vai meklē pēc attēla numura un laika. Pieskaroties foto, redzams QR kods, ar kuru viesis to saņem."
+],
+"Diese E-Mail ist {0} und nicht mehr bearbeitbar.": [
+"This email is {0} and can no longer be edited.",
+"Este correo está {0} y ya no se puede editar.",
+"Cet e-mail est {0} et ne peut plus être modifié.",
+"Questa e-mail è {0} e non è più modificabile.",
+"Deze e-mail is {0} en kan niet meer worden bewerkt.",
+"Šis e-pasts ir {0} un vairs nav rediģējams."
+],
+"Diese Funktion ist Teil von {0}": [
+"This feature is part of {0}",
+"Esta función forma parte de {0}",
+"Cette fonction fait partie de {0}",
+"Questa funzione fa parte di {0}",
+"Deze functie hoort bij {0}",
+"Šī funkcija ir daļa no {0}"
+],
+"Diese Funktion ist auf dem Server noch nicht freigeschaltet (operator-liftpic-assets).": [
+"This feature isn't enabled on the server yet (operator-liftpic-assets).",
+"Esta función aún no está activada en el servidor (operator-liftpic-assets).",
+"Cette fonction n'est pas encore activée sur le serveur (operator-liftpic-assets).",
+"Questa funzione non è ancora attiva sul server (operator-liftpic-assets).",
+"Deze functie is op de server nog niet vrijgegeven (operator-liftpic-assets).",
+"Šī funkcija serverī vēl nav aktivizēta (operator-liftpic-assets)."
+],
+"Diese Seite hilft dir, Einnahmen genauer zu verstehen und Trends schneller zu erkennen. Du kannst Tagesverläufe, Monatsentwicklung und Verkaufsleistung nach Zeitraum oder Datenbasis prüfen.": [
+"This page helps you understand revenue in more detail and spot trends faster. You can check daily curves, monthly development and sales performance by period or data source.",
+"Esta página te ayuda a entender mejor los ingresos y detectar tendencias más rápido. Puedes revisar la evolución diaria, mensual y el rendimiento de ventas por periodo o fuente de datos.",
+"Cette page t'aide à mieux comprendre les recettes et à repérer plus vite les tendances. Tu peux examiner l'évolution journalière, mensuelle et les performances de vente par période ou source de données.",
+"Questa pagina ti aiuta a capire meglio gli incassi e a individuare più rapidamente le tendenze. Puoi controllare andamento giornaliero, mensile e rendimento delle vendite per periodo o base dati.",
+"Deze pagina helpt je de omzet beter te begrijpen en trends sneller te zien. Je kunt dagverloop, maandontwikkeling en verkoopprestaties per periode of databron bekijken.",
+"Šī lapa palīdz labāk saprast ieņēmumus un ātrāk pamanīt tendences. Vari pārbaudīt dienas gaitu, mēneša attīstību un pārdošanas rezultātus pēc perioda vai datu avota."
+],
+"Diese Seite ist dein operativer Blick auf die erzeugten Bilder und zeigt dir sofort, ob der Fotozufluss passt. Du kannst nach Bildnummer, Datum oder Quelle suchen, Vorschauen öffnen und Volumen nach Tagen vergleichen.": [
+"This page is your operational view of the generated images and shows you immediately whether the photo flow is right. You can search by image number, date or source, open previews and compare volumes by day.",
+"Esta página es tu vista operativa de las imágenes generadas y te muestra al instante si el flujo de fotos es correcto. Puedes buscar por número de imagen, fecha u origen, abrir vistas previas y comparar volúmenes por día.",
+"Cette page est ta vue opérationnelle sur les images produites et te montre immédiatement si le flux de photos est correct. Tu peux chercher par numéro d'image, date ou source, ouvrir des aperçus et comparer les volumes par jour.",
+"Questa pagina è la tua vista operativa sulle immagini generate e ti mostra subito se il flusso di foto è regolare. Puoi cercare per numero immagine, data o fonte, aprire anteprime e confrontare i volumi per giorno.",
+"Deze pagina is je operationele blik op de gemaakte foto's en laat direct zien of de fotostroom klopt. Je kunt zoeken op beeldnummer, datum of bron, voorbeelden openen en volumes per dag vergelijken.",
+"Šī lapa ir tavs operatīvais skats uz izveidotajiem attēliem un uzreiz parāda, vai foto plūsma ir kārtībā. Vari meklēt pēc attēla numura, datuma vai avota, atvērt priekšskatījumus un salīdzināt apjomus pa dienām."
+],
+"Diese Seite zeigt dir, ob Kameras, Uploads und Maschinen stabil laufen oder Aufmerksamkeit brauchen. Du kannst Maschinenstatus, letzte Signale, Fehlerbilder und Ausfälle prüfen und direkt Auffälligkeiten erkennen.": [
+"This page shows you whether cameras, uploads and machines are running smoothly or need attention. You can check machine status, last signals, error patterns and outages and spot issues right away.",
+"Esta página te muestra si cámaras, subidas y máquinas funcionan de forma estable o requieren atención. Puedes revisar el estado de las máquinas, las últimas señales, los errores y las caídas, y detectar anomalías al instante.",
+"Cette page te montre si les caméras, les envois et les machines fonctionnent bien ou demandent de l'attention. Tu peux vérifier l'état des machines, les derniers signaux, les erreurs et les pannes et repérer directement les anomalies.",
+"Questa pagina ti mostra se fotocamere, caricamenti e macchine funzionano in modo stabile o richiedono attenzione. Puoi controllare stato delle macchine, ultimi segnali, errori e guasti e individuare subito le anomalie.",
+"Deze pagina laat zien of camera's, uploads en machines stabiel draaien of aandacht nodig hebben. Je kunt machinestatus, laatste signalen, foutpatronen en storingen bekijken en afwijkingen direct zien.",
+"Šī lapa parāda, vai kameras, augšupielādes un iekārtas darbojas stabili vai prasa uzmanību. Vari pārbaudīt iekārtu statusu, pēdējos signālus, kļūdas un dīkstāves un uzreiz pamanīt novirzes."
+],
+"Diese Woche": [
+"This week",
+"Esta semana",
+"Cette semaine",
+"Questa settimana",
+"Deze week",
+"Šonedēļ"
+],
+"Dieser Automat meldet noch keinen Zustand seiner Programme": [
+"This kiosk isn't reporting the status of its programs yet",
+"Esta máquina aún no informa del estado de sus programas",
+"Cette borne ne signale pas encore l'état de ses programmes",
+"Questo distributore non segnala ancora lo stato dei suoi programmi",
+"Deze automaat meldt nog geen status van zijn programma's",
+"Šis automāts vēl neziņo par savu programmu stāvokli"
+],
+"Dieser Automat meldet noch keinen Zustand seiner Programme. Fotos und Umsatz laufen davon unberührt.": [
+"This kiosk isn't reporting the status of its programs yet. Photos and revenue are unaffected.",
+"Esta máquina aún no informa del estado de sus programas. Las fotos y los ingresos no se ven afectados.",
+"Cette borne ne signale pas encore l'état de ses programmes. Les photos et les recettes ne sont pas concernées.",
+"Questo distributore non segnala ancora lo stato dei suoi programmi. Foto e incassi non ne sono influenzati.",
+"Deze automaat meldt nog geen status van zijn programma's. Foto's en omzet lopen gewoon door.",
+"Šis automāts vēl neziņo par savu programmu stāvokli. Foto un ieņēmumus tas neietekmē."
+],
+"Dieser Park verkauft über den Online-Shop. Umsatz und Käufe findest du in der Web-Ansicht.": [
+"This park sells via the online shop. You'll find revenue and purchases in the web view.",
+"Este parque vende a través de la tienda online. Encontrarás ingresos y compras en la vista web.",
+"Ce parc vend via la boutique en ligne. Tu trouveras recettes et achats dans la vue web.",
+"Questo parco vende tramite il negozio online. Trovi incassi e acquisti nella vista web.",
+"Dit park verkoopt via de webshop. Omzet en aankopen vind je in de webweergave.",
+"Šis parks pārdod caur interneta veikalu. Ieņēmumus un pirkumus atradīsi tīmekļa skatā."
+],
+"Drehung · {0}°": [
+"Rotation · {0}°",
+"Rotación · {0}°",
+"Rotation · {0}°",
+"Rotazione · {0}°",
+"Rotatie · {0}°",
+"Pagrieziens · {0}°"
+],
+"Drei Wege, den Shop freizuschalten": [
+"Three ways to activate the shop",
+"Tres formas de activar la tienda",
+"Trois façons d'activer la boutique",
+"Tre modi per attivare il negozio",
+"Drie manieren om de shop te activeren",
+"Trīs veidi, kā aktivizēt veikalu"
+],
+"Dringend": [
+"Urgent",
+"Urgente",
+"Urgent",
+"Urgente",
+"Dringend",
+"Steidzami"
+],
+"Dringlichkeit": [
+"Urgency",
+"Urgencia",
+"Urgence",
+"Urgenza",
+"Urgentie",
+"Steidzamība"
+],
+"Drucke": [
+"prints",
+"impresiones",
+"tirages",
+"stampe",
+"afdrukken",
+"izdrukas"
+],
+"Drucke übrig": [
+"Prints left",
+"Impresiones restantes",
+"Tirages restants",
+"Stampe rimaste",
+"Afdrukken over",
+"Atlikušās izdrukas"
+],
+"Drucker": [
+"Printer",
+"Impresora",
+"Imprimante",
+"Stampante",
+"Printer",
+"Printeris"
+],
+"Du findest es unter „Gespeicherte Overlays“ und kannst es dort jederzeit verwenden.": [
+"You'll find it under “Saved overlays” and can use it there any time.",
+"Lo encontrarás en «Overlays guardados» y podrás usarlo allí cuando quieras.",
+"Tu le trouves sous « Overlays enregistrés » et peux l'utiliser à tout moment.",
+"Lo trovi in «Overlay salvati» e puoi usarlo lì in qualsiasi momento.",
+"Je vindt hem onder ‘Opgeslagen overlays’ en kunt hem daar altijd gebruiken.",
+"Tu to atradīsi sadaļā “Saglabātie pārklājumi” un vari jebkurā laikā izmantot."
+],
+"Du hast eine Frage oder ein Problem? Schreib uns eine neue Anfrage.": [
+"Got a question or a problem? Send us a new request.",
+"¿Tienes una pregunta o un problema? Escríbenos una nueva solicitud.",
+"Tu as une question ou un problème ? Envoie-nous une nouvelle demande.",
+"Hai una domanda o un problema? Scrivici una nuova richiesta.",
+"Heb je een vraag of probleem? Stuur ons een nieuwe aanvraag.",
+"Tev ir jautājums vai problēma? Uzraksti mums jaunu pieprasījumu."
+],
+"Du hast noch keine Overlays gespeichert. Lade unten eines hoch oder lass es von der KI erstellen.": [
+"You haven't saved any overlays yet. Upload one below or let the AI create one.",
+"Aún no has guardado ningún overlay. Sube uno abajo o deja que lo cree la IA.",
+"Tu n'as encore enregistré aucun overlay. Importe-en un ci-dessous ou laisse l'IA en créer un.",
+"Non hai ancora salvato overlay. Caricane uno qui sotto o lascialo creare all'IA.",
+"Je hebt nog geen overlays opgeslagen. Upload er hieronder een of laat de AI er een maken.",
+"Tu vēl neesi saglabājis pārklājumus. Augšupielādē vienu zemāk vai ļauj MI to izveidot."
+],
+"Dunkel": [
+"Dark",
+"Oscuro",
+"Sombre",
+"Scuro",
+"Donker",
+"Tumšs"
+],
+"Dunkler Modus": [
+"Dark mode",
+"Modo oscuro",
+"Mode sombre",
+"Modalità scura",
+"Donkere modus",
+"Tumšais režīms"
+],
+"E-Mail löschen": [
+"Delete email",
+"Eliminar correo",
+"Supprimer l'e-mail",
+"Elimina e-mail",
+"E-mail verwijderen",
+"Dzēst e-pastu"
+],
+"E-Mail planen?": [
+"Schedule email?",
+"¿Programar correo?",
+"Programmer l'e-mail ?",
+"Pianificare l'e-mail?",
+"E-mail inplannen?",
+"Ieplānot e-pastu?"
+],
+"E-Mails": [
+"Emails",
+"Correos",
+"E-mails",
+"E-mail",
+"E-mails",
+"E-pasti"
+],
+"E-Mails in diesem Monat": [
+"emails this month",
+"correos este mes",
+"e-mails ce mois-ci",
+"e-mail questo mese",
+"e-mails deze maand",
+"e-pasti šomēnes"
+],
+"Ebenen": [
+"Layers",
+"Capas",
+"Calques",
+"Livelli",
+"Lagen",
+"Slāņi"
+],
+"Ecken · {0}": [
+"Corners · {0}",
+"Esquinas · {0}",
+"Coins · {0}",
+"Angoli · {0}",
+"Hoeken · {0}",
+"Stūri · {0}"
+],
+"Ein kurzer Rundgang zeigt dir in etwa einer Minute, wo du was findest.": [
+"A short tour shows you where to find everything in about a minute.",
+"Un breve recorrido te muestra en un minuto dónde encontrar cada cosa.",
+"Une courte visite te montre en une minute environ où trouver quoi.",
+"Un breve tour ti mostra in circa un minuto dove trovare tutto.",
+"Een korte rondleiding laat je in ongeveer een minuut zien waar je alles vindt.",
+"Īsa ekskursija apmēram minūtē parādīs, kur ko atrast."
+],
+"Eine Vorlage, die du mit einem Tipp an alle Gäste mit Einwilligung schickst.": [
+"A template you send to all consenting guests with one tap.",
+"Una plantilla que envías con un toque a todos los visitantes con consentimiento.",
+"Un modèle que tu envoies d'un geste à tous les visiteurs ayant donné leur accord.",
+"Un modello che invii con un tocco a tutti gli ospiti con consenso.",
+"Een sjabloon die je met één tik naar alle gasten met toestemming stuurt.",
+"Veidne, ko ar vienu pieskārienu nosūti visiem viesiem ar piekrišanu."
+],
+"Einfache Ansicht": [
+"Simple view",
+"Vista sencilla",
+"Vue simple",
+"Vista semplice",
+"Eenvoudige weergave",
+"Vienkāršs skats"
+],
+"Einleitung": [
+"Introduction",
+"Introducción",
+"Introduction",
+"Introduzione",
+"Inleiding",
+"Ievads"
+],
+"Einträge · {0}": [
+"Entries · {0}",
+"Entradas · {0}",
+"Participations · {0}",
+"Voci · {0}",
+"Inzendingen · {0}",
+"Ieraksti · {0}"
+],
+"Einzelne Verkäufe am Automaten": [
+"Individual sales at the kiosk",
+"Ventas individuales en la máquina",
+"Ventes individuelles à la borne",
+"Singole vendite al distributore",
+"Losse verkopen bij de automaat",
+"Atsevišķi pārdevumi automātā"
+],
+"Element für Element bauen – ziehen, vergrößern, speichern.": [
+"Build it element by element – drag, resize, save.",
+"Constrúyelo elemento a elemento: arrastra, amplía, guarda.",
+"Construis élément par élément – glisse, agrandis, enregistre.",
+"Costruisci elemento per elemento: trascina, ingrandisci, salva.",
+"Bouw element voor element – slepen, vergroten, opslaan.",
+"Veido elementu pa elementam – velc, palielini, saglabā."
+],
+"Empfänger": [
+"Recipients",
+"Destinatarios",
+"Destinataires",
+"Destinatari",
+"Ontvangers",
+"Adresāti"
+],
+"English": [
+"English",
+"English",
+"English",
+"English",
+"English",
+"English"
+],
+"Entscheidet über den Bewertungs-Link": [
+"Decides on the review link",
+"Decide sobre el enlace de reseña",
+"Détermine le lien d'avis",
+"Determina il link alla recensione",
+"Bepaalt de reviewlink",
+"Nosaka atsauksmes saiti"
+],
+"Ergebnisse": [
+"Results",
+"Resultados",
+"Résultats",
+"Risultati",
+"Resultaten",
+"Rezultāti"
+],
+"Erkennt Gäste und löst die Kamera aus.": [
+"Detects guests and triggers the camera.",
+"Detecta a los visitantes y dispara la cámara.",
+"Détecte les visiteurs et déclenche la caméra.",
+"Rileva gli ospiti e fa scattare la fotocamera.",
+"Herkent gasten en activeert de camera.",
+"Atpazīst viesus un iedarbina kameru."
+],
+"Erklärung: {0}": [
+"Explanation: {0}",
+"Explicación: {0}",
+"Explication : {0}",
+"Spiegazione: {0}",
+"Uitleg: {0}",
+"Skaidrojums: {0}"
+],
+"Erneut": [
+"Again",
+"De nuevo",
+"À nouveau",
+"Di nuovo",
+"Opnieuw",
+"Vēlreiz"
+],
+"Erscheinungsbild": [
+"Appearance",
+"Apariencia",
+"Apparence",
+"Aspetto",
+"Weergave",
+"Izskats"
+],
+"Ersetzen": [
+"Replace",
+"Sustituir",
+"Remplacer",
+"Sostituisci",
+"Vervangen",
+"Aizstāt"
+],
+"Es liegt ab jetzt auf den neuen Fotos. Du findest es unter „Gespeicherte Overlays“.": [
+"It's now on new photos. You'll find it under “Saved overlays”.",
+"A partir de ahora aparece en las fotos nuevas. Lo encontrarás en «Overlays guardados».",
+"Il figure désormais sur les nouvelles photos. Tu le trouves sous « Overlays enregistrés ».",
+"Da ora compare sulle nuove foto. Lo trovi in «Overlay salvati».",
+"Het staat vanaf nu op nieuwe foto's. Je vindt het onder ‘Opgeslagen overlays’.",
+"No šī brīža tas ir uz jaunajiem foto. Tu to atradīsi sadaļā “Saglabātie pārklājumi”."
+],
+"Es werden nur die neuesten Verkäufe angezeigt.": [
+"Only the latest sales are shown.",
+"Solo se muestran las ventas más recientes.",
+"Seules les ventes les plus récentes sont affichées.",
+"Vengono mostrate solo le vendite più recenti.",
+"Alleen de nieuwste verkopen worden getoond.",
+"Tiek rādīti tikai jaunākie pārdevumi."
+],
+"Export": [
+"Export",
+"Exportar",
+"Exporter",
+"Esporta",
+"Exporteren",
+"Eksports"
+],
+"FRAGE ": [
+"QUESTION ",
+"PREGUNTA ",
+"QUESTION ",
+"DOMANDA ",
+"VRAAG ",
+"JAUTĀJUMS "
+],
+"Facebook": [
+"Facebook",
+"Facebook",
+"Facebook",
+"Facebook",
+"Facebook",
+"Facebook"
+],
+"Fahrten gemessen": [
+"Rides measured",
+"Viajes medidos",
+"Trajets mesurés",
+"Corse misurate",
+"Ritten gemeten",
+"Izmērītie braucieni"
+],
+"Farbe {0}": [
+"Colour {0}",
+"Color {0}",
+"Couleur {0}",
+"Colore {0}",
+"Kleur {0}",
+"Krāsa {0}"
+],
+"Farbfläche dahinter": [
+"Colour block behind",
+"Fondo de color detrás",
+"Aplat de couleur derrière",
+"Sfondo colorato dietro",
+"Kleurvlak erachter",
+"Krāsu laukums aizmugurē"
+],
+"Fehler": [
+"Error",
+"Error",
+"Erreur",
+"Errore",
+"Fout",
+"Kļūda"
+],
+"Fertig": [
+"Done",
+"Listo",
+"Terminé",
+"Fine",
+"Klaar",
+"Gatavs"
+],
+"Fertig!": [
+"Done!",
+"¡Listo!",
+"Terminé !",
+"Fatto!",
+"Klaar!",
+"Gatavs!"
+],
+"Fett": [
+"Bold",
+"Negrita",
+"Gras",
+"Grassetto",
+"Vet",
+"Treknraksts"
+],
+"Foto abholen": [
+"Pick up photo",
+"Recoger foto",
+"Récupérer la photo",
+"Ritira la foto",
+"Foto ophalen",
+"Saņemt foto"
+],
+"Foto aufnehmen": [
+"Take photo",
+"Hacer foto",
+"Prendre une photo",
+"Scatta foto",
+"Foto maken",
+"Uzņemt foto"
+],
+"Foto freigeben": [
+"Unlock photo",
+"Desbloquear foto",
+"Débloquer la photo",
+"Sblocca foto",
+"Foto vrijgeven",
+"Atbloķēt foto"
+],
+"Foto freigegeben": [
+"Photo unlocked",
+"Foto desbloqueada",
+"Photo débloquée",
+"Foto sbloccata",
+"Foto vrijgegeven",
+"Foto atbloķēts"
+],
+"Foto verkauft": [
+"Photo sold",
+"Foto vendida",
+"Photo vendue",
+"Foto venduta",
+"Foto verkocht",
+"Foto pārdots"
+],
+"Foto {0}": [
+"Photo {0}",
+"Foto {0}",
+"Photo {0}",
+"Foto {0}",
+"Foto {0}",
+"Foto {0}"
+],
+"Foto-Ablage": [
+"Photo storage",
+"Almacén de fotos",
+"Stockage des photos",
+"Archivio foto",
+"Fotoopslag",
+"Foto krātuve"
+],
+"Foto-Overlay 4:3": [
+"Photo overlay 4:3",
+"Overlay de foto 4:3",
+"Overlay photo 4:3",
+"Overlay foto 4:3",
+"Foto-overlay 4:3",
+"Foto pārklājums 4:3"
+],
+"Fotopapier nachbestellen": [
+"Reorder photo paper",
+"Volver a pedir papel fotográfico",
+"Recommander du papier photo",
+"Riordina carta fotografica",
+"Fotopapier nabestellen",
+"Pasūtīt foto papīru"
+],
+"Fotos dieses Automaten werden einem fremden Park zugeordnet.": [
+"Photos from this kiosk are being assigned to another park.",
+"Las fotos de esta máquina se asignan a otro parque.",
+"Les photos de cette borne sont attribuées à un autre parc.",
+"Le foto di questo distributore vengono assegnate a un altro parco.",
+"Foto's van deze automaat worden aan een ander park toegewezen.",
+"Šī automāta foto tiek piesaistīti citam parkam."
+],
+"Fotos finden": [
+"Find photos",
+"Buscar fotos",
+"Trouver des photos",
+"Trova foto",
+"Foto's zoeken",
+"Atrast foto"
+],
+"Fotos verkauft": [
+"Photos sold",
+"Fotos vendidas",
+"Photos vendues",
+"Foto vendute",
+"Foto's verkocht",
+"Pārdotie foto"
+],
+"Frage entfernen?": [
+"Remove question?",
+"¿Eliminar la pregunta?",
+"Supprimer la question ?",
+"Rimuovere la domanda?",
+"Vraag verwijderen?",
+"Noņemt jautājumu?"
+],
+"Fragen und Einstellungen": [
+"Questions and settings",
+"Preguntas y ajustes",
+"Questions et réglages",
+"Domande e impostazioni",
+"Vragen en instellingen",
+"Jautājumi un iestatījumi"
+],
+"Fragen · {0} von {1}": [
+"Questions · {0} of {1}",
+"Preguntas · {0} de {1}",
+"Questions · {0} sur {1}",
+"Domande · {0} di {1}",
+"Vragen · {0} van {1}",
+"Jautājumi · {0} no {1}"
+],
+"Fragen, Google-Bewertung, Texte": [
+"Questions, Google review, texts",
+"Preguntas, reseña de Google, textos",
+"Questions, avis Google, textes",
+"Domande, recensione Google, testi",
+"Vragen, Google-review, teksten",
+"Jautājumi, Google atsauksme, teksti"
+],
+"Freier Speicher für neue Fotos.": [
+"Free space for new photos.",
+"Espacio libre para fotos nuevas.",
+"Espace libre pour les nouvelles photos.",
+"Spazio libero per nuove foto.",
+"Vrije ruimte voor nieuwe foto's.",
+"Brīva vieta jauniem foto."
+],
+"Freischalt-Weg": [
+"Unlock method",
+"Método de desbloqueo",
+"Mode de déblocage",
+"Modalità di sblocco",
+"Vrijgavemethode",
+"Atbloķēšanas veids"
+],
+"Für Gäste aktiv: so schalten Gäste gerade ihr Foto frei.": [
+"Active for guests: this is how guests currently unlock their photo.",
+"Activo para visitantes: así desbloquean ahora su foto.",
+"Actif pour les visiteurs : c'est ainsi qu'ils débloquent actuellement leur photo.",
+"Attivo per gli ospiti: è così che ora sbloccano la loro foto.",
+"Actief voor gasten: zo geven gasten nu hun foto vrij.",
+"Aktīvs viesiem: šādi viesi pašlaik atbloķē savu foto."
+],
+"Für diesen Park ist noch kein Automat verbunden.": [
+"No kiosk is connected to this park yet.",
+"Aún no hay ninguna máquina conectada a este parque.",
+"Aucune borne n'est encore connectée à ce parc.",
+"Nessun distributore è ancora collegato a questo parco.",
+"Er is nog geen automaat aan dit park gekoppeld.",
+"Šim parkam vēl nav pievienots neviens automāts."
+],
+"Gelesen aus ": [
+"Read from ",
+"Leído de ",
+"Lu depuis ",
+"Letto da ",
+"Gelezen uit ",
+"Nolasīts no "
+],
+"Gelöst": [
+"Resolved",
+"Resuelto",
+"Résolu",
+"Risolto",
+"Opgelost",
+"Atrisināts"
+],
+"Geschwindigkeit": [
+"Speed",
+"Velocidad",
+"Vitesse",
+"Velocità",
+"Snelheid",
+"Ātrums"
+],
+"Geschwindigkeit auf jedem Foto, Tagesbestenliste für den Bildschirm, Gäste-Profile, Gewinnspiel für die Tagesbesten.": [
+"Speed on every photo, daily leaderboard for the screen, guest profiles, a prize draw for the day's best.",
+"Velocidad en cada foto, clasificación diaria para la pantalla, perfiles de visitantes y sorteo para los mejores del día.",
+"Vitesse sur chaque photo, classement du jour pour l'écran, profils des visiteurs, jeu-concours pour les meilleurs du jour.",
+"Velocità su ogni foto, classifica giornaliera per lo schermo, profili degli ospiti, concorso per i migliori del giorno.",
+"Snelheid op elke foto, dagranglijst voor het scherm, gastprofielen, winactie voor de dagtoppers.",
+"Ātrums uz katra foto, dienas līderu saraksts ekrānam, viesu profili, izloze dienas labākajiem."
+],
+"Gespeichert – gilt sofort.": [
+"Saved – applies immediately.",
+"Guardado: se aplica al instante.",
+"Enregistré – s'applique immédiatement.",
+"Salvato: vale subito.",
+"Opgeslagen – geldt direct.",
+"Saglabāts – darbojas uzreiz."
+],
+"Gespeichert.": [
+"Saved.",
+"Guardado.",
+"Enregistré.",
+"Salvato.",
+"Opgeslagen.",
+"Saglabāts."
+],
+"Gestaltung (optional)": [
+"Design (optional)",
+"Diseño (opcional)",
+"Mise en forme (facultatif)",
+"Design (facoltativo)",
+"Vormgeving (optioneel)",
+"Noformējums (pēc izvēles)"
+],
+"Gewinner: {0}": [
+"Winner: {0}",
+"Ganador: {0}",
+"Gagnant : {0}",
+"Vincitore: {0}",
+"Winnaar: {0}",
+"Uzvarētājs: {0}"
+],
+"Gewinnspiel anbieten": [
+"Offer a prize draw",
+"Ofrecer un sorteo",
+"Proposer un jeu-concours",
+"Offri un concorso",
+"Winactie aanbieden",
+"Piedāvāt izlozi"
+],
+"Gewinnspiel und Rekord-Challenge gehören zu {0}.": [
+"Prize draw and record challenge are part of {0}.",
+"El sorteo y el reto de récord forman parte de {0}.",
+"Le jeu-concours et le défi record font partie de {0}.",
+"Concorso e sfida record fanno parte di {0}.",
+"Winactie en recordchallenge horen bij {0}.",
+"Izloze un rekorda izaicinājums ir daļa no {0}."
+],
+"Gewinnspiel und Rekord-Challenge gehören zu {0}. „Teilen & freischalten“ geht schon jetzt.": [
+"Prize draw and record challenge are part of {0}. “Share & unlock” works right now.",
+"El sorteo y el reto de récord forman parte de {0}. «Compartir y desbloquear» ya funciona.",
+"Le jeu-concours et le défi record font partie de {0}. « Partager & débloquer » fonctionne déjà.",
+"Concorso e sfida record fanno parte di {0}. «Condividi e sblocca» funziona già.",
+"Winactie en recordchallenge horen bij {0}. ‘Delen & vrijgeven’ werkt nu al.",
+"Izloze un rekorda izaicinājums ir daļa no {0}. “Dalīties un atbloķēt” darbojas jau tagad."
+],
+"Gezogen am {0}": [
+"Drawn on {0}",
+"Sorteado el {0}",
+"Tiré le {0}",
+"Estratto il {0}",
+"Getrokken op {0}",
+"Izlozēts {0}"
+],
+"Gibt die gekauften Bilder aus.": [
+"Prints the purchased photos.",
+"Imprime las fotos compradas.",
+"Imprime les photos achetées.",
+"Stampa le foto acquistate.",
+"Drukt de gekochte foto's af.",
+"Izdrukā nopirktos foto."
+],
+"Gilt für hochgeladene und von der KI erstellte Overlays.": [
+"Applies to uploaded and AI-created overlays.",
+"Se aplica a overlays subidos y creados por la IA.",
+"S'applique aux overlays importés et créés par l'IA.",
+"Vale per overlay caricati e creati dall'IA.",
+"Geldt voor geüploade en door AI gemaakte overlays.",
+"Attiecas uz augšupielādētiem un MI veidotiem pārklājumiem."
+],
+"Gilt nach dem Speichern für neue Besuche der Abholseite.": [
+"After saving, applies to new visits to the pickup page.",
+"Tras guardar, se aplica a las nuevas visitas a la página de recogida.",
+"Après l'enregistrement, s'applique aux nouvelles visites de la page de récupération.",
+"Dopo il salvataggio vale per le nuove visite alla pagina di ritiro.",
+"Geldt na opslaan voor nieuwe bezoeken aan de ophaalpagina.",
+"Pēc saglabāšanas attiecas uz jauniem saņemšanas lapas apmeklējumiem."
+],
+"Gilt sofort nach dem Speichern": [
+"Applies immediately after saving",
+"Se aplica justo después de guardar",
+"S'applique dès l'enregistrement",
+"Vale subito dopo il salvataggio",
+"Geldt direct na opslaan",
+"Darbojas uzreiz pēc saglabāšanas"
+],
+"Glocke": [
+"Bell",
+"Campana",
+"Cloche",
+"Campanella",
+"Bel",
+"Zvans"
+],
+"Groß und fett": [
+"Large and bold",
+"Grande y en negrita",
+"Grand et gras",
+"Grande e in grassetto",
+"Groot en vet",
+"Liels un trekns"
+],
+"Größe · {0}": [
+"Size · {0}",
+"Tamaño · {0}",
+"Taille · {0}",
+"Dimensione · {0}",
+"Grootte · {0}",
+"Izmērs · {0}"
+],
+"Grüner Haken: Foto wurde gekauft. Fotos werden nach etwa 30 Tagen gelöscht.": [
+"Green tick: photo was purchased. Photos are deleted after about 30 days.",
+"Marca verde: la foto se ha comprado. Las fotos se eliminan tras unos 30 días.",
+"Coche verte : photo achetée. Les photos sont supprimées après environ 30 jours.",
+"Spunta verde: foto acquistata. Le foto vengono eliminate dopo circa 30 giorni.",
+"Groen vinkje: foto is gekocht. Foto's worden na ongeveer 30 dagen verwijderd.",
+"Zaļš ķeksītis: foto ir nopirkts. Foto tiek dzēsti pēc apmēram 30 dienām."
+],
+"Gäste kaufen ihr Foto auch nach dem Besuch – als Download oder auf Tasse und T-Shirt. Hier stellst du Produkte und Preise ein.": [
+"Guests can buy their photo after their visit too – as a download or on a mug and T-shirt. Set products and prices here.",
+"Los visitantes compran su foto también después de la visita: como descarga o en taza y camiseta. Aquí configuras productos y precios.",
+"Les visiteurs achètent leur photo même après la visite – en téléchargement ou sur mug et T-shirt. Ici, tu règles produits et prix.",
+"Gli ospiti acquistano la foto anche dopo la visita, come download o su tazza e maglietta. Qui imposti prodotti e prezzi.",
+"Gasten kopen hun foto ook na het bezoek – als download of op mok en T-shirt. Hier stel je producten en prijzen in.",
+"Viesi var nopirkt savu foto arī pēc apmeklējuma – lejupielādei vai uz krūzes un T-krekla. Šeit iestati produktus un cenas."
+],
+"Gäste nehmen mit ihrem Beitrag teil.": [
+"Guests enter with their post.",
+"Los visitantes participan con su publicación.",
+"Les visiteurs participent avec leur publication.",
+"Gli ospiti partecipano con il loro post.",
+"Gasten doen mee met hun bericht.",
+"Viesi piedalās ar savu ierakstu."
+],
+"Gäste schalten gerade per {0} frei.": [
+"Guests are currently unlocking via {0}.",
+"Los visitantes desbloquean ahora mediante {0}.",
+"Les visiteurs débloquent actuellement via {0}.",
+"Gli ospiti stanno sbloccando tramite {0}.",
+"Gasten geven nu vrij via {0}.",
+"Viesi pašlaik atbloķē ar {0}."
+],
+"Gäste sehen sie danach nicht mehr auf der Abholseite.": [
+"Guests will no longer see it on the pickup page afterwards.",
+"Después, los visitantes ya no la verán en la página de recogida.",
+"Les visiteurs ne la verront plus sur la page de récupération.",
+"In seguito gli ospiti non la vedranno più nella pagina di ritiro.",
+"Gasten zien die daarna niet meer op de ophaalpagina.",
+"Pēc tam viesi to vairs neredzēs saņemšanas lapā."
+],
+"Gäste, die ihr Foto mit E-Mail freischalten, erscheinen hier.": [
+"Guests who unlock their photo with an email appear here.",
+"Aquí aparecen los visitantes que desbloquean su foto con el correo.",
+"Les visiteurs qui débloquent leur photo avec leur e-mail apparaissent ici.",
+"Qui compaiono gli ospiti che sbloccano la foto con l'e-mail.",
+"Gasten die hun foto met e-mail vrijgeven, verschijnen hier.",
+"Šeit parādās viesi, kas atbloķē foto ar e-pastu."
+],
+"Hell": [
+"Light",
+"Claro",
+"Clair",
+"Chiaro",
+"Licht",
+"Gaišs"
+],
+"Heller Modus": [
+"Light mode",
+"Modo claro",
+"Mode clair",
+"Modalità chiara",
+"Lichte modus",
+"Gaišais režīms"
+],
+"Heute geschlossen": [
+"Closed today",
+"Cerrado hoy",
+"Fermé aujourd'hui",
+"Chiuso oggi",
+"Vandaag gesloten",
+"Šodien slēgts"
+],
+"Heute geöffnet {0} bis {1} Uhr": [
+"Open today {0} to {1}",
+"Abierto hoy de {0} a {1}",
+"Ouvert aujourd'hui de {0} à {1}",
+"Aperto oggi dalle {0} alle {1}",
+"Vandaag open van {0} tot {1} uur",
+"Šodien atvērts no {0} līdz {1}"
+],
+"Heute noch kein Verkauf": [
+"No sales yet today",
+"Hoy aún no hay ventas",
+"Aucune vente aujourd'hui",
+"Ancora nessuna vendita oggi",
+"Vandaag nog geen verkoop",
+"Šodien vēl nav pārdevumu"
+],
+"Heutiges Datum": [
+"Today's date",
+"Fecha de hoy",
+"Date du jour",
+"Data di oggi",
+"Datum van vandaag",
+"Šodienas datums"
+],
+"Hier bekommst du den schnellsten Gesamtüberblick über deinen Park, ohne dich erst durch einzelne Bereiche zu klicken. Du siehst die wichtigsten Tages- und Monatszahlen, die Umsatzkurve und aktuelle operative Hinweise auf einen Blick.": [
+"This is the quickest overview of your park without clicking through individual sections. You see the key daily and monthly figures, the revenue curve and current operational notes at a glance.",
+"Aquí tienes la visión general más rápida de tu parque sin tener que recorrer cada sección. Ves de un vistazo las cifras clave del día y del mes, la curva de ingresos y los avisos operativos actuales.",
+"Ici, tu as la vue d'ensemble la plus rapide de ton parc, sans passer par chaque section. Tu vois d'un coup d'œil les chiffres clés du jour et du mois, la courbe des recettes et les alertes opérationnelles en cours.",
+"Qui hai la panoramica più rapida del tuo parco, senza dover cliccare tra le singole sezioni. Vedi a colpo d'occhio i dati principali del giorno e del mese, la curva degli incassi e gli avvisi operativi attuali.",
+"Hier krijg je het snelste totaaloverzicht van je park zonder door losse onderdelen te klikken. Je ziet de belangrijkste dag- en maandcijfers, de omzetcurve en actuele operationele meldingen in één oogopslag.",
+"Šeit ātrākais kopskats par tavu parku, neklikšķinot pa atsevišķām sadaļām. Vienā skatienā redzi galvenos dienas un mēneša rādītājus, ieņēmumu līkni un aktuālos darbības paziņojumus."
+],
+"Hier erkennst du, welche Gäste ihre Bilder digital freischalten oder nach dem Besuch noch mit dem Bild interagieren. Du kannst Kontakte filtern, nach Land segmentieren, einzelne Einträge löschen und die Weltkarte sowie Einlösezeiten auswerten.": [
+"Here you see which guests unlock their photos digitally or still interact with the photo after their visit. You can filter contacts, segment by country, delete individual entries and analyse the world map and redemption times.",
+"Aquí ves qué visitantes desbloquean sus fotos digitalmente o siguen interactuando con ellas tras la visita. Puedes filtrar contactos, segmentar por país, eliminar entradas y analizar el mapa mundial y los horarios de canje.",
+"Ici, tu vois quels visiteurs débloquent leurs photos en ligne ou interagissent encore avec elles après la visite. Tu peux filtrer les contacts, segmenter par pays, supprimer des entrées et analyser la carte du monde et les heures d'utilisation.",
+"Qui vedi quali ospiti sbloccano le foto in digitale o interagiscono ancora con esse dopo la visita. Puoi filtrare i contatti, segmentarli per paese, eliminare singole voci e analizzare la mappa del mondo e gli orari di riscatto.",
+"Hier zie je welke gasten hun foto's digitaal vrijgeven of na het bezoek nog met de foto bezig zijn. Je kunt contacten filteren, op land segmenteren, losse items verwijderen en de wereldkaart en inwisseltijden analyseren.",
+"Šeit redzi, kuri viesi atbloķē foto digitāli vai pēc apmeklējuma vēl ar tiem mijiedarbojas. Vari filtrēt kontaktus, segmentēt pēc valsts, dzēst atsevišķus ierakstus un analizēt pasaules karti un izmantošanas laikus."
+],
+"Hier laufen technische oder organisatorische Rückfragen zusammen, damit du Probleme schneller lösen kannst. Du kannst Tickets lesen, beantworten, archivieren und neue Fälle anlegen, wenn etwas im Betrieb auffällt.": [
+"Technical and organisational questions come together here so you can solve problems faster. You can read, answer and archive tickets and create new cases when something comes up in operation.",
+"Aquí se reúnen las consultas técnicas u organizativas para que resuelvas los problemas más rápido. Puedes leer, responder y archivar tickets y crear casos nuevos cuando notes algo en la operación.",
+"Ici se regroupent les questions techniques ou organisationnelles pour que tu résolves les problèmes plus vite. Tu peux lire, répondre, archiver des tickets et en créer de nouveaux quand quelque chose cloche.",
+"Qui confluiscono le richieste tecniche o organizzative, così risolvi i problemi più rapidamente. Puoi leggere, rispondere e archiviare ticket e aprirne di nuovi quando noti qualcosa durante l'attività.",
+"Hier komen technische of organisatorische vragen samen, zodat je problemen sneller oplost. Je kunt tickets lezen, beantwoorden, archiveren en nieuwe aanmaken als er iets opvalt.",
+"Šeit apkopoti tehniskie un organizatoriskie jautājumi, lai problēmas risinātu ātrāk. Vari lasīt, atbildēt un arhivēt pieteikumus un izveidot jaunus, ja darbībā kaut kas pamanīts."
+],
+"Hier siehst du jede einzelne Transaktion und kannst schnell nachvollziehen, was am Automaten verkauft wurde. Du kannst Käufe filtern, durchsuchen, exportieren und einzelne Vorgänge nach Datum, Betrag oder Quelle prüfen.": [
+"Here you see every single transaction and can quickly trace what was sold at the kiosk. You can filter, search and export purchases and check individual transactions by date, amount or source.",
+"Aquí ves cada transacción y puedes comprobar rápidamente qué se vendió en la máquina. Puedes filtrar, buscar y exportar compras y revisar operaciones por fecha, importe u origen.",
+"Ici, tu vois chaque transaction et retraces rapidement ce qui a été vendu à la borne. Tu peux filtrer, rechercher, exporter les achats et vérifier chaque opération par date, montant ou source.",
+"Qui vedi ogni singola transazione e capisci rapidamente cosa è stato venduto al distributore. Puoi filtrare, cercare, esportare gli acquisti e controllare le singole operazioni per data, importo o fonte.",
+"Hier zie je elke transactie en kun je snel nagaan wat er bij de automaat is verkocht. Je kunt aankopen filteren, doorzoeken, exporteren en losse transacties controleren op datum, bedrag of bron.",
+"Šeit redzi katru darījumu un vari ātri izsekot, kas pārdots automātā. Vari filtrēt, meklēt, eksportēt pirkumus un pārbaudīt atsevišķus darījumus pēc datuma, summas vai avota."
+],
+"Hinweis schließen": [
+"Close notice",
+"Cerrar aviso",
+"Fermer l'avis",
+"Chiudi avviso",
+"Melding sluiten",
+"Aizvērt paziņojumu"
+],
+"Hochformat 3:4": [
+"Portrait 3:4",
+"Vertical 3:4",
+"Portrait 3:4",
+"Verticale 3:4",
+"Staand 3:4",
+"Portrets 3:4"
+],
+"Hochladen": [
+"Upload",
+"Subir",
+"Importer",
+"Carica",
+"Uploaden",
+"Augšupielādēt"
+],
+"Im Editor einschalten": [
+"Turn on in the editor",
+"Activar en el editor",
+"Activer dans l'éditeur",
+"Attiva nell'editor",
+"Inschakelen in de editor",
+"Ieslēgt redaktorā"
+],
+"Im Studio": [
+"In the studio",
+"En el estudio",
+"Dans le studio",
+"Nello studio",
+"In de studio",
+"Studijā"
+],
+"Im Studio bearbeiten": [
+"Edit in studio",
+"Editar en el estudio",
+"Modifier dans le studio",
+"Modifica nello studio",
+"Bewerken in studio",
+"Rediģēt studijā"
+],
+"Im gewählten Zeitraum gibt es noch keine Antworten. Sobald Gäste vor der Freischaltung antworten, erscheinen sie hier.": [
+"There are no answers in the selected period yet. As soon as guests answer before unlocking, they'll appear here.",
+"Aún no hay respuestas en el periodo seleccionado. En cuanto los visitantes respondan antes del desbloqueo, aparecerán aquí.",
+"Aucune réponse sur la période choisie. Dès que des visiteurs répondent avant le déblocage, elles apparaissent ici.",
+"Nel periodo selezionato non ci sono ancora risposte. Appena gli ospiti rispondono prima dello sblocco, compariranno qui.",
+"In de gekozen periode zijn er nog geen antwoorden. Zodra gasten vóór het vrijgeven antwoorden, verschijnen ze hier.",
+"Izvēlētajā periodā vēl nav atbilžu. Tiklīdz viesi atbildēs pirms atbloķēšanas, tās parādīsies šeit."
+],
+"Im gewählten Zeitraum hat noch kein Gast per Social Media freigeschaltet.": [
+"No guest has unlocked via social media in the selected period yet.",
+"En el periodo seleccionado aún ningún visitante ha desbloqueado mediante redes sociales.",
+"Aucun visiteur n'a encore débloqué via les réseaux sociaux sur la période choisie.",
+"Nel periodo selezionato nessun ospite ha ancora sbloccato tramite social media.",
+"In de gekozen periode heeft nog geen gast via social media vrijgegeven.",
+"Izvēlētajā periodā neviens viesis vēl nav atbloķējis ar sociālajiem tīkliem."
+],
+"In 14 Tagen": [
+"In 14 days",
+"En 14 días",
+"Dans 14 jours",
+"Tra 14 giorni",
+"Over 14 dagen",
+"Pēc 14 dienām"
+],
+"In 30 Tagen": [
+"In 30 days",
+"En 30 días",
+"Dans 30 jours",
+"Tra 30 giorni",
+"Over 30 dagen",
+"Pēc 30 dienām"
+],
+"In 7 Tagen": [
+"In 7 days",
+"En 7 días",
+"Dans 7 jours",
+"Tra 7 giorni",
+"Over 7 dagen",
+"Pēc 7 dienām"
+],
+"In Antworten suchen": [
+"Search answers",
+"Buscar en las respuestas",
+"Rechercher dans les réponses",
+"Cerca nelle risposte",
+"Zoeken in antwoorden",
+"Meklēt atbildēs"
+],
+"In diesem Zeitraum wurde keine Fahrt mit Foto-Abholung gemessen.": [
+"No ride with photo pickup was measured in this period.",
+"En este periodo no se midió ningún viaje con recogida de foto.",
+"Aucun trajet avec récupération de photo n'a été mesuré sur cette période.",
+"In questo periodo non è stata misurata nessuna corsa con ritiro della foto.",
+"In deze periode is geen rit met fotoafhaling gemeten.",
+"Šajā periodā nav izmērīts neviens brauciens ar foto saņemšanu."
+],
+"In diesem Zeitraum wurde noch kein Foto verkauft.": [
+"No photo has been sold in this period yet.",
+"En este periodo aún no se ha vendido ninguna foto.",
+"Aucune photo n'a encore été vendue sur cette période.",
+"In questo periodo non è ancora stata venduta nessuna foto.",
+"In deze periode is nog geen foto verkocht.",
+"Šajā periodā vēl nav pārdots neviens foto."
+],
+"Inhaber": [
+"Owner",
+"Titular",
+"Propriétaire",
+"Titolare",
+"Eigenaar",
+"Īpašnieks"
+],
+"Instagram": [
+"Instagram",
+"Instagram",
+"Instagram",
+"Instagram",
+"Instagram",
+"Instagram"
+],
+"Internetverbindung": [
+"Internet connection",
+"Conexión a internet",
+"Connexion internet",
+"Connessione internet",
+"Internetverbinding",
+"Interneta savienojums"
+],
+"Jeder Automat mit Papier, Kamera, Drucker und Verbindung. „Einfache Ansicht“ zeigt nur, was zählt.": [
+"Every kiosk with paper, camera, printer and connection. “Simple view” shows only what matters.",
+"Cada máquina con papel, cámara, impresora y conexión. «Vista sencilla» muestra solo lo importante.",
+"Chaque borne avec papier, caméra, imprimante et connexion. « Vue simple » n'affiche que l'essentiel.",
+"Ogni distributore con carta, fotocamera, stampante e connessione. «Vista semplice» mostra solo l'essenziale.",
+"Elke automaat met papier, camera, printer en verbinding. ‘Eenvoudige weergave’ toont alleen wat telt.",
+"Katrs automāts ar papīru, kameru, printeri un savienojumu. “Vienkāršs skats” rāda tikai būtisko."
+],
+"Jetzt an {0} Empfänger senden? Das lässt sich nicht zurücknehmen.": [
+"Send to {0} recipients now? This cannot be undone.",
+"¿Enviar ahora a {0} destinatarios? No se puede deshacer.",
+"Envoyer maintenant à {0} destinataires ? Action irréversible.",
+"Inviare ora a {0} destinatari? Non si può annullare.",
+"Nu naar {0} ontvangers sturen? Dit kan niet ongedaan worden gemaakt.",
+"Sūtīt tagad {0} adresātiem? To nevar atsaukt."
+],
+"Jetzt senden?": [
+"Send now?",
+"¿Enviar ahora?",
+"Envoyer maintenant ?",
+"Inviare ora?",
+"Nu versturen?",
+"Sūtīt tagad?"
+],
+"KI-Overlay erstellt und aktiviert.": [
+"AI overlay created and activated.",
+"Overlay de IA creado y activado.",
+"Overlay IA créé et activé.",
+"Overlay IA creato e attivato.",
+"AI-overlay gemaakt en geactiveerd.",
+"MI pārklājums izveidots un aktivizēts."
+],
+"KI-Overlay erstellt und gespeichert.": [
+"AI overlay created and saved.",
+"Overlay de IA creado y guardado.",
+"Overlay IA créé et enregistré.",
+"Overlay IA creato e salvato.",
+"AI-overlay gemaakt en opgeslagen.",
+"MI pārklājums izveidots un saglabāts."
+],
+"Kamera-Software": [
+"Camera software",
+"Software de la cámara",
+"Logiciel caméra",
+"Software fotocamera",
+"Camerasoftware",
+"Kameras programmatūra"
+],
+"Kampagne": [
+"Campaign",
+"Campaña",
+"Campagne",
+"Campagna",
+"Campagne",
+"Kampaņa"
+],
+"Kampagne bearbeiten": [
+"Edit campaign",
+"Editar campaña",
+"Modifier la campagne",
+"Modifica campagna",
+"Campagne bewerken",
+"Rediģēt kampaņu"
+],
+"Kampagne beenden?": [
+"End campaign?",
+"¿Finalizar la campaña?",
+"Terminer la campagne ?",
+"Terminare la campagna?",
+"Campagne beëindigen?",
+"Beigt kampaņu?"
+],
+"Kartenterminal": [
+"Card terminal",
+"Terminal de tarjetas",
+"Terminal de paiement",
+"Terminale carte",
+"Kaartterminal",
+"Karšu terminālis"
+],
+"Kartenterminal-Prüfung": [
+"Card terminal check",
+"Comprobación del terminal de tarjetas",
+"Contrôle du terminal de paiement",
+"Verifica terminale carte",
+"Controle kaartterminal",
+"Karšu termināļa pārbaude"
+],
+"Kaufquote heute": [
+"Purchase rate today",
+"Tasa de compra hoy",
+"Taux d'achat aujourd'hui",
+"Tasso di acquisto oggi",
+"Koopratio vandaag",
+"Pirkumu īpatsvars šodien"
+],
+"Kein Livebild: die Kamera hängt am Automaten, nicht am Internet. Die Vorschau ist eine Annäherung am fertigen Bild, keine Aufnahme mit den neuen Werten.": [
+"No live image: the camera is connected to the kiosk, not the internet. The preview approximates the finished photo; it isn't a shot taken with the new values.",
+"Sin imagen en directo: la cámara está conectada a la máquina, no a internet. La vista previa es una aproximación a la foto final, no una toma con los nuevos valores.",
+"Pas d'image en direct : la caméra est reliée à la borne, pas à internet. L'aperçu est une approximation de l'image finale, pas une prise de vue avec les nouvelles valeurs.",
+"Nessuna immagine dal vivo: la fotocamera è collegata al distributore, non a internet. L'anteprima è un'approssimazione della foto finale, non uno scatto con i nuovi valori.",
+"Geen livebeeld: de camera hangt aan de automaat, niet aan internet. Het voorbeeld benadert de uiteindelijke foto en is geen opname met de nieuwe waarden.",
+"Nav tiešraides attēla: kamera ir pievienota automātam, nevis internetam. Priekšskatījums ir tuvinājums gatavajam foto, nevis kadrs ar jaunajām vērtībām."
+],
+"Kein Park": [
+"No park",
+"Sin parque",
+"Aucun parc",
+"Nessun parco",
+"Geen park",
+"Nav parka"
+],
+"Kein Park gefunden.": [
+"No park found.",
+"No se ha encontrado ningún parque.",
+"Aucun parc trouvé.",
+"Nessun parco trovato.",
+"Geen park gevonden.",
+"Parks nav atrasts."
+],
+"Kein Zugang": [
+"No access",
+"Sin acceso",
+"Pas d'accès",
+"Nessun accesso",
+"Geen toegang",
+"Nav piekļuves"
+],
+"Kein Zugriff auf die Fotos. Bitte in den iOS-Einstellungen erlauben.": [
+"No access to photos. Please allow it in iOS Settings.",
+"Sin acceso a las fotos. Permítelo en los ajustes de iOS.",
+"Pas d'accès aux photos. Autorise-le dans les réglages iOS.",
+"Nessun accesso alle foto. Consentilo nelle impostazioni di iOS.",
+"Geen toegang tot foto's. Sta dit toe in de iOS-instellingen.",
+"Nav piekļuves fotoattēliem. Lūdzu, atļauj to iOS iestatījumos."
+],
+"Kein Zugriff auf die Kamera. Bitte in den iOS-Einstellungen erlauben.": [
+"No access to the camera. Please allow it in iOS Settings.",
+"Sin acceso a la cámara. Permítelo en los ajustes de iOS.",
+"Pas d'accès à la caméra. Autorise-le dans les réglages iOS.",
+"Nessun accesso alla fotocamera. Consentilo nelle impostazioni di iOS.",
+"Geen toegang tot de camera. Sta dit toe in de iOS-instellingen.",
+"Nav piekļuves kamerai. Lūdzu, atļauj to iOS iestatījumos."
+],
+"Keine Adresse erhalten": [
+"No address received",
+"No se recibió ninguna dirección",
+"Aucune adresse reçue",
+"Nessun indirizzo ricevuto",
+"Geen adres ontvangen",
+"Adrese nav saņemta"
+],
+"Keine Antwort": [
+"No answer",
+"Sin respuesta",
+"Pas de réponse",
+"Nessuna risposta",
+"Geen antwoord",
+"Nav atbildes"
+],
+"Keine Antwort passt zur Suche.": [
+"No answer matches the search.",
+"Ninguna respuesta coincide con la búsqueda.",
+"Aucune réponse ne correspond à la recherche.",
+"Nessuna risposta corrisponde alla ricerca.",
+"Geen antwoord past bij de zoekopdracht.",
+"Neviena atbilde neatbilst meklējumam."
+],
+"Keine Automaten": [
+"No kiosks",
+"Sin máquinas",
+"Aucune borne",
+"Nessun distributore",
+"Geen automaten",
+"Nav automātu"
+],
+"Keine Fotos mehr": [
+"No more photos",
+"No hay más fotos",
+"Plus de photos",
+"Nessun'altra foto",
+"Geen foto's meer",
+"Vairāk foto nav"
+],
+"Keine Kamera gemeldet": [
+"No camera reported",
+"No se ha detectado ninguna cámara",
+"Aucune caméra signalée",
+"Nessuna fotocamera segnalata",
+"Geen camera gemeld",
+"Kamera nav reģistrēta"
+],
+"Keine Score-Frage gewählt – dann sehen alle den Link.": [
+"No score question selected – everyone will see the link.",
+"No hay pregunta de puntuación: todos verán el enlace.",
+"Aucune question de score choisie – tout le monde verra le lien.",
+"Nessuna domanda di punteggio scelta: tutti vedranno il link.",
+"Geen scorevraag gekozen – dan ziet iedereen de link.",
+"Nav izvēlēts vērtējuma jautājums – tad saiti redz visi."
+],
+"Keine Störungen, kein Papiermangel, keine offenen Antworten. Behobene Störungen verschwinden von selbst.": [
+"No faults, no paper shortage, no pending replies. Resolved faults disappear automatically.",
+"Sin averías, sin falta de papel, sin respuestas pendientes. Las averías resueltas desaparecen solas.",
+"Aucune panne, pas de manque de papier, aucune réponse en attente. Les pannes résolues disparaissent d'elles-mêmes.",
+"Nessun guasto, nessuna carenza di carta, nessuna risposta in sospeso. I guasti risolti scompaiono da soli.",
+"Geen storingen, geen papiertekort, geen openstaande antwoorden. Opgeloste storingen verdwijnen vanzelf.",
+"Nav traucējumu, nav papīra trūkuma, nav neatbildētu atbilžu. Novērstie traucējumi pazūd paši."
+],
+"Keine Verbindung. Bitte Internet prüfen.": [
+"No connection. Please check your internet.",
+"Sin conexión. Comprueba internet.",
+"Pas de connexion. Vérifie internet.",
+"Nessuna connessione. Controlla internet.",
+"Geen verbinding. Controleer je internet.",
+"Nav savienojuma. Lūdzu, pārbaudi internetu."
+],
+"Keine Verkäufe": [
+"No sales",
+"Sin ventas",
+"Aucune vente",
+"Nessuna vendita",
+"Geen verkopen",
+"Nav pārdevumu"
+],
+"Keine offenen Anfragen": [
+"No open requests",
+"Sin solicitudes abiertas",
+"Aucune demande ouverte",
+"Nessuna richiesta aperta",
+"Geen openstaande aanvragen",
+"Nav atvērtu pieprasījumu"
+],
+"Konfiguration": [
+"Configuration",
+"Configuración",
+"Configuration",
+"Configurazione",
+"Configuratie",
+"Konfigurācija"
+],
+"Kontaktdaten (E-Mail)": [
+"Contact details (email)",
+"Datos de contacto (correo)",
+"Coordonnées (e-mail)",
+"Dati di contatto (e-mail)",
+"Contactgegevens (e-mail)",
+"Kontaktinformācija (e-pasts)"
+],
+"Kontakte": [
+"Contacts",
+"Contactos",
+"Contacts",
+"Contatti",
+"Contacten",
+"Kontakti"
+],
+"Kontakte, E-Mails, Social Media, Umfrage mit allen Antworten und Werbe-Pixel. Der grüne Punkt zeigt, wie Gäste gerade freischalten.": [
+"Contacts, emails, social media, survey with all answers and ad pixels. The green dot shows how guests are currently unlocking.",
+"Contactos, correos, redes sociales, encuesta con todas las respuestas y píxeles publicitarios. El punto verde indica cómo desbloquean ahora los visitantes.",
+"Contacts, e-mails, réseaux sociaux, sondage avec toutes les réponses et pixels publicitaires. Le point vert indique comment les visiteurs débloquent actuellement.",
+"Contatti, e-mail, social media, sondaggio con tutte le risposte e pixel pubblicitari. Il punto verde mostra come gli ospiti stanno sbloccando.",
+"Contacten, e-mails, social media, enquête met alle antwoorden en advertentiepixels. De groene stip laat zien hoe gasten nu vrijgeven.",
+"Kontakti, e-pasti, sociālie tīkli, aptauja ar visām atbildēm un reklāmas pikseļi. Zaļais punkts rāda, kā viesi pašlaik atbloķē."
+],
+"Kontakte, Umfrage, E-Mails und Social Media": [
+"Contacts, survey, emails and social media",
+"Contactos, encuesta, correos y redes sociales",
+"Contacts, sondage, e-mails et réseaux sociaux",
+"Contatti, sondaggio, e-mail e social media",
+"Contacten, enquête, e-mails en social media",
+"Kontakti, aptauja, e-pasti un sociālie tīkli"
+],
+"Konto und Einstellungen": [
+"Account and settings",
+"Cuenta y ajustes",
+"Compte et réglages",
+"Account e impostazioni",
+"Account en instellingen",
+"Konts un iestatījumi"
+],
+"Kontur · {0}": [
+"Outline · {0}",
+"Contorno · {0}",
+"Contour · {0}",
+"Contorno · {0}",
+"Contour · {0}",
+"Kontūra · {0}"
+],
+"Kopie": [
+"Copy",
+"Copia",
+"Copie",
+"Copia",
+"Kopie",
+"Kopija"
+],
+"Kopieren": [
+"Copy",
+"Copiar",
+"Copier",
+"Copia",
+"Kopiëren",
+"Kopēt"
+],
+"Kopiert": [
+"Copied",
+"Copiado",
+"Copié",
+"Copiato",
+"Gekopieerd",
+"Nokopēts"
+],
+"Kreis-Stempel": [
+"Round stamp",
+"Sello redondo",
+"Tampon rond",
+"Timbro rotondo",
+"Ronde stempel",
+"Apaļais zīmogs"
+],
+"Kritiker {0}": [
+"Detractors {0}",
+"Detractores {0}",
+"Détracteurs {0}",
+"Detrattori {0}",
+"Criticasters {0}",
+"Kritiķi {0}"
+],
+"Käufe, Kamera, Marketing, Shop, Einstellungen und mehr. Zwischen den Tabs kannst du auch seitlich wischen.": [
+"Purchases, camera, marketing, shop, settings and more. You can also swipe sideways between tabs.",
+"Compras, cámara, marketing, tienda, ajustes y más. También puedes deslizar lateralmente entre pestañas.",
+"Achats, caméra, marketing, boutique, réglages et plus. Tu peux aussi balayer latéralement entre les onglets.",
+"Acquisti, fotocamera, marketing, negozio, impostazioni e altro. Puoi anche scorrere lateralmente tra le schede.",
+"Aankopen, camera, marketing, shop, instellingen en meer. Je kunt ook zijwaarts tussen tabbladen vegen.",
+"Pirkumi, kamera, mārketings, veikals, iestatījumi un vēl. Starp cilnēm vari arī pavilkt uz sāniem."
+],
+"Lade die erste Person ein. Sie sieht nur die Seiten, die du freigibst.": [
+"Invite the first person. They only see the pages you allow.",
+"Invita a la primera persona. Solo verá las páginas que autorices.",
+"Invite la première personne. Elle ne voit que les pages que tu autorises.",
+"Invita la prima persona. Vedrà solo le pagine che autorizzi.",
+"Nodig de eerste persoon uit. Die ziet alleen de pagina's die jij vrijgeeft.",
+"Uzaicini pirmo personu. Tā redzēs tikai tās lapas, kuras atļausi."
+],
+"Langsamste": [
+"Slowest",
+"Más lentos",
+"Plus lents",
+"Più lenti",
+"Langzaamste",
+"Lēnākie"
+],
+"Laufzeit seit dem letzten Neustart.": [
+"Uptime since the last restart.",
+"Tiempo de funcionamiento desde el último reinicio.",
+"Durée de fonctionnement depuis le dernier redémarrage.",
+"Tempo di attività dall'ultimo riavvio.",
+"Looptijd sinds de laatste herstart.",
+"Darbības laiks kopš pēdējās restartēšanas."
+],
+"Leere Frage": [
+"Empty question",
+"Pregunta vacía",
+"Question vide",
+"Domanda vuota",
+"Lege vraag",
+"Tukšs jautājums"
+],
+"Leeren": [
+"Clear",
+"Vaciar",
+"Effacer",
+"Svuota",
+"Leegmaken",
+"Notīrīt"
+],
+"Lege eine an, um ein Gewinnspiel oder eine Challenge zu starten.": [
+"Create one to start a prize draw or a challenge.",
+"Crea una para empezar un sorteo o un reto.",
+"Crées-en une pour lancer un jeu-concours ou un défi.",
+"Creane una per avviare un concorso o una sfida.",
+"Maak er een aan om een winactie of challenge te starten.",
+"Izveido kampaņu, lai sāktu izlozi vai izaicinājumu."
+],
+"Legt fest, welche Nummer auf den Beleg gedruckt wird.": [
+"Sets which number is printed on the receipt.",
+"Define qué número se imprime en el recibo.",
+"Détermine le numéro imprimé sur le reçu.",
+"Stabilisce quale numero viene stampato sullo scontrino.",
+"Bepaalt welk nummer op het bonnetje wordt gedrukt.",
+"Nosaka, kurš numurs tiek drukāts uz čeka."
+],
+"Letzte 30 Tage": [
+"Last 30 days",
+"Últimos 30 días",
+"30 derniers jours",
+"Ultimi 30 giorni",
+"Laatste 30 dagen",
+"Pēdējās 30 dienas"
+],
+"Letzte Meldung vor {0}": [
+"Last report {0} ago",
+"Último aviso hace {0}",
+"Dernier signal il y a {0}",
+"Ultima segnalazione {0} fa",
+"Laatste melding {0} geleden",
+"Pēdējais ziņojums pirms {0}"
+],
+"Letzte Verkäufe": [
+"Recent sales",
+"Últimas ventas",
+"Dernières ventes",
+"Ultime vendite",
+"Laatste verkopen",
+"Pēdējie pārdevumi"
+],
+"Letztes Foto als Hintergrund": [
+"Latest photo as background",
+"Última foto como fondo",
+"Dernière photo en arrière-plan",
+"Ultima foto come sfondo",
+"Laatste foto als achtergrond",
+"Pēdējais foto kā fons"
+],
+"Lichtschranke": [
+"Light barrier",
+"Barrera de luz",
+"Barrière lumineuse",
+"Fotocellula",
+"Lichtsluis",
+"Gaismas barjera"
+],
+"Liefert die Fotos schnell an die Gäste aus.": [
+"Delivers photos quickly to guests.",
+"Entrega las fotos rápidamente a los visitantes.",
+"Livre rapidement les photos aux visiteurs.",
+"Consegna rapidamente le foto agli ospiti.",
+"Levert de foto's snel aan gasten.",
+"Ātri piegādā foto viesiem."
+],
+"Liftbase": [
+"Liftbase",
+"Liftbase",
+"Liftbase",
+"Liftbase",
+"Liftbase",
+"Liftbase"
+],
+"Liftpictures Dashboard ": [
+"Liftpictures Dashboard ",
+"Liftpictures Dashboard ",
+"Liftpictures Dashboard ",
+"Liftpictures Dashboard ",
+"Liftpictures Dashboard ",
+"Liftpictures Dashboard "
+],
+"Liftpictures Support": [
+"Liftpictures Support",
+"Soporte de Liftpictures",
+"Support Liftpictures",
+"Assistenza Liftpictures",
+"Liftpictures Support",
+"Liftpictures atbalsts"
+],
+"Liftpictures meldet sich bei dir mit einem Angebot.": [
+"Liftpictures will get back to you with an offer.",
+"Liftpictures te contactará con una oferta.",
+"Liftpictures te recontactera avec une offre.",
+"Liftpictures ti contatterà con un'offerta.",
+"Liftpictures neemt contact met je op met een aanbod.",
+"Liftpictures sazināsies ar tevi ar piedāvājumu."
+],
+"Liftpictures stellt hier passende Ausstattung für deinen Park zusammen.": [
+"Liftpictures puts together suitable equipment for your park here.",
+"Liftpictures reúne aquí el equipamiento adecuado para tu parque.",
+"Liftpictures rassemble ici l'équipement adapté à ton parc.",
+"Liftpictures raccoglie qui l'attrezzatura adatta al tuo parco.",
+"Liftpictures stelt hier passende uitrusting voor je park samen.",
+"Liftpictures šeit apkopo tavam parkam piemērotu aprīkojumu."
+],
+"Links": [
+"Left",
+"Izquierda",
+"Gauche",
+"Sinistra",
+"Links",
+"Pa kreisi"
+],
+"Logo oder Bild": [
+"Logo or image",
+"Logotipo o imagen",
+"Logo ou image",
+"Logo o immagine",
+"Logo of afbeelding",
+"Logotips vai attēls"
+],
+"Lädt die Fotos zu Liftpictures hoch.": [
+"Uploads photos to Liftpictures.",
+"Sube las fotos a Liftpictures.",
+"Envoie les photos vers Liftpictures.",
+"Carica le foto su Liftpictures.",
+"Uploadt de foto's naar Liftpictures.",
+"Augšupielādē foto uz Liftpictures."
+],
+"Läuft seit {0}": [
+"Running for {0}",
+"En marcha desde hace {0}",
+"En marche depuis {0}",
+"In funzione da {0}",
+"Draait sinds {0}",
+"Darbojas {0}"
+],
+"Mehrere Parks passen, bitte genauer tippen.": [
+"Several parks match, please be more specific.",
+"Coinciden varios parques, escribe con más precisión.",
+"Plusieurs parcs correspondent, précise ta saisie.",
+"Corrispondono più parchi, digita in modo più preciso.",
+"Meerdere parken passen, typ wat nauwkeuriger.",
+"Atbilst vairāki parki, lūdzu, raksti precīzāk."
+],
+"Mein Park": [
+"My park",
+"Mi parque",
+"Mon parc",
+"Il mio parco",
+"Mijn park",
+"Mans parks"
+],
+"Meine Overlays ({0})": [
+"My overlays ({0})",
+"Mis overlays ({0})",
+"Mes overlays ({0})",
+"I miei overlay ({0})",
+"Mijn overlays ({0})",
+"Mani pārklājumi ({0})"
+],
+"Meiste Fahrten um {0}:00 Uhr": [
+"Most rides at {0}:00",
+"Más viajes a las {0}:00",
+"Le plus de trajets à {0} h",
+"Più corse alle {0}:00",
+"Meeste ritten om {0}:00 uur",
+"Visvairāk braucienu plkst. {0}:00"
+],
+"Meldung entfernen": [
+"Remove notice",
+"Eliminar aviso",
+"Supprimer l'avis",
+"Rimuovi avviso",
+"Melding verwijderen",
+"Noņemt paziņojumu"
+],
+"Meldungen, {0} neu": [
+"Notifications, {0} new",
+"Avisos, {0} nuevos",
+"Notifications, {0} nouvelles",
+"Avvisi, {0} nuovi",
+"Meldingen, {0} nieuw",
+"Paziņojumi, {0} jauni"
+],
+"Min.": [
+"min",
+"min",
+"min",
+"min",
+"min.",
+"min."
+],
+"Mindestens 2 Buchstaben eingeben.": [
+"Enter at least 2 letters.",
+"Introduce al menos 2 letras.",
+"Saisis au moins 2 lettres.",
+"Inserisci almeno 2 lettere.",
+"Voer minstens 2 letters in.",
+"Ievadi vismaz 2 burtus."
+],
+"Mindestens eine ID ist zum Aktivieren nötig. Diese Version erfasst Seitenaufrufe; Ereignisse wie Kauf oder Freischaltung folgen separat.": [
+"At least one ID is required to activate. This version tracks page views; events like purchase or unlock will follow separately.",
+"Se necesita al menos un ID para activar. Esta versión registra visitas a la página; eventos como compra o desbloqueo llegarán por separado.",
+"Au moins un ID est nécessaire pour activer. Cette version mesure les pages vues ; les événements comme l'achat ou le déblocage suivront séparément.",
+"Per attivare serve almeno un ID. Questa versione registra le visualizzazioni di pagina; eventi come acquisto o sblocco seguiranno separatamente.",
+"Er is minstens één ID nodig om te activeren. Deze versie meet paginaweergaven; gebeurtenissen zoals aankoop of vrijgave volgen apart.",
+"Aktivizēšanai nepieciešams vismaz viens ID. Šī versija uzskaita lapas skatījumus; notikumi, piemēram, pirkums vai atbloķēšana, sekos atsevišķi."
+],
+"Mit ": [
+"With ",
+"Con ",
+"Avec ",
+"Con ",
+"Met ",
+"Ar "
+],
+"Mit KI erstellen": [
+"Create with AI",
+"Crear con IA",
+"Créer avec l'IA",
+"Crea con l'IA",
+"Maken met AI",
+"Izveidot ar MI"
+],
+"Mit der Handykamera scannen · Antippen zum Schließen": [
+"Scan with your phone camera · tap to close",
+"Escanéalo con la cámara del móvil · toca para cerrar",
+"Scanne avec l'appareil photo du téléphone · touche pour fermer",
+"Scansiona con la fotocamera del telefono · tocca per chiudere",
+"Scannen met de telefooncamera · tik om te sluiten",
+"Noskenē ar telefona kameru · pieskaries, lai aizvērtu"
+],
+"Mit einem anderen Handy scannen und den Shop selbst ausprobieren – inklusive Test-Checkout mit der Karte 4242 4242 4242 4242.": [
+"Scan with another phone and try the shop yourself – including a test checkout with card 4242 4242 4242 4242.",
+"Escanéalo con otro móvil y prueba tú mismo la tienda, incluido un pago de prueba con la tarjeta 4242 4242 4242 4242.",
+"Scanne avec un autre téléphone et essaie la boutique toi-même – y compris un paiement test avec la carte 4242 4242 4242 4242.",
+"Scansiona con un altro telefono e prova tu stesso il negozio, incluso un checkout di prova con la carta 4242 4242 4242 4242.",
+"Scan met een andere telefoon en probeer de shop zelf uit – inclusief testafrekening met kaart 4242 4242 4242 4242.",
+"Noskenē ar citu telefonu un izmēģini veikalu pats – ieskaitot testa apmaksu ar karti 4242 4242 4242 4242."
+],
+"Mit {0} leitest du zufriedene Gäste direkt zur Google-Bewertung weiter.": [
+"With {0} you send satisfied guests straight to your Google review page.",
+"Con {0} llevas a los visitantes satisfechos directamente a la reseña de Google.",
+"Avec {0}, tu rediriges les visiteurs satisfaits directement vers l'avis Google.",
+"Con {0} indirizzi gli ospiti soddisfatti direttamente alla recensione Google.",
+"Met {0} stuur je tevreden gasten direct door naar de Google-review.",
+"Ar {0} apmierinātus viesus novirzi tieši uz Google atsauksmi."
+],
+"Mit {0} schaltest du sie für deinen Park frei. Alles, was du heute schon nutzt, bleibt dabei unverändert.": [
+"With {0} you unlock it for your park. Everything you already use stays unchanged.",
+"Con {0} la activas para tu parque. Todo lo que ya usas sigue igual.",
+"Avec {0}, tu l'actives pour ton parc. Tout ce que tu utilises déjà reste inchangé.",
+"Con {0} la attivi per il tuo parco. Tutto ciò che usi già resta invariato.",
+"Met {0} activeer je het voor je park. Alles wat je nu al gebruikt, blijft hetzelfde.",
+"Ar {0} to aktivizē savam parkam. Viss, ko jau izmanto, paliek nemainīgs."
+],
+"Mitarbeiter melden sich mit ihrer E-Mail und ihrem Passwort in der App oder im Web an.": [
+"Staff sign in with their email and password in the app or on the web.",
+"El personal inicia sesión con su correo y contraseña en la app o en la web.",
+"Les collaborateurs se connectent avec leur e-mail et leur mot de passe dans l'app ou sur le web.",
+"I collaboratori accedono con e-mail e password nell'app o sul web.",
+"Medewerkers melden zich met hun e-mail en wachtwoord aan in de app of op het web.",
+"Darbinieki piesakās ar savu e-pastu un paroli lietotnē vai tīmeklī."
+],
+"Mitarbeiter-Zugang": [
+"Staff access",
+"Acceso de personal",
+"Accès collaborateur",
+"Accesso collaboratore",
+"Medewerkerstoegang",
+"Darbinieka piekļuve"
+],
+"Mitglied": [
+"Member",
+"Miembro",
+"Membre",
+"Membro",
+"Lid",
+"Dalībnieks"
+],
+"Mitte": [
+"Centre",
+"Centro",
+"Centre",
+"Centro",
+"Midden",
+"Centrs"
+],
+"Mitteilungen auf diesem Gerät empfangen": [
+"Receive notifications on this device",
+"Recibir notificaciones en este dispositivo",
+"Recevoir les notifications sur cet appareil",
+"Ricevi notifiche su questo dispositivo",
+"Meldingen op dit apparaat ontvangen",
+"Saņemt paziņojumus šajā ierīcē"
+],
+"Mitteilungen sind für die App ausgeschaltet. Bitte in den iOS-Einstellungen erlauben.": [
+"Notifications are turned off for the app. Please allow them in iOS Settings.",
+"Las notificaciones están desactivadas para la app. Permítelas en los ajustes de iOS.",
+"Les notifications sont désactivées pour l'app. Autorise-les dans les réglages iOS.",
+"Le notifiche sono disattivate per l'app. Consentile nelle impostazioni di iOS.",
+"Meldingen staan uit voor de app. Sta ze toe in de iOS-instellingen.",
+"Paziņojumi lietotnei ir izslēgti. Lūdzu, atļauj tos iOS iestatījumos."
+],
+"Monate": [
+"Months",
+"Meses",
+"Mois",
+"Mesi",
+"Maanden",
+"Mēneši"
+],
+"Monatlich kündbar, alle Preise zzgl. MwSt.": [
+"Cancel monthly, all prices excl. VAT.",
+"Cancelable mensualmente, todos los precios sin IVA.",
+"Résiliable chaque mois, tous les prix HT.",
+"Disdicibile mensilmente, tutti i prezzi IVA esclusa.",
+"Maandelijks opzegbaar, alle prijzen excl. btw.",
+"Atsakāms katru mēnesi, visas cenas bez PVN."
+],
+"Morgen 10:00": [
+"Tomorrow 10:00",
+"Mañana 10:00",
+"Demain 10:00",
+"Domani 10:00",
+"Morgen 10:00",
+"Rīt 10:00"
+],
+"Morgen 18:00": [
+"Tomorrow 18:00",
+"Mañana 18:00",
+"Demain 18:00",
+"Domani 18:00",
+"Morgen 18:00",
+"Rīt 18:00"
+],
+"Möchtest du dich abmelden?": [
+"Do you want to sign out?",
+"¿Quieres cerrar sesión?",
+"Veux-tu te déconnecter ?",
+"Vuoi uscire?",
+"Wil je uitloggen?",
+"Vai vēlies izrakstīties?"
+],
+"Münzeinnahmen": [
+"Coin revenue",
+"Ingresos en monedas",
+"Recettes en pièces",
+"Incassi in monete",
+"Muntinkomsten",
+"Monētu ieņēmumi"
+],
+"Münzprüfer": [
+"Coin validator",
+"Validador de monedas",
+"Monnayeur",
+"Gettoniera",
+"Muntproever",
+"Monētu pārbaudītājs"
+],
+"NPS": [
+"NPS",
+"NPS",
+"NPS",
+"NPS",
+"NPS",
+"NPS"
+],
+"Nach links": [
+"To the left",
+"A la izquierda",
+"Vers la gauche",
+"A sinistra",
+"Naar links",
+"Pa kreisi"
+],
+"Nach rechts": [
+"To the right",
+"A la derecha",
+"Vers la droite",
+"A destra",
+"Naar rechts",
+"Pa labi"
+],
+"Nach vorn": [
+"Bring forward",
+"Traer adelante",
+"Mettre en avant",
+"Porta avanti",
+"Naar voren",
+"Uz priekšu"
+],
+"Nachricht auf dem Foto": [
+"Message on the photo",
+"Mensaje en la foto",
+"Message sur la photo",
+"Messaggio sulla foto",
+"Bericht op de foto",
+"Ziņa uz foto"
+],
+"Name, E-Mail oder Telefon": [
+"Name, email or phone",
+"Nombre, correo o teléfono",
+"Nom, e-mail ou téléphone",
+"Nome, e-mail o telefono",
+"Naam, e-mail of telefoon",
+"Vārds, e-pasts vai tālrunis"
+],
+"Neu": [
+"New",
+"Nuevo",
+"Nouveau",
+"Nuovo",
+"Nieuw",
+"Jauns"
+],
+"Neu starten": [
+"Restart",
+"Reiniciar",
+"Redémarrer",
+"Riavvia",
+"Opnieuw starten",
+"Restartēt"
+],
+"Neue Anfrage": [
+"New request",
+"Nueva solicitud",
+"Nouvelle demande",
+"Nuova richiesta",
+"Nieuwe aanvraag",
+"Jauns pieprasījums"
+],
+"Neues Bild": [
+"New image",
+"Nueva imagen",
+"Nouvelle image",
+"Nuova immagine",
+"Nieuwe afbeelding",
+"Jauns attēls"
+],
+"Neueste": [
+"Newest",
+"Más recientes",
+"Plus récentes",
+"Più recenti",
+"Nieuwste",
+"Jaunākie"
+],
+"Neueste Kontakte": [
+"Latest contacts",
+"Contactos más recientes",
+"Contacts les plus récents",
+"Contatti più recenti",
+"Nieuwste contacten",
+"Jaunākie kontakti"
+],
+"Neustart zurückgenommen.": [
+"Restart cancelled.",
+"Reinicio cancelado.",
+"Redémarrage annulé.",
+"Riavvio annullato.",
+"Herstart ingetrokken.",
+"Restartēšana atcelta."
+],
+"Neutral {0}": [
+"Passives {0}",
+"Pasivos {0}",
+"Passifs {0}",
+"Passivi {0}",
+"Passief {0}",
+"Neitrāli {0}"
+],
+"Nicht alles, was die Kamera kann, steht hier. Auslöser, Blitzausgang und Netzwerkeinstellungen bleiben bewusst außen vor – sie gehören zur Verkabelung der Anlage, nicht zur Bildgestaltung.": [
+"Not everything the camera can do is listed here. Trigger, flash output and network settings are intentionally left out – they belong to the installation's wiring, not to image design.",
+"Aquí no está todo lo que puede hacer la cámara. El disparador, la salida de flash y los ajustes de red se dejan fuera a propósito: forman parte del cableado de la instalación, no del diseño de la imagen.",
+"Tout ce que sait faire la caméra ne figure pas ici. Déclencheur, sortie flash et réglages réseau sont volontairement exclus – ils relèvent du câblage de l'installation, pas du rendu de l'image.",
+"Qui non c'è tutto ciò che la fotocamera sa fare. Scatto, uscita flash e impostazioni di rete restano volutamente esclusi: riguardano il cablaggio dell'impianto, non la resa dell'immagine.",
+"Niet alles wat de camera kan, staat hier. Trigger, flitsuitgang en netwerkinstellingen blijven bewust buiten beschouwing – die horen bij de bekabeling van de installatie, niet bij de beeldvormgeving.",
+"Šeit nav viss, ko kamera spēj. Slēdzis, zibspuldzes izeja un tīkla iestatījumi apzināti nav iekļauti – tie attiecas uz iekārtas vadojumu, nevis attēla veidošanu."
+],
+"Nicht angemeldet": [
+"Not signed in",
+"Sin sesión iniciada",
+"Non connecté",
+"Non connesso",
+"Niet aangemeld",
+"Nav pieteicies"
+],
+"Nicht gekauft": [
+"Not purchased",
+"No comprada",
+"Non achetée",
+"Non acquistata",
+"Niet gekocht",
+"Nav nopirkts"
+],
+"Nichts gefunden": [
+"Nothing found",
+"No se ha encontrado nada",
+"Rien trouvé",
+"Nessun risultato",
+"Niets gevonden",
+"Nekas nav atrasts"
+],
+"Nimmt Münzen an und gibt Wechselgeld.": [
+"Accepts coins and gives change.",
+"Acepta monedas y da cambio.",
+"Accepte les pièces et rend la monnaie.",
+"Accetta monete e dà il resto.",
+"Neemt munten aan en geeft wisselgeld.",
+"Pieņem monētas un izdod atlikumu."
+],
+"Nimmt das Foto auf, sobald die Lichtschranke auslöst.": [
+"Takes the photo as soon as the light barrier triggers.",
+"Toma la foto en cuanto se activa la barrera de luz.",
+"Prend la photo dès que la barrière lumineuse se déclenche.",
+"Scatta la foto non appena scatta la fotocellula.",
+"Maakt de foto zodra de lichtsluis activeert.",
+"Uzņem foto, tiklīdz nostrādā gaismas barjera."
+],
+"Nimmt die hochgeladenen Bilder entgegen.": [
+"Receives the uploaded images.",
+"Recibe las imágenes subidas.",
+"Reçoit les images envoyées.",
+"Riceve le immagini caricate.",
+"Ontvangt de geüploade afbeeldingen.",
+"Saņem augšupielādētos attēlus."
+],
+"Noch kein Produkt aktiv": [
+"No product active yet",
+"Aún no hay productos activos",
+"Aucun produit actif pour l'instant",
+"Ancora nessun prodotto attivo",
+"Nog geen product actief",
+"Vēl nav aktīvu produktu"
+],
+"Noch kein Zugang? ": [
+"No access yet? ",
+"¿Aún sin acceso? ",
+"Pas encore d'accès ? ",
+"Non hai ancora accesso? ",
+"Nog geen toegang? ",
+"Vēl nav piekļuves? "
+],
+"Noch keine Automaten verbunden.": [
+"No kiosks connected yet.",
+"Aún no hay máquinas conectadas.",
+"Aucune borne connectée pour l'instant.",
+"Ancora nessun distributore collegato.",
+"Nog geen automaten gekoppeld.",
+"Vēl nav pievienotu automātu."
+],
+"Noch keine E-Mails": [
+"No emails yet",
+"Aún no hay correos",
+"Pas encore d'e-mails",
+"Ancora nessuna e-mail",
+"Nog geen e-mails",
+"Vēl nav e-pastu"
+],
+"Noch keine Elemente. Starte mit einer Vorlage oder füge Text hinzu.": [
+"No elements yet. Start with a template or add text.",
+"Aún no hay elementos. Empieza con una plantilla o añade texto.",
+"Aucun élément pour l'instant. Commence avec un modèle ou ajoute du texte.",
+"Ancora nessun elemento. Inizia con un modello o aggiungi del testo.",
+"Nog geen elementen. Begin met een sjabloon of voeg tekst toe.",
+"Vēl nav elementu. Sāc ar veidni vai pievieno tekstu."
+],
+"Noch keine Fahrten": [
+"No rides yet",
+"Aún no hay viajes",
+"Pas encore de trajets",
+"Ancora nessuna corsa",
+"Nog geen ritten",
+"Vēl nav braucienu"
+],
+"Noch keine Fragen. Starte mit der Vorlage: Weiterempfehlung und eine offene Frage.": [
+"No questions yet. Start with the template: recommendation and one open question.",
+"Aún no hay preguntas. Empieza con la plantilla: recomendación y una pregunta abierta.",
+"Pas encore de questions. Commence avec le modèle : recommandation et une question ouverte.",
+"Ancora nessuna domanda. Inizia con il modello: raccomandazione e una domanda aperta.",
+"Nog geen vragen. Begin met het sjabloon: aanbeveling en een open vraag.",
+"Vēl nav jautājumu. Sāc ar veidni: ieteikšana un viens atvērtais jautājums."
+],
+"Noch keine Freischaltungen": [
+"No unlocks yet",
+"Aún no hay desbloqueos",
+"Pas encore de déblocages",
+"Ancora nessuno sblocco",
+"Nog geen vrijgaven",
+"Vēl nav atbloķēšanu"
+],
+"Noch keine Kampagne": [
+"No campaign yet",
+"Aún no hay campañas",
+"Pas encore de campagne",
+"Ancora nessuna campagna",
+"Nog geen campagne",
+"Vēl nav kampaņu"
+],
+"Noch keine Kontakte": [
+"No contacts yet",
+"Aún no hay contactos",
+"Pas encore de contacts",
+"Ancora nessun contatto",
+"Nog geen contacten",
+"Vēl nav kontaktu"
+],
+"Noch keine Mitarbeiter": [
+"No staff yet",
+"Aún no hay personal",
+"Pas encore de collaborateurs",
+"Ancora nessun collaboratore",
+"Nog geen medewerkers",
+"Vēl nav darbinieku"
+],
+"Noch keine Overlays gespeichert. Lade eine fertige Datei hoch oder lass die KI eines erstellen.": [
+"No overlays saved yet. Upload a finished file or let the AI create one.",
+"Aún no hay overlays guardados. Sube un archivo terminado o deja que la IA cree uno.",
+"Aucun overlay enregistré. Importe un fichier prêt ou laisse l'IA en créer un.",
+"Ancora nessun overlay salvato. Carica un file pronto o lascia che l'IA ne crei uno.",
+"Nog geen overlays opgeslagen. Upload een kant-en-klaar bestand of laat de AI er een maken.",
+"Vēl nav saglabātu pārklājumu. Augšupielādē gatavu failu vai ļauj MI to izveidot."
+],
+"Noch keine Verkäufe": [
+"No sales yet",
+"Aún no hay ventas",
+"Pas encore de ventes",
+"Ancora nessuna vendita",
+"Nog geen verkopen",
+"Vēl nav pārdevumu"
+],
+"Noch nichts hinterlegt": [
+"Nothing stored yet",
+"Aún no hay nada guardado",
+"Rien d'enregistré pour l'instant",
+"Ancora nulla salvato",
+"Nog niets ingesteld",
+"Vēl nekas nav saglabāts"
+],
+"Noch {0} Drucke übrig. Bitte bald eine neue Rolle einlegen.": [
+"{0} prints left. Please insert a new roll soon.",
+"Quedan {0} impresiones. Coloca pronto un rollo nuevo.",
+"Plus que {0} tirages. Mets bientôt un nouveau rouleau.",
+"Restano {0} stampe. Inserisci presto un nuovo rotolo.",
+"Nog {0} afdrukken over. Plaats binnenkort een nieuwe rol.",
+"Atlikušas {0} izdrukas. Lūdzu, drīz ieliec jaunu rulli."
+],
+"Normale Zeile": [
+"Normal line",
+"Línea normal",
+"Ligne normale",
+"Riga normale",
+"Normale regel",
+"Parasta rinda"
+],
+"Nur Einwilligung": [
+"Consent only",
+"Solo consentimiento",
+"Consentement uniquement",
+"Solo consenso",
+"Alleen toestemming",
+"Tikai piekrišana"
+],
+"Nur speichern": [
+"Save only",
+"Solo guardar",
+"Enregistrer seulement",
+"Salva soltanto",
+"Alleen opslaan",
+"Tikai saglabāt"
+],
+"Nur wenn dies aktiv ist, werden die Kategorien unten an dieses Konto gesendet.": [
+"The categories below are only sent to this account when this is active.",
+"Las categorías de abajo solo se envían a esta cuenta si esto está activo.",
+"Les catégories ci-dessous ne sont envoyées à ce compte que si ceci est activé.",
+"Le categorie qui sotto vengono inviate a questo account solo se questa opzione è attiva.",
+"Alleen als dit actief is, worden de categorieën hieronder naar dit account gestuurd.",
+"Tikai tad, ja tas ir aktīvs, zemāk esošās kategorijas tiek sūtītas uz šo kontu."
+],
+"Nur zur Vorschau – gespeichert wird das Overlay mit transparentem Hintergrund.": [
+"Preview only – the overlay is saved with a transparent background.",
+"Solo vista previa: el overlay se guarda con fondo transparente.",
+"Aperçu uniquement – l'overlay est enregistré avec un fond transparent.",
+"Solo anteprima: l'overlay viene salvato con sfondo trasparente.",
+"Alleen voorbeeld – de overlay wordt opgeslagen met transparante achtergrond.",
+"Tikai priekšskatījumam – pārklājums tiek saglabāts ar caurspīdīgu fonu."
+],
+"Nötig für Upload und Kartenzahlung.": [
+"Required for upload and card payment.",
+"Necesario para la subida y el pago con tarjeta.",
+"Nécessaire pour l'envoi et le paiement par carte.",
+"Necessario per caricamento e pagamento con carta.",
+"Nodig voor upload en kaartbetaling.",
+"Nepieciešams augšupielādei un karšu maksājumiem."
+],
+"OK": [
+"OK",
+"OK",
+"OK",
+"OK",
+"OK",
+"Labi"
+],
+"Oder anrufen: ": [
+"Or call: ",
+"O llama: ",
+"Ou appelle : ",
+"Oppure chiama: ",
+"Of bel: ",
+"Vai zvani: "
+],
+"Offline": [
+"Offline",
+"Sin conexión",
+"Hors ligne",
+"Offline",
+"Offline",
+"Bezsaistē"
+],
+"Offline seit {0}": [
+"Offline for {0}",
+"Sin conexión desde hace {0}",
+"Hors ligne depuis {0}",
+"Offline da {0}",
+"Offline sinds {0}",
+"Bezsaistē {0}"
+],
+"Offline · zuletzt {0}": [
+"Offline · last seen {0}",
+"Sin conexión · última vez {0}",
+"Hors ligne · vu {0}",
+"Offline · ultimo segnale {0}",
+"Offline · laatst {0}",
+"Bezsaistē · pēdējoreiz {0}"
+],
+"Ohne Ende": [
+"No end",
+"Sin fin",
+"Sans fin",
+"Senza fine",
+"Zonder einde",
+"Bez beigām"
+],
+"Online-Bezahlung": [
+"Online payment",
+"Pago en línea",
+"Paiement en ligne",
+"Pagamento online",
+"Online betaling",
+"Tiešsaistes maksājums"
+],
+"Online-Verkauf": [
+"Online sales",
+"Venta en línea",
+"Vente en ligne",
+"Vendita online",
+"Online verkoop",
+"Tiešsaistes pārdošana"
+],
+"Overlay anwenden": [
+"Apply overlay",
+"Aplicar overlay",
+"Appliquer l'overlay",
+"Applica overlay",
+"Overlay toepassen",
+"Lietot pārklājumu"
+],
+"Overlay gespeichert": [
+"Overlay saved",
+"Overlay guardado",
+"Overlay enregistré",
+"Overlay salvato",
+"Overlay opgeslagen",
+"Pārklājums saglabāts"
+],
+"Overlay hochgeladen und aktiviert.": [
+"Overlay uploaded and activated.",
+"Overlay subido y activado.",
+"Overlay importé et activé.",
+"Overlay caricato e attivato.",
+"Overlay geüpload en geactiveerd.",
+"Pārklājums augšupielādēts un aktivizēts."
+],
+"Overlay hochgeladen.": [
+"Overlay uploaded.",
+"Overlay subido.",
+"Overlay importé.",
+"Overlay caricato.",
+"Overlay geüpload.",
+"Pārklājums augšupielādēts."
+],
+"Overlay ist aktiv": [
+"Overlay is active",
+"El overlay está activo",
+"L'overlay est actif",
+"L'overlay è attivo",
+"Overlay is actief",
+"Pārklājums ir aktīvs"
+],
+"Overlay ist jetzt aktiv.": [
+"Overlay is now active.",
+"El overlay ya está activo.",
+"L'overlay est maintenant actif.",
+"L'overlay è ora attivo.",
+"Overlay is nu actief.",
+"Pārklājums tagad ir aktīvs."
+],
+"Overlay löschen?": [
+"Delete overlay?",
+"¿Eliminar el overlay?",
+"Supprimer l'overlay ?",
+"Eliminare l'overlay?",
+"Overlay verwijderen?",
+"Dzēst pārklājumu?"
+],
+"Overlay speichern": [
+"Save overlay",
+"Guardar overlay",
+"Enregistrer l'overlay",
+"Salva overlay",
+"Overlay opslaan",
+"Saglabāt pārklājumu"
+],
+"Overlay von der KI": [
+"Overlay from the AI",
+"Overlay de la IA",
+"Overlay par l'IA",
+"Overlay dall'IA",
+"Overlay van de AI",
+"Pārklājums no MI"
+],
+"Overlays und Bilder am Automaten": [
+"Overlays and images at the kiosk",
+"Overlays e imágenes en la máquina",
+"Overlays et images à la borne",
+"Overlay e immagini al distributore",
+"Overlays en afbeeldingen bij de automaat",
+"Pārklājumi un attēli automātā"
+],
+"Overlays, Kamera und Online-Shop": [
+"Overlays, camera and online shop",
+"Overlays, cámara y tienda online",
+"Overlays, caméra et boutique en ligne",
+"Overlay, fotocamera e negozio online",
+"Overlays, camera en webshop",
+"Pārklājumi, kamera un interneta veikals"
+],
+"PC-Laufzeit": [
+"PC uptime",
+"Tiempo de actividad del PC",
+"Durée de fonctionnement du PC",
+"Tempo di attività del PC",
+"Looptijd pc",
+"Datora darbības laiks"
+],
+"PNG mit transparentem Hintergrund, 4:3": [
+"PNG with transparent background, 4:3",
+"PNG con fondo transparente, 4:3",
+"PNG à fond transparent, 4:3",
+"PNG con sfondo trasparente, 4:3",
+"PNG met transparante achtergrond, 4:3",
+"PNG ar caurspīdīgu fonu, 4:3"
+],
+"Papier wird knapp": [
+"Paper running low",
+"Queda poco papel",
+"Papier bientôt épuisé",
+"Carta in esaurimento",
+"Papier raakt op",
+"Papīrs beidzas"
+],
+"Park wählen": [
+"Choose park",
+"Elegir parque",
+"Choisir un parc",
+"Scegli parco",
+"Park kiezen",
+"Izvēlēties parku"
+],
+"Park-Passwort": [
+"Park password",
+"Contraseña del parque",
+"Mot de passe du parc",
+"Password del parco",
+"Parkwachtwoord",
+"Parka parole"
+],
+"Parks konnten nicht geladen werden": [
+"Parks could not be loaded",
+"No se pudieron cargar los parques",
+"Impossible de charger les parcs",
+"Impossibile caricare i parchi",
+"Parken konden niet worden geladen",
+"Parkus nevarēja ielādēt"
+],
+"Passwort für die Person": [
+"Password for this person",
+"Contraseña para la persona",
+"Mot de passe pour la personne",
+"Password per la persona",
+"Wachtwoord voor de persoon",
+"Parole šai personai"
+],
+"Passwort vergessen?": [
+"Forgot password?",
+"¿Has olvidado la contraseña?",
+"Mot de passe oublié ?",
+"Password dimenticata?",
+"Wachtwoord vergeten?",
+"Aizmirsi paroli?"
+],
+"Pixel": [
+"Pixel",
+"Píxel",
+"Pixel",
+"Pixel",
+"Pixel",
+"Pikselis"
+],
+"Pixel für deine Foto-Abholseite – unabhängig davon, wie Gäste ihr Foto freischalten. Die Tags werden erst geladen, wenn ein Gast Werbe-Tracking zustimmt.": [
+"Pixels for your photo pickup page – regardless of how guests unlock their photo. The tags only load once a guest agrees to ad tracking.",
+"Píxeles para tu página de recogida de fotos, independientemente de cómo desbloqueen los visitantes su foto. Las etiquetas solo se cargan cuando un visitante acepta el seguimiento publicitario.",
+"Pixels pour ta page de récupération de photos – quelle que soit la façon dont les visiteurs débloquent leur photo. Les balises ne se chargent que si un visiteur accepte le suivi publicitaire.",
+"Pixel per la tua pagina di ritiro foto, indipendentemente da come gli ospiti sbloccano la foto. I tag vengono caricati solo quando un ospite accetta il tracciamento pubblicitario.",
+"Pixels voor je fotoafhaalpagina – ongeacht hoe gasten hun foto vrijgeven. De tags worden pas geladen als een gast instemt met advertentietracking.",
+"Pikseļi tavai foto saņemšanas lapai – neatkarīgi no tā, kā viesi atbloķē foto. Tagi tiek ielādēti tikai tad, kad viesis piekrīt reklāmas izsekošanai."
+],
+"Planen": [
+"Schedule",
+"Programar",
+"Programmer",
+"Pianifica",
+"Inplannen",
+"Ieplānot"
+],
+"Platzhalter: ": [
+"Placeholders: ",
+"Marcadores: ",
+"Variables : ",
+"Segnaposto: ",
+"Plaatshouders: ",
+"Vietturi: "
+],
+"Pläne und Abrechnung": [
+"Plans and billing",
+"Planes y facturación",
+"Forfaits et facturation",
+"Piani e fatturazione",
+"Plannen en facturatie",
+"Plāni un norēķini"
+],
+"Polaroid": [
+"Polaroid",
+"Polaroid",
+"Polaroid",
+"Polaroid",
+"Polaroid",
+"Polaroid"
+],
+"Preis auf Anfrage": [
+"Price on request",
+"Precio a consultar",
+"Prix sur demande",
+"Prezzo su richiesta",
+"Prijs op aanvraag",
+"Cena pēc pieprasījuma"
+],
+"Preis pro Foto": [
+"Price per photo",
+"Precio por foto",
+"Prix par photo",
+"Prezzo per foto",
+"Prijs per foto",
+"Cena par foto"
+],
+"Pro Automat": [
+"Per kiosk",
+"Por máquina",
+"Par borne",
+"Per distributore",
+"Per automaat",
+"Uz automātu"
+],
+"Produkte & Preise · {0} aktiv": [
+"Products & prices · {0} active",
+"Productos y precios · {0} activos",
+"Produits & prix · {0} actifs",
+"Prodotti e prezzi · {0} attivi",
+"Producten & prijzen · {0} actief",
+"Produkti un cenas · {0} aktīvi"
+],
+"Produkte aktiv": [
+"Products active",
+"Productos activos",
+"Produits actifs",
+"Prodotti attivi",
+"Producten actief",
+"Aktīvie produkti"
+],
+"Programm oder Gerät fällt aus": [
+"Program or device fails",
+"Fallo de programa o dispositivo",
+"Panne de programme ou d'appareil",
+"Guasto di programma o dispositivo",
+"Programma of apparaat valt uit",
+"Programma vai ierīce nedarbojas"
+],
+"Promoter {0}": [
+"Promoters {0}",
+"Promotores {0}",
+"Promoteurs {0}",
+"Promotori {0}",
+"Promotors {0}",
+"Atbalstītāji {0}"
+],
+"Prüft, ob das Terminal antwortet.": [
+"Checks whether the terminal responds.",
+"Comprueba si el terminal responde.",
+"Vérifie si le terminal répond.",
+"Verifica se il terminale risponde.",
+"Controleert of de terminal reageert.",
+"Pārbauda, vai terminālis atbild."
+],
+"Push geht nur auf einem echten Gerät.": [
+"Push only works on a real device.",
+"Las notificaciones push solo funcionan en un dispositivo real.",
+"Les notifications push ne fonctionnent que sur un vrai appareil.",
+"Le notifiche push funzionano solo su un dispositivo reale.",
+"Push werkt alleen op een echt apparaat.",
+"Push darbojas tikai īstā ierīcē."
+],
+"QR-Code": [
+"QR code",
+"Código QR",
+"QR code",
+"Codice QR",
+"QR-code",
+"QR kods"
+],
+"QR-Code groß zeigen": [
+"Show QR code large",
+"Mostrar el código QR en grande",
+"Afficher le QR code en grand",
+"Mostra codice QR in grande",
+"QR-code groot tonen",
+"Rādīt lielu QR kodu"
+],
+"Quadrat 1:1": [
+"Square 1:1",
+"Cuadrado 1:1",
+"Carré 1:1",
+"Quadrato 1:1",
+"Vierkant 1:1",
+"Kvadrāts 1:1"
+],
+"Rahmen": [
+"Frame",
+"Marco",
+"Cadre",
+"Cornice",
+"Kader",
+"Rāmis"
+],
+"Randfarbe": [
+"Border colour",
+"Color del borde",
+"Couleur de bordure",
+"Colore del bordo",
+"Randkleur",
+"Malas krāsa"
+],
+"Rechts": [
+"Right",
+"Derecha",
+"Droite",
+"Destra",
+"Rechts",
+"Pa labi"
+],
+"Regler verschieben – die Vorschau zeigt die Wirkung sofort. Erst „An Kamera senden“ stellt die Kamera wirklich um.": [
+"Move the sliders – the preview shows the effect immediately. Only “Send to camera” actually changes the camera.",
+"Mueve los controles: la vista previa muestra el efecto al instante. Solo «Enviar a la cámara» cambia realmente la cámara.",
+"Déplace les curseurs – l'aperçu montre l'effet immédiatement. Seul « Envoyer à la caméra » modifie réellement la caméra.",
+"Sposta i cursori: l'anteprima mostra subito l'effetto. Solo «Invia alla fotocamera» modifica davvero la fotocamera.",
+"Verschuif de schuifregelaars – het voorbeeld toont het effect direct. Pas ‘Naar camera sturen’ past de camera echt aan.",
+"Pārvieto slīdņus – priekšskatījums uzreiz parāda efektu. Tikai “Sūtīt uz kameru” patiešām maina kameru."
+],
+"Richtung": [
+"Direction",
+"Dirección",
+"Direction",
+"Direzione",
+"Richting",
+"Virziens"
+],
+"Saison {0} bis {1}{2}": [
+"Season {0} to {1}{2}",
+"Temporada {0} a {1}{2}",
+"Saison du {0} au {1}{2}",
+"Stagione dal {0} al {1}{2}",
+"Seizoen {0} tot {1}{2}",
+"Sezona no {0} līdz {1}{2}"
+],
+"Saisonstart-Mail senden?": [
+"Send season-start email?",
+"¿Enviar correo de inicio de temporada?",
+"Envoyer l'e-mail de début de saison ?",
+"Inviare l'e-mail di inizio stagione?",
+"Seizoensstartmail versturen?",
+"Sūtīt sezonas sākuma e-pastu?"
+],
+"Schnellste": [
+"Fastest",
+"Más rápidos",
+"Plus rapides",
+"Più veloci",
+"Snelste",
+"Ātrākie"
+],
+"Schreibe die erste Nachricht an Gäste, die der Werbung zugestimmt haben.": [
+"Write the first message to guests who agreed to marketing.",
+"Escribe el primer mensaje a los visitantes que aceptaron recibir publicidad.",
+"Écris le premier message aux visiteurs qui ont accepté la publicité.",
+"Scrivi il primo messaggio agli ospiti che hanno accettato la pubblicità.",
+"Schrijf het eerste bericht aan gasten die met reclame hebben ingestemd.",
+"Uzraksti pirmo ziņu viesiem, kas piekrituši reklāmai."
+],
+"Schreiben": [
+"Write",
+"Escribir",
+"Écrire",
+"Scrivi",
+"Schrijven",
+"Rakstīt"
+],
+"Schrift": [
+"Font",
+"Fuente",
+"Police",
+"Carattere",
+"Lettertype",
+"Fonts"
+],
+"Score-Frage": [
+"Score question",
+"Pregunta de puntuación",
+"Question de score",
+"Domanda di punteggio",
+"Scorevraag",
+"Vērtējuma jautājums"
+],
+"Seit {0} Min. getrennt": [
+"Disconnected for {0} min",
+"Desconectado desde hace {0} min",
+"Déconnecté depuis {0} min",
+"Disconnesso da {0} min",
+"Sinds {0} min. losgekoppeld",
+"Atvienots {0} min."
+],
+"Seite konnte nicht geladen werden": [
+"Page could not be loaded",
+"No se pudo cargar la página",
+"Impossible de charger la page",
+"Impossibile caricare la pagina",
+"Pagina kon niet worden geladen",
+"Lapu nevarēja ielādēt"
+],
+"Senden fehlgeschlagen": [
+"Sending failed",
+"Error al enviar",
+"Échec de l'envoi",
+"Invio non riuscito",
+"Versturen mislukt",
+"Sūtīšana neizdevās"
+],
+"Senden planen": [
+"Schedule sending",
+"Programar envío",
+"Programmer l'envoi",
+"Pianifica invio",
+"Verzending inplannen",
+"Ieplānot sūtīšanu"
+],
+"Shop": [
+"Shop",
+"Tienda",
+"Boutique",
+"Negozio",
+"Shop",
+"Veikals"
+],
+"Sitzung abgelaufen. Bitte neu anmelden.": [
+"Session expired. Please sign in again.",
+"La sesión ha caducado. Vuelve a iniciar sesión.",
+"Session expirée. Reconnecte-toi.",
+"Sessione scaduta. Accedi di nuovo.",
+"Sessie verlopen. Log opnieuw in.",
+"Sesija beigusies. Lūdzu, piesakies vēlreiz."
+],
+"Sobald das erste Foto verkauft ist, erscheint hier der Verlauf.": [
+"The history appears here as soon as the first photo is sold.",
+"El historial aparecerá aquí en cuanto se venda la primera foto.",
+"L'historique apparaît ici dès que la première photo est vendue.",
+"Lo storico comparirà qui non appena verrà venduta la prima foto.",
+"Zodra de eerste foto is verkocht, verschijnt hier het verloop.",
+"Tiklīdz būs pārdots pirmais foto, šeit parādīsies vēsture."
+],
+"Sobald der Automat Fotos hochlädt, erscheinen sie hier.": [
+"As soon as the kiosk uploads photos, they'll appear here.",
+"En cuanto la máquina suba fotos, aparecerán aquí.",
+"Dès que la borne envoie des photos, elles apparaissent ici.",
+"Non appena il distributore carica foto, compariranno qui.",
+"Zodra de automaat foto's uploadt, verschijnen ze hier.",
+"Tiklīdz automāts augšupielādēs foto, tie parādīsies šeit."
+],
+"Social Media": [
+"Social media",
+"Redes sociales",
+"Réseaux sociaux",
+"Social media",
+"Social media",
+"Sociālie tīkli"
+],
+"Sollwert {0}": [
+"Target {0}",
+"Valor objetivo {0}",
+"Valeur cible {0}",
+"Valore target {0}",
+"Doelwaarde {0}",
+"Mērķvērtība {0}"
+],
+"Speichern & verwenden": [
+"Save & use",
+"Guardar y usar",
+"Enregistrer & utiliser",
+"Salva e usa",
+"Opslaan & gebruiken",
+"Saglabāt un lietot"
+],
+"Speichern geht nur in der App auf dem iPhone oder iPad.": [
+"Saving only works in the app on iPhone or iPad.",
+"Solo se puede guardar en la app del iPhone o iPad.",
+"L'enregistrement ne fonctionne que dans l'app sur iPhone ou iPad.",
+"Il salvataggio funziona solo nell'app su iPhone o iPad.",
+"Opslaan kan alleen in de app op iPhone of iPad.",
+"Saglabāt var tikai lietotnē iPhone vai iPad ierīcē."
+],
+"Speicherplatz": [
+"Storage",
+"Almacenamiento",
+"Espace de stockage",
+"Spazio di archiviazione",
+"Opslagruimte",
+"Krātuve"
+],
+"Speichert Fotos, Verkäufe und Einstellungen.": [
+"Stores photos, sales and settings.",
+"Guarda fotos, ventas y ajustes.",
+"Stocke photos, ventes et réglages.",
+"Memorizza foto, vendite e impostazioni.",
+"Slaat foto's, verkopen en instellingen op.",
+"Glabā foto, pārdevumus un iestatījumus."
+],
+"Stammgäste jagen Rekorde. Wer überholt wurde, fährt nochmal und kauft ein neues Foto.": [
+"Regulars chase records. Whoever gets overtaken rides again and buys a new photo.",
+"Los clientes habituales persiguen récords. Quien es superado vuelve a subir y compra una foto nueva.",
+"Les habitués chassent les records. Celui qui est dépassé refait un tour et achète une nouvelle photo.",
+"I clienti abituali inseguono i record. Chi viene superato rifà un giro e compra una nuova foto.",
+"Vaste gasten jagen op records. Wie wordt ingehaald, gaat nog een keer en koopt een nieuwe foto.",
+"Pastāvīgie viesi dzenas pēc rekordiem. Kuru apsteidz, brauc vēlreiz un pērk jaunu foto."
+],
+"Stand hinterlegen": [
+"Store current state",
+"Guardar estado actual",
+"Enregistrer l'état actuel",
+"Salva stato attuale",
+"Huidige stand vastleggen",
+"Saglabāt pašreizējo stāvokli"
+],
+"Standard": [
+"Default",
+"Estándar",
+"Standard",
+"Standard",
+"Standaard",
+"Standarta"
+],
+"Statistik-E-Mail": [
+"Statistics email",
+"Correo de estadísticas",
+"E-mail de statistiques",
+"E-mail statistiche",
+"Statistiek-e-mail",
+"Statistikas e-pasts"
+],
+"Steckplätze für Lichtschranke und Münzprüfer.": [
+"Ports for light barrier and coin validator.",
+"Conectores para la barrera de luz y el validador de monedas.",
+"Ports pour la barrière lumineuse et le monnayeur.",
+"Porte per fotocellula e gettoniera.",
+"Aansluitingen voor lichtsluis en muntproever.",
+"Pieslēgvietas gaismas barjerai un monētu pārbaudītājam."
+],
+"Steht im Abholcode jedes Fotos. Geht sie falsch, finden Gäste ihre Bilder nicht.": [
+"It's part of every photo's pickup code. If it's wrong, guests can't find their photos.",
+"Aparece en el código de recogida de cada foto. Si está mal, los visitantes no encuentran sus fotos.",
+"Figure dans le code de récupération de chaque photo. S'il est faux, les visiteurs ne trouvent pas leurs photos.",
+"Compare nel codice di ritiro di ogni foto. Se è sbagliato, gli ospiti non trovano le loro foto.",
+"Staat in de ophaalcode van elke foto. Klopt die niet, dan vinden gasten hun foto's niet.",
+"Ir katra foto saņemšanas kodā. Ja tas ir nepareizs, viesi neatradīs savus foto."
+],
+"Still seit {0}": [
+"Idle for {0}",
+"Inactivo desde hace {0}",
+"Inactif depuis {0}",
+"Inattivo da {0}",
+"Stil sinds {0}",
+"Dīkstāvē {0}"
+],
+"Story 9:16": [
+"Story 9:16",
+"Historia 9:16",
+"Story 9:16",
+"Storia 9:16",
+"Story 9:16",
+"Stāsts 9:16"
+],
+"Stärke": [
+"Thickness",
+"Grosor",
+"Épaisseur",
+"Spessore",
+"Dikte",
+"Biezums"
+],
+"Störungen am Automaten": [
+"Kiosk faults",
+"Averías en la máquina",
+"Pannes de la borne",
+"Guasti al distributore",
+"Storingen bij de automaat",
+"Automāta traucējumi"
+],
+"Störungen, Papiermangel, Antworten vom Support und Hinweise von Liftpictures. Ein roter Punkt heißt: es gibt etwas Neues.": [
+"Faults, low paper, replies from support and notes from Liftpictures. A red dot means there's something new.",
+"Averías, falta de papel, respuestas del soporte y avisos de Liftpictures. Un punto rojo significa que hay algo nuevo.",
+"Pannes, manque de papier, réponses du support et informations de Liftpictures. Un point rouge signifie qu'il y a du nouveau.",
+"Guasti, carta in esaurimento, risposte dell'assistenza e avvisi di Liftpictures. Un punto rosso indica una novità.",
+"Storingen, papiertekort, antwoorden van support en meldingen van Liftpictures. Een rode stip betekent: er is iets nieuws.",
+"Traucējumi, papīra trūkums, atbalsta atbildes un Liftpictures paziņojumi. Sarkans punkts nozīmē, ka ir kas jauns."
+],
+"Suche fehlgeschlagen": [
+"Search failed",
+"Error en la búsqueda",
+"Échec de la recherche",
+"Ricerca non riuscita",
+"Zoeken mislukt",
+"Meklēšana neizdevās"
+],
+"Suche starten": [
+"Start search",
+"Iniciar búsqueda",
+"Lancer la recherche",
+"Avvia ricerca",
+"Zoeken starten",
+"Sākt meklēšanu"
+],
+"Suchen, z. B. Papier oder Preis": [
+"Search, e.g. paper or price",
+"Buscar, p. ej. papel o precio",
+"Rechercher, p. ex. papier ou prix",
+"Cerca, ad es. carta o prezzo",
+"Zoeken, bijv. papier of prijs",
+"Meklēt, piem., papīrs vai cena"
+],
+"Suche…": [
+"Searching…",
+"Buscando…",
+"Recherche…",
+"Ricerca…",
+"Zoeken…",
+"Meklē…"
+],
+"Support-Antwort": [
+"Support reply",
+"Respuesta del soporte",
+"Réponse du support",
+"Risposta dell'assistenza",
+"Antwoord van support",
+"Atbalsta atbilde"
+],
+"Support-Antwort: {0}": [
+"Support reply: {0}",
+"Respuesta del soporte: {0}",
+"Réponse du support : {0}",
+"Risposta dell'assistenza: {0}",
+"Antwoord van support: {0}",
+"Atbalsta atbilde: {0}"
+],
+"TT.MM.JJJJ HH:MM": [
+"DD.MM.YYYY HH:MM",
+"DD.MM.AAAA HH:MM",
+"JJ.MM.AAAA HH:MM",
+"GG.MM.AAAA HH:MM",
+"DD.MM.JJJJ UU:MM",
+"DD.MM.GGGG HH:MM"
+],
+"Tage": [
+"Days",
+"Días",
+"Jours",
+"Giorni",
+"Dagen",
+"Dienas"
+],
+"Tagesabrechnung der Münzkasse.": [
+"Daily coin box settlement.",
+"Liquidación diaria de la caja de monedas.",
+"Relevé journalier de la caisse à pièces.",
+"Chiusura giornaliera della cassa monete.",
+"Dagafrekening van de muntkas.",
+"Monētu kases dienas atskaite."
+],
+"Team": [
+"Team",
+"Equipo",
+"Équipe",
+"Team",
+"Team",
+"Komanda"
+],
+"Teilen": [
+"Share",
+"Compartir",
+"Partager",
+"Condividi",
+"Delen",
+"Dalīties"
+],
+"Teilnahme durch Teilen mit Hashtag, Ziehung hier in der App.": [
+"Enter by sharing with a hashtag; the draw happens here in the app.",
+"Se participa compartiendo con hashtag; el sorteo se hace aquí en la app.",
+"Participation en partageant avec un hashtag, tirage ici dans l'app.",
+"Si partecipa condividendo con hashtag, l'estrazione avviene qui nell'app.",
+"Meedoen door te delen met hashtag, trekking hier in de app.",
+"Piedalīšanās, daloties ar tēmturi; izloze notiek šeit lietotnē."
+],
+"Teilnehmer · {0}": [
+"Participants · {0}",
+"Participantes · {0}",
+"Participants · {0}",
+"Partecipanti · {0}",
+"Deelnemers · {0}",
+"Dalībnieki · {0}"
+],
+"Test an mich": [
+"Test to me",
+"Prueba para mí",
+"Test à moi",
+"Prova a me",
+"Test naar mij",
+"Tests man"
+],
+"Test gesendet an {0}.": [
+"Test sent to {0}.",
+"Prueba enviada a {0}.",
+"Test envoyé à {0}.",
+"Prova inviata a {0}.",
+"Test verstuurd naar {0}.",
+"Tests nosūtīts uz {0}."
+],
+"Test-Benachrichtigung gesendet. Sie kommt in wenigen Sekunden an.": [
+"Test notification sent. It will arrive in a few seconds.",
+"Notificación de prueba enviada. Llegará en unos segundos.",
+"Notification test envoyée. Elle arrive dans quelques secondes.",
+"Notifica di prova inviata. Arriverà tra pochi secondi.",
+"Testmelding verstuurd. Die komt binnen een paar seconden aan.",
+"Testa paziņojums nosūtīts. Tas pienāks pēc dažām sekundēm."
+],
+"Testfoto beauftragt. Das Ergebnis erscheint gleich im Verlauf.": [
+"Test photo requested. The result will appear in the history shortly.",
+"Foto de prueba solicitada. El resultado aparecerá enseguida en el historial.",
+"Photo test demandée. Le résultat apparaîtra bientôt dans l'historique.",
+"Foto di prova richiesta. Il risultato comparirà a breve nello storico.",
+"Testfoto aangevraagd. Het resultaat verschijnt zo in het verloop.",
+"Testa foto pieprasīts. Rezultāts drīz parādīsies vēsturē."
+],
+"Testfoto beauftragt. Es dauert bis zu einer Minute – dann auf „Bild neu laden“ tippen oder nach unten ziehen.": [
+"Test photo requested. It takes up to a minute – then tap “Reload image” or pull down.",
+"Foto de prueba solicitada. Tarda hasta un minuto; luego toca «Recargar imagen» o desliza hacia abajo.",
+"Photo test demandée. Cela prend jusqu'à une minute – touche ensuite « Recharger l'image » ou tire vers le bas.",
+"Foto di prova richiesta. Ci vuole fino a un minuto, poi tocca «Ricarica immagine» o trascina verso il basso.",
+"Testfoto aangevraagd. Dit duurt tot een minuut – tik dan op ‘Afbeelding opnieuw laden’ of trek omlaag.",
+"Testa foto pieprasīts. Tas aizņem līdz minūtei – tad pieskaries “Pārlādēt attēlu” vai pavelc uz leju."
+],
+"Testmodus": [
+"Test mode",
+"Modo de prueba",
+"Mode test",
+"Modalità test",
+"Testmodus",
+"Testa režīms"
+],
+"Text auf Farbfläche": [
+"Text on colour block",
+"Texto sobre fondo de color",
+"Texte sur aplat de couleur",
+"Testo su sfondo colorato",
+"Tekst op kleurvlak",
+"Teksts uz krāsu laukuma"
+],
+"Text über den Fragen (optional)": [
+"Text above the questions (optional)",
+"Texto sobre las preguntas (opcional)",
+"Texte au-dessus des questions (facultatif)",
+"Testo sopra le domande (facoltativo)",
+"Tekst boven de vragen (optioneel)",
+"Teksts virs jautājumiem (pēc izvēles)"
+],
+"TikTok": [
+"TikTok",
+"TikTok",
+"TikTok",
+"TikTok",
+"TikTok",
+"TikTok"
+],
+"Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein.": [
+"Type the first letters of your park and enter the park password.",
+"Escribe las primeras letras de tu parque e introduce la contraseña del parque.",
+"Tape les premières lettres de ton parc et saisis le mot de passe du parc.",
+"Digita le prime lettere del tuo parco e inserisci la password del parco.",
+"Typ de eerste letters van je park en voer het parkwachtwoord in.",
+"Ieraksti sava parka pirmos burtus un ievadi parka paroli."
+],
+"Titel": [
+"Title",
+"Título",
+"Titre",
+"Titolo",
+"Titel",
+"Virsraksts"
+],
+"Täglicher Umsatzbericht. Nebenfunktion.": [
+"Daily revenue report. Secondary feature.",
+"Informe diario de ingresos. Función secundaria.",
+"Rapport quotidien des recettes. Fonction secondaire.",
+"Report giornaliero degli incassi. Funzione secondaria.",
+"Dagelijks omzetrapport. Bijfunctie.",
+"Ikdienas ieņēmumu atskaite. Papildfunkcija."
+],
+"Uhr": [
+"",
+"h",
+"h",
+"",
+"uur",
+""
+],
+"Uhrzeit": [
+"Time",
+"Hora",
+"Heure",
+"Orario",
+"Tijd",
+"Laiks"
+],
+"Uhrzeit heute, z. B. 14:30": [
+"Time today, e.g. 14:30",
+"Hora de hoy, p. ej. 14:30",
+"Heure aujourd'hui, p. ex. 14:30",
+"Orario di oggi, ad es. 14:30",
+"Tijd vandaag, bijv. 14:30",
+"Laiks šodien, piem., 14:30"
+],
+"Umfrage bearbeiten": [
+"Edit survey",
+"Editar encuesta",
+"Modifier le sondage",
+"Modifica sondaggio",
+"Enquête bewerken",
+"Rediģēt aptauju"
+],
+"Umfrage-Antworten": [
+"Survey answers",
+"Respuestas de la encuesta",
+"Réponses au sondage",
+"Risposte al sondaggio",
+"Enquête-antwoorden",
+"Aptaujas atbildes"
+],
+"Umsatz pro Tag": [
+"Revenue per day",
+"Ingresos por día",
+"Recettes par jour",
+"Incassi al giorno",
+"Omzet per dag",
+"Ieņēmumi dienā"
+],
+"Umsatz, Fotos und Automaten in Echtzeit": [
+"Revenue, photos and kiosks in real time",
+"Ingresos, fotos y máquinas en tiempo real",
+"Recettes, photos et bornes en temps réel",
+"Incassi, foto e distributori in tempo reale",
+"Omzet, foto's en automaten in realtime",
+"Ieņēmumi, foto un automāti reāllaikā"
+],
+"Umsatz, verkaufte Fotos, Fahrten und Kaufquote von heute – direkt vom Automaten. Zum Aktualisieren die Seite nach unten ziehen.": [
+"Today's revenue, photos sold, rides and purchase rate – straight from the kiosk. Pull down to refresh.",
+"Ingresos, fotos vendidas, viajes y tasa de compra de hoy, directamente de la máquina. Desliza hacia abajo para actualizar.",
+"Recettes, photos vendues, trajets et taux d'achat du jour – directement depuis la borne. Tire vers le bas pour actualiser.",
+"Incassi, foto vendute, corse e tasso di acquisto di oggi, direttamente dal distributore. Trascina verso il basso per aggiornare.",
+"Omzet, verkochte foto's, ritten en koopratio van vandaag – direct van de automaat. Trek omlaag om te vernieuwen.",
+"Šodienas ieņēmumi, pārdotie foto, braucieni un pirkumu īpatsvars – tieši no automāta. Pavelc uz leju, lai atjauninātu."
+],
+"Umsatzanteil": [
+"revenue share",
+"participación en ingresos",
+"part du chiffre d'affaires",
+"quota sugli incassi",
+"omzetaandeel",
+"ieņēmumu daļa"
+],
+"Unbenannt": [
+"Untitled",
+"Sin nombre",
+"Sans titre",
+"Senza nome",
+"Naamloos",
+"Bez nosaukuma"
+],
+"Unter Konto → Einstellungen den Schalter „Dieses Gerät“ einschalten und iOS-Mitteilungen erlauben. Mit „Test-Benachrichtigung senden“ prüfst du es sofort.": [
+"Under Account → Settings, turn on “This device” and allow iOS notifications. Use “Send test notification” to check right away.",
+"En Cuenta → Ajustes activa «Este dispositivo» y permite las notificaciones de iOS. Con «Enviar notificación de prueba» lo compruebas al instante.",
+"Sous Compte → Réglages, active « Cet appareil » et autorise les notifications iOS. « Envoyer une notification test » permet de vérifier aussitôt.",
+"In Account → Impostazioni attiva «Questo dispositivo» e consenti le notifiche iOS. Con «Invia notifica di prova» verifichi subito.",
+"Zet onder Account → Instellingen de schakelaar ‘Dit apparaat’ aan en sta iOS-meldingen toe. Met ‘Testmelding versturen’ controleer je het direct.",
+"Sadaļā Konts → Iestatījumi ieslēdz “Šī ierīce” un atļauj iOS paziņojumus. Ar “Sūtīt testa paziņojumu” to pārbaudi uzreiz."
+],
+"Uploader": [
+"Uploader",
+"Uploader",
+"Uploader",
+"Uploader",
+"Uploader",
+"Augšupielādētājs"
+],
+"Verbucht die Online-Käufe der Gäste.": [
+"Records guests' online purchases.",
+"Registra las compras en línea de los visitantes.",
+"Enregistre les achats en ligne des visiteurs.",
+"Registra gli acquisti online degli ospiti.",
+"Boekt de online aankopen van gasten.",
+"Reģistrē viesu tiešsaistes pirkumus."
+],
+"Verkaufsprogramm": [
+"Sales program",
+"Programa de venta",
+"Programme de vente",
+"Programma di vendita",
+"Verkoopprogramma",
+"Pārdošanas programma"
+],
+"Verkaufsprogramm neu starten?": [
+"Restart sales program?",
+"¿Reiniciar el programa de venta?",
+"Redémarrer le programme de vente ?",
+"Riavviare il programma di vendita?",
+"Verkoopprogramma opnieuw starten?",
+"Restartēt pārdošanas programmu?"
+],
+"Verkauft heute": [
+"Sold today",
+"Vendidas hoy",
+"Vendues aujourd'hui",
+"Vendute oggi",
+"Vandaag verkocht",
+"Pārdots šodien"
+],
+"Verkaufte Fotos am Automaten": [
+"Photos sold at the kiosk",
+"Fotos vendidas en la máquina",
+"Photos vendues à la borne",
+"Foto vendute al distributore",
+"Verkochte foto's bij de automaat",
+"Automātā pārdotie foto"
+],
+"Verkäufe": [
+"Sales",
+"Ventas",
+"Ventes",
+"Vendite",
+"Verkopen",
+"Pārdevumi"
+],
+"Verlauf": [
+"History",
+"Historial",
+"Historique",
+"Storico",
+"Verloop",
+"Vēsture"
+],
+"Verlauf nach": [
+"Gradient to",
+"Degradado hacia",
+"Dégradé vers",
+"Sfumatura verso",
+"Verloop naar",
+"Pāreja uz"
+],
+"Verlauf unten": [
+"Gradient at bottom",
+"Degradado abajo",
+"Dégradé en bas",
+"Sfumatura in basso",
+"Verloop onderaan",
+"Pāreja apakšā"
+],
+"Versand der Willkommens-Mail": [
+"Welcome email delivery",
+"Envío del correo de bienvenida",
+"Envoi de l'e-mail de bienvenue",
+"Invio dell'e-mail di benvenuto",
+"Verzending van de welkomstmail",
+"Sveiciena e-pasta sūtīšana"
+],
+"Version {0}": [
+"Version {0}",
+"Versión {0}",
+"Version {0}",
+"Versione {0}",
+"Versie {0}",
+"Versija {0}"
+],
+"Vollbild": [
+"Full screen",
+"Pantalla completa",
+"Plein écran",
+"Schermo intero",
+"Volledig scherm",
+"Pilnekrāns"
+],
+"Vor- und Nachname": [
+"First and last name",
+"Nombre y apellidos",
+"Prénom et nom",
+"Nome e cognome",
+"Voor- en achternaam",
+"Vārds un uzvārds"
+],
+"Vorhanden": [
+"Available",
+"Disponible",
+"Disponible",
+"Presente",
+"Aanwezig",
+"Ir"
+],
+"Vorlage verwenden?": [
+"Use template?",
+"¿Usar plantilla?",
+"Utiliser le modèle ?",
+"Usare il modello?",
+"Sjabloon gebruiken?",
+"Izmantot veidni?"
+],
+"Vorschau": [
+"Preview",
+"Vista previa",
+"Aperçu",
+"Anteprima",
+"Voorbeeld",
+"Priekšskatījums"
+],
+"Wann am meisten gefahren und gekauft wird. Tippe auf eine Säule, um die Stunde genau zu sehen.": [
+"When people ride and buy the most. Tap a bar to see that hour in detail.",
+"Cuándo más se sube y se compra. Toca una columna para ver la hora exacta.",
+"Quand on fait le plus de trajets et d'achats. Touche une colonne pour voir l'heure en détail.",
+"Quando si fanno più corse e acquisti. Tocca una colonna per vedere l'ora nel dettaglio.",
+"Wanneer er het meest gereden en gekocht wordt. Tik op een staaf om het uur precies te zien.",
+"Kad visvairāk brauc un pērk. Pieskaries stabiņam, lai redzētu stundu precīzi."
+],
+"Warum sehe ich manche Seiten nicht?": [
+"Why can't I see some pages?",
+"¿Por qué no veo algunas páginas?",
+"Pourquoi certaines pages ne s'affichent-elles pas ?",
+"Perché non vedo alcune pagine?",
+"Waarom zie ik sommige pagina's niet?",
+"Kāpēc es neredzu dažas lapas?"
+],
+"Was besser machen?": [
+"What to improve?",
+"¿Qué mejorar?",
+"Qu'améliorer ?",
+"Cosa migliorare?",
+"Wat kan beter?",
+"Ko uzlabot?"
+],
+"Was gerade am Automaten zu sehen ist. „Ändern“ schickt ein neues Bild, im Overlay-Studio baust du eigene Overlays.": [
+"What's currently shown at the kiosk. “Change” sends a new image; build your own overlays in the Overlay Studio.",
+"Lo que se ve ahora en la máquina. «Cambiar» envía una imagen nueva; en el Overlay Studio creas tus propios overlays.",
+"Ce qui s'affiche actuellement sur la borne. « Modifier » envoie une nouvelle image ; dans l'Overlay Studio, tu crées tes propres overlays.",
+"Ciò che è visibile ora al distributore. «Modifica» invia una nuova immagine, nell'Overlay Studio crei i tuoi overlay.",
+"Wat er nu bij de automaat te zien is. ‘Wijzigen’ stuurt een nieuwe afbeelding, in de Overlay Studio maak je eigen overlays.",
+"Kas pašlaik redzams automātā. “Mainīt” nosūta jaunu attēlu, Overlay Studio veido savus pārklājumus."
+],
+"Was ist passiert? Je genauer, desto schneller helfen wir.": [
+"What happened? The more precise, the faster we can help.",
+"¿Qué ha pasado? Cuanto más preciso, más rápido te ayudamos.",
+"Que s'est-il passé ? Plus c'est précis, plus vite nous t'aidons.",
+"Cos'è successo? Più sei preciso, più velocemente ti aiutiamo.",
+"Wat is er gebeurd? Hoe preciezer, hoe sneller we helpen.",
+"Kas notika? Jo precīzāk, jo ātrāk palīdzēsim."
+],
+"Was passiert, wenn ich „Anfragen“ tippe?": [
+"What happens when I tap “Request”?",
+"¿Qué pasa si toco «Solicitar»?",
+"Que se passe-t-il quand je touche « Demander » ?",
+"Cosa succede se tocco «Richiedi»?",
+"Wat gebeurt er als ik op ‘Aanvragen’ tik?",
+"Kas notiek, ja pieskaros “Pieprasīt”?"
+],
+"Web-Ansicht öffnen": [
+"Open web view",
+"Abrir vista web",
+"Ouvrir la vue web",
+"Apri vista web",
+"Webweergave openen",
+"Atvērt tīmekļa skatu"
+],
+"Weiter gestalten": [
+"Keep designing",
+"Seguir diseñando",
+"Continuer la mise en forme",
+"Continua a progettare",
+"Verder vormgeven",
+"Turpināt veidot"
+],
+"Weiterempfehlung, −100 bis 100": [
+"Recommendation, −100 to 100",
+"Recomendación, −100 a 100",
+"Recommandation, −100 à 100",
+"Raccomandazione, da −100 a 100",
+"Aanbeveling, −100 tot 100",
+"Ieteikšana, no −100 līdz 100"
+],
+"Welche Seiten ein Mitarbeiter sieht, legt der Inhaber im Mitarbeiter-Zugang fest. Manche Funktionen gehören außerdem zu einem Paket, z. B. Marketing Starter oder die Speedmessung.": [
+"The owner decides which pages a staff member sees in staff access. Some features also belong to a package, e.g. Marketing Starter or speed measurement.",
+"El titular decide qué páginas ve cada empleado en el acceso de personal. Además, algunas funciones pertenecen a un paquete, p. ej. Marketing Starter o la medición de velocidad.",
+"Le propriétaire définit dans l'accès collaborateur les pages visibles par chacun. Certaines fonctions font aussi partie d'un pack, p. ex. Marketing Starter ou la mesure de vitesse.",
+"Il titolare stabilisce nell'accesso collaboratori quali pagine vede ciascuno. Alcune funzioni fanno inoltre parte di un pacchetto, ad es. Marketing Starter o la misurazione della velocità.",
+"Welke pagina's een medewerker ziet, bepaalt de eigenaar bij medewerkerstoegang. Sommige functies horen bovendien bij een pakket, bijv. Marketing Starter of de snelheidsmeting.",
+"Kuras lapas darbinieks redz, nosaka īpašnieks darbinieku piekļuvē. Dažas funkcijas turklāt ir daļa no paketes, piem., Marketing Starter vai ātruma mērīšana."
+],
+"Weniger": [
+"Less",
+"Menos",
+"Moins",
+"Meno",
+"Minder",
+"Mazāk"
+],
+"Wenn nur noch wenige Drucke übrig sind": [
+"When only a few prints are left",
+"Cuando quedan pocas impresiones",
+"Quand il ne reste que peu de tirages",
+"Quando restano poche stampe",
+"Als er nog maar weinig afdrukken over zijn",
+"Kad palikušas tikai dažas izdrukas"
+],
+"Wenn während der Öffnungszeit keine Fotos ankommen": [
+"When no photos arrive during opening hours",
+"Cuando no llegan fotos durante el horario de apertura",
+"Quand aucune photo n'arrive pendant les heures d'ouverture",
+"Quando non arrivano foto durante l'orario di apertura",
+"Als er tijdens openingstijden geen foto's binnenkomen",
+"Kad darba laikā nepienāk foto"
+],
+"Wer darf welche Seiten sehen": [
+"Who can see which pages",
+"Quién puede ver qué páginas",
+"Qui peut voir quelles pages",
+"Chi può vedere quali pagine",
+"Wie welke pagina's mag zien",
+"Kurš drīkst redzēt kuras lapas"
+],
+"WhatsApp": [
+"WhatsApp",
+"WhatsApp",
+"WhatsApp",
+"WhatsApp",
+"WhatsApp",
+"WhatsApp"
+],
+"Wickelt Kartenzahlungen im Webshop ab.": [
+"Processes card payments in the online shop.",
+"Procesa los pagos con tarjeta en la tienda online.",
+"Traite les paiements par carte de la boutique en ligne.",
+"Gestisce i pagamenti con carta nel negozio online.",
+"Verwerkt kaartbetalingen in de webshop.",
+"Apstrādā karšu maksājumus interneta veikalā."
+],
+"Wie Gerät": [
+"System",
+"Sistema",
+"Système",
+"Sistema",
+"Systeem",
+"Sistēma"
+],
+"Wie bekomme ich Mitteilungen aufs Handy?": [
+"How do I get notifications on my phone?",
+"¿Cómo recibo notificaciones en el móvil?",
+"Comment recevoir des notifications sur mon téléphone ?",
+"Come ricevo le notifiche sul telefono?",
+"Hoe krijg ik meldingen op mijn telefoon?",
+"Kā saņemt paziņojumus telefonā?"
+],
+"Wie das Gerät": [
+"Same as device",
+"Como el dispositivo",
+"Comme l'appareil",
+"Come il dispositivo",
+"Zoals het apparaat",
+"Kā ierīcē"
+],
+"Wie erfahren?": [
+"How did you hear?",
+"¿Cómo nos conociste?",
+"Comment nous as-tu connus ?",
+"Come ci hai conosciuto?",
+"Hoe gehoord?",
+"Kā uzzināji?"
+],
+"Wir bekommen eine Benachrichtigung und melden uns bei dir. Es wird noch nichts automatisch bestellt oder berechnet.": [
+"We get a notification and will get back to you. Nothing is ordered or charged automatically.",
+"Recibimos un aviso y te contactaremos. Todavía no se pide ni se cobra nada automáticamente.",
+"Nous recevons une notification et te recontactons. Rien n'est commandé ni facturé automatiquement.",
+"Riceviamo una notifica e ti contatteremo. Non viene ordinato né addebitato nulla in automatico.",
+"Wij krijgen een melding en nemen contact met je op. Er wordt nog niets automatisch besteld of in rekening gebracht.",
+"Mēs saņemam paziņojumu un sazināsimies ar tevi. Nekas netiek automātiski pasūtīts vai iekasēts."
+],
+"Wir schicken dir eine neue Rolle passend zu deinem Drucker.": [
+"We'll send you a new roll that fits your printer.",
+"Te enviaremos un rollo nuevo adecuado para tu impresora.",
+"Nous t'envoyons un nouveau rouleau adapté à ton imprimante.",
+"Ti invieremo un nuovo rotolo adatto alla tua stampante.",
+"We sturen je een nieuwe rol die past bij je printer.",
+"Mēs nosūtīsim tev jaunu rulli, kas der tavam printerim."
+],
+"Wird angemeldet…": [
+"Signing in…",
+"Iniciando sesión…",
+"Connexion…",
+"Accesso in corso…",
+"Bezig met aanmelden…",
+"Piesakās…"
+],
+"Wird ausgelöst…": [
+"Triggering…",
+"Disparando…",
+"Déclenchement…",
+"Scatto in corso…",
+"Wordt geactiveerd…",
+"Iedarbina…"
+],
+"Wird geöffnet…": [
+"Opening…",
+"Abriendo…",
+"Ouverture…",
+"Apertura…",
+"Wordt geopend…",
+"Atver…"
+],
+"Woche ab {0}": [
+"Week from {0}",
+"Semana desde {0}",
+"Semaine du {0}",
+"Settimana dal {0}",
+"Week vanaf {0}",
+"Nedēļa no {0}"
+],
+"Woher kommen die Umsatz-Schätzungen?": [
+"Where do the revenue estimates come from?",
+"¿De dónde salen las estimaciones de ingresos?",
+"D'où viennent les estimations de recettes ?",
+"Da dove provengono le stime degli incassi?",
+"Waar komen de omzetschattingen vandaan?",
+"No kurienes nāk ieņēmumu aplēses?"
+],
+"Worum geht es?": [
+"What is it about?",
+"¿De qué se trata?",
+"De quoi s'agit-il ?",
+"Di cosa si tratta?",
+"Waar gaat het over?",
+"Par ko ir runa?"
+],
+"X": [
+"X",
+"X",
+"X",
+"X",
+"X",
+"X"
+],
+"YouTube": [
+"YouTube",
+"YouTube",
+"YouTube",
+"YouTube",
+"YouTube",
+"YouTube"
+],
+"Zahlungsabwicklung": [
+"Payment processing",
+"Procesamiento de pagos",
+"Traitement des paiements",
+"Elaborazione pagamenti",
+"Betalingsverwerking",
+"Maksājumu apstrāde"
+],
+"Zeitraum wählen – darunter der Verlauf, jeder Automat einzeln und jeder Tag mit Fotos und Betrag.": [
+"Choose a period – below it the trend, each kiosk individually and each day with photos and amount.",
+"Elige un periodo: debajo verás la evolución, cada máquina por separado y cada día con fotos e importe.",
+"Choisis une période – en dessous l'évolution, chaque borne séparément et chaque jour avec photos et montant.",
+"Scegli un periodo: sotto trovi l'andamento, ogni distributore singolarmente e ogni giorno con foto e importo.",
+"Kies een periode – daaronder het verloop, elke automaat apart en elke dag met foto's en bedrag.",
+"Izvēlies periodu – zem tā gaita, katrs automāts atsevišķi un katra diena ar foto un summu."
+],
+"Zuerst die Mail schreiben": [
+"Write the email first",
+"Primero escribe el correo",
+"Écris d'abord l'e-mail",
+"Scrivi prima l'e-mail",
+"Schrijf eerst de mail",
+"Vispirms uzraksti e-pastu"
+],
+"Zufriedenheit (Sterne)": [
+"Satisfaction (stars)",
+"Satisfacción (estrellas)",
+"Satisfaction (étoiles)",
+"Soddisfazione (stelle)",
+"Tevredenheid (sterren)",
+"Apmierinātība (zvaigznes)"
+],
+"Zufällig unter geprüften Teilnehmern, die dem Gewinnspiel zugestimmt haben.": [
+"At random among verified participants who opted into the prize draw.",
+"Al azar entre los participantes verificados que aceptaron el sorteo.",
+"Au hasard parmi les participants vérifiés ayant accepté le jeu-concours.",
+"A caso tra i partecipanti verificati che hanno aderito al concorso.",
+"Willekeurig onder gecontroleerde deelnemers die met de winactie hebben ingestemd.",
+"Nejauši starp pārbaudītajiem dalībniekiem, kas piekrituši izlozei."
+],
+"Zugang": [
+"Access",
+"Acceso",
+"Accès",
+"Accesso",
+"Toegang",
+"Piekļuve"
+],
+"Zugang entfernen": [
+"Remove access",
+"Eliminar acceso",
+"Supprimer l'accès",
+"Rimuovi accesso",
+"Toegang verwijderen",
+"Noņemt piekļuvi"
+],
+"Zuletzt geändert: {0}": [
+"Last changed: {0}",
+"Último cambio: {0}",
+"Dernière modification : {0}",
+"Ultima modifica: {0}",
+"Laatst gewijzigd: {0}",
+"Pēdējoreiz mainīts: {0}"
+],
+"Zuletzt neu gestartet: ": [
+"Last restarted: ",
+"Último reinicio: ",
+"Dernier redémarrage : ",
+"Ultimo riavvio: ",
+"Laatst herstart: ",
+"Pēdējoreiz restartēts: "
+],
+"Zuletzt {0}": [
+"Last seen {0}",
+"Última vez {0}",
+"Vu {0}",
+"Ultimo segnale {0}",
+"Laatst {0}",
+"Pēdējoreiz {0}"
+],
+"Zum Vergleich: am Automaten kostet ein Foto ": [
+"For comparison: a photo at the kiosk costs ",
+"A modo de comparación: en la máquina una foto cuesta ",
+"À titre de comparaison : une photo coûte à la borne ",
+"Per confronto: al distributore una foto costa ",
+"Ter vergelijking: bij de automaat kost een foto ",
+"Salīdzinājumam: automātā foto maksā "
+],
+"Zur Konfiguration": [
+"To configuration",
+"Ir a la configuración",
+"Vers la configuration",
+"Alla configurazione",
+"Naar configuratie",
+"Uz konfigurāciju"
+],
+"Zur Personalisierung": [
+"To personalisation",
+"Ir a la personalización",
+"Vers la personnalisation",
+"Alla personalizzazione",
+"Naar personalisatie",
+"Uz personalizāciju"
+],
+"Zur Seite →": [
+"Go to page →",
+"Ir a la página →",
+"Vers la page →",
+"Vai alla pagina →",
+"Naar pagina →",
+"Uz lapu →"
+],
+"Zurück": [
+"Back",
+"Atrás",
+"Retour",
+"Indietro",
+"Terug",
+"Atpakaļ"
+],
+"Zurückholen": [
+"Restore",
+"Recuperar",
+"Restaurer",
+"Ripristina",
+"Terughalen",
+"Atjaunot"
+],
+"Zurücksetzen: {0}": [
+"Reset: {0}",
+"Restablecer: {0}",
+"Réinitialiser : {0}",
+"Ripristina: {0}",
+"Herstellen: {0}",
+"Atiestatīt: {0}"
+],
+"Zusätzlich": [
+"Add-ons",
+"Adicional",
+"En plus",
+"Aggiuntivo",
+"Extra",
+"Papildus"
+],
+"ab Wert {0}": [
+"from value {0}",
+"a partir del valor {0}",
+"à partir de la valeur {0}",
+"dal valore {0}",
+"vanaf waarde {0}",
+"no vērtības {0}"
+],
+"ab {0}": [
+"from {0}",
+"desde {0}",
+"dès {0}",
+"da {0}",
+"vanaf {0}",
+"no {0}"
+],
+"abgeholt": [
+"picked up",
+"recogida",
+"récupérée",
+"ritirata",
+"opgehaald",
+"saņemts"
+],
+"aufgenommen {0}{1}": [
+"captured {0}{1}",
+"tomada {0}{1}",
+"prise {0}{1}",
+"scattata {0}{1}",
+"opgenomen {0}{1}",
+"uzņemts {0}{1}"
+],
+"bis ": [
+"until ",
+"hasta ",
+"jusqu'au ",
+"fino al ",
+"tot ",
+"līdz "
+],
+"geschenkt": [
+"free",
+"gratis",
+"offerts",
+"in omaggio",
+"gratis",
+"dāvanā"
+],
+"geschlossen": [
+"closed",
+"cerrado",
+"fermé",
+"chiuso",
+"gesloten",
+"slēgts"
+],
+"gestern": [
+"yesterday",
+"ayer",
+"hier",
+"ieri",
+"gisteren",
+"vakar"
+],
+"höchstens {0}": [
+"at most {0}",
+"como máximo {0}",
+"au plus {0}",
+"al massimo {0}",
+"maximaal {0}",
+"ne vairāk kā {0}"
+],
+"in Ordnung": [
+"OK",
+"correcto",
+"en ordre",
+"in ordine",
+"in orde",
+"kārtībā"
+],
+"keine Daten seit {0}": [
+"no data since {0}",
+"sin datos desde {0}",
+"aucune donnée depuis {0}",
+"nessun dato da {0}",
+"geen gegevens sinds {0}",
+"nav datu kopš {0}"
+],
+"km/h": [
+"km/h",
+"km/h",
+"km/h",
+"km/h",
+"km/u",
+"km/h"
+],
+"letzte {0} Tage": [
+"last {0} days",
+"últimos {0} días",
+"{0} derniers jours",
+"ultimi {0} giorni",
+"laatste {0} dagen",
+"pēdējās {0} dienas"
+],
+"lösen ihr Bild erst am nächsten Tag oder nach Parkschluss digital ein.": [
+"redeem their photo digitally only the next day or after the park closes.",
+"canjean su foto digitalmente al día siguiente o tras el cierre del parque.",
+"récupèrent leur photo en ligne seulement le lendemain ou après la fermeture du parc.",
+"riscattano la foto in digitale solo il giorno dopo o dopo la chiusura del parco.",
+"wisselen hun foto pas de volgende dag of na sluitingstijd digitaal in.",
+"izmanto savu foto digitāli tikai nākamajā dienā vai pēc parka slēgšanas."
+],
+"nie": [
+"never",
+"nunca",
+"jamais",
+"mai",
+"nooit",
+"nekad"
+],
+"niedrig": [
+"low",
+"bajo",
+"faible",
+"basso",
+"laag",
+"zems"
+],
+"noch nie angemeldet": [
+"never signed in",
+"nunca ha iniciado sesión",
+"jamais connecté",
+"mai effettuato l'accesso",
+"nog nooit aangemeld",
+"nekad nav pieteicies"
+],
+"nur Kartenzahlung": [
+"card payment only",
+"solo pago con tarjeta",
+"paiement par carte uniquement",
+"solo pagamento con carta",
+"alleen kaartbetaling",
+"tikai karšu maksājumi"
+],
+"nur Testkäufe": [
+"test purchases only",
+"solo compras de prueba",
+"achats test uniquement",
+"solo acquisti di prova",
+"alleen testaankopen",
+"tikai testa pirkumi"
+],
+"ohne": [
+"none",
+"sin",
+"sans",
+"senza",
+"zonder",
+"bez"
+],
+"px. Für den Automaten ist „Foto-Overlay 4:3“ richtig.": [
+"px. For the kiosk, “Photo overlay 4:3” is correct.",
+"px. Para la máquina, lo correcto es «Overlay de foto 4:3».",
+"px. Pour la borne, « Overlay photo 4:3 » est le bon format.",
+"px. Per il distributore il formato giusto è «Overlay foto 4:3».",
+"px. Voor de automaat is ‘Foto-overlay 4:3’ juist.",
+"px. Automātam pareizais ir “Foto pārklājums 4:3”."
+],
+"statt ": [
+"instead of ",
+"en lugar de ",
+"au lieu de ",
+"invece di ",
+"in plaats van ",
+"nevis "
+],
+"umfrage-{0}-tage.csv": [
+"survey-{0}-days.csv",
+"encuesta-{0}-dias.csv",
+"sondage-{0}-jours.csv",
+"sondaggio-{0}-giorni.csv",
+"enquete-{0}-dagen.csv",
+"aptauja-{0}-dienas.csv"
+],
+"von {0} Fahrten": [
+"of {0} rides",
+"de {0} viajes",
+"sur {0} trajets",
+"su {0} corse",
+"van {0} ritten",
+"no {0} braucieniem"
+],
+"vor {0} Min.": [
+"{0} min ago",
+"hace {0} min",
+"il y a {0} min",
+"{0} min fa",
+"{0} min. geleden",
+"pirms {0} min."
+],
+"vor {0} Std.": [
+"{0} h ago",
+"hace {0} h",
+"il y a {0} h",
+"{0} h fa",
+"{0} uur geleden",
+"pirms {0} st."
+],
+"vor {0} Tagen": [
+"{0} days ago",
+"hace {0} días",
+"il y a {0} jours",
+"{0} giorni fa",
+"{0} dagen geleden",
+"pirms {0} dienām"
+],
+"z. B. Frohe Herbstferien!": [
+"e.g. Happy autumn holidays!",
+"p. ej. ¡Felices vacaciones de otoño!",
+"p. ex. Bonnes vacances d'automne !",
+"ad es. Buone vacanze d'autunno!",
+"bijv. Fijne herfstvakantie!",
+"piem., Priecīgas rudens brīvdienas!"
+],
+"z. B. Herbstlaub am Rand, unser Logo unten rechts": [
+"e.g. autumn leaves at the edge, our logo bottom right",
+"p. ej. hojas de otoño en el borde, nuestro logo abajo a la derecha",
+"p. ex. feuilles d'automne en bordure, notre logo en bas à droite",
+"ad es. foglie autunnali sul bordo, il nostro logo in basso a destra",
+"bijv. herfstbladeren aan de rand, ons logo rechtsonder",
+"piem., rudens lapas malā, mūsu logotips apakšā pa labi"
+],
+"z. B. Wingst": [
+"e.g. Wingst",
+"p. ej. Wingst",
+"p. ex. Wingst",
+"ad es. Wingst",
+"bijv. Wingst",
+"piem., Wingst"
+],
+"zuletzt vor {0} Min.": [
+"last seen {0} min ago",
+"última vez hace {0} min",
+"vu il y a {0} min",
+"ultimo segnale {0} min fa",
+"laatst {0} min. geleden",
+"pēdējoreiz pirms {0} min."
+],
+"zuletzt {0}": [
+"last {0}",
+"última vez {0}",
+"dernière fois {0}",
+"ultimo {0}",
+"laatst {0}",
+"pēdējoreiz {0}"
+],
+"{0}\n\nDie Kamerasoftware startet danach neu – für einige Sekunden entstehen keine Fotos. Der Automat sichert vorher die alten Werte.": [
+"{0}\n\nThe camera software then restarts – no photos are taken for a few seconds. The kiosk backs up the old values first.",
+"{0}\n\nDespués se reinicia el software de la cámara: durante unos segundos no se toman fotos. La máquina guarda antes los valores anteriores.",
+"{0}\n\nLe logiciel caméra redémarre ensuite – aucune photo pendant quelques secondes. La borne sauvegarde d'abord les anciennes valeurs.",
+"{0}\n\nPoi il software della fotocamera si riavvia: per alcuni secondi non vengono scattate foto. Il distributore salva prima i valori precedenti.",
+"{0}\n\nDe camerasoftware start daarna opnieuw – een paar seconden worden er geen foto's gemaakt. De automaat bewaart eerst de oude waarden.",
+"{0}\n\nPēc tam kameras programmatūra restartējas – dažas sekundes foto netiek uzņemti. Automāts iepriekš saglabā vecās vērtības."
+],
+"{0} % Umsatzanteil": [
+"{0} % revenue share",
+"{0} % de participación en ingresos",
+"{0} % du chiffre d'affaires",
+"{0} % di quota sugli incassi",
+"{0} % omzetaandeel",
+"{0} % ieņēmumu daļa"
+],
+"{0} % der Freischaltungen": [
+"{0} % of unlocks",
+"{0} % de los desbloqueos",
+"{0} % des déblocages",
+"{0} % degli sblocchi",
+"{0} % van de vrijgaven",
+"{0} % no atbloķēšanām"
+],
+"{0} ({1}) wird beendet und NICHT wieder gestartet. Es bleibt aus, bis du es wieder startest.": [
+"{0} ({1}) will be stopped and NOT restarted. It stays off until you start it again.",
+"{0} ({1}) se detendrá y NO se reiniciará. Seguirá apagado hasta que lo vuelvas a iniciar.",
+"{0} ({1}) sera arrêté et NE redémarrera PAS. Il reste éteint jusqu'à ce que tu le relances.",
+"{0} ({1}) verrà chiuso e NON riavviato. Resta spento finché non lo riavvii.",
+"{0} ({1}) wordt afgesloten en NIET opnieuw gestart. Het blijft uit tot je het weer start.",
+"{0} ({1}) tiks apturēts un NETIKS restartēts. Tas paliks izslēgts, līdz to atkal palaidīsi."
+],
+"{0} ({1}) wird beendet und neu gestartet.\n\n{2}\n\nNur ausführen, wenn gerade niemand am Automaten steht.": [
+"{0} ({1}) will be stopped and restarted.\n\n{2}\n\nOnly do this when nobody is at the kiosk.",
+"{0} ({1}) se detendrá y se reiniciará.\n\n{2}\n\nHazlo solo cuando no haya nadie en la máquina.",
+"{0} ({1}) sera arrêté puis redémarré.\n\n{2}\n\nÀ faire uniquement quand personne n'est à la borne.",
+"{0} ({1}) verrà chiuso e riavviato.\n\n{2}\n\nEseguire solo quando nessuno è al distributore.",
+"{0} ({1}) wordt afgesloten en opnieuw gestart.\n\n{2}\n\nAlleen uitvoeren als er niemand bij de automaat staat.",
+"{0} ({1}) tiks apturēts un restartēts.\n\n{2}\n\nDari to tikai tad, kad pie automāta neviena nav."
+],
+"{0} Automaten offline": [
+"{0} kiosks offline",
+"{0} máquinas sin conexión",
+"{0} bornes hors ligne",
+"{0} distributori offline",
+"{0} automaten offline",
+"{0} automāti bezsaistē"
+],
+"{0} Besucher": [
+"{0} visitors",
+"{0} visitantes",
+"{0} visiteurs",
+"{0} visitatori",
+"{0} bezoekers",
+"{0} apmeklētāji"
+],
+"{0} Bilder in den letzten {1} Tagen": [
+"{0} photos in the last {1} days",
+"{0} imágenes en los últimos {1} días",
+"{0} images ces {1} derniers jours",
+"{0} immagini negli ultimi {1} giorni",
+"{0} foto's in de laatste {1} dagen",
+"{0} attēli pēdējās {1} dienās"
+],
+"{0} Empfänger{1}{2}": [
+"{0} recipients{1}{2}",
+"{0} destinatarios{1}{2}",
+"{0} destinataires{1}{2}",
+"{0} destinatari{1}{2}",
+"{0} ontvangers{1}{2}",
+"{0} adresāti{1}{2}"
+],
+"{0} Fotos": [
+"{0} photos",
+"{0} fotos",
+"{0} photos",
+"{0} foto",
+"{0} foto's",
+"{0} foto"
+],
+"{0} Fotos verkauft": [
+"{0} photos sold",
+"{0} fotos vendidas",
+"{0} photos vendues",
+"{0} foto vendute",
+"{0} foto's verkocht",
+"{0} foto pārdoti"
+],
+"{0} Fotos{1}": [
+"{0} photos{1}",
+"{0} fotos{1}",
+"{0} photos{1}",
+"{0} foto{1}",
+"{0} foto's{1}",
+"{0} foto{1}"
+],
+"{0} Gäste würden diese E-Mail bekommen (nur mit Einwilligung).": [
+"{0} guests would receive this email (only with consent).",
+"{0} visitantes recibirían este correo (solo con consentimiento).",
+"{0} visiteurs recevraient cet e-mail (uniquement avec accord).",
+"{0} ospiti riceverebbero questa e-mail (solo con consenso).",
+"{0} gasten zouden deze e-mail krijgen (alleen met toestemming).",
+"{0} viesi saņemtu šo e-pastu (tikai ar piekrišanu)."
+],
+"{0} Karte · {1} bar": [
+"{0} card · {1} cash",
+"{0} tarjeta · {1} efectivo",
+"{0} carte · {1} espèces",
+"{0} carta · {1} contanti",
+"{0} kaart · {1} contant",
+"{0} karte · {1} skaidrā"
+],
+"{0} Kaufquote": [
+"{0} purchase rate",
+"{0} tasa de compra",
+"{0} taux d'achat",
+"{0} tasso di acquisto",
+"{0} koopratio",
+"{0} pirkumu īpatsvars"
+],
+"{0} Kontakte": [
+"{0} contacts",
+"{0} contactos",
+"{0} contacts",
+"{0} contatti",
+"{0} contacten",
+"{0} kontakti"
+],
+"{0} Min.": [
+"{0} min",
+"{0} min",
+"{0} min",
+"{0} min",
+"{0} min.",
+"{0} min."
+],
+"{0} Monate Laufzeit": [
+"{0}-month term",
+"{0} meses de permanencia",
+"Engagement de {0} mois",
+"Durata {0} mesi",
+"{0} maanden looptijd",
+"{0} mēnešu termiņš"
+],
+"{0} Monate geschenkt": [
+"{0} months free",
+"{0} meses gratis",
+"{0} mois offerts",
+"{0} mesi in omaggio",
+"{0} maanden gratis",
+"{0} mēneši dāvanā"
+],
+"{0} Seiten": [
+"{0} pages",
+"{0} páginas",
+"{0} pages",
+"{0} pagine",
+"{0} pagina's",
+"{0} lapas"
+],
+"{0} Std.": [
+"{0} h",
+"{0} h",
+"{0} h",
+"{0} h",
+"{0} uur",
+"{0} st."
+],
+"{0} Stunden danach": [
+"{0} hours later",
+"{0} horas después",
+"{0} heures après",
+"{0} ore dopo",
+"{0} uur erna",
+"{0} stundas vēlāk"
+],
+"{0} Störungen": [
+"{0} faults",
+"{0} averías",
+"{0} pannes",
+"{0} guasti",
+"{0} storingen",
+"{0} traucējumi"
+],
+"{0} Tagen": [
+"{0} days",
+"{0} días",
+"{0} jours",
+"{0} giorni",
+"{0} dagen",
+"{0} dienām"
+],
+"{0} Uhr": [
+"{0}",
+"{0} h",
+"{0}",
+"{0}",
+"{0} uur",
+"{0}"
+],
+"{0} Uhr{1}": [
+"{0}{1}",
+"{0} h{1}",
+"{0}{1}",
+"{0}{1}",
+"{0} uur{1}",
+"{0}{1}"
+],
+"{0} Uhr{1}{2}": [
+"{0}{1}{2}",
+"{0} h{1}{2}",
+"{0}{1}{2}",
+"{0}{1}{2}",
+"{0} uur{1}{2}",
+"{0}{1}{2}"
+],
+"{0} Warnungen": [
+"{0} warnings",
+"{0} avisos",
+"{0} avertissements",
+"{0} avvisi",
+"{0} waarschuwingen",
+"{0} brīdinājumi"
+],
+"{0} beenden?": [
+"Stop {0}?",
+"¿Detener {0}?",
+"Arrêter {0} ?",
+"Chiudere {0}?",
+"{0} afsluiten?",
+"Apturēt {0}?"
+],
+"{0} bis {1}": [
+"{0} to {1}",
+"{0} a {1}",
+"{0} au {1}",
+"{0} – {1}",
+"{0} tot {1}",
+"{0} līdz {1}"
+],
+"{0} geändert": [
+"{0} changed",
+"{0} cambiado",
+"{0} modifié",
+"{0} modificato",
+"{0} gewijzigd",
+"{0} mainīts"
+],
+"{0} im Vergleich": [
+"{0} compared",
+"{0} en comparación",
+"{0} en comparaison",
+"{0} a confronto",
+"{0} vergeleken",
+"{0} salīdzinājumā"
+],
+"{0} ist offline": [
+"{0} is offline",
+"{0} está sin conexión",
+"{0} est hors ligne",
+"{0} è offline",
+"{0} is offline",
+"{0} ir bezsaistē"
+],
+"{0} kann sich danach nicht mehr anmelden. Das lässt sich nicht rückgängig machen.": [
+"{0} will no longer be able to sign in. This cannot be undone.",
+"{0} ya no podrá iniciar sesión. No se puede deshacer.",
+"{0} ne pourra plus se connecter. Action irréversible.",
+"{0} non potrà più accedere. Non si può annullare.",
+"{0} kan daarna niet meer inloggen. Dit kan niet ongedaan worden gemaakt.",
+"{0} pēc tam vairs nevarēs pieteikties. To nevar atsaukt."
+],
+"{0} km/h": [
+"{0} km/h",
+"{0} km/h",
+"{0} km/h",
+"{0} km/h",
+"{0} km/u",
+"{0} km/h"
+],
+"{0} neu": [
+"{0} new",
+"{0} nuevos",
+"{0} nouveaux",
+"{0} nuovi",
+"{0} nieuw",
+"{0} jauni"
+],
+"{0} neu starten?": [
+"Restart {0}?",
+"¿Reiniciar {0}?",
+"Redémarrer {0} ?",
+"Riavviare {0}?",
+"{0} opnieuw starten?",
+"Restartēt {0}?"
+],
+"{0} startet heute Nacht neu.": [
+"{0} will restart tonight.",
+"{0} se reiniciará esta noche.",
+"{0} redémarrera cette nuit.",
+"{0} si riavvierà stanotte.",
+"{0} start vannacht opnieuw.",
+"{0} restartēsies šonakt."
+],
+"{0} unverkaufte Bilder": [
+"{0} unsold photos",
+"{0} imágenes no vendidas",
+"{0} images invendues",
+"{0} immagini invendute",
+"{0} onverkochte foto's",
+"{0} nepārdoti attēli"
+],
+"{0} von {1} Einlösungen": [
+"{0} of {1} redemptions",
+"{0} de {1} canjes",
+"{0} sur {1} utilisations",
+"{0} di {1} riscatti",
+"{0} van {1} inwisselingen",
+"{0} no {1} izmantošanām"
+],
+"{0} wird beendet.": [
+"{0} will be stopped.",
+"{0} se detendrá.",
+"{0} sera arrêté.",
+"{0} verrà chiuso.",
+"{0} wordt afgesloten.",
+"{0} tiks apturēts."
+],
+"{0} wird endgültig entfernt.": [
+"{0} will be removed permanently.",
+"{0} se eliminará definitivamente.",
+"{0} sera supprimé définitivement.",
+"{0} verrà rimosso definitivamente.",
+"{0} wordt definitief verwijderd.",
+"{0} tiks neatgriezeniski noņemts."
+],
+"{0} wird neu gestartet. Der Automat holt den Auftrag beim nächsten Abruf.": [
+"{0} will be restarted. The kiosk picks up the job at its next check.",
+"{0} se reiniciará. La máquina recogerá la orden en la próxima consulta.",
+"{0} va redémarrer. La borne récupère l'ordre lors de sa prochaine interrogation.",
+"{0} verrà riavviato. Il distributore riceve il comando al prossimo controllo.",
+"{0} wordt opnieuw gestart. De automaat haalt de opdracht op bij de volgende controle.",
+"{0} tiks restartēts. Automāts saņems uzdevumu nākamajā pārbaudē."
+],
+"{0} · aktualisiert {1}": [
+"{0} · updated {1}",
+"{0} · actualizado {1}",
+"{0} · mis à jour {1}",
+"{0} · aggiornato {1}",
+"{0} · bijgewerkt {1}",
+"{0} · atjaunināts {1}"
+],
+"{0} · aus der App": [
+"{0} · from the app",
+"{0} · desde la app",
+"{0} · depuis l'app",
+"{0} · dall'app",
+"{0} · vanuit de app",
+"{0} · no lietotnes"
+],
+"{0} · seit {1}": [
+"{0} · since {1}",
+"{0} · desde {1}",
+"{0} · depuis {1}",
+"{0} · da {1}",
+"{0} · sinds {1}",
+"{0} · kopš {1}"
+],
+"{0} · {1} Einträge, {2} geprüft{3}": [
+"{0} · {1} entries, {2} verified{3}",
+"{0} · {1} participaciones, {2} verificadas{3}",
+"{0} · {1} participations, {2} vérifiées{3}",
+"{0} · {1} partecipazioni, {2} verificate{3}",
+"{0} · {1} inzendingen, {2} gecontroleerd{3}",
+"{0} · {1} ieraksti, {2} pārbaudīti{3}"
+],
+"{0} · {1} Fotos": [
+"{0} · {1} photos",
+"{0} · {1} fotos",
+"{0} · {1} photos",
+"{0} · {1} foto",
+"{0} · {1} foto's",
+"{0} · {1} foto"
+],
+"{0} · {1} mit Beitrag": [
+"{0} · {1} with post",
+"{0} · {1} con publicación",
+"{0} · {1} avec publication",
+"{0} · {1} con post",
+"{0} · {1} met bericht",
+"{0} · {1} ar ierakstu"
+],
+"{0} Änderungen bereit": [
+"{0} changes ready",
+"{0} cambios listos",
+"{0} modifications prêtes",
+"{0} modifiche pronte",
+"{0} wijzigingen klaar",
+"{0} izmaiņas gatavas"
+],
+"{0} ändern": [
+"Change {0}",
+"Cambiar {0}",
+"Modifier {0}",
+"Modifica {0}",
+"{0} wijzigen",
+"Mainīt {0}"
+],
+"{0} €/Monat": [
+"€{0}/month",
+"{0} €/mes",
+"{0} €/mois",
+"{0} €/mese",
+"€ {0}/maand",
+"{0} €/mēn."
+],
+"{0}: Abholcode {1} unbekannt": [
+"{0}: pickup code {1} unknown",
+"{0}: código de recogida {1} desconocido",
+"{0} : code de récupération {1} inconnu",
+"{0}: codice di ritiro {1} sconosciuto",
+"{0}: ophaalcode {1} onbekend",
+"{0}: saņemšanas kods {1} nezināms"
+],
+"{0}: Münzen leer": [
+"{0}: coins empty",
+"{0}: sin monedas",
+"{0} : plus de pièces",
+"{0}: monete esaurite",
+"{0}: munten op",
+"{0}: monētas beigušās"
+],
+"{0}: Papier wird knapp": [
+"{0}: paper running low",
+"{0}: queda poco papel",
+"{0} : papier bientôt épuisé",
+"{0}: carta in esaurimento",
+"{0}: papier raakt op",
+"{0}: papīrs beidzas"
+],
+"{0}: Störung ({1})": [
+"{0}: fault ({1})",
+"{0}: avería ({1})",
+"{0} : panne ({1})",
+"{0}: guasto ({1})",
+"{0}: storing ({1})",
+"{0}: traucējums ({1})"
+],
+"{0}:00 bis {1}:00 Uhr": [
+"{0}:00 to {1}:00",
+"de {0}:00 a {1}:00",
+"de {0} h à {1} h",
+"dalle {0}:00 alle {1}:00",
+"{0}:00 tot {1}:00 uur",
+"no {0}:00 līdz {1}:00"
+],
+"Ändern, speichern, Vorschau prüfen": [
+"Change, save, check preview",
+"Cambiar, guardar, revisar vista previa",
+"Modifier, enregistrer, vérifier l'aperçu",
+"Modifica, salva, controlla anteprima",
+"Wijzigen, opslaan, voorbeeld controleren",
+"Mainīt, saglabāt, pārbaudīt priekšskatījumu"
+],
+"Öffnungszeiten": [
+"Opening hours",
+"Horario de apertura",
+"Horaires d'ouverture",
+"Orari di apertura",
+"Openingstijden",
+"Darba laiks"
+],
+"Ø Score {0} von 10": [
+"Avg. score {0} of 10",
+"Puntuación media {0} de 10",
+"Score moyen {0} sur 10",
+"Punteggio medio {0} su 10",
+"Gem. score {0} van 10",
+"Vid. vērtējums {0} no 10"
+],
+"„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.": [
+"“Store current state” uploads the image currently on the kiosk – for display only. It isn't sent to the kiosk and nothing restarts.",
+"«Guardar estado actual» sube la imagen que hay ahora en la máquina, solo para mostrarla. No se envía a la máquina ni hay reinicio.",
+"« Enregistrer l'état actuel » importe l'image présente sur la borne – uniquement pour l'affichage. Rien n'est envoyé à la borne, aucun redémarrage.",
+"«Salva stato attuale» carica l'immagine presente ora sul distributore, solo per la visualizzazione. Non viene inviata al distributore, nessun riavvio.",
+"‘Huidige stand vastleggen’ uploadt de afbeelding die nu op de automaat staat – alleen ter weergave. Er wordt niets naar de automaat gestuurd, geen herstart.",
+"“Saglabāt pašreizējo stāvokli” augšupielādē attēlu, kas pašlaik ir automātā – tikai attēlošanai. Tas netiek nosūtīts uz automātu, nav restartēšanas."
+],
+"„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.": [
+"“{0}” stored. Nothing has changed at the kiosk.",
+"«{0}» guardado. En la máquina no ha cambiado nada.",
+"« {0} » enregistré. Rien n'a changé sur la borne.",
+"«{0}» salvato. Al distributore non è cambiato nulla.",
+"‘{0}’ vastgelegd. Bij de automaat is niets veranderd.",
+"“{0}” saglabāts. Automātā nekas nav mainījies."
+],
+"„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.": [
+"“{0}” was handed to {1}. To make it visible, restart the sales program now.",
+"«{0}» se ha entregado a {1}. Para que se vea, reinicia ahora el programa de venta.",
+"« {0} » a été transmis à {1}. Pour qu'il soit visible, redémarre maintenant le programme de vente.",
+"«{0}» è stato consegnato a {1}. Per renderlo visibile, riavvia ora il programma di vendita.",
+"‘{0}’ is doorgegeven aan {1}. Start nu het verkoopprogramma opnieuw om het zichtbaar te maken.",
+"“{0}” nodots {1}. Lai tas būtu redzams, tagad restartē pārdošanas programmu."
+]
+}

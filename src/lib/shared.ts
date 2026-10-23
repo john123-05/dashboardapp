@@ -1,5 +1,6 @@
 import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
-import { getFunctionSession } from './functionAuth';
+import { getFunctionSession, isTokenRejection, refreshFunctionSession } from './functionAuth';
+import { tr } from '../i18n';
 
 // Aufruf einer Function im geteilten Projekt mit dem Token des Betreibers (wie im Web die vielen
 // `call()` in lib/surveyApi.ts, lib/shop.ts usw.). Antwort ohne `data`-Hülle kommt unverändert zurück.
@@ -7,7 +8,7 @@ export async function sharedHeaders(): Promise<Record<string, string>> {
   const {
     data: { session },
   } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Sitzung abgelaufen. Bitte neu anmelden.');
+  if (!session?.access_token) throw new Error(tr('Sitzung abgelaufen. Bitte neu anmelden.'));
   return { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY };
 }
 
@@ -25,14 +26,22 @@ export async function callShared<T = any>(
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(query ?? {})) if (v !== undefined && v !== '') params.set(k, v);
   const qs = params.toString();
-  const headers: Record<string, string> = await sharedHeaders();
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
-  const res = await fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/${fn}${qs ? `?${qs}` : ''}`, {
-    method,
-    headers,
-    body: form ?? (body !== undefined ? JSON.stringify(body) : undefined),
-  });
-  const json = await res.json().catch(() => null);
+  const send = async () => {
+    const headers: Record<string, string> = await sharedHeaders();
+    if (body !== undefined) headers['Content-Type'] = 'application/json';
+    return fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/${fn}${qs ? `?${qs}` : ''}`, {
+      method,
+      headers,
+      body: form ?? (body !== undefined ? JSON.stringify(body) : undefined),
+    });
+  };
+  let res = await send();
+  let json = await res.json().catch(() => null);
+  // Token abgelehnt (z. B. nach langer Pause im Hintergrund): einmal erneuern und wiederholen.
+  if (isTokenRejection(res.status, json?.error) && (await refreshFunctionSession())) {
+    res = await send();
+    json = await res.json().catch(() => null);
+  }
   if (!res.ok) throw new SharedError(json?.error || `HTTP ${res.status}`, res.status, json);
   return (raw ? json : json?.data ?? json) as T;
 }

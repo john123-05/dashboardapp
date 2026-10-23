@@ -11,6 +11,7 @@ import { successHaptic } from '../components/haptics';
 import { useNotifications, type FeedItem } from '../contexts/NotificationsContext';
 import { timeAgo } from '../lib/format';
 import { colors, font, TAP } from '../theme';
+import { tr } from '../i18n';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 const KIND: Record<FeedItem['kind'], IconName> = {
@@ -41,9 +42,9 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
   };
   return (
     <Screen
-      title="Meldungen"
+      title={tr('Meldungen')}
       onBack={navigation.goBack}
-      subtitle={unread > 0 ? `${unread} neu` : 'Alles gelesen'}
+      subtitle={unread > 0 ? tr('{0} neu', unread) : tr('Alles gelesen')}
       refreshing={refreshing}
       onRefresh={reload}
       right={
@@ -57,7 +58,7 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
             style={{ minHeight: TAP, justifyContent: 'center' }}
             accessibilityRole="button"
           >
-            <Text style={{ ...font.callout, color: colors.brand }}>Alle gelesen</Text>
+            <Text style={{ ...font.callout, color: colors.brand }}>{tr('Alle gelesen')}</Text>
           </Pressable>
         ) : null
       }
@@ -93,7 +94,7 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
                         hide(it.id);
                       }}
                       hitSlop={10}
-                      accessibilityLabel="Meldung entfernen"
+                      accessibilityLabel={tr('Meldung entfernen')}
                     >
                       <Ionicons name="close-circle" size={20} color={colors.ink3} />
                     </Pressable>
@@ -106,7 +107,7 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
         </ListCard>
       ) : !loading ? (
         <Card>
-          <EmptyState icon="checkmark-circle-outline" title="Alles in Ordnung" text="Keine Störungen, kein Papiermangel, keine offenen Antworten. Behobene Störungen verschwinden von selbst." />
+          <EmptyState icon="checkmark-circle-outline" title={tr('Alles in Ordnung')} text={tr('Keine Störungen, kein Papiermangel, keine offenen Antworten. Behobene Störungen verschwinden von selbst.')} />
         </Card>
       ) : null}
     </Screen>

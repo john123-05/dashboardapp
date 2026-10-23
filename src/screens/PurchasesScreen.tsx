@@ -8,6 +8,7 @@ import { formatCents, formatDayLong, formatNumber, formatTime } from '../lib/for
 import { daysAgoInTimezone, todayInTimezone } from '../lib/kioskSales';
 import { useData } from '../lib/useData';
 import { colors, font } from '../theme';
+import { tr } from '../i18n';
 
 type Range = '0' | '7' | '30';
 
@@ -33,17 +34,17 @@ export function PurchasesScreen({ navigation }: { navigation: { goBack: () => vo
   }, [purchases, timezone]);
 
   return (
-    <Screen page="purchases" title="Käufe" subtitle="Einzelne Verkäufe am Automaten" onBack={navigation.goBack} refreshing={ledger.refreshing} onRefresh={ledger.reload}>
-      <Segmented<Range> value={range} onChange={setRange} options={[{ value: '0', label: 'Heute' }, { value: '7', label: '7 Tage' }, { value: '30', label: '30 Tage' }]} />
+    <Screen page="purchases" title={tr('Käufe')} subtitle={tr('Einzelne Verkäufe am Automaten')} onBack={navigation.goBack} refreshing={ledger.refreshing} onRefresh={ledger.reload}>
+      <Segmented<Range> value={range} onChange={setRange} options={[{ value: '0', label: tr('Heute') }, { value: '7', label: tr('7 Tage') }, { value: '30', label: tr('30 Tage') }]} />
       {ledger.error && !ledger.data ? <ErrorNote text={ledger.error} onRetry={ledger.reload} /> : null}
       {ledger.loading && !ledger.data ? (
         <KpiSkeleton />
       ) : (
         <KpiGrid>
-          <Kpi icon="receipt-outline" label="Verkäufe" value={formatNumber(purchases.length)} />
-          <Kpi icon="cash-outline" label="Umsatz" value={formatCents(total)} />
-          <Kpi icon="card-outline" label="Karte" value={formatNumber(card)} />
-          <Kpi icon="wallet-outline" label="Bar" value={formatNumber(cash)} />
+          <Kpi icon="receipt-outline" label={tr('Verkäufe')} value={formatNumber(purchases.length)} />
+          <Kpi icon="cash-outline" label={tr('Umsatz')} value={formatCents(total)} />
+          <Kpi icon="card-outline" label={tr('Karte')} value={formatNumber(card)} />
+          <Kpi icon="wallet-outline" label={tr('Bar')} value={formatNumber(cash)} />
         </KpiGrid>
       )}
       {groups.map(([day, rows]) => (
@@ -53,12 +54,12 @@ export function PurchasesScreen({ navigation }: { navigation: { goBack: () => vo
               <Row
                 key={`${p.sold_at}-${p.bild_nr}-${i}`}
                 icon={p.method === 'bar' ? 'cash-outline' : 'card-outline'}
-                title={p.claimed_name || p.claimed_email || (p.bild_nr ? `Foto ${p.bild_nr}` : 'Foto verkauft')}
-                subtitle={`${formatTime(p.sold_at, timezone)} Uhr${p.bild_nr ? ` · Bild ${p.bild_nr}` : ''}${p.card_scheme ? ` · ${p.card_scheme}` : ''}`}
+                title={p.claimed_name || p.claimed_email || (p.bild_nr ? tr('Foto {0}', p.bild_nr) : tr('Foto verkauft'))}
+                subtitle={tr('{0} Uhr{1}{2}', formatTime(p.sold_at, timezone), p.bild_nr ? tr(' · Bild {0}', p.bild_nr) : '', p.card_scheme ? ` · ${p.card_scheme}` : '')}
                 right={
                   <View style={{ alignItems: 'flex-end', gap: 4 }}>
                     <Text style={{ ...font.callout, color: colors.ink, fontVariant: ['tabular-nums'] }}>{formatCents(p.amount_cents ?? price)}</Text>
-                    {p.claimed_email ? <Pill text="abgeholt" tone="ok" /> : null}
+                    {p.claimed_email ? <Pill text={tr('abgeholt')} tone="ok" /> : null}
                   </View>
                 }
                 last={i === rows.length - 1}
@@ -69,10 +70,10 @@ export function PurchasesScreen({ navigation }: { navigation: { goBack: () => vo
       ))}
       {!ledger.loading && purchases.length === 0 && !ledger.error ? (
         <Card>
-          <EmptyState icon="receipt-outline" title="Keine Verkäufe" text="In diesem Zeitraum wurde noch kein Foto verkauft." />
+          <EmptyState icon="receipt-outline" title={tr('Keine Verkäufe')} text={tr('In diesem Zeitraum wurde noch kein Foto verkauft.')} />
         </Card>
       ) : null}
-      {ledger.data?.truncated ? <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>Es werden nur die neuesten Verkäufe angezeigt.</Text> : null}
+      {ledger.data?.truncated ? <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>{tr('Es werden nur die neuesten Verkäufe angezeigt.')}</Text> : null}
     </Screen>
   );
 }

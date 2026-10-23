@@ -7,6 +7,7 @@ import { PREVIEW, PREVIEW_PARK } from '../lib/preview';
 import { previewKioskSales } from '../lib/mock';
 import { loadHealth } from '../lib/data';
 import { cameraControlAvailable, cameraPageSetting } from '../lib/camera';
+import { tr } from '../i18n';
 
 interface ParkState {
   loading: boolean;
@@ -135,6 +136,6 @@ export function ParkProvider({ children }: PropsWithChildren) {
 
 export function usePark() {
   const ctx = useContext(ParkContext);
-  if (!ctx) throw new Error('usePark außerhalb von ParkProvider');
+  if (!ctx) throw new Error(tr('usePark außerhalb von ParkProvider'));
   return ctx;
 }

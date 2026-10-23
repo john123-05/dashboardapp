@@ -8,6 +8,7 @@ import { timeAgo } from '../lib/format';
 import { loadTickets, PRIORITY_LABEL, STATUS_LABEL, SUPPORT_PHONE, SUPPORT_PHONE_HREF, type SupportTicket } from '../lib/support';
 import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
+import { tr } from '../i18n';
 
 const tone = (s: SupportTicket['status']) => (s === 'open' ? 'warn' : s === 'in_progress' ? 'info' : 'ok') as 'warn' | 'info' | 'ok';
 
@@ -19,17 +20,17 @@ export function SupportScreen({ navigation }: { navigation: { goBack: () => void
   const tickets = data.data ?? [];
 
   return (
-    <Screen page="tickets" title="Support" subtitle="Anfragen an Liftpictures" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="tickets" title={tr('Support')} subtitle={tr('Anfragen an Liftpictures')} onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
       <View style={{ flexDirection: 'row', gap: space.sm }}>
         <View style={{ flex: 1 }}>
-          <Button title="Neue Anfrage" icon="add" onPress={() => nav.navigate('NewTicket', { onDone: undefined })} />
+          <Button title={tr('Neue Anfrage')} icon="add" onPress={() => nav.navigate('NewTicket', { onDone: undefined })} />
         </View>
         <View style={{ flex: 1 }}>
-          <Button title="Anrufen" icon="call-outline" kind="plain" onPress={() => void Linking.openURL(SUPPORT_PHONE_HREF)} />
+          <Button title={tr('Anrufen')} icon="call-outline" kind="plain" onPress={() => void Linking.openURL(SUPPORT_PHONE_HREF)} />
         </View>
       </View>
-      <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center', marginTop: -6 }}>Telefon {SUPPORT_PHONE}</Text>
-      <Segmented value={tab} onChange={setTab} options={[{ value: 'aktiv', label: 'Aktiv' }, { value: 'archiv', label: 'Archiv' }]} />
+      <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center', marginTop: -6 }}>{tr('Telefon ')}{SUPPORT_PHONE}</Text>
+      <Segmented value={tab} onChange={setTab} options={[{ value: 'aktiv', label: tr('Aktiv') }, { value: 'archiv', label: tr('Archiv') }]} />
       {data.error && !data.data ? <ErrorNote text={data.error} onRetry={data.reload} /> : null}
       {data.loading && !data.data ? (
         <Card>
@@ -43,7 +44,7 @@ export function SupportScreen({ navigation }: { navigation: { goBack: () => void
               key={t.id}
               icon="chatbubbles-outline"
               title={t.subject}
-              subtitle={`${PRIORITY_LABEL[t.priority]} · aktualisiert ${timeAgo(t.updated_at)}`}
+              subtitle={tr('{0} · aktualisiert {1}', PRIORITY_LABEL[t.priority], timeAgo(t.updated_at))}
               right={<Pill tone={tone(t.status)} text={STATUS_LABEL[t.status]} />}
               chevron
               onPress={() => nav.navigate('SupportThread', { ticket: t })}
@@ -53,7 +54,7 @@ export function SupportScreen({ navigation }: { navigation: { goBack: () => void
         </ListCard>
       ) : (
         <Card>
-          <EmptyState icon="chatbubbles-outline" title={tab === 'aktiv' ? 'Keine offenen Anfragen' : 'Archiv ist leer'} text={tab === 'aktiv' ? 'Du hast eine Frage oder ein Problem? Schreib uns eine neue Anfrage.' : undefined} />
+          <EmptyState icon="chatbubbles-outline" title={tab === 'aktiv' ? tr('Keine offenen Anfragen') : tr('Archiv ist leer')} text={tab === 'aktiv' ? tr('Du hast eine Frage oder ein Problem? Schreib uns eine neue Anfrage.') : undefined} />
         </Card>
       )}
     </Screen>

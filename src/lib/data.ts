@@ -12,6 +12,7 @@ import {
 import { PREVIEW } from './preview';
 import type { Kameradaten } from './camera';
 import { previewHealth, previewKioskSales, previewLedger, previewMachineRevenue } from './mock';
+import { tr } from '../i18n';
 
 export type HealthItem = { name: string; status: string; detail?: string | null; plain?: string | null };
 
@@ -57,12 +58,12 @@ export async function loadHealth(parkId: string): Promise<HealthMachine[]> {
   const {
     data: { session },
   } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Nicht angemeldet');
+  if (!session?.access_token) throw new Error(tr('Nicht angemeldet'));
   const res = await fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/operator-liftpic-health?park_id=${encodeURIComponent(parkId)}`, {
     headers: { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY },
   });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return (body?.data?.machines ?? []) as HealthMachine[];
 }
 

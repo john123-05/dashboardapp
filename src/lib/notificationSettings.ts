@@ -1,6 +1,7 @@
 import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
-import { getFunctionSession } from './functionAuth';
+import { getFunctionSession, isTokenRejection, refreshFunctionSession } from './functionAuth';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 export interface NotificationSettings {
   push_enabled: boolean;
@@ -26,15 +27,19 @@ const URL_ = `${EXTERNAL_SUPABASE_URL}/functions/v1/operator-notification-settin
 
 async function auth() {
   const { data: { session } } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Sitzung abgelaufen. Bitte neu anmelden.');
+  if (!session?.access_token) throw new Error(tr('Sitzung abgelaufen. Bitte neu anmelden.'));
   return { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY, 'Content-Type': 'application/json' };
 }
 
 export async function loadNotificationSettings(parkId: string): Promise<NotificationSettings> {
   if (PREVIEW) return { ...DEFAULT_SETTINGS, push_enabled: true };
-  const res = await fetch(`${URL_}?park_id=${encodeURIComponent(parkId)}`, { headers: await auth() });
-  const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  let res = await fetch(`${URL_}?park_id=${encodeURIComponent(parkId)}`, { headers: await auth() });
+  let body = await res.json().catch(() => null);
+  if (isTokenRejection(res.status, body?.error) && (await refreshFunctionSession())) {
+    res = await fetch(`${URL_}?park_id=${encodeURIComponent(parkId)}`, { headers: await auth() });
+    body = await res.json().catch(() => null);
+  }
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return { ...DEFAULT_SETTINGS, ...(body?.settings ?? {}) };
 }
 
@@ -46,8 +51,12 @@ export async function saveNotificationSettings(parkId: string, s: NotificationSe
     photo_inactivity_minutes: Math.min(240, Math.max(5, Math.round(s.photo_inactivity_minutes))),
     paper_low_threshold: Math.min(500, Math.max(1, Math.round(s.paper_low_threshold))),
   };
-  const res = await fetch(URL_, { method: 'POST', headers: await auth(), body: JSON.stringify(payload) });
-  const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  let res = await fetch(URL_, { method: 'POST', headers: await auth(), body: JSON.stringify(payload) });
+  let body = await res.json().catch(() => null);
+  if (isTokenRejection(res.status, body?.error) && (await refreshFunctionSession())) {
+    res = await fetch(URL_, { method: 'POST', headers: await auth(), body: JSON.stringify(payload) });
+    body = await res.json().catch(() => null);
+  }
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return { ...DEFAULT_SETTINGS, ...(body?.settings ?? payload) };
 }

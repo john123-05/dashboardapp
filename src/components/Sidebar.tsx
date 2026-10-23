@@ -7,12 +7,13 @@ import { usePark } from '../contexts/ParkContext';
 import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
-import { PAGES, pageAvailable, type PageEntry } from '../lib/pages';
+import { GROUP_LABEL, PAGES, pageAvailable, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { initialsOf } from './HeaderActions';
 import { BAR_GREY } from './TabBar';
 import { CoachTarget } from './coach/Coach';
+import { tr } from '../i18n';
 
 // iPad quer und Mac: Seitenleiste links wie im Web-Dashboard (#2b2b2b, Gruppen Betrieb/Marketing/Verwaltung).
 export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: string | null; onOpen: (p: PageEntry) => void; onAlerts: () => void; onAccount: () => void }) {
@@ -30,7 +31,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
       <View style={styles.brand}>
         <Image source={require('../../assets/icon.png')} style={styles.logo} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Text style={styles.brandName}>Liftbase</Text>
+          <Text style={styles.brandName}>{tr('Liftbase')}</Text>
           <Text style={styles.park} numberOfLines={1}>
             {parkName}
           </Text>
@@ -43,7 +44,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
           if (!items.length) return null;
           return (
             <View key={g} style={{ gap: 2 }}>
-              <Text style={styles.group}>{g}</Text>
+              <Text style={styles.group}>{GROUP_LABEL[g]}</Text>
               {items.map((p) => {
                 const on = active === p.route;
                 return (
@@ -58,7 +59,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
                     <Ionicons name={p.icon} size={18} color={on ? '#fff' : 'rgba(255,255,255,0.7)'} />
                     <Text style={[styles.itemText, on && { color: '#fff', fontWeight: '600' }]} numberOfLines={1}>
                       {p.title}
-                      {upgrade(p.key) ? <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}> (Upgrade)</Text> : null}
+                      {upgrade(p.key) ? <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}> {tr('(Upgrade)')}</Text> : null}
                     </Text>
                   </Pressable>
                 );
@@ -77,10 +78,10 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
             {fullName || email}
           </Text>
         </Pressable>
-        <Pressable onPress={toggle} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel={isDark ? 'Hell' : 'Dunkel'}>
+        <Pressable onPress={toggle} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel={isDark ? tr('Hell') : tr('Dunkel')}>
           <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={19} color="#fff" />
         </Pressable>
-        <Pressable onPress={onAlerts} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel="Meldungen">
+        <Pressable onPress={onAlerts} style={({ pressed }) => [styles.bell, pressed && styles.itemOn]} accessibilityLabel={tr('Meldungen')}>
           <Ionicons name="notifications-outline" size={20} color="#fff" />
           {unread > 0 ? <View style={styles.dot} /> : null}
         </Pressable>

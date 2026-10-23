@@ -1,5 +1,6 @@
 import { invokeEdgeFunction } from './edgeFunctions';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 export interface SupportTicket {
   id: string;
@@ -19,13 +20,13 @@ export interface SupportMessage {
   created_at: string;
 }
 
-export const STATUS_LABEL: Record<SupportTicket['status'], string> = { open: 'Offen', in_progress: 'In Bearbeitung', resolved: 'Gelöst', closed: 'Geschlossen' };
-export const PRIORITY_LABEL: Record<SupportTicket['priority'], string> = { low: 'Niedrig', medium: 'Normal', high: 'Hoch', critical: 'Dringend' };
+export const STATUS_LABEL: Record<SupportTicket['status'], string> = { get open() { return tr('Offen'); }, get in_progress() { return tr('In Bearbeitung'); }, get resolved() { return tr('Gelöst'); }, get closed() { return tr('Geschlossen'); } };
+export const PRIORITY_LABEL: Record<SupportTicket['priority'], string> = { get low() { return tr('Niedrig'); }, get medium() { return tr('Normal'); }, get high() { return tr('Hoch'); }, get critical() { return tr('Dringend'); } };
 export const SUPPORT_PHONE = '+49 5222 8504-90';
 export const SUPPORT_PHONE_HREF = 'tel:+495222850490';
 
 const unwrap = <T,>(r: { data: T | null; error: string | null }): T => {
-  if (r.error || !r.data) throw new Error(r.error || 'Keine Antwort');
+  if (r.error || !r.data) throw new Error(r.error || tr('Keine Antwort'));
   return r.data;
 };
 

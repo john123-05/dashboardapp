@@ -32,6 +32,7 @@ import {
 import { hasGuestActivity, PLAN_LABEL, useEntitlements, type PlanKey } from '../lib/entitlements';
 import { colors, font, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
+import { tr, getLanguage, localeTag } from '../i18n';
 
 const PLAN_ORDER: PlanKey[] = ['basis', 'marketing_starter', 'marketing_pro'];
 
@@ -73,7 +74,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
     .filter((g) => g.key === 'plan' || (c ? catalogGroup(c, g.key).length > 0 : ['shop', 'speed', 'system'].includes(g.key)))
     // Parks mit Speedmessungs-Hardware sehen nur die Software-Pakete.
     .filter((g) => !(hardware && g.key === 'speed'));
-  const tabs = [{ value: 'all', label: 'Alle' }, ...groups.map((g) => ({ value: g.key, label: g.key === 'plan' ? 'Marketing' : g.name }))];
+  const tabs = [{ value: 'all', label: tr('Alle') }, ...groups.map((g) => ({ value: g.key, label: g.key === 'plan' ? tr('Marketing') : g.name }))];
   const shown = tabs.some((t) => t.value === filter) ? filter : 'all';
   const visibleGroups = groups.filter((g) => shown === 'all' || g.key === shown);
 
@@ -85,17 +86,17 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
       try {
         // Mit eingerichteter Stripe-Abrechnung geht es direkt zur Buchung im Browser.
         await Linking.openURL(await startCheckout(parkId, plan));
-        setNotice('Die Buchung ist im Browser geöffnet. Wenn du zurück in die App wechselst, wird dein Plan neu geladen.');
+        setNotice(tr('Die Buchung ist im Browser geöffnet. Wenn du zurück in die App wechselst, wird dein Plan neu geladen.'));
         return;
       } catch (e) {
         if (!(e instanceof BillingDisabledError)) throw e;
       }
       const fb = FALLBACK_PLANS.find((p) => p.plan === plan)!;
-      await requestPackage(parkId, pkg ?? { key: plan, name: fb.name, price: `${fb.cents / 100} €/Monat` });
+      await requestPackage(parkId, pkg ?? { key: plan, name: fb.name, price: tr('{0} €/Monat', fb.cents / 100) });
       successHaptic();
       setRequested((r) => [...r, plan]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Anfrage fehlgeschlagen.');
+      setError(e instanceof Error ? e.message : tr('Anfrage fehlgeschlagen.'));
     } finally {
       setBusy(null);
     }
@@ -110,7 +111,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
       successHaptic();
       setRequested((r) => [...r, key]);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Anfrage fehlgeschlagen.');
+      setError(e instanceof Error ? e.message : tr('Anfrage fehlgeschlagen.'));
     }
     setBusy(null);
   }
@@ -121,7 +122,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
     try {
       await Linking.openURL(await openBillingPortal(parkId));
     } catch (e) {
-      setError(e instanceof BillingDisabledError ? 'Die Online-Abrechnung ist für deinen Park noch nicht eingerichtet. Wir melden uns persönlich.' : e instanceof Error ? e.message : String(e));
+      setError(e instanceof BillingDisabledError ? tr('Die Online-Abrechnung ist für deinen Park noch nicht eingerichtet. Wir melden uns persönlich.') : e instanceof Error ? e.message : String(e));
     }
   }
 
@@ -130,7 +131,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
     const fromCatalog = c ? catalogGroup(c, 'plan') : [];
     const items = fromCatalog.length
       ? fromCatalog.map((p) => ({ plan: p.key as PlanKey, pkg: p as CatalogPackage | undefined, name: pkgText(p, 'name') ?? PLAN_LABEL[p.key as PlanKey] ?? p.key, note: pkgText(p, 'tagline'), points: bullets(p, true), excluded: bullets(p, false), highlight: p.highlight, badge: pkgText(p, 'badge'), price: priceLine(p) }))
-      : FALLBACK_PLANS.map((p) => ({ plan: p.plan, pkg: undefined as CatalogPackage | undefined, name: p.name, note: p.note, points: p.points, excluded: [] as string[], highlight: !!p.highlight, badge: p.highlight ? 'Empfohlen' : undefined, price: p.cents ? { value: money(p.cents), suffix: '/ Monat' } : { value: 'Kostenlos' } }));
+      : FALLBACK_PLANS.map((p) => ({ plan: p.plan, pkg: undefined as CatalogPackage | undefined, name: p.name, note: p.note, points: p.points, excluded: [] as string[], highlight: !!p.highlight, badge: p.highlight ? tr('Empfohlen') : undefined, price: p.cents ? { value: money(p.cents), suffix: tr('/ Monat') } : { value: tr('Kostenlos') } }));
     return (
       <Grid cols={cols}>
         {items.map((it) => {
@@ -150,13 +151,13 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
               excluded={it.excluded}
               action={
                 current ? (
-                  <Pill tone="ok" icon="checkmark-circle" text="Dein aktueller Plan" />
+                  <Pill tone="ok" icon="checkmark-circle" text={tr('Dein aktueller Plan')} />
                 ) : lower || !bookable ? null : requested.includes(it.plan) ? (
-                  <Pill tone="ok" icon="checkmark" text="Angefragt – wir melden uns" />
+                  <Pill tone="ok" icon="checkmark" text={tr('Angefragt – wir melden uns')} />
                 ) : isOwner ? (
-                  <Button title={busy === it.plan ? 'Wird geöffnet…' : 'Jetzt buchen'} kind={it.highlight ? 'primary' : 'plain'} loading={busy === it.plan} onPress={() => void book(it.plan as 'marketing_starter' | 'marketing_pro', it.pkg)} />
+                  <Button title={busy === it.plan ? tr('Wird geöffnet…') : tr('Jetzt buchen')} kind={it.highlight ? 'primary' : 'plain'} loading={busy === it.plan} onPress={() => void book(it.plan as 'marketing_starter' | 'marketing_pro', it.pkg)} />
                 ) : (
-                  <Text style={styles.hint}>Buchen kann der Inhaber des Kontos.</Text>
+                  <Text style={styles.hint}>{tr('Buchen kann der Inhaber des Kontos.')}</Text>
                 )
               }
             />
@@ -172,7 +173,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
     return (
       <Grid cols={wide ? Math.min(3, list.length) : 1}>
         {list.map((p) => {
-          const notes = [pkgText(p, 'tagline'), p.setup_cents ? `+ ${money(p.setup_cents)} Einrichtung` : null, p.term_months ? `${p.term_months} Monate Laufzeit` : null, p.free_months > 0 ? `${p.free_months} ${p.free_months === 1 ? 'Monat' : 'Monate'} geschenkt` : null].filter(Boolean);
+          const notes = [pkgText(p, 'tagline'), p.setup_cents ? tr('+ {0} Einrichtung', money(p.setup_cents)) : null, p.term_months ? tr('{0} Monate Laufzeit', p.term_months) : null, p.free_months > 0 ? (p.free_months === 1 ? tr('1 Monat geschenkt') : tr('{0} Monate geschenkt', p.free_months)) : null].filter(Boolean);
           const badge = pkgText(p, 'badge');
           return (
             <PackageCard
@@ -187,9 +188,9 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
               excluded={bullets(p, false)}
               action={
                 requested.includes(p.key) ? (
-                  <Pill tone="ok" icon="checkmark" text="Angefragt – wir melden uns" />
+                  <Pill tone="ok" icon="checkmark" text={tr('Angefragt – wir melden uns')} />
                 ) : (
-                  <Button title={busy === p.key ? 'Wird gesendet…' : 'Anfragen'} kind={p.highlight ? 'primary' : 'plain'} loading={busy === p.key} onPress={() => void ask(p.key, p)} />
+                  <Button title={busy === p.key ? tr('Wird gesendet…') : tr('Anfragen')} kind={p.highlight ? 'primary' : 'plain'} loading={busy === p.key} onPress={() => void ask(p.key, p)} />
                 )
               }
             />
@@ -203,8 +204,8 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
 
   return (
     <Screen page="plans"
-      title="Preise & Pakete"
-      subtitle="Monatlich kündbar, alle Preise zzgl. MwSt."
+      title={tr('Preise & Pakete')}
+      subtitle={tr('Monatlich kündbar, alle Preise zzgl. MwSt.')}
       onBack={navigation.goBack}
       refreshing={catalog.refreshing}
       onRefresh={() => {
@@ -215,9 +216,9 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
     >
       {(c?.promotions ?? []).map((p) => (
         <View key={p.id} style={styles.promo}>
-          <Pill tone="ok" icon="gift-outline" text={p.texts?.de?.title || 'Aktion'} />
-          <Text style={{ ...font.footnote, color: colors.ink, flex: 1 }}>{p.texts?.de?.banner || `Aktion: ${p.name}`}</Text>
-          {p.ends_on ? <Text style={{ ...font.caption, color: colors.ink2 }}>bis {new Date(`${p.ends_on}T00:00:00`).toLocaleDateString('de-DE')}</Text> : null}
+          <Pill tone="ok" icon="gift-outline" text={(p.texts?.[getLanguage()] ?? p.texts?.de)?.title || tr('Aktion')} />
+          <Text style={{ ...font.footnote, color: colors.ink, flex: 1 }}>{(p.texts?.[getLanguage()] ?? p.texts?.de)?.banner || tr('Aktion: {0}', p.name)}</Text>
+          {p.ends_on ? <Text style={{ ...font.caption, color: colors.ink2 }}>{tr('bis ')}{new Date(`${p.ends_on}T00:00:00`).toLocaleDateString(localeTag())}</Text> : null}
         </View>
       ))}
       {error ? <ErrorNote text={error} /> : null}
@@ -226,7 +227,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
       <CoachTarget id="plans.tabs">
         <TabStrip tabs={tabs} value={shown} onChange={setFilter} />
       </CoachTarget>
-      {ent.plan !== 'basis' && isOwner ? <Button title="Abo und Rechnungen verwalten" icon="card-outline" kind="plain" onPress={() => void manageBilling()} /> : null}
+      {ent.plan !== 'basis' && isOwner ? <Button title={tr('Abo und Rechnungen verwalten')} icon="card-outline" kind="plain" onPress={() => void manageBilling()} /> : null}
 
       {catalog.loading && !catalog.data ? <Skeleton height={300} radius={radius.lg} /> : null}
 
@@ -236,17 +237,17 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
         const body = g.key === 'plan' ? planCards() : groupCards(g.key);
         if (!body) return null;
         return (
-          <Section key={g.key} title={g.key === 'plan' ? 'Pläne' : g.name}>
-            {g.sub || g.key === 'plan' ? <Text style={styles.sub}>{g.sub ?? 'Ein Plan je Park. Höhere Pläne enthalten alles aus den niedrigeren.'}</Text> : null}
+          <Section key={g.key} title={g.key === 'plan' ? tr('Pläne') : g.name}>
+            {g.sub || g.key === 'plan' ? <Text style={styles.sub}>{g.sub ?? tr('Ein Plan je Park. Höhere Pläne enthalten alles aus den niedrigeren.')}</Text> : null}
             {body}
-            {rows.length ? <CompareTable title={`${g.key === 'plan' ? 'Die Pläne' : g.name} im Vergleich`} columns={columns} rows={rows} /> : null}
+            {rows.length ? <CompareTable title={tr('{0} im Vergleich', g.key === 'plan' ? tr('Die Pläne') : g.name)} columns={columns} rows={rows} /> : null}
           </Section>
         );
       })}
 
       {addons.length ? (
-        <Section title="Zusätzlich buchbar">
-          <Text style={styles.sub}>Unabhängig vom Plan.</Text>
+        <Section title={tr('Zusätzlich buchbar')}>
+          <Text style={styles.sub}>{tr('Unabhängig vom Plan.')}</Text>
           <Grid cols={wide ? 2 : 1}>
             {addons.map((a) => {
               const pkg = c?.packages.find((p) => p.key === `addon_${a.key}`);
@@ -255,7 +256,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
                 a.key === 'shop' ? () => (shown === 'all' && groups.some((g) => g.key === 'shop') ? setFilter('shop') : nav.navigate('Shop'))
                 : a.key === 'speed' ? () => nav.navigate('Speed')
                 : a.key === 'hardware' ? () => nav.navigate('Configuration')
-                : () => void ask('addon_mail', pkg ?? { key: 'addon_mail', name: 'Zusatz-E-Mails', price: 'auf Anfrage' });
+                : () => void ask('addon_mail', pkg ?? { key: 'addon_mail', name: 'Zusatz-E-Mails', price: tr('auf Anfrage') });
               return (
                 <Card key={a.key} style={{ gap: 10 }}>
                   <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
@@ -265,7 +266,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
                     <View style={{ flex: 1, gap: 2 }}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                         <Text style={{ ...font.headline, color: colors.ink }}>{pkgText(pkg, 'name') ?? a.title}</Text>
-                        {active ? <Pill tone="ok" text="Aktiv" /> : null}
+                        {active ? <Pill tone="ok" text={tr('Aktiv')} /> : null}
                       </View>
                       <Text style={{ ...font.footnote, color: colors.ink2 }}>{pkgText(pkg, 'tagline') ?? a.text}</Text>
                     </View>
@@ -273,10 +274,10 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
                   <View style={styles.divider} />
                   <Text style={{ ...font.footnote, color: colors.ink, fontWeight: '600' }}>{pkgText(pkg, 'price_note') ?? a.price}</Text>
                   {requested.includes(`addon_${a.key}`) ? (
-                    <Pill tone="ok" icon="checkmark" text="Angefragt – wir melden uns" />
+                    <Pill tone="ok" icon="checkmark" text={tr('Angefragt – wir melden uns')} />
                   ) : (
                     <Button
-                      title={a.key === 'mail' ? (busy === 'addon_mail' ? 'Wird gesendet…' : 'Anfragen') : a.key === 'hardware' ? 'Zur Konfiguration' : 'Einzelheiten ansehen'}
+                      title={a.key === 'mail' ? (busy === 'addon_mail' ? tr('Wird gesendet…') : tr('Anfragen')) : a.key === 'hardware' ? tr('Zur Konfiguration') : tr('Einzelheiten ansehen')}
                       kind="plain"
                       loading={busy === 'addon_mail' && a.key === 'mail'}
                       onPress={action}
@@ -289,7 +290,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
         </Section>
       ) : null}
 
-      <Text style={styles.hint}>Alle Preise zzgl. MwSt. Anfragen sind unverbindlich – wir melden uns persönlich.</Text>
+      <Text style={styles.hint}>{tr('Alle Preise zzgl. MwSt. Anfragen sind unverbindlich – wir melden uns persönlich.')}</Text>
     </Screen>
   );
 }
@@ -319,10 +320,10 @@ function PackageCard({ name, badge, highlight, pkg, price, note, points, exclude
       </View>
       {deal ? (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
-          <Pill tone="ok" text={deal.source === 'override' ? 'Dein Preis' : deal.name ?? 'Aktion'} />
-          {changed ? <Text style={{ ...font.footnote, color: colors.ink3, textDecorationLine: 'line-through' }}>statt {money(deal.list_price_cents!)} / Monat</Text> : null}
-          {deal.extra_free_months > 0 ? <Text style={{ ...font.footnote, color: colors.ok, fontWeight: '600' }}>+{deal.extra_free_months} {deal.extra_free_months === 1 ? 'Monat' : 'Monate'} geschenkt</Text> : null}
-          {deal.valid_until ? <Text style={{ ...font.caption, color: colors.ink3 }}>bis {new Date(`${deal.valid_until}T00:00:00`).toLocaleDateString('de-DE')}</Text> : null}
+          <Pill tone="ok" text={deal.source === 'override' ? tr('Dein Preis') : deal.name ?? tr('Aktion')} />
+          {changed ? <Text style={{ ...font.footnote, color: colors.ink3, textDecorationLine: 'line-through' }}>{tr('statt ')}{money(deal.list_price_cents!)} {tr('/ Monat')}</Text> : null}
+          {deal.extra_free_months > 0 ? <Text style={{ ...font.footnote, color: colors.ok, fontWeight: '600' }}>+{deal.extra_free_months} {deal.extra_free_months === 1 ? tr('Monat') : tr('Monate')} {tr('geschenkt')}</Text> : null}
+          {deal.valid_until ? <Text style={{ ...font.caption, color: colors.ink3 }}>{tr('bis ')}{new Date(`${deal.valid_until}T00:00:00`).toLocaleDateString(localeTag())}</Text> : null}
         </View>
       ) : null}
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 6 }}>
@@ -369,7 +370,7 @@ function CompareTable({ title, columns, rows }: { title: string; columns: string
             <View key={r.label} style={styles.trow}>
               <Text style={[styles.tlabel, { ...font.footnote, color: colors.ink }]} numberOfLines={3}>
                 {r.label}
-                {r.soon ? <Text style={{ color: colors.ink3 }}> (in Entwicklung)</Text> : null}
+                {r.soon ? <Text style={{ color: colors.ink3 }}> {tr('(in Entwicklung)')}</Text> : null}
               </Text>
               {r.cells.map((cell, i) => (
                 <View key={i} style={{ width: colW, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 }}>

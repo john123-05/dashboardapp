@@ -1,5 +1,6 @@
 import { callShared } from './shared';
 import { PREVIEW } from './preview';
+import { getLanguage } from '../i18n';
 
 // Marketing-CRM wie im Web: Umfrage, Freischalt-Weg, Social Media und Pixel (operator-survey),
 // E-Mail (operator-email-campaigns), Kampagnen (operator-social-campaigns), Segmente (operator-contact-segments).
@@ -10,7 +11,7 @@ export type UnlockMode = 'email' | 'survey' | 'social';
 export type FieldLevel = 'off' | 'optional' | 'required';
 export type SocialPlatform = 'instagram' | 'facebook' | 'tiktok' | 'x' | 'youtube' | 'whatsapp';
 
-export const pickLocalized = (v: Localized | null | undefined, lang = 'de') => (v ? v[lang] || v.de || v.en || Object.values(v)[0] || '' : '');
+export const pickLocalized = (v: Localized | null | undefined, lang: string = getLanguage()) => (v ? v[lang] || v.de || v.en || Object.values(v)[0] || '' : '');
 
 export interface SocialSettings {
   platforms?: SocialPlatform[];

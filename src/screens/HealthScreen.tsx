@@ -12,6 +12,7 @@ import { kurzText, loadMachines, orderMachine, seit, urteil, warnText, zusammenf
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
+import { tr } from '../i18n';
 
 const TON_ICON = { ok: 'checkmark-circle', warn: 'alert-circle', bad: 'close-circle', ruhig: 'moon', aus: 'remove-circle', unklar: 'help-circle' } as const;
 
@@ -35,21 +36,21 @@ export function HealthScreen() {
       await orderMachine(parkId, m.id, mode, target);
       successHaptic();
       setNotice(
-        mode === 'cancel' ? 'Der geplante Neustart wurde zurückgenommen.'
-          : target === 'testphoto' ? 'Testfoto beauftragt. Das Ergebnis erscheint gleich im Verlauf.'
-            : mode === 'stop' ? `${label ?? 'Das Programm'} wird beendet.`
-              : mode === 'tonight' ? `${label ?? 'Das Programm'} startet heute Nacht neu.`
-                : `${label ?? 'Das Programm'} wird neu gestartet. Der Automat holt den Auftrag beim nächsten Abruf.`,
+        mode === 'cancel' ? tr('Der geplante Neustart wurde zurückgenommen.')
+          : target === 'testphoto' ? tr('Testfoto beauftragt. Das Ergebnis erscheint gleich im Verlauf.')
+            : mode === 'stop' ? tr('{0} wird beendet.', label ?? tr('Das Programm'))
+              : mode === 'tonight' ? tr('{0} startet heute Nacht neu.', label ?? tr('Das Programm'))
+                : tr('{0} wird neu gestartet. Der Automat holt den Auftrag beim nächsten Abruf.', label ?? tr('Das Programm')),
       );
       data.reload();
     } catch (e) {
-      Alert.alert('Auftrag fehlgeschlagen', e instanceof Error ? e.message : 'Unbekannter Fehler');
+      Alert.alert(tr('Auftrag fehlgeschlagen'), e instanceof Error ? e.message : tr('Unbekannter Fehler'));
     }
     setBusy(null);
   }
 
   return (
-    <Screen page="health" tabs actions title="Systemzustand" refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="health" tabs actions title={tr('Systemzustand')} refreshing={data.refreshing} onRefresh={data.reload}>
       {data.error && !data.data ? <ErrorNote text={data.error} onRetry={data.reload} /> : null}
       {notice ? <Pill tone="info" icon="information-circle" text={notice} /> : null}
 
@@ -68,9 +69,9 @@ export function HealthScreen() {
             </View>
           </View>
           <View style={styles.sums}>
-            <Kennzahl label="Fotos heute" wert={formatNumber(fotos)} />
-            <Kennzahl label="Verkauft heute" wert={formatNumber(verkauft)} />
-            <Kennzahl label="Automaten" wert={`${machines.filter((m) => m.reachable).length}/${machines.length}`} />
+            <Kennzahl label={tr('Fotos heute')} wert={formatNumber(fotos)} />
+            <Kennzahl label={tr('Verkauft heute')} wert={formatNumber(verkauft)} />
+            <Kennzahl label={tr('Automaten')} wert={`${machines.filter((m) => m.reachable).length}/${machines.length}`} />
           </View>
         </Card>
       ) : data.loading ? (
@@ -81,7 +82,7 @@ export function HealthScreen() {
       ) : null}
 
       {machines.length > 0 ? (
-        <CoachTarget id="health.view"><Segmented value={ansicht} onChange={setAnsicht} options={[{ value: 'wichtig', label: 'Einfache Ansicht' }, { value: 'alle', label: 'Alle Werte' }]} /></CoachTarget>
+        <CoachTarget id="health.view"><Segmented value={ansicht} onChange={setAnsicht} options={[{ value: 'wichtig', label: tr('Einfache Ansicht') }, { value: 'alle', label: tr('Alle Werte') }]} /></CoachTarget>
       ) : null}
 
       {machines.map((m) => (
@@ -90,13 +91,13 @@ export function HealthScreen() {
 
       {!data.loading && machines.length === 0 && !data.error ? (
         <Card>
-          <EmptyState icon="pulse-outline" title="Keine Automaten" text="Für diesen Park ist noch kein Automat verbunden." />
+          <EmptyState icon="pulse-outline" title={tr('Keine Automaten')} text={tr('Für diesen Park ist noch kein Automat verbunden.')} />
         </Card>
       ) : null}
 
       {history.length > 0 ? (
         <View style={{ gap: space.sm }}>
-          <Text style={styles.sectionTitle}>Verlauf</Text>
+          <Text style={styles.sectionTitle}>{tr('Verlauf')}</Text>
           <ListCard>
             {history.slice(0, 30).map((h, i) => (
               <View key={h.id} style={[styles.hist, i > 0 && styles.histLine]}>
@@ -153,14 +154,14 @@ function Automat({ m, alle, busy, onAuftrag }: { m: Machine; alle: boolean; busy
           <Text style={{ ...font.headline, color: colors.ink, flex: 1 }} numberOfLines={1}>
             {m.machine_label || m.machine_id}
           </Text>
-          <Pill tone={m.reachable ? 'ok' : 'err'} text={m.reachable ? 'verbunden' : `keine Daten seit ${seit(m.offline_minutes)}`} />
+          <Pill tone={m.reachable ? 'ok' : 'err'} text={m.reachable ? tr('verbunden') : tr('keine Daten seit {0}', seit(m.offline_minutes))} />
         </View>
-        {eintraege.length > 0 ? <Text style={{ ...font.footnote, color: colors.ink3, marginTop: -6 }}>{inOrdnung} von {sichtbar.length} in Ordnung</Text> : null}
+        {eintraege.length > 0 ? <Text style={{ ...font.footnote, color: colors.ink3, marginTop: -6 }}>{inOrdnung} {tr('von ')}{sichtbar.length} {tr('in Ordnung')}</Text> : null}
 
         <View style={{ flexDirection: 'row', gap: space.lg }}>
           {typeof m.paper_remaining === 'number' ? (
             <View style={{ flex: 1.3 }}>
-              <Text style={{ ...font.caption, color: colors.ink3 }}>Papier übrig</Text>
+              <Text style={{ ...font.caption, color: colors.ink3 }}>{tr('Papier übrig')}</Text>
               <Text style={{ fontSize: 22, fontWeight: '300', color: m.paper_remaining <= warnPapier ? colors.warn : colors.ink, fontVariant: ['tabular-nums'] }}>
                 {m.paper_remaining}
                 {m.paper_capacity ? <Text style={{ fontSize: 13, color: colors.ink3 }}> / {m.paper_capacity}</Text> : null}
@@ -172,8 +173,8 @@ function Automat({ m, alle, busy, onAuftrag }: { m: Machine; alle: boolean; busy
               ) : null}
             </View>
           ) : null}
-          {m.photos_taken_today !== null ? <Kennzahl label="Fotos heute" wert={formatNumber(m.photos_taken_today)} /> : null}
-          {m.photos_sold_today !== null && m.photos_sold_today !== undefined ? <Kennzahl label="Verkauft" wert={formatNumber(m.photos_sold_today)} /> : null}
+          {m.photos_taken_today !== null ? <Kennzahl label={tr('Fotos heute')} wert={formatNumber(m.photos_taken_today)} /> : null}
+          {m.photos_sold_today !== null && m.photos_sold_today !== undefined ? <Kennzahl label={tr('Verkauft')} wert={formatNumber(m.photos_sold_today)} /> : null}
         </View>
       </View>
 
@@ -186,15 +187,15 @@ function Automat({ m, alle, busy, onAuftrag }: { m: Machine; alle: boolean; busy
       <View style={{ padding: space.md, gap: space.sm }}>
         {m.customer_code_registered === false ? (
           <View style={styles.codeWarn}>
-            <Text style={{ ...font.callout, color: colors.err, fontWeight: '700' }}>Abholcode {m.customer_code} ist nicht hinterlegt</Text>
+            <Text style={{ ...font.callout, color: colors.err, fontWeight: '700' }}>{tr('Abholcode {0} ist nicht hinterlegt', m.customer_code)}</Text>
             <Text style={{ ...font.footnote, color: colors.err }}>
-              Fotos dieses Automaten werden einem fremden Park zugeordnet.{m.park_customer_codes?.length ? ` Hinterlegt sind: ${m.park_customer_codes.join(', ')}.` : ''}
+              {tr('Fotos dieses Automaten werden einem fremden Park zugeordnet.')}{m.park_customer_codes?.length ? tr(' Hinterlegt sind: {0}.', m.park_customer_codes.join(', ')) : ''}
             </Text>
           </View>
         ) : null}
         {eintraege.length === 0 ? (
           <Text style={{ ...font.subhead, color: colors.ink3, padding: space.sm }}>
-            Dieser Automat meldet noch keinen Zustand seiner Programme{m.agent_version ? ` (Version ${m.agent_version})` : ''}.
+            {tr('Dieser Automat meldet noch keinen Zustand seiner Programme')}{m.agent_version ? tr(' (Version {0})', m.agent_version) : ''}.
           </Text>
         ) : null}
         {sichtbar.map((e) => (
@@ -210,8 +211,8 @@ function Automat({ m, alle, busy, onAuftrag }: { m: Machine; alle: boolean; busy
         ))}
         {alle ? (
           <Text style={{ ...font.caption, color: colors.ink3, marginTop: 4 }}>
-            {m.agent_version ? `Version ${m.agent_version}` : ''}
-            {typeof m.queue_count === 'number' ? ` · ${m.queue_count} in der Upload-Warteschlange` : ''}
+            {m.agent_version ? tr('Version {0}', m.agent_version) : ''}
+            {typeof m.queue_count === 'number' ? tr(' · {0} in der Upload-Warteschlange', m.queue_count) : ''}
           </Text>
         ) : null}
       </View>
@@ -227,18 +228,18 @@ function Zeile({ e, m, offen, onToggle, busy, onAuftrag }: {
   const warn = warnText(e);
   const wartet = !!m.pending_restart && !!e.neustart && (m.pending_restart.target || 'viewer') === e.neustart.key;
   const gesperrt = !!m.pending_restart && !wartet;
-  const testfoto = e.kind === 'camera' && e.name === 'Kamera-Software' && m.can_test_photo;
+  const testfoto = e.kind === 'camera' && e.name === tr('Kamera-Software') && m.can_test_photo;
 
   const bestaetigen = (mode: 'now' | 'stop') => {
     const n = e.neustart!;
     Alert.alert(
-      mode === 'now' ? `${n.name} neu starten?` : `${n.name} beenden?`,
+      mode === 'now' ? tr('{0} neu starten?', n.name) : tr('{0} beenden?', n.name),
       mode === 'now'
-        ? `${n.name} (${n.tech}) wird beendet und neu gestartet.\n\n${n.folge}\n\nNur ausführen, wenn gerade niemand am Automaten steht.`
-        : `${n.name} (${n.tech}) wird beendet und NICHT wieder gestartet. Es bleibt aus, bis du es wieder startest.`,
+        ? tr('{0} ({1}) wird beendet und neu gestartet.\n\n{2}\n\nNur ausführen, wenn gerade niemand am Automaten steht.', n.name, n.tech, n.folge)
+        : tr('{0} ({1}) wird beendet und NICHT wieder gestartet. Es bleibt aus, bis du es wieder startest.', n.name, n.tech),
       [
-        { text: 'Abbrechen', style: 'cancel' },
-        { text: mode === 'now' ? 'Neu starten' : 'Beenden', style: mode === 'stop' ? 'destructive' : 'default', onPress: () => onAuftrag(m, mode, n.key, n.name) },
+        { text: tr('Abbrechen'), style: 'cancel' },
+        { text: mode === 'now' ? tr('Neu starten') : tr('Beenden'), style: mode === 'stop' ? 'destructive' : 'default', onPress: () => onAuftrag(m, mode, n.key, n.name) },
       ],
     );
   };
@@ -269,27 +270,27 @@ function Zeile({ e, m, offen, onToggle, busy, onAuftrag }: {
             </Text>
           ) : null}
         </View>
-        {wartet ? <Pill tone="info" text={m.pending_restart?.mode === 'tonight' ? 'heute Nacht' : 'startet neu'} /> : <Pill tone={e.ton === 'ok' ? 'ok' : e.ton === 'bad' ? 'err' : e.ton === 'warn' ? 'warn' : 'neutral'} text={z.label} />}
+        {wartet ? <Pill tone="info" text={m.pending_restart?.mode === 'tonight' ? tr('heute Nacht') : tr('startet neu')} /> : <Pill tone={e.ton === 'ok' ? 'ok' : e.ton === 'bad' ? 'err' : e.ton === 'warn' ? 'warn' : 'neutral'} text={z.label} />}
         <Ionicons name={offen ? 'chevron-up' : 'chevron-down'} size={16} color={colors.ink3} />
       </Pressable>
       {offen ? (
         <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut.duration(120)} style={styles.rowBody}>
           {e.purpose ? <Text style={{ ...font.footnote, color: colors.ink2 }}>{e.purpose}</Text> : null}
-          {e.tech ? <Text style={{ ...font.caption, color: colors.ink3 }}>Auf dem PC: {e.tech}</Text> : null}
-          {e.gemessen ? <Befund titel="Gemessen" text={e.gemessen.detail} /> : null}
-          {e.protokoll ? <Befund titel="Aus dem Protokoll" text={e.protokoll.plain || e.protokoll.detail} datei={e.protokoll.source_file} /> : null}
+          {e.tech ? <Text style={{ ...font.caption, color: colors.ink3 }}>{tr('Auf dem PC: ')}{e.tech}</Text> : null}
+          {e.gemessen ? <Befund titel={tr('Gemessen')} text={e.gemessen.detail} /> : null}
+          {e.protokoll ? <Befund titel={tr('Aus dem Protokoll')} text={e.protokoll.plain || e.protokoll.detail} datei={e.protokoll.source_file} /> : null}
           {(m.coin_warnings ?? []).length && e.kind === 'cash'
             ? (m.coin_warnings ?? []).map((c) => <Pill key={c.cent} tone={c.stufe === 'leer' ? 'err' : 'warn'} icon="logo-euro" text={c.text} />)
             : null}
           {e.neustart ? (
             <View style={styles.actions}>
               {wartet ? (
-                <Knopf label="Zurücknehmen" busy={busy === `${m.id}:cancel`} onPress={() => onAuftrag(m, 'cancel', undefined)} />
+                <Knopf label={tr('Zurücknehmen')} busy={busy === `${m.id}:cancel`} onPress={() => onAuftrag(m, 'cancel', undefined)} />
               ) : (
                 <>
-                  <Knopf label="Jetzt neu starten" icon="refresh" primary disabled={gesperrt} busy={busy === `${m.id}:${e.neustart.key}`} onPress={() => bestaetigen('now')} />
-                  <Knopf label="Heute Nacht" icon="moon-outline" disabled={gesperrt} onPress={() => onAuftrag(m, 'tonight', e.neustart!.key, e.neustart!.name)} />
-                  <Knopf label="Beenden" icon="stop-outline" disabled={gesperrt} onPress={() => bestaetigen('stop')} />
+                  <Knopf label={tr('Jetzt neu starten')} icon="refresh" primary disabled={gesperrt} busy={busy === `${m.id}:${e.neustart.key}`} onPress={() => bestaetigen('now')} />
+                  <Knopf label={tr('Heute Nacht')} icon="moon-outline" disabled={gesperrt} onPress={() => onAuftrag(m, 'tonight', e.neustart!.key, e.neustart!.name)} />
+                  <Knopf label={tr('Beenden')} icon="stop-outline" disabled={gesperrt} onPress={() => bestaetigen('stop')} />
                 </>
               )}
             </View>
@@ -297,14 +298,14 @@ function Zeile({ e, m, offen, onToggle, busy, onAuftrag }: {
           {testfoto ? (
             <View style={styles.actions}>
               <Knopf
-                label={m.pending_restart?.target === 'testphoto' ? 'wartet auf den Automaten…' : 'Testfoto auslösen'}
+                label={m.pending_restart?.target === 'testphoto' ? tr('wartet auf den Automaten…') : tr('Testfoto auslösen')}
                 icon="camera-outline"
                 busy={busy === `${m.id}:testphoto`}
                 disabled={m.pending_restart?.target === 'testphoto'}
                 onPress={() =>
-                  Alert.alert('Testfoto auslösen?', 'Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette bis zum Upload.', [
-                    { text: 'Abbrechen', style: 'cancel' },
-                    { text: 'Auslösen', onPress: () => onAuftrag(m, 'now', 'testphoto') },
+                  Alert.alert(tr('Testfoto auslösen?'), tr('Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette bis zum Upload.'), [
+                    { text: tr('Abbrechen'), style: 'cancel' },
+                    { text: tr('Auslösen'), onPress: () => onAuftrag(m, 'now', 'testphoto') },
                   ])
                 }
               />

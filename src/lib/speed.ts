@@ -1,6 +1,7 @@
 import { EXTERNAL_SUPABASE_URL, EXTERNAL_SUPABASE_ANON_KEY } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 // Speedmessung im Dashboard (docs/AUSBAU_PLAN.md, SP3/SP4): Function `operator-speed`.
 
@@ -54,7 +55,7 @@ async function call<T>(init: RequestInit, query: Record<string, string>): Promis
   const {
     data: { session },
   } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Sitzung abgelaufen. Bitte neu anmelden.');
+  if (!session?.access_token) throw new Error(tr('Sitzung abgelaufen. Bitte neu anmelden.'));
   const res = await fetch(`${ENDPOINT}?${new URLSearchParams(query).toString()}`, {
     ...init,
     headers: {
@@ -64,7 +65,7 @@ async function call<T>(init: RequestInit, query: Record<string, string>): Promis
     },
   });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return body?.data as T;
 }
 

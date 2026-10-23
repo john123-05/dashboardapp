@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
+import { tr } from '../i18n';
 
 export type PickedImage = { uri: string; name: string; type: string; width: number; height: number; base64: string | null; size: number | null };
 
@@ -6,7 +7,7 @@ export type PickedImage = { uri: string; name: string; type: string; width: numb
 // der Overlays), weil ohne `allowsEditing` die Originaldatei kommt.
 export async function pickImage(source: 'library' | 'camera' = 'library', opts: { base64?: boolean } = {}): Promise<PickedImage | null> {
   const perm = source === 'camera' ? await ImagePicker.requestCameraPermissionsAsync() : await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (!perm.granted) throw new Error(source === 'camera' ? 'Kein Zugriff auf die Kamera. Bitte in den iOS-Einstellungen erlauben.' : 'Kein Zugriff auf die Fotos. Bitte in den iOS-Einstellungen erlauben.');
+  if (!perm.granted) throw new Error(source === 'camera' ? tr('Kein Zugriff auf die Kamera. Bitte in den iOS-Einstellungen erlauben.') : tr('Kein Zugriff auf die Fotos. Bitte in den iOS-Einstellungen erlauben.'));
   const options: ImagePicker.ImagePickerOptions = { mediaTypes: ['images'], quality: 1, base64: opts.base64 ?? false, exif: false };
   const result = source === 'camera' ? await ImagePicker.launchCameraAsync(options) : await ImagePicker.launchImageLibraryAsync(options);
   if (result.canceled || !result.assets?.length) return null;

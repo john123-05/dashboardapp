@@ -2,6 +2,7 @@ import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { invokeEdgeFunction } from './edgeFunctions';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 export interface Lead {
   id: string;
@@ -37,12 +38,12 @@ export async function loadSurveyResults(parkId: string, days = 30): Promise<Surv
     return { days, total: 42, scored: 40, average_score: 8.6, nps: 52, promoters: 26, detractors: 5, passives: 9, review_link_shown: 21, distribution: [6, 7, 8, 9, 10].map((s, i) => ({ score: s, count: [3, 4, 7, 11, 15][i] })), questions: [{ id: 'q1', type: 'yesno', prompt: { de: 'Würdest du wiederkommen?' }, answered: 38, yes: 33, no: 5, options: [] }] };
   }
   const { data: { session } } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Sitzung abgelaufen');
+  if (!session?.access_token) throw new Error(tr('Sitzung abgelaufen'));
   const res = await fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/operator-survey?${new URLSearchParams({ park_id: parkId, view: 'results', days: String(days) })}`, {
     headers: { Authorization: `Bearer ${session.access_token}`, apikey: EXTERNAL_SUPABASE_ANON_KEY },
   });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return (body?.data ?? null) as SurveyResults | null;
 }
 

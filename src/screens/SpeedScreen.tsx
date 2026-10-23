@@ -12,12 +12,13 @@ import { todayInTimezone } from '../lib/kioskSales';
 import { fetchSpeedOverview, setSpeedResultHidden, shiftDate, type SpeedPeriod, type SpeedRow } from '../lib/speed';
 import { useData } from '../lib/useData';
 import { colors, font, space, TAP } from '../theme';
+import { tr } from '../i18n';
 
 const PERIODS: { value: SpeedPeriod; label: string }[] = [
-  { value: 'day', label: 'Tag' },
-  { value: 'week', label: 'Woche' },
-  { value: 'month', label: 'Monat' },
-  { value: 'all', label: 'Allzeit' },
+  { value: 'day', get label() { return tr('Tag'); } },
+  { value: 'week', get label() { return tr('Woche'); } },
+  { value: 'month', get label() { return tr('Monat'); } },
+  { value: 'all', get label() { return tr('Allzeit'); } },
 ];
 const kmh = (v: number | null | undefined) => (v === null || v === undefined ? '–' : `${v.toFixed(1).replace('.', ',')} km/h`);
 const MEDAL = ['#E8B000', '#9AA3AB', '#C98A4B'];
@@ -39,35 +40,35 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
 
   function aktion(r: SpeedRow) {
     tapHaptic();
-    const label = r.hidden ? 'Wieder einblenden' : 'Auf der Bestenliste ausblenden';
+    const label = r.hidden ? tr('Wieder einblenden') : tr('Auf der Bestenliste ausblenden');
     const run = async () => {
       try {
         await setSpeedResultHidden(parkId!, r.id, !r.hidden);
         data.reload();
       } catch (e) {
-        Alert.alert('Fehler', e instanceof Error ? e.message : 'Unbekannt');
+        Alert.alert(tr('Fehler'), e instanceof Error ? e.message : tr('Unbekannt'));
       }
     };
-    if (Platform.OS === 'ios') ActionSheetIOS.showActionSheetWithOptions({ options: [label, 'Abbrechen'], cancelButtonIndex: 1, destructiveButtonIndex: r.hidden ? undefined : 0 }, (i) => i === 0 && void run());
-    else Alert.alert(label, undefined, [{ text: 'Abbrechen', style: 'cancel' }, { text: 'OK', onPress: () => void run() }]);
+    if (Platform.OS === 'ios') ActionSheetIOS.showActionSheetWithOptions({ options: [label, tr('Abbrechen')], cancelButtonIndex: 1, destructiveButtonIndex: r.hidden ? undefined : 0 }, (i) => i === 0 && void run());
+    else Alert.alert(label, undefined, [{ text: tr('Abbrechen'), style: 'cancel' }, { text: tr('OK'), onPress: () => void run() }]);
   }
 
-  const zeitraum = period === 'all' ? 'Alle Fahrten' : period === 'day' ? formatDayLong(date) : o?.from && o?.to ? `${formatDayLong(o.from)} bis ${formatDayLong(o.to)}` : formatDayLong(date);
+  const zeitraum = period === 'all' ? tr('Alle Fahrten') : period === 'day' ? formatDayLong(date) : o?.from && o?.to ? tr('{0} bis {1}', formatDayLong(o.from), formatDayLong(o.to)) : formatDayLong(date);
 
   return (
-    <Screen page="speed" title="Speedmessung" subtitle="Bestenliste und Geschwindigkeiten" onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
+    <Screen page="speed" title={tr('Speedmessung')} subtitle={tr('Bestenliste und Geschwindigkeiten')} onBack={navigation.goBack} refreshing={data.refreshing} onRefresh={data.reload}>
       {!unlocked && !ent.loading ? <Locked {...SPEED_OFFER} /> : null}
       {unlocked ? (<>
       <Segmented<SpeedPeriod> value={period} onChange={(p) => { setPeriod(p); setDate(today); }} options={PERIODS} />
       {period !== 'all' ? (
         <View style={styles.dateRow}>
-          <Pressable onPress={() => setDate(shiftDate(date, period, -1))} style={styles.arrow} accessibilityLabel="Zurück">
+          <Pressable onPress={() => setDate(shiftDate(date, period, -1))} style={styles.arrow} accessibilityLabel={tr('Zurück')}>
             <Ionicons name="chevron-back" size={20} color={colors.ink} />
           </Pressable>
           <Text style={{ ...font.callout, color: colors.ink, flex: 1, textAlign: 'center' }} numberOfLines={1} adjustsFontSizeToFit>
             {zeitraum}
           </Text>
-          <Pressable disabled={date >= today} onPress={() => setDate(shiftDate(date, period, 1))} style={[styles.arrow, date >= today && { opacity: 0.3 }]} accessibilityLabel="Weiter">
+          <Pressable disabled={date >= today} onPress={() => setDate(shiftDate(date, period, 1))} style={[styles.arrow, date >= today && { opacity: 0.3 }]} accessibilityLabel={tr('Weiter')}>
             <Ionicons name="chevron-forward" size={20} color={colors.ink} />
           </Pressable>
         </View>
@@ -77,10 +78,10 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
         <KpiSkeleton />
       ) : o ? (
         <KpiGrid>
-          <Kpi icon="flag-outline" label="Fahrten gemessen" value={formatNumber(o.stats.count)} />
-          <Kpi icon="flash-outline" label="Schnellste" value={kmh(o.stats.fastest)} />
-          <Kpi icon="speedometer-outline" label="Durchschnitt" value={kmh(o.stats.average)} />
-          <Kpi icon="trending-down-outline" label="Langsamste" value={kmh(o.stats.slowest)} />
+          <Kpi icon="flag-outline" label={tr('Fahrten gemessen')} value={formatNumber(o.stats.count)} />
+          <Kpi icon="flash-outline" label={tr('Schnellste')} value={kmh(o.stats.fastest)} />
+          <Kpi icon="speedometer-outline" label={tr('Durchschnitt')} value={kmh(o.stats.average)} />
+          <Kpi icon="trending-down-outline" label={tr('Langsamste')} value={kmh(o.stats.slowest)} />
         </KpiGrid>
       ) : null}
 
@@ -96,8 +97,8 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
                   {r.displayName || maskEmail(r.email)}
                 </Text>
                 <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={1}>
-                  {period === 'day' ? `${formatTime(r.capturedAt, timezone)} Uhr` : formatDayLong(r.day)}
-                  {r.hidden ? ' · ausgeblendet' : ''}
+                  {period === 'day' ? tr('{0} Uhr', formatTime(r.capturedAt, timezone)) : formatDayLong(r.day)}
+                  {r.hidden ? tr(' · ausgeblendet') : ''}
                 </Text>
               </View>
               <Text style={styles.speed} numberOfLines={1}>
@@ -108,11 +109,11 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
         </ListCard>
       ) : o && !data.loading ? (
         <Card>
-          <EmptyState icon="speedometer-outline" title="Noch keine Fahrten" text="In diesem Zeitraum wurde keine Fahrt mit Foto-Abholung gemessen." />
+          <EmptyState icon="speedometer-outline" title={tr('Noch keine Fahrten')} text={tr('In diesem Zeitraum wurde keine Fahrt mit Foto-Abholung gemessen.')} />
         </Card>
       ) : null}
-      {o && o.rows.length > 0 ? <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>Antippen, um ein Ergebnis auf der Bestenliste aus- oder einzublenden.</Text> : null}
-      {o && !o.enabled ? <Pill tone="warn" text="Die Bestenliste ist für diesen Park noch nicht freigeschaltet." /> : null}
+      {o && o.rows.length > 0 ? <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>{tr('Antippen, um ein Ergebnis auf der Bestenliste aus- oder einzublenden.')}</Text> : null}
+      {o && !o.enabled ? <Pill tone="warn" text={tr('Die Bestenliste ist für diesen Park noch nicht freigeschaltet.')} /> : null}
       </>) : null}
     </Screen>
   );

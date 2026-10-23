@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import { createTicket, type SupportTicket } from '../lib/support';
 import { colors, font, space } from '../theme';
+import { tr } from '../i18n';
 
 export function NewTicketScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const { parkId } = usePark();
@@ -19,7 +20,7 @@ export function NewTicketScreen({ navigation }: { navigation: { goBack: () => vo
   const [err, setErr] = useState<string | null>(null);
 
   async function senden() {
-    if (!subject.trim() || !description.trim()) return setErr('Bitte Betreff und Beschreibung ausfüllen.');
+    if (!subject.trim() || !description.trim()) return setErr(tr('Bitte Betreff und Beschreibung ausfüllen.'));
     setBusy(true);
     setErr(null);
     try {
@@ -27,22 +28,22 @@ export function NewTicketScreen({ navigation }: { navigation: { goBack: () => vo
       successHaptic();
       navigation.goBack();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Senden fehlgeschlagen');
+      setErr(e instanceof Error ? e.message : tr('Senden fehlgeschlagen'));
     }
     setBusy(false);
   }
 
   return (
-    <Screen sheet title="Neue Anfrage" onBack={navigation.goBack} backLabel="Abbrechen">
+    <Screen sheet title={tr('Neue Anfrage')} onBack={navigation.goBack} backLabel={tr('Abbrechen')}>
       <Card style={{ gap: space.lg }}>
-        <Field label="Betreff" value={subject} onChangeText={setSubject} placeholder="Worum geht es?" returnKeyType="next" />
-        <Field label="Beschreibung" value={description} onChangeText={setDescription} placeholder="Was ist passiert? Je genauer, desto schneller helfen wir." multiline style={{ minHeight: 130, textAlignVertical: 'top' }} />
+        <Field label={tr('Betreff')} value={subject} onChangeText={setSubject} placeholder={tr('Worum geht es?')} returnKeyType="next" />
+        <Field label={tr('Beschreibung')} value={description} onChangeText={setDescription} placeholder={tr('Was ist passiert? Je genauer, desto schneller helfen wir.')} multiline style={{ minHeight: 130, textAlignVertical: 'top' }} />
         <View style={{ gap: 6 }}>
-          <Text style={{ ...font.footnote, color: colors.ink2, fontWeight: '600' }}>Dringlichkeit</Text>
-          <Segmented value={priority} onChange={setPriority} options={[{ value: 'low', label: 'Niedrig' }, { value: 'medium', label: 'Normal' }, { value: 'high', label: 'Hoch' }, { value: 'critical', label: 'Dringend' }]} />
+          <Text style={{ ...font.footnote, color: colors.ink2, fontWeight: '600' }}>{tr('Dringlichkeit')}</Text>
+          <Segmented value={priority} onChange={setPriority} options={[{ value: 'low', label: tr('Niedrig') }, { value: 'medium', label: tr('Normal') }, { value: 'high', label: tr('Hoch') }, { value: 'critical', label: tr('Dringend') }]} />
         </View>
         {err ? <ErrorNote text={err} /> : null}
-        <Button title="Anfrage senden" icon="send" onPress={senden} loading={busy} />
+        <Button title={tr('Anfrage senden')} icon="send" onPress={senden} loading={busy} />
       </Card>
     </Screen>
   );

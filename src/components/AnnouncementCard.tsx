@@ -12,6 +12,7 @@ import { colors, font, radius, space } from '../theme';
 import { tapHaptic } from './haptics';
 import { useWide } from './layout';
 import { QrCode } from './QrCode';
+import { tr } from '../i18n';
 
 const DASHBOARD = 'https://dashboard-liftpictures.com';
 // Für alle Seiten gemeinsam: einmal geschlossen bleibt ein Hinweis in dieser Sitzung weg (und serverseitig für den Nutzer).
@@ -59,7 +60,7 @@ export function AnnouncementCard({ page }: { page: PageKey }) {
       <View style={{ flex: 1, gap: 6, padding: space.md }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8 }}>
           <Text style={{ ...font.headline, color: colors.ink, flex: 1 }}>{a.title}</Text>
-          <Pressable onPress={dismiss} hitSlop={10} accessibilityLabel="Hinweis schließen">
+          <Pressable onPress={dismiss} hitSlop={10} accessibilityLabel={tr('Hinweis schließen')}>
             <Ionicons name="close" size={20} color={colors.ink3} />
           </Pressable>
         </View>

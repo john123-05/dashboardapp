@@ -7,6 +7,7 @@ import Animated, { Easing, FadeInDown, FadeOut, useAnimatedStyle, useSharedValue
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, font, radius, shadow, space } from '../../theme';
 import { successHaptic, tapHaptic } from '../haptics';
+import { tr } from '../../i18n';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -177,17 +178,14 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
       <Animated.View key={i} entering={FadeInDown.duration(320).springify().damping(18)} exiting={FadeOut.duration(120)} style={[styles.cardPos, { left: (W - cardW) / 2, width: cardW }, cardPos]}>
         <View style={[styles.card, shadow as object]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <View style={styles.icon}>
-            <Ionicons name={step.icon} size={20} color={colors.brand} />
-          </View>
-          <Text style={{ ...font.caption, color: colors.ink3, flex: 1 }}>
-            Schritt {i + 1} von {steps.length}
+          <Text style={{ ...font.caption, color: colors.ink3, flex: 1, fontVariant: ['tabular-nums'] }}>
+            {i + 1} / {steps.length}
           </Text>
-          <Pressable onPress={end} hitSlop={10} accessibilityLabel="Rundgang beenden">
+          <Pressable onPress={end} hitSlop={10} accessibilityLabel={tr('Rundgang beenden')}>
             <Ionicons name="close" size={20} color={colors.ink3} />
           </Pressable>
         </View>
-        <Text style={{ ...font.title, color: colors.ink }}>{step.title}</Text>
+        <Text style={{ ...font.headline, fontSize: 19, color: colors.ink }}>{step.title}</Text>
         <Text style={{ ...font.subhead, color: colors.ink2 }}>{step.text}</Text>
         <View style={styles.progress}>
           <View style={{ width: `${((i + 1) / steps.length) * 100}%`, height: 4, borderRadius: 2, backgroundColor: colors.brand }} />
@@ -195,11 +193,11 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
         <View style={{ flexDirection: 'row', gap: 10 }}>
           {i > 0 ? (
             <Pressable onPress={back} style={({ pressed }) => [styles.btn, styles.btnPlain, pressed && { opacity: 0.75 }]}>
-              <Text style={{ ...font.callout, color: colors.ink, fontWeight: '600' }}>Zurück</Text>
+              <Text style={{ ...font.callout, color: colors.ink, fontWeight: '600' }}>{tr('Zurück')}</Text>
             </Pressable>
           ) : null}
           <Pressable onPress={next} style={({ pressed }) => [styles.btn, styles.btnBrand, pressed && { opacity: 0.85 }]}>
-            <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{last ? 'Los geht’s' : 'Weiter'}</Text>
+            <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{last ? tr('Los geht’s') : tr('Weiter')}</Text>
             {!last ? <Ionicons name="arrow-forward" size={16} color={colors.onBrand} /> : null}
           </Pressable>
         </View>

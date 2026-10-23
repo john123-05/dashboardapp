@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import { Appearance } from 'react-native';
+import { tr } from '../i18n';
 
 // Hell, Dunkel oder wie das Gerät. Standard ist Hell, wie das Web-Dashboard. Umschalten über
 // Appearance.setColorScheme: iOS färbt dann alle dynamischen Farben (theme.ts) sofort um.
@@ -44,6 +45,6 @@ export function AppearanceProvider({ children }: PropsWithChildren) {
 
 export function useLook() {
   const c = useContext(Ctx);
-  if (!c) throw new Error('useLook außerhalb von AppearanceProvider');
+  if (!c) throw new Error(tr('useLook außerhalb von AppearanceProvider'));
   return c;
 }

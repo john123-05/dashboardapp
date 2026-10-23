@@ -8,6 +8,7 @@ import type {
   WeekdayKey,
 } from './types';
 import { getFunctionSession } from './functionAuth';
+import { tr, localeTag } from '../i18n';
 
 export interface DailySalesRow {
   camera_code: string;
@@ -48,7 +49,7 @@ export async function fetchKioskSales(parkId: string): Promise<KioskSalesRespons
   });
 
   if (error || !data) {
-    throw new Error(error || 'Keine Antwort von kiosk-photo-sales');
+    throw new Error(error || tr('Keine Antwort von kiosk-photo-sales'));
   }
 
   return data;
@@ -83,7 +84,7 @@ export async function fetchKioskPurchases(parkId: string): Promise<KioskPurchase
   });
 
   if (error || !data) {
-    throw new Error(error || 'Keine Antwort von kiosk-photo-purchases');
+    throw new Error(error || tr('Keine Antwort von kiosk-photo-purchases'));
   }
 
   return data;
@@ -162,7 +163,7 @@ export async function fetchMachineRevenue(parkId: string): Promise<MachineRevenu
     },
   );
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return (body?.data?.machines ?? []) as MachineRevenue[];
 }
 
@@ -191,7 +192,7 @@ export async function fetchKioskPurchasesLedger(
     },
   );
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return (body?.data ?? { purchases: [], machines: [], priceCents: null, truncated: false, from: '', to: '' }) as KioskLedgerResponse;
 }
 
@@ -207,7 +208,7 @@ export async function fetchKioskPhotosForDay(parkId: string, businessDate: strin
   });
 
   if (error || !data) {
-    throw new Error(error || 'Keine Antwort von kiosk-photo-purchases');
+    throw new Error(error || tr('Keine Antwort von kiosk-photo-purchases'));
   }
 
   return data;
@@ -574,7 +575,7 @@ export function toChartSeries(days: AggregatedDay[], limitDays = 30): KioskChart
       const date = new Date(`${day.businessDate}T00:00:00`);
       const label = Number.isNaN(date.getTime())
         ? day.businessDate
-        : new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: '2-digit' }).format(date);
+        : new Intl.DateTimeFormat(localeTag(), { day: '2-digit', month: '2-digit' }).format(date);
       return {
         date: day.businessDate,
         label,

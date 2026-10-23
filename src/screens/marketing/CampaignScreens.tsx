@@ -12,11 +12,12 @@ import { PLAN_LABEL, useEntitlements } from '../../lib/entitlements';
 import { useData } from '../../lib/useData';
 import { colors, font, radius, space } from '../../theme';
 import { CAMPAIGN_STATUS, CAMPAIGN_TYPE } from './SocialTab';
+import { tr, localeTag } from '../../i18n';
 
 const TYPES: { type: CampaignType; desc: string; pro: boolean; icon: string }[] = [
-  { type: 'share_unlock', desc: 'Gäste teilen ihr Foto und schalten es damit frei.', pro: false, icon: 'share-social-outline' },
-  { type: 'giveaway', desc: 'Teilnahme durch Teilen mit Hashtag, Ziehung hier in der App.', pro: true, icon: 'gift-outline' },
-  { type: 'record', desc: '„Schlag den Tagesrekord und teile dein Foto.“', pro: true, icon: 'trophy-outline' },
+  { type: 'share_unlock', get desc() { return tr('Gäste teilen ihr Foto und schalten es damit frei.'); }, pro: false, icon: 'share-social-outline' },
+  { type: 'giveaway', get desc() { return tr('Teilnahme durch Teilen mit Hashtag, Ziehung hier in der App.'); }, pro: true, icon: 'gift-outline' },
+  { type: 'record', get desc() { return tr('„Schlag den Tagesrekord und teile dein Foto.“'); }, pro: true, icon: 'trophy-outline' },
 ];
 
 export const asDraft = (c: Campaign): CampaignDraft => ({ id: c.id, name: c.name, type: c.type, status: c.status, hashtag: c.hashtag, mention: c.mention, prize: c.prize, rules_text: c.rules_text ?? {}, starts_at: c.starts_at, ends_at: c.ends_at });
@@ -46,7 +47,7 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
   const d = q.data;
   if (!d) {
     return (
-      <Screen title="Kampagne" onBack={navigation.goBack} backLabel="CRM">
+      <Screen title={tr('Kampagne')} onBack={navigation.goBack} backLabel={tr('CRM')}>
         {q.error ? <ErrorNote text={q.error} onRetry={q.reload} /> : <Skeleton height={220} radius={radius.lg} />}
       </Screen>
     );
@@ -59,9 +60,9 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
   return (
     <Screen
       title={campaign.name}
-      subtitle={`${CAMPAIGN_TYPE[campaign.type]}${campaign.ends_at ? ` · bis ${new Date(campaign.ends_at).toLocaleDateString('de-DE')}` : ''}`}
+      subtitle={`${CAMPAIGN_TYPE[campaign.type]}${campaign.ends_at ? tr(' · bis {0}', new Date(campaign.ends_at).toLocaleDateString(localeTag())) : ''}`}
       onBack={navigation.goBack}
-      backLabel="CRM"
+      backLabel={tr('CRM')}
       refreshing={q.refreshing}
       onRefresh={q.reload}
       right={<Pill tone={CAMPAIGN_STATUS[campaign.status].tone} text={CAMPAIGN_STATUS[campaign.status].text} />}
@@ -69,39 +70,39 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
       {error ? <ErrorNote text={error} /> : null}
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <View style={{ flex: 1 }}>
-          <Button title="Bearbeiten" icon="create-outline" kind="plain" onPress={() => nav.navigate('CampaignEdit', { draft: asDraft(campaign) })} />
+          <Button title={tr('Bearbeiten')} icon="create-outline" kind="plain" onPress={() => nav.navigate('CampaignEdit', { draft: asDraft(campaign) })} />
         </View>
         {campaign.status === 'active' ? (
           <View style={{ flex: 1 }}>
             <Button
-              title="Beenden"
+              title={tr('Beenden')}
               icon="stop-circle-outline"
               kind="danger"
               loading={busy === 'end'}
               onPress={() =>
-                Alert.alert('Kampagne beenden?', 'Gäste sehen sie danach nicht mehr auf der Abholseite.', [
-                  { text: 'Abbrechen', style: 'cancel' },
-                  { text: 'Beenden', style: 'destructive', onPress: () => void run('end', () => saveCampaign(parkId!, { ...asDraft(campaign), status: 'ended' })) },
+                Alert.alert(tr('Kampagne beenden?'), tr('Gäste sehen sie danach nicht mehr auf der Abholseite.'), [
+                  { text: tr('Abbrechen'), style: 'cancel' },
+                  { text: tr('Beenden'), style: 'destructive', onPress: () => void run('end', () => saveCampaign(parkId!, { ...asDraft(campaign), status: 'ended' })) },
                 ])
               }
             />
           </View>
         ) : (
           <View style={{ flex: 1 }}>
-            <Button title="Aktivieren" icon="play-circle-outline" loading={busy === 'start'} onPress={() => void run('start', () => saveCampaign(parkId!, { ...asDraft(campaign), status: 'active' }))} />
+            <Button title={tr('Aktivieren')} icon="play-circle-outline" loading={busy === 'start'} onPress={() => void run('start', () => saveCampaign(parkId!, { ...asDraft(campaign), status: 'active' }))} />
           </View>
         )}
       </View>
 
       {canDraw ? (
         <Card style={{ gap: space.md }}>
-          <CardHead title={winner ? `Gewinner: ${who(winner)}` : 'Gewinner ziehen'} sub={winner && campaign.drawn_at ? `Gezogen am ${new Date(campaign.drawn_at).toLocaleDateString('de-DE')}` : 'Zufällig unter geprüften Teilnehmern, die dem Gewinnspiel zugestimmt haben.'} right={<Ionicons name="trophy" size={24} color={colors.brand} />} />
+          <CardHead title={winner ? tr('Gewinner: {0}', who(winner)) : tr('Gewinner ziehen')} sub={winner && campaign.drawn_at ? tr('Gezogen am {0}', new Date(campaign.drawn_at).toLocaleDateString(localeTag())) : tr('Zufällig unter geprüften Teilnehmern, die dem Gewinnspiel zugestimmt haben.')} right={<Ionicons name="trophy" size={24} color={colors.brand} />} />
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <Text style={{ ...font.subhead, color: colors.ink, flex: 1 }}>Nach Besuchern gewichten</Text>
+            <Text style={{ ...font.subhead, color: colors.ink, flex: 1 }}>{tr('Nach Besuchern gewichten')}</Text>
             <Switch value={weighted} onValueChange={(v) => { tapHaptic(); setWeighted(v); }} trackColor={{ true: colors.ok, false: undefined }} />
           </View>
           <Button
-            title={winner ? 'Neu ziehen' : 'Gewinner ziehen'}
+            title={winner ? tr('Neu ziehen') : tr('Gewinner ziehen')}
             icon="shuffle"
             loading={busy === 'draw'}
             onPress={() =>
@@ -115,23 +116,23 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
       ) : null}
 
       {leaderboard.length > 0 ? (
-        <Section title="Rangliste: meiste Freunde">
+        <Section title={tr('Rangliste: meiste Freunde')}>
           <ListCard>
             {leaderboard.slice(0, 10).map((e, i, arr) => (
               <View key={e.id} style={[styles.rank, i < arr.length - 1 && styles.line]}>
                 <Text style={styles.rankNo}>{i + 1}</Text>
                 <Text style={{ ...font.body, color: colors.ink, flex: 1 }} numberOfLines={1}>{who(e)}</Text>
-                <Text style={{ ...font.callout, color: colors.ink2, fontVariant: ['tabular-nums'] }}>{e.visitors} Besucher</Text>
+                <Text style={{ ...font.callout, color: colors.ink2, fontVariant: ['tabular-nums'] }}>{e.visitors} {tr('Besucher')}</Text>
               </View>
             ))}
           </ListCard>
         </Section>
       ) : null}
 
-      <Section title={`Teilnehmer · ${entries.length}`}>
+      <Section title={tr('Teilnehmer · {0}', entries.length)}>
         {entries.length === 0 ? (
           <Card>
-            <EmptyState icon="people-outline" title="Noch keine Einträge" />
+            <EmptyState icon="people-outline" title={tr('Noch keine Einträge')} />
           </Card>
         ) : (
           <ListCard>
@@ -144,7 +145,7 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
                       {e.handle && e.name ? <Text style={{ color: colors.ink3 }}> {e.handle}</Text> : null}
                     </Text>
                     <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={2}>
-                      {[e.platform, e.email_masked, new Date(e.created_at).toLocaleDateString('de-DE'), e.giveaway_opt_in ? 'Gewinnspiel: ja' : null, e.visitors > 0 ? `${e.visitors} Besucher` : null].filter(Boolean).join(' · ')}
+                      {[e.platform, e.email_masked, new Date(e.created_at).toLocaleDateString(localeTag()), e.giveaway_opt_in ? tr('Gewinnspiel: ja') : null, e.visitors > 0 ? tr('{0} Besucher', e.visitors) : null].filter(Boolean).join(' · ')}
                     </Text>
                   </View>
                   {e.post_url ? <MiniButton icon="open-outline" onPress={() => void Linking.openURL(e.post_url!)} /> : null}
@@ -152,12 +153,12 @@ export function CampaignDetailScreen({ navigation, route }: { navigation: { goBa
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 }}>
                   <Pressable onPress={() => void run(`v:${e.id}`, () => verifyEntry(parkId!, e.id, !e.verified_at))} style={[styles.tag, e.verified_at && styles.tagOn]} disabled={busy !== null}>
                     <Ionicons name={e.verified_at ? 'checkbox' : 'square-outline'} size={16} color={e.verified_at ? colors.ok : colors.ink2} />
-                    <Text style={[styles.tagText, e.verified_at && { color: colors.ok }]}>Geprüft</Text>
+                    <Text style={[styles.tagText, e.verified_at && { color: colors.ok }]}>{tr('Geprüft')}</Text>
                   </Pressable>
                   {e.photo_rights ? (
                     <Pressable onPress={() => void run(`a:${e.id}`, () => approveEntry(parkId!, e.id, !e.approved_at))} style={[styles.tag, e.approved_at && styles.tagOn]} disabled={busy !== null}>
                       <Ionicons name={e.approved_at ? 'checkmark-circle' : 'image-outline'} size={16} color={e.approved_at ? colors.ok : colors.ink2} />
-                      <Text style={[styles.tagText, e.approved_at && { color: colors.ok }]}>{e.approved_at ? 'Foto freigegeben' : 'Foto freigeben'}</Text>
+                      <Text style={[styles.tagText, e.approved_at && { color: colors.ok }]}>{e.approved_at ? tr('Foto freigegeben') : tr('Foto freigeben')}</Text>
                     </Pressable>
                   ) : null}
                 </View>
@@ -200,7 +201,7 @@ export function CampaignEditScreen({ navigation, route }: { navigation: { goBack
   }
 
   return (
-    <Screen title={d.id ? 'Kampagne bearbeiten' : 'Neue Kampagne'} subtitle={['1 · Typ', '2 · Details', '3 · Prüfen'][step - 1]} onBack={navigation.goBack} backLabel="Zurück">
+    <Screen title={d.id ? tr('Kampagne bearbeiten') : tr('Neue Kampagne')} subtitle={[tr('1 · Typ'), tr('2 · Details'), tr('3 · Prüfen')][step - 1]} onBack={navigation.goBack} backLabel={tr('Zurück')}>
       <View style={{ flexDirection: 'row', gap: 6 }}>
         {[1, 2, 3].map((n) => (
           <View key={n} style={[styles.progress, n <= step && { backgroundColor: colors.brand }]} />
@@ -210,7 +211,7 @@ export function CampaignEditScreen({ navigation, route }: { navigation: { goBack
 
       {step === 1 ? (
         <>
-          {!pro ? <Notice tone="info" text={`Gewinnspiel und Rekord-Challenge gehören zu ${PLAN_LABEL.marketing_pro}.`} /> : null}
+          {!pro ? <Notice tone="info" text={tr('Gewinnspiel und Rekord-Challenge gehören zu {0}.', PLAN_LABEL.marketing_pro)} /> : null}
           {TYPES.map((t) => {
             const locked = t.pro && !pro;
             const on = d.type === t.type;
@@ -227,7 +228,7 @@ export function CampaignEditScreen({ navigation, route }: { navigation: { goBack
           })}
           {!d.id ? (
             <MiniButton
-              title="Beispiel einfügen"
+              title={tr('Beispiel einfügen')}
               icon="sparkles-outline"
               onPress={() =>
                 setD((x) => ({
@@ -248,13 +249,13 @@ export function CampaignEditScreen({ navigation, route }: { navigation: { goBack
 
       {step === 2 ? (
         <Card style={{ gap: space.md }}>
-          <Input label="Name der Kampagne" value={d.name} maxLength={120} onChangeText={(name) => patch({ name })} />
-          <Input label="Hashtag" value={d.hashtag ?? ''} placeholder="#" autoCapitalize="none" onChangeText={(hashtag) => patch({ hashtag })} />
-          <Input label="Profil zum Erwähnen" value={d.mention ?? ''} placeholder="@" autoCapitalize="none" onChangeText={(mention) => patch({ mention })} />
-          {d.type === 'giveaway' ? <Input label="Preis" value={d.prize ?? ''} maxLength={200} onChangeText={(prize) => patch({ prize })} /> : null}
-          <DateTimeInput label="Beginn (leer = sofort)" value={d.starts_at} onChange={(starts_at) => patch({ starts_at })} quick={[{ label: 'Sofort', iso: null }]} />
-          <DateTimeInput label="Ende" value={d.ends_at} onChange={(ends_at) => patch({ ends_at })} quick={[{ label: 'In 7 Tagen', iso: inDays(7) }, { label: 'In 14 Tagen', iso: inDays(14) }, { label: 'In 30 Tagen', iso: inDays(30) }, { label: 'Ohne Ende', iso: null }]} />
-          <LocalizedInput label="Teilnahmebedingungen" value={d.rules_text} onChange={(rules_text) => patch({ rules_text })} multiline />
+          <Input label={tr('Name der Kampagne')} value={d.name} maxLength={120} onChangeText={(name) => patch({ name })} />
+          <Input label={tr('Hashtag')} value={d.hashtag ?? ''} placeholder="#" autoCapitalize="none" onChangeText={(hashtag) => patch({ hashtag })} />
+          <Input label={tr('Profil zum Erwähnen')} value={d.mention ?? ''} placeholder="@" autoCapitalize="none" onChangeText={(mention) => patch({ mention })} />
+          {d.type === 'giveaway' ? <Input label={tr('Preis')} value={d.prize ?? ''} maxLength={200} onChangeText={(prize) => patch({ prize })} /> : null}
+          <DateTimeInput label={tr('Beginn (leer = sofort)')} value={d.starts_at} onChange={(starts_at) => patch({ starts_at })} quick={[{ label: tr('Sofort'), iso: null }]} />
+          <DateTimeInput label={tr('Ende')} value={d.ends_at} onChange={(ends_at) => patch({ ends_at })} quick={[{ label: tr('In 7 Tagen'), iso: inDays(7) }, { label: tr('In 14 Tagen'), iso: inDays(14) }, { label: tr('In 30 Tagen'), iso: inDays(30) }, { label: tr('Ohne Ende'), iso: null }]} />
+          <LocalizedInput label={tr('Teilnahmebedingungen')} value={d.rules_text} onChange={(rules_text) => patch({ rules_text })} multiline />
         </Card>
       ) : null}
 
@@ -263,27 +264,27 @@ export function CampaignEditScreen({ navigation, route }: { navigation: { goBack
           <Text style={{ ...font.title, color: colors.ink }}>{d.name || '–'}</Text>
           <Text style={{ ...font.subhead, color: colors.ink2 }}>{CAMPAIGN_TYPE[d.type]}</Text>
           {[d.mention, d.hashtag].filter(Boolean).length ? <Text style={{ ...font.subhead, color: colors.ink }}>{[d.mention, d.hashtag].filter(Boolean).join(' ')}</Text> : null}
-          {d.prize ? <Text style={{ ...font.subhead, color: colors.ink }}>Preis: {d.prize}</Text> : null}
-          {d.ends_at ? <Text style={{ ...font.subhead, color: colors.ink2 }}>Ende: {new Date(d.ends_at).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' })}</Text> : null}
-          <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400', marginTop: 6 }}>Pro Park läuft höchstens eine Kampagne. Eine neu aktivierte beendet die bisherige.</Text>
+          {d.prize ? <Text style={{ ...font.subhead, color: colors.ink }}>{tr('Preis: ')}{d.prize}</Text> : null}
+          {d.ends_at ? <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Ende: ')}{new Date(d.ends_at).toLocaleString(localeTag(), { dateStyle: 'medium', timeStyle: 'short' })}</Text> : null}
+          <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400', marginTop: 6 }}>{tr('Pro Park läuft höchstens eine Kampagne. Eine neu aktivierte beendet die bisherige.')}</Text>
         </Card>
       ) : null}
 
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {step > 1 ? (
           <View style={{ flex: 1 }}>
-            <Button title="Zurück" kind="plain" onPress={() => setStep((s) => (s - 1) as 1 | 2)} />
+            <Button title={tr('Zurück')} kind="plain" onPress={() => setStep((s) => (s - 1) as 1 | 2)} />
           </View>
         ) : null}
         <View style={{ flex: 1 }}>
           {step < 3 ? (
-            <Button title="Weiter" onPress={() => (step === 2 && !d.name.trim() ? setError('Bitte gib der Kampagne einen Namen.') : (setError(null), setStep((s) => (s + 1) as 2 | 3)))} />
+            <Button title={tr('Weiter')} onPress={() => (step === 2 && !d.name.trim() ? setError(tr('Bitte gib der Kampagne einen Namen.')) : (setError(null), setStep((s) => (s + 1) as 2 | 3)))} />
           ) : (
-            <Button title="Speichern und aktivieren" loading={busy} onPress={() => void save('active')} />
+            <Button title={tr('Speichern und aktivieren')} loading={busy} onPress={() => void save('active')} />
           )}
         </View>
       </View>
-      {step === 3 ? <Button title="Als Entwurf speichern" kind="plain" onPress={() => void save(d.status === 'ended' ? 'ended' : 'draft')} /> : null}
+      {step === 3 ? <Button title={tr('Als Entwurf speichern')} kind="plain" onPress={() => void save(d.status === 'ended' ? 'ended' : 'draft')} /> : null}
     </Screen>
   );
 }

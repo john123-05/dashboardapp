@@ -13,6 +13,7 @@ import { centsToInput, fetchShopOverview, NEW_PRODUCTS, PRODUCT_ICON, priceToCen
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { productDesc, productLabel, ShopPreview } from './ShopScreen';
+import { tr, localeTag } from '../i18n';
 
 type Product = { key: string; label: string; description: string; enabled: boolean; price: string };
 
@@ -61,7 +62,7 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
     if (!parkId) return;
     const bad = products.find((p) => p.enabled && (!Number.isFinite(priceToCents(p.price)) || priceToCents(p.price) <= 0));
     if (bad) {
-      setError(`Bitte einen gültigen Preis für „${productLabel(bad)}“ eingeben.`);
+      setError(tr('Bitte einen gültigen Preis für „{0}“ eingeben.', productLabel(bad)));
       return;
     }
     setSaving(true);
@@ -77,10 +78,10 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
       apply(updated);
       setVersion((v) => v + 1);
       successHaptic();
-      setStatus('Gespeichert – die Vorschau ist aktualisiert.');
+      setStatus(tr('Gespeichert – die Vorschau ist aktualisiert.'));
       shop.reload();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Speichern fehlgeschlagen.');
+      setError(e instanceof Error ? e.message : tr('Speichern fehlgeschlagen.'));
     }
     setSaving(false);
   }
@@ -96,16 +97,16 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
       setSettings(updated);
       setVersion((v) => v + 1);
       successHaptic();
-      setStatus('Logo gespeichert.');
+      setStatus(tr('Logo gespeichert.'));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Logo konnte nicht hochgeladen werden.');
+      setError(e instanceof Error ? e.message : tr('Logo konnte nicht hochgeladen werden.'));
     }
     setLogoBusy(false);
   }
 
   if (shop.loading && !settings) {
     return (
-      <Screen title="Shop bearbeiten" onBack={navigation.goBack} backLabel="Shop">
+      <Screen title={tr('Shop bearbeiten')} onBack={navigation.goBack} backLabel={tr('Shop')}>
         <Skeleton height={200} radius={radius.lg} />
       </Screen>
     );
@@ -113,14 +114,14 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
 
   const editor = (
     <View style={{ gap: space.lg }}>
-      <Section title="Design">
+      <Section title={tr('Design')}>
         <Card style={{ gap: space.md }}>
-          <Text style={styles.label}>Akzentfarbe</Text>
+          <Text style={styles.label}>{tr('Akzentfarbe')}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
             {SHOP_COLORS.map((c) => {
               const on = c.toLowerCase() === color.toLowerCase();
               return (
-                <Pressable key={c} onPress={() => { tapHaptic(); setColor(c); setHex(c); touch(); }} style={[styles.color, { backgroundColor: c }, on && styles.colorOn]} accessibilityLabel={`Farbe ${c}`}>
+                <Pressable key={c} onPress={() => { tapHaptic(); setColor(c); setHex(c); touch(); }} style={[styles.color, { backgroundColor: c }, on && styles.colorOn]} accessibilityLabel={tr('Farbe {0}', c)}>
                   {on ? <Ionicons name="checkmark" size={18} color="#fff" /> : null}
                 </Pressable>
               );
@@ -150,21 +151,21 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <View style={styles.logo}>{settings?.logo_url ? <Image source={{ uri: settings.logo_url }} style={StyleSheet.absoluteFill} contentFit="contain" /> : <Ionicons name="image-outline" size={22} color={colors.ink3} />}</View>
             <View style={{ flex: 1 }}>
-              <Button title={logoBusy ? 'Wird hochgeladen…' : 'Logo hochladen'} icon="cloud-upload-outline" kind="plain" loading={logoBusy} onPress={() => void changeLogo()} />
+              <Button title={logoBusy ? tr('Wird hochgeladen…') : tr('Logo hochladen')} icon="cloud-upload-outline" kind="plain" loading={logoBusy} onPress={() => void changeLogo()} />
             </View>
           </View>
-          <SelectRow label="Schriftart" value={SHOP_FONTS.find((f) => f.key === fontKey)?.label ?? fontKey} onPress={() => setFontPicker(true)} />
+          <SelectRow label={tr('Schriftart')} value={SHOP_FONTS.find((f) => f.key === fontKey)?.label ?? fontKey} onPress={() => setFontPicker(true)} />
         </Card>
       </Section>
 
-      <Section title="Texte">
+      <Section title={tr('Texte')}>
         <Card style={{ gap: space.md }}>
-          <Input label="Shop-Name" value={name} maxLength={60} placeholder={parkName ?? 'Foto-Shop'} onChangeText={(t) => { setName(t); touch(); }} />
-          <Input label="Begrüßungstext" value={welcome} maxLength={240} multiline placeholder="Hol dir dein Foto von heute – als Download, Abzug oder auf Tasse, T-Shirt und mehr." onChangeText={(t) => { setWelcome(t); touch(); }} />
+          <Input label={tr('Shop-Name')} value={name} maxLength={60} placeholder={parkName ?? tr('Foto-Shop')} onChangeText={(t) => { setName(t); touch(); }} />
+          <Input label={tr('Begrüßungstext')} value={welcome} maxLength={240} multiline placeholder={tr('Hol dir dein Foto von heute – als Download, Abzug oder auf Tasse, T-Shirt und mehr.')} onChangeText={(t) => { setWelcome(t); touch(); }} />
         </Card>
       </Section>
 
-      <Section title={`Produkte & Preise · ${products.filter((p) => p.enabled).length} aktiv`}>
+      <Section title={tr('Produkte & Preise · {0} aktiv', products.filter((p) => p.enabled).length)}>
         <Card padded={false} style={{ overflow: 'hidden' }}>
           {products.map((p, i) => (
             <View key={p.key} style={[styles.product, i < products.length - 1 && styles.productLine]}>
@@ -174,7 +175,7 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
               <View style={{ flex: 1, minWidth: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Text style={{ ...font.callout, color: p.enabled ? colors.ink : colors.ink3, flexShrink: 1 }} numberOfLines={1}>{productLabel(p)}</Text>
-                  {NEW_PRODUCTS.includes(p.key) ? <Pill tone="warn" text="Neu" /> : null}
+                  {NEW_PRODUCTS.includes(p.key) ? <Pill tone="warn" text={tr('Neu')} /> : null}
                 </View>
                 <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400' }} numberOfLines={1}>{productDesc(p)}</Text>
               </View>
@@ -194,13 +195,13 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
           ))}
         </Card>
         <Text style={styles.hint}>
-          Merchandise wird nach der Aktivierung über einen Druckpartner produziert und direkt an deine Gäste verschickt{priceCents ? ` – zum Vergleich: am Automaten kostet ein Foto ${(priceCents / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}` : ''}.
+          {tr('Merchandise wird nach der Aktivierung über einen Druckpartner produziert und direkt an deine Gäste verschickt')}{priceCents ? tr(' – zum Vergleich: am Automaten kostet ein Foto {0}', (priceCents / 100).toLocaleString(localeTag(), { style: 'currency', currency: 'EUR' })) : ''}.
         </Text>
       </Section>
 
-      <Section title="Zahlungen">
+      <Section title={tr('Zahlungen')}>
         <Card>
-          <Text style={{ ...font.subhead, color: colors.ink2 }}>Dein Shop läuft im Testmodus: Gäste können alles ausprobieren, es wird nichts berechnet. Echte Zahlungen schalten wir mit der Freischaltung ein.</Text>
+          <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Dein Shop läuft im Testmodus: Gäste können alles ausprobieren, es wird nichts berechnet. Echte Zahlungen schalten wir mit der Freischaltung ein.')}</Text>
         </Card>
       </Section>
     </View>
@@ -208,7 +209,7 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
 
   return (
     <View style={{ flex: 1 }}>
-      <Screen title="Shop bearbeiten" subtitle="Ändern, speichern, Vorschau prüfen" onBack={navigation.goBack} backLabel="Shop">
+      <Screen title={tr('Shop bearbeiten')} subtitle={tr('Ändern, speichern, Vorschau prüfen')} onBack={navigation.goBack} backLabel={tr('Shop')}>
         {error ? <ErrorNote text={error} /> : null}
         {status && !dirty ? <Notice text={status} /> : null}
         {shop.error && !settings ? <ErrorNote text={shop.error} onRetry={shop.reload} /> : null}
@@ -225,8 +226,8 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
         )}
         {dirty ? <View style={{ height: 70 }} /> : null}
       </Screen>
-      <SaveBar visible={dirty} text="Nicht gespeicherte Änderungen" saveLabel="Speichern" busy={saving} onSave={() => void save()} onDiscard={() => shop.data && apply(shop.data.settings)} />
-      <PickerSheet open={fontPicker} title="Schriftart" value={fontKey} options={SHOP_FONTS.map((f) => ({ value: f.key, label: f.label }))} onPick={(k) => { setFontKey(k); touch(); }} onClose={() => setFontPicker(false)} />
+      <SaveBar visible={dirty} text={tr('Nicht gespeicherte Änderungen')} saveLabel={tr('Speichern')} busy={saving} onSave={() => void save()} onDiscard={() => shop.data && apply(shop.data.settings)} />
+      <PickerSheet open={fontPicker} title={tr('Schriftart')} value={fontKey} options={SHOP_FONTS.map((f) => ({ value: f.key, label: f.label }))} onPick={(k) => { setFontKey(k); touch(); }} onClose={() => setFontPicker(false)} />
     </View>
   );
 }

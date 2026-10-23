@@ -35,6 +35,7 @@ import { colors, font, HEADER_HEIGHT, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { OverlayStudio } from './OverlayStudioScreen';
+import { tr, localeTag } from '../i18n';
 
 const CHECKER = colors.subtle;
 
@@ -99,7 +100,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
   /** Mediathek oder Kamera, auf dem iPhone als Aktionsblatt. */
   function chooseSource(then: (src: 'library' | 'camera') => void) {
     if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions({ options: ['Abbrechen', 'Aus Fotos wählen', 'Foto aufnehmen'], cancelButtonIndex: 0 }, (i) => {
+      ActionSheetIOS.showActionSheetWithOptions({ options: [tr('Abbrechen'), tr('Aus Fotos wählen'), tr('Foto aufnehmen')], cancelButtonIndex: 0 }, (i) => {
         if (i === 1) then('library');
         if (i === 2) then('camera');
       });
@@ -112,15 +113,15 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
     if (!machine || !parkId || !slot) return;
     void run('send', async () => {
       if (source === 'upload') {
-        if (!file) throw new Error('Bitte wähle zuerst ein Bild.');
+        if (!file) throw new Error(tr('Bitte wähle zuerst ein Bild.'));
         await sendToSlot(parkId, machine.id, slot.id, { picked: file });
       } else {
-        if (!chosenOverlay) throw new Error('Bitte wähle ein gespeichertes Overlay aus.');
+        if (!chosenOverlay) throw new Error(tr('Bitte wähle ein gespeichertes Overlay aus.'));
         await sendToSlot(parkId, machine.id, slot.id, { overlay: chosenOverlay });
       }
       successHaptic();
       setFile(null);
-      setStatus(`„${slot.label}“ wurde an ${machine.machine_label || machine.machine_id} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.`);
+      setStatus(tr('„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.', slot.label, machine.machine_label || machine.machine_id));
       branding.reload();
     });
   }
@@ -131,14 +132,14 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
       run('restart', async () => {
         await requestRestart(parkId, machine.id, mode);
         successHaptic();
-        setStatus(mode === 'cancel' ? 'Neustart zurückgenommen.' : mode === 'now' ? 'Neustart beauftragt. Der Automat führt ihn innerhalb der nächsten Minute aus.' : 'Neustart für heute Nacht vorgemerkt. Der Automat führt ihn in der Ruhezeit aus.');
+        setStatus(mode === 'cancel' ? tr('Neustart zurückgenommen.') : mode === 'now' ? tr('Neustart beauftragt. Der Automat führt ihn innerhalb der nächsten Minute aus.') : tr('Neustart für heute Nacht vorgemerkt. Der Automat führt ihn in der Ruhezeit aus.'));
         if (mode !== 'cancel') setEditing(null);
         branding.reload();
       });
     if (mode === 'now') {
-      Alert.alert('Verkaufsprogramm neu starten?', 'Das Verkaufsprogramm wird sofort beendet und neu gestartet. Etwa 15 Sekunden lang kann kein Foto verkauft werden. Nur ausführen, wenn gerade niemand am Automaten steht.', [
-        { text: 'Abbrechen', style: 'cancel' },
-        { text: 'Jetzt neu starten', style: 'destructive', onPress: () => void go() },
+      Alert.alert(tr('Verkaufsprogramm neu starten?'), tr('Das Verkaufsprogramm wird sofort beendet und neu gestartet. Etwa 15 Sekunden lang kann kein Foto verkauft werden. Nur ausführen, wenn gerade niemand am Automaten steht.'), [
+        { text: tr('Abbrechen'), style: 'cancel' },
+        { text: tr('Jetzt neu starten'), style: 'destructive', onPress: () => void go() },
       ]);
     } else void go();
   }
@@ -151,7 +152,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
         if (!img) return;
         await uploadCurrentRef(parkId, machine.machine_id, slotId, img);
         successHaptic();
-        setStatus(`„${SLOTS.find((s) => s.id === slotId)?.label}“ hinterlegt. Am Automaten hat sich nichts geändert.`);
+        setStatus(tr('„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.', SLOTS.find((s) => s.id === slotId)?.label));
         branding.reload();
       }),
     );
@@ -166,7 +167,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
         const asset = await uploadOverlay(parkId, user.id, pickedToUpload(img));
         if (autoApply) await activateOverlay(parkId, asset);
         successHaptic();
-        setStatus(autoApply ? 'Overlay hochgeladen und aktiviert.' : 'Overlay hochgeladen.');
+        setStatus(autoApply ? tr('Overlay hochgeladen und aktiviert.') : tr('Overlay hochgeladen.'));
         overlays.reload();
       }),
     );
@@ -177,30 +178,30 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
     void run(`act:${a.id}`, async () => {
       await activateOverlay(parkId, a);
       successHaptic();
-      setStatus('Overlay ist jetzt aktiv.');
+      setStatus(tr('Overlay ist jetzt aktiv.'));
       overlays.reload();
     });
   }
 
   function remove(a: OverlayAsset) {
-    Alert.alert('Overlay löschen?', `${basename(a.path)} wird endgültig entfernt.`, [
-      { text: 'Abbrechen', style: 'cancel' },
-      { text: 'Löschen', style: 'destructive', onPress: () => void run(`del:${a.id}`, async () => { await deleteOverlay(a); overlays.reload(); }) },
+    Alert.alert(tr('Overlay löschen?'), tr('{0} wird endgültig entfernt.', basename(a.path)), [
+      { text: tr('Abbrechen'), style: 'cancel' },
+      { text: tr('Löschen'), style: 'destructive', onPress: () => void run(`del:${a.id}`, async () => { await deleteOverlay(a); overlays.reload(); }) },
     ]);
   }
 
   function generate() {
     if (!parkId || !user) return;
     if (!message.trim() && !prompt.trim()) {
-      setError('Bitte gib eine Nachricht oder eine Beschreibung ein.');
+      setError(tr('Bitte gib eine Nachricht oder eine Beschreibung ein.'));
       return;
     }
     void run('ai', async () => {
       const asset = await generateOverlays(parkId, user.id, message.trim(), prompt.trim(), base.data ?? null);
-      if (!asset) throw new Error('Die KI hat kein Overlay geliefert. Bitte mit einer anderen Beschreibung erneut versuchen.');
+      if (!asset) throw new Error(tr('Die KI hat kein Overlay geliefert. Bitte mit einer anderen Beschreibung erneut versuchen.'));
       if (autoApply) await activateOverlay(parkId, asset);
       successHaptic();
-      setStatus(autoApply ? 'KI-Overlay erstellt und aktiviert.' : 'KI-Overlay erstellt und gespeichert.');
+      setStatus(autoApply ? tr('KI-Overlay erstellt und aktiviert.') : tr('KI-Overlay erstellt und gespeichert.'));
       overlays.reload();
     });
   }
@@ -215,8 +216,8 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
     <Screen page="personalization"
       scrollEnabled={!dragging}
       scrollByRef={scrollBy}
-      title="Personalisierung"
-      subtitle="Overlays und Bilder am Automaten"
+      title={tr('Personalisierung')}
+      subtitle={tr('Overlays und Bilder am Automaten')}
       onBack={navigation.goBack}
       refreshing={branding.refreshing || overlays.refreshing}
       onRefresh={() => {
@@ -229,27 +230,27 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
       {status ? <Notice text={status} /> : null}
 
       {/* ---------------------------------------------------------- Am Automaten */}
-      <Section title="Overlays ändern">
-        <Text style={styles.lead}>Was gerade auf dem Automaten zu sehen ist – und wie du es änderst.</Text>
+      <Section title={tr('Overlays ändern')}>
+        <Text style={styles.lead}>{tr('Was gerade auf dem Automaten zu sehen ist – und wie du es änderst.')}</Text>
         {branding.loading && !branding.data ? (
           <Skeleton height={220} radius={radius.lg} />
         ) : branding.error && !branding.data ? (
           <ErrorNote text={branding.error} onRetry={branding.reload} />
         ) : branding.data?.notDeployed ? (
-          <Notice tone="warn" text="Diese Funktion ist auf dem Server noch nicht freigeschaltet (operator-liftpic-assets)." />
+          <Notice tone="warn" text={tr('Diese Funktion ist auf dem Server noch nicht freigeschaltet (operator-liftpic-assets).')} />
         ) : !machine ? (
           <Card>
-            <Text style={{ ...font.subhead, color: colors.ink2 }}>Für deinen Park ist derzeit kein Automat eingerichtet.</Text>
+            <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Für deinen Park ist derzeit kein Automat eingerichtet.')}</Text>
           </Card>
         ) : (
           <>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               {machines.length > 1 ? (
                 <View style={{ flex: 1, minWidth: 220 }}>
-                  <SelectRow label="Automat" value={machine.machine_label || machine.machine_id} onPress={() => setMachinePicker(true)} />
+                  <SelectRow label={tr('Automat')} value={machine.machine_label || machine.machine_id} onPress={() => setMachinePicker(true)} />
                 </View>
               ) : null}
-              <Pill tone={online ? 'ok' : 'neutral'} icon="desktop-outline" text={`${machines.length === 1 ? `${machine.machine_label || machine.machine_id} · ` : ''}${online ? 'Verbunden' : minutes === null ? 'noch nie gesehen' : `zuletzt vor ${Math.round(minutes)} Min.`}`} />
+              <Pill tone={online ? 'ok' : 'neutral'} icon="desktop-outline" text={`${machines.length === 1 ? `${machine.machine_label || machine.machine_id} · ` : ''}${online ? tr('Verbunden') : minutes === null ? tr('noch nie gesehen') : tr('zuletzt vor {0} Min.', Math.round(minutes))}`} />
             </View>
 
             <CoachTarget id="perso.slots">
@@ -263,7 +264,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                       {shown ? <Image source={{ uri: shown.url }} style={StyleSheet.absoluteFill} contentFit="contain" transition={120} /> : <Ionicons name="image-outline" size={26} color={colors.ink3} />}
                       {shown ? (
                         <View style={{ position: 'absolute', left: 8, top: 8 }}>
-                          <Pill tone={shown.kind === 'sent' ? 'ok' : 'neutral'} text={shown.kind === 'sent' ? 'Gesendet' : 'Hinterlegt'} />
+                          <Pill tone={shown.kind === 'sent' ? 'ok' : 'neutral'} text={shown.kind === 'sent' ? tr('Gesendet') : tr('Hinterlegt')} />
                         </View>
                       ) : null}
                     </View>
@@ -271,12 +272,12 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                       <Text style={{ ...font.headline, color: colors.ink }}>{s.label}</Text>
                       <Text style={{ ...font.footnote, color: colors.ink2 }}>{s.desc}</Text>
                       <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400' }}>
-                        {shown ? (shown.when ? `Zuletzt geändert: ${new Date(shown.when).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })}` : 'Aktualisiert') : 'Noch nichts hochgeladen'}
+                        {shown ? (shown.when ? tr('Zuletzt geändert: {0}', new Date(shown.when).toLocaleString(localeTag(), { dateStyle: 'short', timeStyle: 'short' })) : tr('Aktualisiert')) : tr('Noch nichts hochgeladen')}
                       </Text>
                       <View style={{ flexDirection: 'row', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-                        <MiniButton title="Ändern" tone="brand" icon="swap-horizontal" onPress={() => { setEditing(s.id); setSource(assets.length ? 'gallery' : 'upload'); setFile(null); setStatus(null); }} />
-                        <MiniButton title="Stand hinterlegen" icon="time-outline" busy={busy === `ref:${s.id}`} onPress={() => storeReference(s.id)} />
-                        {shown ? <MiniButton title="Im Studio" icon="brush-outline" onPress={() => openInStudio(shown.url)} /> : null}
+                        <MiniButton title={tr('Ändern')} tone="brand" icon="swap-horizontal" onPress={() => { setEditing(s.id); setSource(assets.length ? 'gallery' : 'upload'); setFile(null); setStatus(null); }} />
+                        <MiniButton title={tr('Stand hinterlegen')} icon="time-outline" busy={busy === `ref:${s.id}`} onPress={() => storeReference(s.id)} />
+                        {shown ? <MiniButton title={tr('Im Studio')} icon="brush-outline" onPress={() => openInStudio(shown.url)} /> : null}
                       </View>
                     </View>
                   </View>
@@ -284,15 +285,15 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
               })}
             </SlotRow>
             </CoachTarget>
-            <Text style={styles.hint}>„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.</Text>
+            <Text style={styles.hint}>{tr('„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.')}</Text>
 
             {slot ? (
               <Card style={{ gap: space.md }}>
-                <CardHead title={`${slot.label} ändern`} sub={slot.tip} right={<MiniButton icon="close" onPress={() => setEditing(null)} />} />
-                <Segmented<'gallery' | 'upload'> value={source} onChange={setSource} options={[{ value: 'gallery', label: `Meine Overlays (${assets.length})` }, { value: 'upload', label: 'Neues Bild' }]} />
+                <CardHead title={tr('{0} ändern', slot.label)} sub={slot.tip} right={<MiniButton icon="close" onPress={() => setEditing(null)} />} />
+                <Segmented<'gallery' | 'upload'> value={source} onChange={setSource} options={[{ value: 'gallery', label: tr('Meine Overlays ({0})', assets.length) }, { value: 'upload', label: tr('Neues Bild') }]} />
                 {source === 'gallery' ? (
                   assets.length === 0 ? (
-                    <Text style={styles.hint}>Du hast noch keine Overlays gespeichert. Lade unten eines hoch oder lass es von der KI erstellen.</Text>
+                    <Text style={styles.hint}>{tr('Du hast noch keine Overlays gespeichert. Lade unten eines hoch oder lass es von der KI erstellen.')}</Text>
                   ) : (
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
                       {assets.map((a) => {
@@ -300,7 +301,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                         return (
                           <Pressable key={a.id} onPress={() => { tapHaptic(); setGalleryPick(a.id); }} style={[styles.pickTile, sel && { borderColor: colors.brand, borderWidth: 2 }]}>
                             <View style={styles.pickImg}>{a.preview_url ? <Image source={{ uri: a.preview_url }} style={StyleSheet.absoluteFill} contentFit="contain" /> : null}</View>
-                            <Text style={{ ...font.caption, color: colors.ink2 }} numberOfLines={1}>{a.width && a.height ? `${a.width} × ${a.height}` : 'Größe unbekannt'}</Text>
+                            <Text style={{ ...font.caption, color: colors.ink2 }} numberOfLines={1}>{a.width && a.height ? `${a.width} × ${a.height}` : tr('Größe unbekannt')}</Text>
                           </Pressable>
                         );
                       })}
@@ -308,7 +309,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                   )
                 ) : (
                   <View style={{ gap: 10 }}>
-                    <Button title={file ? 'Anderes Bild wählen' : 'Bild wählen'} icon="image-outline" kind="plain" onPress={() => chooseSource((src) => void run('pick', async () => { const img = await pick(src); if (img) setFile(img); }))} />
+                    <Button title={file ? tr('Anderes Bild wählen') : tr('Bild wählen')} icon="image-outline" kind="plain" onPress={() => chooseSource((src) => void run('pick', async () => { const img = await pick(src); if (img) setFile(img); }))} />
                     {file ? (
                       <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
                         <View style={[styles.pickImg, { width: 120, height: 90 }]}>
@@ -322,26 +323,26 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                     ) : null}
                   </View>
                 )}
-                <Button title={busy === 'send' ? 'Wird übertragen…' : 'Jetzt ändern'} icon="checkmark-circle-outline" loading={busy === 'send'} onPress={sendNow} />
+                <Button title={busy === 'send' ? tr('Wird übertragen…') : tr('Jetzt ändern')} icon="checkmark-circle-outline" loading={busy === 'send'} onPress={sendNow} />
                 <View style={styles.divider} />
-                <Text style={{ ...font.footnote, color: colors.ink2 }}>Danach live schalten – nötig, damit z. B. ein neuer Hintergrund erscheint.</Text>
+                <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Danach live schalten – nötig, damit z. B. ein neuer Hintergrund erscheint.')}</Text>
                 {machine.pending_restart ? (
                   <View style={styles.pending}>
                     <Ionicons name="sync" size={18} color={colors.warn} />
-                    <Text style={{ ...font.footnote, color: colors.ink, flex: 1 }}>{machine.pending_restart.mode === 'tonight' ? 'Neustart für heute Nacht vorgemerkt.' : 'Neustart wird gleich ausgeführt.'}</Text>
-                    <MiniButton title="Zurücknehmen" onPress={() => restart('cancel')} busy={busy === 'restart'} />
+                    <Text style={{ ...font.footnote, color: colors.ink, flex: 1 }}>{machine.pending_restart.mode === 'tonight' ? tr('Neustart für heute Nacht vorgemerkt.') : tr('Neustart wird gleich ausgeführt.')}</Text>
+                    <MiniButton title={tr('Zurücknehmen')} onPress={() => restart('cancel')} busy={busy === 'restart'} />
                   </View>
                 ) : (
                   <View style={{ flexDirection: wide ? 'row' : 'column', gap: 10 }}>
                     <View style={{ flex: wide ? 1 : undefined }}>
-                      <Button title="Verkaufsprogramm jetzt neu starten" icon="refresh-circle-outline" kind="plain" loading={busy === 'restart'} onPress={() => restart('now')} />
+                      <Button title={tr('Verkaufsprogramm jetzt neu starten')} icon="refresh-circle-outline" kind="plain" loading={busy === 'restart'} onPress={() => restart('now')} />
                     </View>
                     <View style={{ flex: wide ? 1 : undefined }}>
-                      <Button title="Heute Nacht" icon="moon-outline" kind="plain" onPress={() => restart('tonight')} />
+                      <Button title={tr('Heute Nacht')} icon="moon-outline" kind="plain" onPress={() => restart('tonight')} />
                     </View>
                   </View>
                 )}
-                {machine.last_restart_at ? <Text style={styles.hint}>Zuletzt neu gestartet: {new Date(machine.last_restart_at).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })}.</Text> : null}
+                {machine.last_restart_at ? <Text style={styles.hint}>{tr('Zuletzt neu gestartet: ')}{new Date(machine.last_restart_at).toLocaleString(localeTag(), { dateStyle: 'short', timeStyle: 'short' })}.</Text> : null}
               </Card>
             ) : null}
           </>
@@ -350,7 +351,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
 
       {/* ---------------------------------------------------------- Gespeicherte Overlays */}
       {/* ---------------------------------------------------------- Overlay-Studio direkt auf der Seite (wie im Web) */}
-      <Section title="Overlay-Studio">
+      <Section title={tr('Overlay-Studio')}>
         <View ref={studioRef} collapsable={false}>
           <Card>
             <OverlayStudio embedded openRequest={studioOpen} onSaved={() => overlays.reload()} onDragChange={setDragging} onFullscreen={() => nav.navigate('OverlayStudio')} />
@@ -358,11 +359,11 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
         </View>
       </Section>
 
-      <Section title="Gespeicherte Overlays" action="Hochladen" onAction={uploadReady}>
+      <Section title={tr('Gespeicherte Overlays')} action={tr('Hochladen')} onAction={uploadReady}>
         <Card style={{ gap: space.md }}>
-          <CardHead title="Vorschau" sub="So sieht dein aktuelles Foto mit Overlay aus." right={<MiniButton icon="refresh" onPress={() => base.reload()} />} />
+          <CardHead title={tr('Vorschau')} sub={tr('So sieht dein aktuelles Foto mit Overlay aus.')} right={<MiniButton icon="refresh" onPress={() => base.reload()} />} />
           <View style={[styles.preview, { width: previewW, height: Math.round((previewW * 3) / 4) }]}>
-            {base.data ? <Image source={{ uri: base.data }} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} /> : <Text style={{ ...font.subhead, color: colors.ink3 }}>Kein aktuelles Foto</Text>}
+            {base.data ? <Image source={{ uri: base.data }} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} /> : <Text style={{ ...font.subhead, color: colors.ink3 }}>{tr('Kein aktuelles Foto')}</Text>}
             {activeLayers.map((l) => {
               const a = assets.find((x) => x.id === l.asset_id);
               if (!a?.preview_url) return null;
@@ -370,7 +371,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
             })}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ ...font.footnote, color: colors.ink2, flex: 1 }}>Antippen zum Anwenden · lange drücken zum Bearbeiten oder Löschen</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2, flex: 1 }}>{tr('Antippen zum Anwenden · lange drücken zum Bearbeiten oder Löschen')}</Text>
             <Pill text={String(assets.length)} />
           </View>
           {overlays.loading && !overlays.data ? (
@@ -378,7 +379,7 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
           ) : overlays.error && !overlays.data ? (
             <ErrorNote text={overlays.error} onRetry={overlays.reload} />
           ) : assets.length === 0 ? (
-            <Text style={styles.hint}>Noch keine Overlays gespeichert. Lade eine fertige Datei hoch oder lass die KI eines erstellen.</Text>
+            <Text style={styles.hint}>{tr('Noch keine Overlays gespeichert. Lade eine fertige Datei hoch oder lass die KI eines erstellen.')}</Text>
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {assets.map((a) => {
@@ -391,19 +392,19 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
                     onLongPress={() => {
                       tapHaptic();
                       if (Platform.OS !== 'ios') return remove(a);
-                      ActionSheetIOS.showActionSheetWithOptions({ options: ['Abbrechen', 'Im Studio bearbeiten', 'Löschen'], cancelButtonIndex: 0, destructiveButtonIndex: 2 }, (k) => {
+                      ActionSheetIOS.showActionSheetWithOptions({ options: [tr('Abbrechen'), tr('Im Studio bearbeiten'), tr('Löschen')], cancelButtonIndex: 0, destructiveButtonIndex: 2 }, (k) => {
                         if (k === 1 && a.preview_url) openInStudio(a.preview_url);
                         if (k === 2) remove(a);
                       });
                     }}
                     style={({ pressed }) => [styles.gridTile, { width: gridTile, height: Math.round(gridTile * 0.75) }, on && { borderColor: colors.brand, borderWidth: 2 }, pressed && { opacity: 0.8 }]}
-                    accessibilityLabel={on ? 'Aktives Overlay' : 'Overlay anwenden'}
+                    accessibilityLabel={on ? tr('Aktives Overlay') : tr('Overlay anwenden')}
                   >
                     {a.preview_url ? <Image source={{ uri: a.preview_url }} style={StyleSheet.absoluteFill} contentFit="contain" /> : null}
                     {on || working ? (
                       <View style={styles.activeBadge}>
                         <Ionicons name={working ? 'hourglass-outline' : 'checkmark'} size={11} color={colors.onBrand} />
-                        <Text style={{ color: colors.onBrand, fontSize: 10, fontWeight: '700' }}>{working ? '…' : 'Aktiv'}</Text>
+                        <Text style={{ color: colors.onBrand, fontSize: 10, fontWeight: '700' }}>{working ? '…' : tr('Aktiv')}</Text>
                       </View>
                     ) : null}
                   </Pressable>
@@ -413,22 +414,22 @@ export function PersonalizationScreen({ navigation }: { navigation: { goBack: ()
           )}
         </Card>
         <ListCard>
-          <SwitchRow title="Beim Speichern sofort verwenden" subtitle="Gilt für hochgeladene und von der KI erstellte Overlays." value={autoApply} onChange={setAutoApply} />
-          <Row icon="cloud-upload-outline" title={busy === 'upload' ? 'Wird hochgeladen…' : 'Fertige Datei hochladen'} subtitle="PNG mit transparentem Hintergrund, 4:3" chevron onPress={uploadReady} last />
+          <SwitchRow title={tr('Beim Speichern sofort verwenden')} subtitle={tr('Gilt für hochgeladene und von der KI erstellte Overlays.')} value={autoApply} onChange={setAutoApply} />
+          <Row icon="cloud-upload-outline" title={busy === 'upload' ? tr('Wird hochgeladen…') : tr('Fertige Datei hochladen')} subtitle={tr('PNG mit transparentem Hintergrund, 4:3')} chevron onPress={uploadReady} last />
         </ListCard>
       </Section>
 
       {/* ---------------------------------------------------------- KI */}
-      <Section title="Overlay von der KI">
+      <Section title={tr('Overlay von der KI')}>
         <Card style={{ gap: space.md }}>
-          <Text style={{ ...font.footnote, color: colors.ink2 }}>Beschreibe kurz, was auf dem Foto stehen soll. Die KI baut daraus ein Overlay passend zu deinem neuesten Foto.</Text>
-          <Input label="Nachricht auf dem Foto" value={message} onChangeText={setMessage} placeholder="z. B. Frohe Herbstferien!" />
-          <Input label="Gestaltung (optional)" value={prompt} onChangeText={setPrompt} placeholder="z. B. Herbstlaub am Rand, unser Logo unten rechts" multiline />
-          <Button title={busy === 'ai' ? 'Wird erstellt…' : 'Mit KI erstellen'} icon="sparkles-outline" loading={busy === 'ai'} onPress={generate} />
+          <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Beschreibe kurz, was auf dem Foto stehen soll. Die KI baut daraus ein Overlay passend zu deinem neuesten Foto.')}</Text>
+          <Input label={tr('Nachricht auf dem Foto')} value={message} onChangeText={setMessage} placeholder={tr('z. B. Frohe Herbstferien!')} />
+          <Input label={tr('Gestaltung (optional)')} value={prompt} onChangeText={setPrompt} placeholder={tr('z. B. Herbstlaub am Rand, unser Logo unten rechts')} multiline />
+          <Button title={busy === 'ai' ? tr('Wird erstellt…') : tr('Mit KI erstellen')} icon="sparkles-outline" loading={busy === 'ai'} onPress={generate} />
         </Card>
       </Section>
 
-      <PickerSheet open={machinePicker} title="Automat" value={machine?.id} options={machines.map((m) => ({ value: m.id, label: m.machine_label || m.machine_id }))} onPick={(id) => { setMachineId(id); setEditing(null); }} onClose={() => setMachinePicker(false)} />
+      <PickerSheet open={machinePicker} title={tr('Automat')} value={machine?.id} options={machines.map((m) => ({ value: m.id, label: m.machine_label || m.machine_id }))} onPick={(id) => { setMachineId(id); setEditing(null); }} onClose={() => setMachinePicker(false)} />
     </Screen>
   );
 }

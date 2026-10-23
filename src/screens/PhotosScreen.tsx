@@ -15,6 +15,7 @@ import { fetchRecentPhotos, searchPhotosByCode, searchPhotosByDateTime, type Bro
 import { useData } from '../lib/useData';
 import { colors, font, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
+import { tr } from '../i18n';
 
 type Mode = 'neu' | 'code' | 'zeit';
 
@@ -45,13 +46,13 @@ export function PhotosScreen() {
       if (mode === 'code') setResults(await searchPhotosByCode(parkId, code));
       else {
         const m = time.match(/^(\d{1,2})[:.]?(\d{2})$/);
-        if (!m) throw new Error('Bitte eine Uhrzeit wie 14:30 eingeben.');
+        if (!m) throw new Error(tr('Bitte eine Uhrzeit wie 14:30 eingeben.'));
         const day = todayInTimezone(timezone);
         const iso = new Date(`${day}T${m[1].padStart(2, '0')}:${m[2]}:00`).toISOString();
         setResults(await searchPhotosByDateTime(parkId, iso, { windowMinutes: 10, limit: 12 }));
       }
     } catch (e) {
-      setSearchError(e instanceof Error ? e.message : 'Suche fehlgeschlagen');
+      setSearchError(e instanceof Error ? e.message : tr('Suche fehlgeschlagen'));
     }
     setSearching(false);
   }
@@ -63,10 +64,10 @@ export function PhotosScreen() {
   const list = mode === 'neu' ? recent.data ?? [] : results ?? [];
 
   return (
-    <Screen page="photos" tabs actions title="Fotos" refreshing={recent.refreshing} onRefresh={recent.reload}>
+    <Screen page="photos" tabs actions title={tr('Fotos')} refreshing={recent.refreshing} onRefresh={recent.reload}>
       <KpiGrid>
-        <Kpi icon="camera-outline" label="Fotos heute" value={formatNumber(today?.expectedCount ?? null)} />
-        <Kpi icon="bag-check-outline" label="Verkauft heute" value={formatNumber(today?.soldCount ?? null)} sub={today?.conversionRate != null ? `${formatPercent(today.conversionRate)} Kaufquote` : null} />
+        <Kpi icon="camera-outline" label={tr('Fotos heute')} value={formatNumber(today?.expectedCount ?? null)} />
+        <Kpi icon="bag-check-outline" label={tr('Verkauft heute')} value={formatNumber(today?.soldCount ?? null)} sub={today?.conversionRate != null ? tr('{0} Kaufquote', formatPercent(today.conversionRate)) : null} />
       </KpiGrid>
 
       <CoachTarget id="photos.search">
@@ -77,7 +78,7 @@ export function PhotosScreen() {
           setResults(null);
           setSearchError(null);
         }}
-        options={[{ value: 'neu', label: 'Neueste' }, { value: 'code', label: 'Bildnummer' }, { value: 'zeit', label: 'Uhrzeit' }]}
+        options={[{ value: 'neu', label: tr('Neueste') }, { value: 'code', label: tr('Bildnummer') }, { value: 'zeit', label: tr('Uhrzeit') }]}
       />
       </CoachTarget>
 
@@ -87,7 +88,7 @@ export function PhotosScreen() {
           <TextInput
             value={mode === 'code' ? code : time}
             onChangeText={mode === 'code' ? setCode : setTime}
-            placeholder={mode === 'code' ? 'Bildnummer, z. B. 0412' : 'Uhrzeit heute, z. B. 14:30'}
+            placeholder={mode === 'code' ? tr('Bildnummer, z. B. 0412') : tr('Uhrzeit heute, z. B. 14:30')}
             placeholderTextColor={colors.ink3}
             keyboardType={mode === 'code' ? 'number-pad' : 'numbers-and-punctuation'}
             returnKeyType="search"
@@ -95,7 +96,7 @@ export function PhotosScreen() {
             style={styles.searchInput}
           />
           <Pressable onPress={suchen} style={styles.searchBtn} accessibilityRole="button">
-            <Text style={{ ...font.callout, color: '#fff', fontWeight: '600' }}>{searching ? '…' : 'Suchen'}</Text>
+            <Text style={{ ...font.callout, color: '#fff', fontWeight: '600' }}>{searching ? '…' : tr('Suchen')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -122,7 +123,7 @@ export function PhotosScreen() {
               <Image source={p.imageUrl ? { uri: p.imageUrl } : undefined} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} recyclingKey={p.id} />
               <View style={styles.tileFoot}>
                 <Text style={styles.tileTime}>{formatTime(p.capturedAt, timezone)}</Text>
-                {p.speedKmh ? <Text style={styles.tileTime}>{Math.round(p.speedKmh)} km/h</Text> : null}
+                {p.speedKmh ? <Text style={styles.tileTime}>{Math.round(p.speedKmh)} {tr('km/h')}</Text> : null}
               </View>
               {p.isPaid ? (
                 <View style={styles.paid}>
@@ -134,10 +135,10 @@ export function PhotosScreen() {
         </View>
       ) : (
         <Card>
-          <EmptyState icon="images-outline" title={mode === 'neu' ? 'Noch keine Fotos' : results ? 'Nichts gefunden' : 'Suche starten'} text={mode === 'neu' ? 'Sobald der Automat Fotos hochlädt, erscheinen sie hier.' : undefined} />
+          <EmptyState icon="images-outline" title={mode === 'neu' ? tr('Noch keine Fotos') : results ? tr('Nichts gefunden') : tr('Suche starten')} text={mode === 'neu' ? tr('Sobald der Automat Fotos hochlädt, erscheinen sie hier.') : undefined} />
         </Card>
       )}
-      {list.length > 0 ? <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>Grüner Haken: Foto wurde gekauft. Fotos werden nach etwa 30 Tagen gelöscht.</Text> : null}
+      {list.length > 0 ? <Text style={{ ...font.caption, color: colors.ink3, textAlign: 'center' }}>{tr('Grüner Haken: Foto wurde gekauft. Fotos werden nach etwa 30 Tagen gelöscht.')}</Text> : null}
     </Screen>
   );
 }

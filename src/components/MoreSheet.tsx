@@ -9,11 +9,12 @@ import { usePark } from '../contexts/ParkContext';
 import { useLook } from '../contexts/AppearanceContext';
 import { canSee } from '../lib/permissions';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
-import { PAGES, pageAvailable, type PageEntry } from '../lib/pages';
+import { GROUP_LABEL, PAGES, pageAvailable, type PageEntry } from '../lib/pages';
 import { font } from '../theme';
 import { tapHaptic } from './haptics';
 import { initialsOf } from './HeaderActions';
 import { BAR_GREY } from './TabBar';
+import { tr } from '../i18n';
 
 const EASE = Easing.bezier(0.32, 0.72, 0, 1);
 
@@ -64,7 +65,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents={open ? 'auto' : 'none'}>
       <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, backdrop]}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Schließen" />
+        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel={tr('Schließen')} />
       </Animated.View>
       <Animated.View style={[styles.sheet, { maxHeight: sheetH, paddingBottom: insets.bottom + 12 }, sheet]}>
         <GestureDetector gesture={pan}>
@@ -102,14 +103,14 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
             accessibilityRole="button"
           >
             <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={20} color="rgba(255,255,255,0.85)" />
-            <Text style={styles.itemText}>{isDark ? 'Heller Modus' : 'Dunkler Modus'}</Text>
+            <Text style={styles.itemText}>{isDark ? tr('Heller Modus') : tr('Dunkler Modus')}</Text>
           </Pressable>
           {groups.map((g) => {
             const items = list.filter((pg) => pg.group === g);
             if (!items.length) return null;
             return (
               <View key={g} style={{ gap: 2 }}>
-                <Text style={styles.group}>{g}</Text>
+                <Text style={styles.group}>{GROUP_LABEL[g]}</Text>
                 {items.map((pg) => (
                   <Pressable
                     key={pg.key}
@@ -123,7 +124,7 @@ export function MoreSheet({ open, onClose, onOpenPage, onAccount }: { open: bool
                     <Ionicons name={pg.icon} size={20} color="rgba(255,255,255,0.85)" />
                     <Text style={styles.itemText} numberOfLines={1}>
                       {pg.title}
-                      {upgrade(pg.key) ? <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}> (Upgrade)</Text> : null}
+                      {upgrade(pg.key) ? <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}> {tr('(Upgrade)')}</Text> : null}
                     </Text>
                     {!pg.route ? <Ionicons name="open-outline" size={14} color="rgba(255,255,255,0.35)" /> : null}
                   </Pressable>

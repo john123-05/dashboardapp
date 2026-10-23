@@ -10,6 +10,7 @@ import { tapHaptic } from '../components/haptics';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import { colors, font, HEADER_HEIGHT, TAP } from '../theme';
+import { tr } from '../i18n';
 
 export const DASHBOARD_URL = 'https://dashboard-liftpictures.com';
 const SESSION_KEY = 'sb-xcrxltiiovpoladpaewd-auth-token';
@@ -65,11 +66,11 @@ export function WebPageScreen({ route, navigation }: { route: { params: { path: 
     <View style={styles.root}>
       {failed ? (
         <View style={[styles.center, { paddingTop: top }]}>
-          <Text style={styles.failTitle}>Seite konnte nicht geladen werden</Text>
-          <Text style={styles.failText}>Bitte Internetverbindung prüfen.</Text>
+          <Text style={styles.failTitle}>{tr('Seite konnte nicht geladen werden')}</Text>
+          <Text style={styles.failText}>{tr('Bitte Internetverbindung prüfen.')}</Text>
           <View style={{ width: 220 }}>
             <Button
-              title="Erneut versuchen"
+              title={tr('Erneut versuchen')}
               onPress={() => {
                 setFailed(false);
                 setLoading(true);
@@ -118,10 +119,10 @@ export function WebPageScreen({ route, navigation }: { route: { params: { path: 
             hitSlop={8}
             style={styles.back}
             accessibilityRole="button"
-            accessibilityLabel="Zurück"
+            accessibilityLabel={tr('Zurück')}
           >
             <Ionicons name="chevron-back" size={26} color={colors.brand} />
-            <Text style={styles.backText}>Zurück</Text>
+            <Text style={styles.backText}>{tr('Zurück')}</Text>
           </Pressable>
           <Text style={styles.title} numberOfLines={1}>
             {title}

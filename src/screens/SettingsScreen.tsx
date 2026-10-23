@@ -10,8 +10,9 @@ import { DEFAULT_SETTINGS, loadNotificationSettings, saveNotificationSettings, t
 import { formatCents } from '../lib/format';
 import { normalizeOpeningHoursConfig } from '../lib/kioskSales';
 import { colors, font, space, TAP } from '../theme';
+import { N_, tr } from '../i18n';
 
-const TAGE: [string, string][] = [['mon', 'Montag'], ['tue', 'Dienstag'], ['wed', 'Mittwoch'], ['thu', 'Donnerstag'], ['fri', 'Freitag'], ['sat', 'Samstag'], ['sun', 'Sonntag']];
+const TAGE: [string, string][] = [['mon', N_('Montag')], ['tue', N_('Dienstag')], ['wed', N_('Mittwoch')], ['thu', N_('Donnerstag')], ['fri', N_('Freitag')], ['sat', N_('Samstag')], ['sun', N_('Sonntag')]];
 
 function Stepper({ value, onChange, min, max, step, suffix }: { value: number; onChange: (v: number) => void; min: number; max: number; step: number; suffix: string }) {
   const btn = (d: number, label: string) => (
@@ -28,11 +29,11 @@ function Stepper({ value, onChange, min, max, step, suffix }: { value: number; o
   );
   return (
     <View style={styles.stepper}>
-      {btn(-step, 'Weniger')}
+      {btn(-step, tr('Weniger'))}
       <Text style={{ ...font.callout, color: colors.ink, minWidth: 64, textAlign: 'center', fontVariant: ['tabular-nums'] }}>
         {value} {suffix}
       </Text>
-      {btn(step, 'Mehr')}
+      {btn(step, tr('Mehr'))}
     </View>
   );
 }
@@ -66,7 +67,7 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
       setDevice(on);
       successHaptic();
     } catch (e) {
-      setPushNote(e instanceof Error ? e.message : 'Fehlgeschlagen');
+      setPushNote(e instanceof Error ? e.message : tr('Fehlgeschlagen'));
     }
     setDeviceBusy(false);
   }
@@ -76,16 +77,16 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
     setPushNote(null);
     try {
       await sendTestPush(parkId);
-      setPushNote('Test-Benachrichtigung gesendet. Sie kommt in wenigen Sekunden an.');
+      setPushNote(tr('Test-Benachrichtigung gesendet. Sie kommt in wenigen Sekunden an.'));
     } catch (e) {
-      setPushNote(e instanceof Error ? e.message : 'Senden fehlgeschlagen');
+      setPushNote(e instanceof Error ? e.message : tr('Senden fehlgeschlagen'));
     }
   }
 
   useEffect(() => {
     if (!parkId) return;
     loadNotificationSettings(parkId).then(setS).catch((e) => {
-      setErr(e instanceof Error ? e.message : 'Laden fehlgeschlagen');
+      setErr(e instanceof Error ? e.message : tr('Laden fehlgeschlagen'));
       setS(DEFAULT_SETTINGS);
     });
   }, [parkId]);
@@ -104,7 +105,7 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
       successHaptic();
       setSaved(true);
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Speichern fehlgeschlagen');
+      setErr(e instanceof Error ? e.message : tr('Speichern fehlgeschlagen'));
     }
     setSaving(false);
   }
@@ -112,8 +113,8 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
   const cfg = normalizeOpeningHoursConfig(openingHoursConfig, openingHours);
 
   return (
-    <Screen page="settings" title="Einstellungen" subtitle={parkName} onBack={navigation.goBack}>
-      <Section title="Benachrichtigungen">
+    <Screen page="settings" title={tr('Einstellungen')} subtitle={parkName} onBack={navigation.goBack}>
+      <Section title={tr('Benachrichtigungen')}>
         {err ? <ErrorNote text={err} /> : null}
         {!s ? (
           <Card>
@@ -121,37 +122,37 @@ export function SettingsScreen({ navigation }: { navigation: { goBack: () => voi
           </Card>
         ) : (
           <Card padded={false}>
-            <Toggle title="Dieses Gerät" sub={deviceBusy ? 'Wird angemeldet…' : device ? 'Aktiv: Mitteilungen kommen auf dieses iPhone' : 'Mitteilungen auf diesem Gerät empfangen'} value={device} onChange={(v) => void geraetUmschalten(v)} />
-            <Toggle title="Benachrichtigungen für diesen Park" sub="Nur wenn dies aktiv ist, werden die Kategorien unten an dieses Konto gesendet." value={s.push_enabled} onChange={(v) => set({ push_enabled: v })} />
-            <Toggle title="Keine Fotos mehr" sub="Wenn während der Öffnungszeit keine Fotos ankommen" value={s.photo_inactivity_enabled} onChange={(v) => set({ photo_inactivity_enabled: v })}>
-              {s.photo_inactivity_enabled ? <Stepper value={s.photo_inactivity_minutes} onChange={(v) => set({ photo_inactivity_minutes: v })} min={5} max={240} step={5} suffix="Min." /> : null}
+            <Toggle title={tr('Dieses Gerät')} sub={deviceBusy ? tr('Wird angemeldet…') : device ? tr('Aktiv: Mitteilungen kommen auf dieses iPhone') : tr('Mitteilungen auf diesem Gerät empfangen')} value={device} onChange={(v) => void geraetUmschalten(v)} />
+            <Toggle title={tr('Benachrichtigungen für diesen Park')} sub={tr('Nur wenn dies aktiv ist, werden die Kategorien unten an dieses Konto gesendet.')} value={s.push_enabled} onChange={(v) => set({ push_enabled: v })} />
+            <Toggle title={tr('Keine Fotos mehr')} sub={tr('Wenn während der Öffnungszeit keine Fotos ankommen')} value={s.photo_inactivity_enabled} onChange={(v) => set({ photo_inactivity_enabled: v })}>
+              {s.photo_inactivity_enabled ? <Stepper value={s.photo_inactivity_minutes} onChange={(v) => set({ photo_inactivity_minutes: v })} min={5} max={240} step={5} suffix={tr('Min.')} /> : null}
             </Toggle>
-            <Toggle title="Papier wird knapp" sub="Wenn nur noch wenige Drucke übrig sind" value={s.paper_low_enabled} onChange={(v) => set({ paper_low_enabled: v })}>
-              {s.paper_low_enabled ? <Stepper value={s.paper_low_threshold} onChange={(v) => set({ paper_low_threshold: v })} min={1} max={500} step={5} suffix="Drucke" /> : null}
+            <Toggle title={tr('Papier wird knapp')} sub={tr('Wenn nur noch wenige Drucke übrig sind')} value={s.paper_low_enabled} onChange={(v) => set({ paper_low_enabled: v })}>
+              {s.paper_low_enabled ? <Stepper value={s.paper_low_threshold} onChange={(v) => set({ paper_low_threshold: v })} min={1} max={500} step={5} suffix={tr('Drucke')} /> : null}
             </Toggle>
-            <Toggle title="Antworten vom Support" value={s.support_enabled} onChange={(v) => set({ support_enabled: v })} />
-            <Toggle title="Störungen am Automaten" sub="Programm oder Gerät fällt aus" value={s.system_health_enabled} onChange={(v) => set({ system_health_enabled: v })} last />
+            <Toggle title={tr('Antworten vom Support')} value={s.support_enabled} onChange={(v) => set({ support_enabled: v })} />
+            <Toggle title={tr('Störungen am Automaten')} sub={tr('Programm oder Gerät fällt aus')} value={s.system_health_enabled} onChange={(v) => set({ system_health_enabled: v })} last />
           </Card>
         )}
         {pushNote ? <Pill tone="info" icon="information-circle" text={pushNote} /> : null}
-        {s ? <Button title={saved ? 'Gespeichert' : 'Benachrichtigungen speichern'} icon={saved ? 'checkmark' : 'notifications-outline'} onPress={speichern} loading={saving} /> : null}
-        {device ? <Button title="Test-Benachrichtigung senden" kind="plain" icon="phone-portrait-outline" onPress={() => void testSenden()} /> : null}
+        {s ? <Button title={saved ? tr('Gespeichert') : tr('Benachrichtigungen speichern')} icon={saved ? 'checkmark' : 'notifications-outline'} onPress={speichern} loading={saving} /> : null}
+        {device ? <Button title={tr('Test-Benachrichtigung senden')} kind="plain" icon="phone-portrait-outline" onPress={() => void testSenden()} /> : null}
       </Section>
 
-      <Section title="Öffnungszeiten" action="Bearbeiten" onAction={() => nav.navigate('Web', { path: '/settings', title: 'Öffnungszeiten' })}>
+      <Section title={tr('Öffnungszeiten')} action={tr('Bearbeiten')} onAction={() => nav.navigate('Web', { path: '/settings', title: tr('Öffnungszeiten') })}>
         <ListCard>
           {TAGE.map(([k, name], i) => {
             const d = cfg.weekdays[k as keyof typeof cfg.weekdays];
-            return <Row key={k} title={name} right={<Text style={{ ...font.callout, color: d?.enabled ? colors.ink : colors.ink3, fontVariant: ['tabular-nums'] }}>{d?.enabled ? `${d.open} bis ${d.close}` : 'geschlossen'}</Text>} last={i === TAGE.length - 1} />;
+            return <Row key={k} title={tr(name)} right={<Text style={{ ...font.callout, color: d?.enabled ? colors.ink : colors.ink3, fontVariant: ['tabular-nums'] }}>{d?.enabled ? tr('{0} bis {1}', d.open, d.close) : tr('geschlossen')}</Text>} last={i === TAGE.length - 1} />;
           })}
         </ListCard>
-        {cfg.season_start || cfg.season_end ? <Pill tone="neutral" icon="calendar-outline" text={`Saison ${cfg.season_start ?? '…'} bis ${cfg.season_end ?? '…'}${cfg.exceptions.length ? ` · ${cfg.exceptions.length} Ausnahmen` : ''}`} /> : null}
+        {cfg.season_start || cfg.season_end ? <Pill tone="neutral" icon="calendar-outline" text={tr('Saison {0} bis {1}{2}', cfg.season_start ?? '…', cfg.season_end ?? '…', cfg.exceptions.length ? tr(' · {0} Ausnahmen', cfg.exceptions.length) : '')} /> : null}
       </Section>
 
       {priceCents !== null ? (
-        <Section title="Automat">
+        <Section title={tr('Automat')}>
           <ListCard>
-            <Row title="Preis pro Foto" right={<Text style={{ ...font.callout, color: colors.ink }}>{formatCents(priceCents)}</Text>} last />
+            <Row title={tr('Preis pro Foto')} right={<Text style={{ ...font.callout, color: colors.ink }}>{formatCents(priceCents)}</Text>} last />
           </ListCard>
         </Section>
       ) : null}

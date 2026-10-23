@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View } from 'react-native';
 import { colors, font, space } from '../theme';
 import { Button, Card, Pill } from './ui';
+import { tr } from '../i18n';
 
 // Nicht freigeschaltete Funktion: dieselbe Upgrade-Ansicht wie im Web (UpgradeHero).
 export function Locked({ badge = 'Upgrade', title, intro, points }: { badge?: string; title: string; intro: string; points?: { title: string; text: string }[] }) {
@@ -21,19 +22,19 @@ export function Locked({ badge = 'Upgrade', title, intro, points }: { badge?: st
           </View>
         </View>
       ))}
-      <Button title="Preise und Pakete ansehen" onPress={() => nav.navigate('Plans')} />
+      <Button title={tr('Preise und Pakete ansehen')} onPress={() => nav.navigate('Plans')} />
     </Card>
   );
 }
 
 export const SPEED_OFFER = {
-  badge: 'Noch nicht freigeschaltet',
-  title: 'Mach jede Fahrt zum Wettkampf',
-  intro: 'Gäste fahren, das Tempo wird gemessen und steht auf dem Foto. Wer es kauft, taucht in der Rangliste auf.',
+  get badge() { return tr('Noch nicht freigeschaltet'); },
+  get title() { return tr('Mach jede Fahrt zum Wettkampf'); },
+  get intro() { return tr('Gäste fahren, das Tempo wird gemessen und steht auf dem Foto. Wer es kauft, taucht in der Rangliste auf.'); },
   points: [
-    { title: 'Profil wie im Videospiel', text: 'Profilbild und Nutzername anlegen, mit anderen messen. Gerade beliebt bei jungen Gästen.' },
-    { title: 'Bestzeit toppen', text: 'Stammgäste jagen Rekorde. Wer überholt wurde, fährt nochmal und kauft ein neues Foto.' },
-    { title: 'Tag, Monat, Allzeit', text: 'Wer war heute, diesen Monat und insgesamt am schnellsten?' },
-    { title: 'Nur mit gekauftem Foto', text: 'Nur freigeschaltete Fotos landen in der Liste. Das motiviert zum Kaufen und Fahren.' },
+    { get title() { return tr('Profil wie im Videospiel'); }, get text() { return tr('Profilbild und Nutzername anlegen, mit anderen messen. Gerade beliebt bei jungen Gästen.'); } },
+    { get title() { return tr('Bestzeit toppen'); }, get text() { return tr('Stammgäste jagen Rekorde. Wer überholt wurde, fährt nochmal und kauft ein neues Foto.'); } },
+    { get title() { return tr('Tag, Monat, Allzeit'); }, get text() { return tr('Wer war heute, diesen Monat und insgesamt am schnellsten?'); } },
+    { get title() { return tr('Nur mit gekauftem Foto'); }, get text() { return tr('Nur freigeschaltete Fotos landen in der Liste. Das motiviert zum Kaufen und Fahren.'); } },
   ],
 };

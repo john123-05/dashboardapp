@@ -10,6 +10,7 @@ import { FAQ, HELP_ARTICLES, SUPPORT_EMAIL } from '../lib/help';
 import { SUPPORT_PHONE, SUPPORT_PHONE_HREF } from '../lib/support';
 import { colors, font, radius, space } from '../theme';
 import { startCoach } from '../components/coach/Coach';
+import { tr } from '../i18n';
 
 // Hilfe-Center wie im Web (Fragezeichen oben rechts): Suche, Artikel zum Aufklappen, häufige Fragen,
 // Rundgang starten und Support per Anfrage, E-Mail oder Telefon.
@@ -22,20 +23,20 @@ export function HelpScreen({ navigation }: { navigation: { goBack: () => void } 
   const faq = useMemo(() => FAQ.filter((f) => !needle || `${f.q} ${f.a}`.toLowerCase().includes(needle)), [needle]);
 
   return (
-    <Screen title="Hilfe-Center" subtitle="Wobei können wir helfen?" onBack={navigation.goBack}>
+    <Screen title={tr('Hilfe-Center')} subtitle={tr('Wobei können wir helfen?')} onBack={navigation.goBack}>
       <View style={styles.search}>
         <Ionicons name="search" size={18} color={colors.ink3} />
-        <TextInput value={q} onChangeText={setQ} placeholder="Suchen, z. B. Papier oder Preis" placeholderTextColor={colors.ink3} style={styles.input} returnKeyType="search" />
+        <TextInput value={q} onChangeText={setQ} placeholder={tr('Suchen, z. B. Papier oder Preis')} placeholderTextColor={colors.ink3} style={styles.input} returnKeyType="search" />
       </View>
 
       <View style={styles.tiles}>
-        <Tile icon="play-circle-outline" label="Rundgang starten" onPress={startCoach} />
-        <Tile icon="chatbubbles-outline" label="Anfrage stellen" onPress={() => nav.navigate('NewTicket')} />
-        <Tile icon="mail-outline" label="E-Mail" onPress={() => void Linking.openURL(`mailto:${SUPPORT_EMAIL}`)} />
-        <Tile icon="call-outline" label="Anrufen" onPress={() => void Linking.openURL(SUPPORT_PHONE_HREF)} />
+        <Tile icon="play-circle-outline" label={tr('Rundgang starten')} onPress={startCoach} />
+        <Tile icon="chatbubbles-outline" label={tr('Anfrage stellen')} onPress={() => nav.navigate('NewTicket')} />
+        <Tile icon="mail-outline" label={tr('E-Mail')} onPress={() => void Linking.openURL(`mailto:${SUPPORT_EMAIL}`)} />
+        <Tile icon="call-outline" label={tr('Anrufen')} onPress={() => void Linking.openURL(SUPPORT_PHONE_HREF)} />
       </View>
 
-      <Section title="Anleitungen">
+      <Section title={tr('Anleitungen')}>
         <ListCard>
           {articles.map((a, i) => (
             <Animated.View key={a.id} layout={LinearTransition.duration(200)}>
@@ -54,7 +55,7 @@ export function HelpScreen({ navigation }: { navigation: { goBack: () => void } 
                   <Text style={{ ...font.subhead, color: colors.ink2 }}>{a.body}</Text>
                   {a.route ? (
                     <Pressable onPress={() => nav.navigate(a.route!)} style={{ marginTop: 8 }}>
-                      <Text style={{ ...font.callout, color: colors.brand, fontWeight: '600' }}>Zur Seite →</Text>
+                      <Text style={{ ...font.callout, color: colors.brand, fontWeight: '600' }}>{tr('Zur Seite →')}</Text>
                     </Pressable>
                   ) : null}
                 </Animated.View>
@@ -65,7 +66,7 @@ export function HelpScreen({ navigation }: { navigation: { goBack: () => void } 
       </Section>
 
       {faq.length ? (
-        <Section title="Häufige Fragen">
+        <Section title={tr('Häufige Fragen')}>
           <ListCard>
             {faq.map((f, i) => (
               <Row key={f.q} title={f.q} subtitle={f.a} subtitleLines={4} titleLines={2} last={i === faq.length - 1} />
@@ -75,9 +76,9 @@ export function HelpScreen({ navigation }: { navigation: { goBack: () => void } 
       ) : null}
 
       <Card style={{ gap: 6 }}>
-        <Text style={{ ...font.headline, color: colors.ink }}>Support</Text>
-        <Text style={{ ...font.footnote, color: colors.ink2 }}>Oder anrufen: {SUPPORT_PHONE} · {SUPPORT_EMAIL}</Text>
-        <Button title="Anfragen ansehen" kind="plain" icon="help-buoy-outline" onPress={() => nav.navigate('Support')} />
+        <Text style={{ ...font.headline, color: colors.ink }}>{tr('Support')}</Text>
+        <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Oder anrufen: ')}{SUPPORT_PHONE} · {SUPPORT_EMAIL}</Text>
+        <Button title={tr('Anfragen ansehen')} kind="plain" icon="help-buoy-outline" onPress={() => nav.navigate('Support')} />
       </Card>
     </Screen>
   );

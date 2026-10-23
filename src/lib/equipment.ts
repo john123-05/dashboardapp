@@ -1,6 +1,7 @@
 import { EXTERNAL_SUPABASE_URL, EXTERNAL_SUPABASE_ANON_KEY } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { PREVIEW } from './preview';
+import { tr } from '../i18n';
 
 export type EquipmentKategorie = 'Automat' | 'Kamera' | 'Zubehoer' | 'Verkauf' | 'Software' | 'Webshop' | 'Sonstiges';
 export type EquipmentStatus = 'vorhanden' | 'empfohlen' | 'bestellt';
@@ -39,7 +40,7 @@ export async function fetchParkEquipment(parkId: string): Promise<EquipmentItem[
     },
   );
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
   return (body?.items ?? []) as EquipmentItem[];
 }
 
@@ -57,7 +58,7 @@ export async function meldeAusstattungsInteresse(
   const {
     data: { session },
   } = await getFunctionSession();
-  if (!session?.access_token) throw new Error('Nicht angemeldet');
+  if (!session?.access_token) throw new Error(tr('Nicht angemeldet'));
 
   const res = await fetch(`${EXTERNAL_SUPABASE_URL}/functions/v1/operator-equipment-interest`, {
     method: 'POST',
@@ -72,5 +73,5 @@ export async function meldeAusstattungsInteresse(
     }),
   });
   const body = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error(body?.error || tr('HTTP {0}', res.status));
 }

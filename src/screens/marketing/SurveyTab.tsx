@@ -9,12 +9,13 @@ import { fetchSurveyResults, pickLocalized, type SurveyQuestionResult } from '..
 import { formatDay, formatNumber } from '../../lib/format';
 import { useData } from '../../lib/useData';
 import { colors, font, radius, space } from '../../theme';
+import { tr, localeTag } from '../../i18n';
 
 const PERIODS = [
-  { value: '7', label: '7 Tage' },
-  { value: '30', label: '30 Tage' },
-  { value: '90', label: '90 Tage' },
-  { value: '365', label: '12 Monate' },
+  { value: '7', get label() { return tr('7 Tage'); } },
+  { value: '30', get label() { return tr('30 Tage'); } },
+  { value: '90', get label() { return tr('90 Tage'); } },
+  { value: '365', get label() { return tr('12 Monate'); } },
 ];
 const scoreColor = (s: number) => (s >= 9 ? colors.ok : s >= 7 ? colors.warn : colors.err);
 const comma = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',');
@@ -47,7 +48,7 @@ export function SurveyTab({ parkId }: { parkId: string }) {
       e.weight += d.count;
       weeks.set(key, e);
     }
-    return [...weeks.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([w, v]) => ({ label: w.slice(8, 10) + '.' + w.slice(5, 7), value: Math.round((v.sum / v.weight) * 10) / 10, caption: `Woche ab ${formatDay(w)}` }));
+    return [...weeks.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([w, v]) => ({ label: w.slice(8, 10) + '.' + w.slice(5, 7), value: Math.round((v.sum / v.weight) * 10) / 10, caption: tr('Woche ab {0}', formatDay(w)) }));
   }, [data]);
 
   function exportAnswers() {
@@ -58,33 +59,33 @@ export function SurveyTab({ parkId }: { parkId: string }) {
       const question = pickLocalized(qu.prompt);
       if (qu.type === 'text') for (const t of qu.texts ?? []) lines.push([question, t.text, 1, t.score ?? '', t.at.slice(0, 10)].map(cell).join(';'));
       else if (qu.distribution) for (const d of qu.distribution) lines.push([question, d.value, d.count, '', ''].map(cell).join(';'));
-      else if (qu.type === 'yesno') lines.push([question, 'Ja', qu.yes ?? 0, '', ''].map(cell).join(';'), [question, 'Nein', qu.no ?? 0, '', ''].map(cell).join(';'));
+      else if (qu.type === 'yesno') lines.push([question, tr('Ja'), qu.yes ?? 0, '', ''].map(cell).join(';'), [question, tr('Nein'), qu.no ?? 0, '', ''].map(cell).join(';'));
       else if (qu.counts) for (const c of qu.counts) lines.push([question, pickLocalized(qu.options[c.index]), c.count, '', ''].map(cell).join(';'));
     }
-    void Share.share({ title: `umfrage-${days}-tage.csv`, message: lines.join('\n') });
+    void Share.share({ title: tr('umfrage-{0}-tage.csv', days), message: lines.join('\n') });
   }
 
   return (
     <>
       <ListCard>
-        <Row icon="create-outline" title="Fragen und Einstellungen" subtitle="Fragen, Google-Bewertung, Texte" chevron onPress={() => nav.navigate('SurveyEdit')} last />
+        <Row icon="create-outline" title={tr('Fragen und Einstellungen')} subtitle={tr('Fragen, Google-Bewertung, Texte')} chevron onPress={() => nav.navigate('SurveyEdit')} last />
       </ListCard>
       <TabStrip tabs={PERIODS} value={days} onChange={setDays} />
-      {options.languages.length > 1 ? <TabStrip tabs={[{ value: '', label: 'Alle Sprachen' }, ...options.languages.map((l) => ({ value: l, label: l.toUpperCase() }))]} value={locale} onChange={setLocale} /> : null}
-      {options.countries.length > 1 ? <TabStrip tabs={[{ value: '', label: 'Alle Länder' }, ...options.countries.map((c) => ({ value: c, label: c }))]} value={country} onChange={setCountry} /> : null}
+      {options.languages.length > 1 ? <TabStrip tabs={[{ value: '', label: tr('Alle Sprachen') }, ...options.languages.map((l) => ({ value: l, label: l.toUpperCase() }))]} value={locale} onChange={setLocale} /> : null}
+      {options.countries.length > 1 ? <TabStrip tabs={[{ value: '', label: tr('Alle Länder') }, ...options.countries.map((c) => ({ value: c, label: c }))]} value={country} onChange={setCountry} /> : null}
       {q.error && !data ? <ErrorNote text={q.error} onRetry={q.reload} /> : null}
       {q.loading && !data ? <KpiSkeleton /> : null}
 
       {data && data.total === 0 ? (
         <Card>
-          <EmptyState icon="clipboard-outline" title="Noch keine Antworten" text="Im gewählten Zeitraum gibt es noch keine Antworten. Sobald Gäste vor der Freischaltung antworten, erscheinen sie hier." />
+          <EmptyState icon="clipboard-outline" title={tr('Noch keine Antworten')} text={tr('Im gewählten Zeitraum gibt es noch keine Antworten. Sobald Gäste vor der Freischaltung antworten, erscheinen sie hier.')} />
         </Card>
       ) : null}
 
       {data && data.total > 0 ? (
         <>
           <Card style={{ gap: space.sm }}>
-            <CardHead title="NPS" sub="Weiterempfehlung, −100 bis 100" right={<MiniButton title="Export" icon="share-outline" onPress={exportAnswers} />} />
+            <CardHead title={tr('NPS')} sub={tr('Weiterempfehlung, −100 bis 100')} right={<MiniButton title={tr('Export')} icon="share-outline" onPress={exportAnswers} />} />
             <Text style={{ fontSize: 52, lineHeight: 58, fontWeight: '300', color: colors.ink, letterSpacing: -1 }}>{data.nps === null ? '–' : String(data.nps)}</Text>
             {npsTotal > 0 ? (
               <>
@@ -94,48 +95,48 @@ export function SurveyTab({ parkId }: { parkId: string }) {
                   <View style={{ flex: data.detractors, backgroundColor: colors.err }} />
                 </View>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
-                  <Legend color={colors.ok} text={`Promoter ${data.promoters}`} />
-                  <Legend color={colors.warn} text={`Neutral ${data.passives}`} />
-                  <Legend color={colors.err} text={`Kritiker ${data.detractors}`} />
+                  <Legend color={colors.ok} text={tr('Promoter {0}', data.promoters)} />
+                  <Legend color={colors.warn} text={tr('Neutral {0}', data.passives)} />
+                  <Legend color={colors.err} text={tr('Kritiker {0}', data.detractors)} />
                 </View>
               </>
             ) : null}
           </Card>
           <KpiGrid>
-            <Kpi icon="chatbubbles-outline" label="Antworten" value={formatNumber(data.total)} sub={data.average_score === null ? null : `Ø Score ${comma(data.average_score)} von 10`} />
-            <Kpi icon="logo-google" label="Bewertungs-Link gezeigt" value={formatNumber(data.review_link_shown)} sub={`ab Wert ${data.review_min_score}`} />
+            <Kpi icon="chatbubbles-outline" label={tr('Antworten')} value={formatNumber(data.total)} sub={data.average_score === null ? null : tr('Ø Score {0} von 10', comma(data.average_score))} />
+            <Kpi icon="logo-google" label={tr('Bewertungs-Link gezeigt')} value={formatNumber(data.review_link_shown)} sub={tr('ab Wert {0}', data.review_min_score)} />
           </KpiGrid>
 
           {weekly.length > 1 ? (
-            <Section title="Ø Score je Woche">
+            <Section title={tr('Ø Score je Woche')}>
               <Card>
                 <BarChart data={weekly} height={130} format={(v) => comma(v)} />
               </Card>
             </Section>
           ) : null}
 
-          <Section title="Verteilung der Weiterempfehlung">
+          <Section title={tr('Verteilung der Weiterempfehlung')}>
             <Card>
               <Bars labelWidth={28} items={data.distribution.slice().reverse().map((d) => ({ label: String(d.score), count: d.count, color: scoreColor(d.score) }))} />
             </Card>
           </Section>
 
           {data.timeline.length > 1 ? (
-            <Section title="Antworten pro Tag">
+            <Section title={tr('Antworten pro Tag')}>
               <Card>
                 <BarChart data={data.timeline.map((d) => ({ label: d.day.slice(8, 10), value: d.count, caption: `${formatDay(d.day)}${d.avg_score !== null ? ` · Ø ${comma(d.avg_score)}` : ''}` }))} height={120} format={(v) => `${v} Antworten`} />
               </Card>
             </Section>
           ) : null}
 
-          <Section title="Antworten je Frage">
+          <Section title={tr('Antworten je Frage')}>
             {data.questions
               .filter((qu) => qu.active || qu.answered > 0)
               .map((qu) => (
                 <QuestionCard key={qu.id} q={qu} />
               ))}
           </Section>
-          {data.truncated ? <Text style={styles.hint}>Es werden die neuesten 5.000 Antworten ausgewertet.</Text> : null}
+          {data.truncated ? <Text style={styles.hint}>{tr('Es werden die neuesten 5.000 Antworten ausgewertet.')}</Text> : null}
         </>
       ) : null}
     </>
@@ -159,35 +160,35 @@ function QuestionCard({ q }: { q: SurveyQuestionResult }) {
   return (
     <Card style={{ gap: space.md }}>
       <View>
-        <Text style={{ ...font.headline, color: colors.ink }}>{pickLocalized(q.prompt) || 'Frage'}</Text>
+        <Text style={{ ...font.headline, color: colors.ink }}>{pickLocalized(q.prompt) || tr('Frage')}</Text>
         <Text style={{ ...font.footnote, color: colors.ink2, marginTop: 2 }}>
-          {q.answered} Antworten{!q.active ? ' · Frage entfernt' : ''}
+          {q.answered} {tr('Antworten')}{!q.active ? tr(' · Frage entfernt') : ''}
           {typeof q.average === 'number' ? ` · Ø ${comma(q.average)}` : ''}
         </Text>
       </View>
       {q.type === 'nps' && q.distribution ? <Bars labelWidth={28} items={q.distribution.slice().reverse().map((d) => ({ label: String(d.value), count: d.count, color: scoreColor(d.value) }))} /> : null}
       {q.type === 'stars' && q.distribution ? <Bars labelWidth={40} items={q.distribution.slice().reverse().map((d) => ({ label: `${d.value} ★`, count: d.count, color: '#F5B301' }))} /> : null}
-      {q.type === 'yesno' ? <Bars labelWidth={44} items={[{ label: 'Ja', count: q.yes ?? 0, color: colors.ok }, { label: 'Nein', count: q.no ?? 0, color: colors.err }]} /> : null}
-      {q.type === 'choice' && q.counts ? <Bars labelWidth={110} items={q.counts.map((c) => ({ label: pickLocalized(q.options[c.index]) || `Antwort ${c.index + 1}`, count: c.count }))} /> : null}
+      {q.type === 'yesno' ? <Bars labelWidth={44} items={[{ label: tr('Ja'), count: q.yes ?? 0, color: colors.ok }, { label: tr('Nein'), count: q.no ?? 0, color: colors.err }]} /> : null}
+      {q.type === 'choice' && q.counts ? <Bars labelWidth={110} items={q.counts.map((c) => ({ label: pickLocalized(q.options[c.index]) || tr('Antwort {0}', c.index + 1), count: c.count }))} /> : null}
       {q.type === 'text' ? (
         <View style={{ gap: 8 }}>
           {(q.texts ?? []).length > 4 ? (
             <View style={styles.search}>
               <Ionicons name="search" size={16} color={colors.ink3} />
-              <TextInput value={search} onChangeText={setSearch} placeholder="In Antworten suchen" placeholderTextColor={colors.ink3} style={{ flex: 1, ...font.body, color: colors.ink }} />
+              <TextInput value={search} onChangeText={setSearch} placeholder={tr('In Antworten suchen')} placeholderTextColor={colors.ink3} style={{ flex: 1, ...font.body, color: colors.ink }} />
             </View>
           ) : null}
-          {texts.length === 0 ? <Text style={styles.hint}>{(q.texts ?? []).length ? 'Keine Antwort passt zur Suche.' : 'Noch keine Antworten.'}</Text> : null}
+          {texts.length === 0 ? <Text style={styles.hint}>{(q.texts ?? []).length ? tr('Keine Antwort passt zur Suche.') : tr('Noch keine Antworten.')}</Text> : null}
           {shown.map((t, i) => (
             <View key={`${t.at}-${i}`} style={styles.answer}>
               <Text style={{ ...font.subhead, color: colors.ink }}>{t.text}</Text>
               <Text style={{ ...font.caption, color: colors.ink3, fontWeight: '400', marginTop: 3 }}>
-                {new Date(t.at).toLocaleDateString('de-DE')}
-                {typeof t.score === 'number' ? ` · Wert ${t.score}` : ''}
+                {new Date(t.at).toLocaleDateString(localeTag())}
+                {typeof t.score === 'number' ? tr(' · Wert {0}', t.score) : ''}
               </Text>
             </View>
           ))}
-          {texts.length > 8 ? <MiniButton title={all ? 'Weniger anzeigen' : `Alle ${texts.length} anzeigen`} onPress={() => setAll((v) => !v)} /> : null}
+          {texts.length > 8 ? <MiniButton title={all ? tr('Weniger anzeigen') : tr('Alle {0} anzeigen', texts.length)} onPress={() => setAll((v) => !v)} /> : null}
         </View>
       ) : null}
     </Card>
