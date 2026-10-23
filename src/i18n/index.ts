@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSyncExternalStore } from 'react';
-import { NativeModules, Platform } from 'react-native';
+import { getLocales } from 'expo-localization';
+import { Platform } from 'react-native';
 import en from './en';
 import es from './es';
 import fr from './fr';
@@ -35,11 +36,15 @@ const isSupported = (v: string | null | undefined): v is Language => !!v && LANG
 /** Sprachen des Geräts in der Reihenfolge der Vorliebe. */
 function deviceLanguages(): string[] {
   const out: string[] = [];
-  if (Platform.OS === 'ios') {
-    const s = NativeModules.SettingsManager?.settings;
-    if (Array.isArray(s?.AppleLanguages)) out.push(...s.AppleLanguages);
-    if (typeof s?.AppleLocale === 'string') out.push(s.AppleLocale);
+  // expo-localization liest die bevorzugten Sprachen des Systems (iOS: Locale.preferredLanguages).
+  // NativeModules.SettingsManager gibt es in der neuen Architektur nicht, und Hermes' Intl liefert dort
+  // immer en-US – darum nur noch als Rückfall.
+  try {
+    for (const l of getLocales()) out.push(l.languageTag);
+  } catch {
+    // ohne Modul (Web-Vorschau) bleibt es bei den Angaben unten
   }
+  if (Platform.OS === 'web' && typeof navigator !== 'undefined') out.push(...(navigator.languages ?? [navigator.language]));
   try {
     out.push(Intl.DateTimeFormat().resolvedOptions().locale);
   } catch {

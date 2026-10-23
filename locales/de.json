@@ -1,0 +1,5 @@
+{
+  "CFBundleDisplayName": "Liftpictures Dashboard",
+  "NSPhotoLibraryUsageDescription": "Damit du Logos, Overlays und Fotos ins Dashboard hochladen kannst.",
+  "NSCameraUsageDescription": "Damit du Fotos direkt aufnehmen und ins Dashboard hochladen kannst."
+}

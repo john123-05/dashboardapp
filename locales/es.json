@@ -1,0 +1,5 @@
+{
+  "CFBundleDisplayName": "Liftpictures Dashboard",
+  "NSPhotoLibraryUsageDescription": "Para que puedas subir logotipos, overlays y fotos al panel.",
+  "NSCameraUsageDescription": "Para que puedas hacer fotos y subirlas al panel."
+}
