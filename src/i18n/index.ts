@@ -24,9 +24,11 @@ export const LANGUAGES: { value: Language; label: string }[] = [
 const DICTS: Record<Exclude<Language, 'de'>, Record<string, string>> = { en, es, fr, it, nl, lv };
 const LOCALE_TAGS: Record<Language, string> = { de: 'de-DE', en: 'en-GB', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', nl: 'nl-NL', lv: 'lv-LV' };
 const STORAGE_KEY = 'app_language';
+const PICKED_KEY = 'app_language_picked';
 
 let current: Language = 'de';
 let chosen: Language | null = null;
+let picked = false;
 
 const isSupported = (v: string | null | undefined): v is Language => !!v && LANGUAGES.some((l) => l.value === v);
 
@@ -60,6 +62,14 @@ export async function initLanguage(): Promise<void> {
   const stored = await AsyncStorage.getItem(STORAGE_KEY).catch(() => null);
   chosen = isSupported(stored) ? stored : null;
   current = chosen ?? detectLanguage();
+  picked = chosen !== null || (await AsyncStorage.getItem(PICKED_KEY).catch(() => null)) === '1';
+}
+
+/** Hat jemand auf diesem Gerät schon einmal eine Sprache gewählt (Sprachauswahl vor der Anmeldung)? */
+export const hasPickedLanguage = () => picked;
+export async function markLanguagePicked(): Promise<void> {
+  picked = true;
+  await AsyncStorage.setItem(PICKED_KEY, '1').catch(() => undefined);
 }
 
 export const getLanguage = () => current;
@@ -80,6 +90,11 @@ export async function setLanguage(lang: Language | null): Promise<void> {
   if (lang) await AsyncStorage.setItem(STORAGE_KEY, lang).catch(() => undefined);
   else await AsyncStorage.removeItem(STORAGE_KEY).catch(() => undefined);
   listeners.forEach((fn) => fn());
+}
+
+/** Text in einer bestimmten Sprache, unabhängig von der eingestellten (z. B. für die Sprachauswahl). */
+export function trIn(lang: Language, text: string): string {
+  return lang === 'de' ? text : DICTS[lang][text] ?? text;
 }
 
 export function tr(text: string, ...args: (string | number | null | undefined)[]): string {

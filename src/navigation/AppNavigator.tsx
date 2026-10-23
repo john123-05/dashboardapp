@@ -36,6 +36,7 @@ import { MarketingScreen } from '../screens/MarketingScreen';
 import { HelpScreen } from '../screens/HelpScreen';
 import { TOUR_SEEN_KEY, TourScreen } from '../screens/TourScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LanguageScreen } from '../screens/LanguageScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { NewTicketScreen } from '../screens/NewTicketScreen';
 import { OverviewScreen } from '../screens/OverviewScreen';
@@ -52,7 +53,9 @@ import { TeamEditScreen } from '../screens/TeamEditScreen';
 import { TeamScreen } from '../screens/TeamScreen';
 import { WebPageScreen } from '../screens/WebPageScreen';
 import { colors, font } from '../theme';
-import { tr, useLanguage } from '../i18n';
+import { hasPickedLanguage, tr, useLanguage } from '../i18n';
+import { isDeviceRegistered, registerDevice } from '../lib/push';
+import { loadNotificationSettings, saveNotificationSettings } from '../lib/notificationSettings';
 
 const Root = createNativeStackNavigator();
 const Inner = createNativeStackNavigator();
@@ -269,8 +272,26 @@ function useNotificationTaps(ready: boolean, wide: boolean) {
 // Geführter Rundgang über alle Seiten, die diese Person sehen darf.
 function CoachHost({ wide }: { wide: boolean }) {
   const viewer = useViewer();
-  const { cameraAvailable } = usePark();
-  const steps = coachSteps(viewer, { wide, cameraAvailable });
+  const { cameraAvailable, parkId } = usePark();
+  // Schritt „Mitteilungen aktivieren“ nur, solange dieses Gerät noch nicht angemeldet ist.
+  const [pushReady, setPushReady] = useState(false);
+  useEffect(() => {
+    if (parkId) void isDeviceRegistered(parkId).then(setPushReady);
+  }, [parkId]);
+  const steps = coachSteps(viewer, { wide, cameraAvailable, push: !pushReady && !!parkId });
+  // Fragt iOS nach der Erlaubnis, meldet das Gerät an und schaltet Push für den Park ein (wie der
+  // Schalter „Dieses Gerät“ in den Einstellungen).
+  const enablePush = useCallback(async () => {
+    if (!parkId) return;
+    await registerDevice(parkId);
+    const s = await loadNotificationSettings(parkId).catch(() => null);
+    if (s && !s.push_enabled) await saveNotificationSettings(parkId, { ...s, push_enabled: true });
+  }, [parkId]);
+  // Erst nach dem Rundgang neu prüfen, sonst verschieben sich die Schritte mitten im Rundgang.
+  const finish = useCallback(() => {
+    void AsyncStorage.setItem(TOUR_SEEN_KEY, '1');
+    if (parkId) void isDeviceRegistered(parkId).then(setPushReady);
+  }, [parkId]);
   const go = useCallback(
     (s: CoachStep) => {
       if (!navRef.isReady()) return;
@@ -280,7 +301,7 @@ function CoachHost({ wide }: { wide: boolean }) {
     },
     [wide, viewer],
   );
-  return <CoachOverlay steps={steps} go={go} onFinish={() => void AsyncStorage.setItem(TOUR_SEEN_KEY, '1')} />;
+  return <CoachOverlay steps={steps} go={go} onPush={enablePush} onFinish={finish} />;
 }
 
 export function AppNavigator() {
@@ -288,6 +309,7 @@ export function AppNavigator() {
   const auth = useAuth();
   const park = usePark();
   const wide = useWide();
+  const [languagePicked, setLanguagePicked] = useState(hasPickedLanguage);
   usePreviewTour(wide);
   useNotificationTaps(Boolean(auth.user && park.parkId), wide);
   // Rundgang beim ersten Start nach der Anmeldung.
@@ -302,7 +324,7 @@ export function AppNavigator() {
   }, [signedIn]);
 
   if (!PREVIEW && (auth.loading || park.loading)) return <Splash />;
-  if (!PREVIEW && !auth.user) return <LoginScreen key={lang} />;
+  if (!PREVIEW && !auth.user) return languagePicked ? <LoginScreen key={lang} /> : <LanguageScreen onDone={() => setLanguagePicked(true)} />;
   if (!PREVIEW && !auth.hasOrg) return <NoAccess />;
   if (!PREVIEW && !park.parkId) return <ParkAccessScreen key={lang} />;
 

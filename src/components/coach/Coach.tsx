@@ -42,6 +42,8 @@ export type CoachStep = {
   title: string;
   text: string;
   icon: IconName;
+  /** 'push': Schritt mit Knopf „Mitteilungen erlauben“ statt „Weiter“. */
+  action?: 'push';
 };
 
 export const startCoach = () => DeviceEventEmitter.emit('lp-coach', true);
@@ -59,8 +61,10 @@ function measure(id: string | undefined): Promise<Rect | null> {
 const PAD = 8;
 const EASE = Easing.bezier(0.25, 0.8, 0.25, 1);
 
-export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: (s: CoachStep) => void; onFinish: () => void }) {
+export function CoachOverlay({ steps, go, onFinish, onPush }: { steps: CoachStep[]; go: (s: CoachStep) => void; onFinish: () => void; onPush?: () => Promise<void> }) {
   const [active, setActive] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [i, setI] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
   const { width: W, height: H } = useWindowDimensions();
@@ -150,6 +154,7 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
     onFinish();
   };
   const next = () => {
+    setActionError(null);
     if (last) {
       successHaptic();
       return end();
@@ -157,7 +162,22 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
     tapHaptic();
     setI((k) => k + 1);
   };
+  const allowPush = async () => {
+    if (!onPush) return next();
+    setBusy(true);
+    setActionError(null);
+    try {
+      await onPush();
+      successHaptic();
+      setBusy(false);
+      next();
+    } catch (e) {
+      setBusy(false);
+      setActionError(e instanceof Error ? e.message : tr('Fehlgeschlagen'));
+    }
+  };
   const back = () => {
+    setActionError(null);
     if (i === 0) return;
     tapHaptic();
     setI((k) => k - 1);
@@ -187,9 +207,21 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
         </View>
         <Text style={{ ...font.headline, fontSize: 19, color: colors.ink }}>{step.title}</Text>
         <Text style={{ ...font.subhead, color: colors.ink2 }}>{step.text}</Text>
+        {actionError ? <Text style={{ ...font.footnote, color: colors.err }}>{actionError}</Text> : null}
         <View style={styles.progress}>
           <View style={{ width: `${((i + 1) / steps.length) * 100}%`, height: 4, borderRadius: 2, backgroundColor: colors.brand }} />
         </View>
+        {step.action === 'push' ? (
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <Pressable onPress={next} disabled={busy} style={({ pressed }) => [styles.btn, styles.btnPlain, pressed && { opacity: 0.75 }]}>
+              <Text style={{ ...font.callout, color: colors.ink, fontWeight: '600' }}>{tr('Nicht jetzt')}</Text>
+            </Pressable>
+            <Pressable onPress={() => void allowPush()} disabled={busy} style={({ pressed }) => [styles.btn, styles.btnBrand, (pressed || busy) && { opacity: 0.85 }]}>
+              <Ionicons name="notifications" size={16} color={colors.onBrand} />
+              <Text style={{ ...font.callout, color: colors.onBrand, fontWeight: '700' }}>{busy ? tr('Wird angemeldet…') : tr('Erlauben')}</Text>
+            </Pressable>
+          </View>
+        ) : (
         <View style={{ flexDirection: 'row', gap: 10 }}>
           {i > 0 ? (
             <Pressable onPress={back} style={({ pressed }) => [styles.btn, styles.btnPlain, pressed && { opacity: 0.75 }]}>
@@ -201,6 +233,7 @@ export function CoachOverlay({ steps, go, onFinish }: { steps: CoachStep[]; go: 
             {!last ? <Ionicons name="arrow-forward" size={16} color={colors.onBrand} /> : null}
           </Pressable>
         </View>
+        )}
         </View>
       </Animated.View>
     </View>

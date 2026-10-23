@@ -1751,6 +1751,14 @@
 "Uitleg: {0}",
 "Skaidrojums: {0}"
 ],
+"Erlauben": [
+"Allow",
+"Permitir",
+"Autoriser",
+"Consenti",
+"Toestaan",
+"Atļaut"
+],
 "Erneut": [
 "Again",
 "De nuevo",
@@ -3111,6 +3119,14 @@
 "Midden",
 "Centrs"
 ],
+"Mitteilungen aktivieren": [
+"Turn on notifications",
+"Activar notificaciones",
+"Activer les notifications",
+"Attiva le notifiche",
+"Meldingen inschakelen",
+"Ieslēgt paziņojumus"
+],
 "Mitteilungen auf diesem Gerät empfangen": [
 "Receive notifications on this device",
 "Recibir notificaciones en este dispositivo",
@@ -3318,6 +3334,14 @@
 "Non acquistata",
 "Niet gekocht",
 "Nav nopirkts"
+],
+"Nicht jetzt": [
+"Not now",
+"Ahora no",
+"Pas maintenant",
+"Non ora",
+"Niet nu",
+"Ne tagad"
 ],
 "Nichts gefunden": [
 "Nothing found",
@@ -4167,6 +4191,14 @@
 "Storingen bij de automaat",
 "Automāta traucējumi"
 ],
+"Störungen, Papiermangel und Antworten vom Support kommen sofort aufs Handy – auch wenn die App geschlossen ist. Ändern kannst du das jederzeit in den Einstellungen.": [
+"Faults, low paper and replies from support arrive on your phone right away – even when the app is closed. You can change this any time in Settings.",
+"Averías, falta de papel y respuestas del soporte llegan al instante a tu móvil, aunque la app esté cerrada. Puedes cambiarlo cuando quieras en Ajustes.",
+"Pannes, manque de papier et réponses du support arrivent aussitôt sur ton téléphone – même quand l'app est fermée. Tu peux modifier cela à tout moment dans les Réglages.",
+"Guasti, carta in esaurimento e risposte dell'assistenza arrivano subito sul telefono, anche con l'app chiusa. Puoi cambiarlo in qualsiasi momento nelle Impostazioni.",
+"Storingen, papiertekort en antwoorden van support komen direct op je telefoon – ook als de app gesloten is. Je kunt dit altijd wijzigen in de Instellingen.",
+"Traucējumi, papīra trūkums un atbalsta atbildes uzreiz pienāk telefonā – arī tad, ja lietotne ir aizvērta. To vari jebkurā laikā mainīt iestatījumos."
+],
 "Störungen, Papiermangel, Antworten vom Support und Hinweise von Liftpictures. Ein roter Punkt heißt: es gibt etwas Neues.": [
 "Faults, low paper, replies from support and notes from Liftpictures. A red dot means there's something new.",
 "Averías, falta de papel, respuestas del soporte y avisos de Liftpictures. Un punto rojo significa que hay algo nuevo.",
@@ -4759,6 +4791,14 @@
 "Hoe gehoord?",
 "Kā uzzināji?"
 ],
+"Willkommen bei Liftbase": [
+"Welcome to Liftbase",
+"Bienvenido a Liftbase",
+"Bienvenue sur Liftbase",
+"Benvenuto su Liftbase",
+"Welkom bij Liftbase",
+"Laipni lūdzam Liftbase"
+],
 "Wir bekommen eine Benachrichtigung und melden uns bei dir. Es wird noch nichts automatisch bestellt oder berechnet.": [
 "We get a notification and will get back to you. Nothing is ordered or charged automatically.",
 "Recibimos un aviso y te contactaremos. Todavía no se pide ni se cobra nada automáticamente.",
@@ -4822,6 +4862,14 @@
 "Di cosa si tratta?",
 "Waar gaat het over?",
 "Par ko ir runa?"
+],
+"Wähle deine Sprache": [
+"Choose your language",
+"Elige tu idioma",
+"Choisis ta langue",
+"Scegli la tua lingua",
+"Kies je taal",
+"Izvēlies valodu"
 ],
 "X": [
 "X",

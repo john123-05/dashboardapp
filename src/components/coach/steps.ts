@@ -22,9 +22,10 @@ const ALL: Def[] = [
   { route: 'Personalization', page: 'personalization', target: 'perso.slots', icon: 'color-wand-outline', get title() { return tr('Personalisierung'); }, get text() { return tr('Was gerade am Automaten zu sehen ist. „Ändern“ schickt ein neues Bild, im Overlay-Studio baust du eigene Overlays.'); } },
   { route: 'Shop', page: 'shop', target: 'shop.own', icon: 'bag-handle-outline', get title() { return tr('Online-Shop'); }, get text() { return tr('Gäste kaufen ihr Foto auch nach dem Besuch – als Download oder auf Tasse und T-Shirt. Hier stellst du Produkte und Preise ein.'); } },
   { route: 'Plans', page: 'plans', target: 'plans.tabs', icon: 'card-outline', get title() { return tr('Preise & Pakete'); }, get text() { return tr('Dein Plan, Aktionen und alles, was du dazubuchen kannst. Anfragen landen direkt bei uns.'); } },
+  { route: 'Overview', tab: true, target: 'header.bell', action: 'push', icon: 'notifications-outline', get title() { return tr('Mitteilungen aktivieren'); }, get text() { return tr('Störungen, Papiermangel und Antworten vom Support kommen sofort aufs Handy – auch wenn die App geschlossen ist. Ändern kannst du das jederzeit in den Einstellungen.'); } },
   { route: 'Overview', tab: true, icon: 'sparkles-outline', get title() { return tr('Fertig!'); }, get text() { return tr('Den Rundgang findest du jederzeit wieder unter Konto → „Rundgang starten“ und im Hilfe-Center.'); } },
 ];
 
-export function coachSteps(viewer: Viewer, opts: { wide: boolean; cameraAvailable: boolean | null }): CoachStep[] {
-  return ALL.filter((s) => (!s.only || (s.only === 'wide') === opts.wide) && (!s.page || canSee(s.page, viewer)) && (s.page !== 'kamera' || opts.cameraAvailable === true));
+export function coachSteps(viewer: Viewer, opts: { wide: boolean; cameraAvailable: boolean | null; push: boolean }): CoachStep[] {
+  return ALL.filter((s) => (s.action !== 'push' || opts.push) && (!s.only || (s.only === 'wide') === opts.wide) && (!s.page || canSee(s.page, viewer)) && (s.page !== 'kamera' || opts.cameraAvailable === true));
 }
