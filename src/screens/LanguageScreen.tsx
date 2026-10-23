@@ -12,13 +12,12 @@ const HELLO = N_('Willkommen bei Liftbase');
 const CHOOSE = N_('Wähle deine Sprache');
 const NEXT = N_('Weiter');
 
-// Erster Bildschirm vor der Anmeldung: Sprache wählen. Die Begrüßung wechselt durch alle Sprachen,
-// bis jemand eine auswählt; danach steht alles in der gewählten Sprache.
+// Erster Bildschirm vor der Anmeldung: Sprache wählen (Liste mit allen Sprachen). Die Begrüßung wechselt
+// durch alle Sprachen, bis jemand eine auswählt; danach steht alles in der gewählten Sprache.
 export function LanguageScreen({ onDone }: { onDone: () => void }) {
   const insets = useSafeAreaInsets();
   const [sel, setSel] = useState<Language>(() => detectLanguage());
   const [touched, setTouched] = useState(false);
-  const [open, setOpen] = useState(false);
   const [k, setK] = useState(() => Math.max(0, LANGUAGES.findIndex((l) => l.value === detectLanguage())));
 
   useEffect(() => {
@@ -32,7 +31,6 @@ export function LanguageScreen({ onDone }: { onDone: () => void }) {
     tapHaptic();
     setSel(l);
     setTouched(true);
-    setOpen(false);
   };
   const next = async () => {
     tapHaptic();
@@ -55,36 +53,20 @@ export function LanguageScreen({ onDone }: { onDone: () => void }) {
             </Animated.View>
           </View>
 
-          <View>
-            <Pressable
-              onPress={() => {
-                tapHaptic();
-                setOpen((v) => !v);
-              }}
-              style={({ pressed }) => [styles.field, open && styles.fieldOpen, pressed && { opacity: 0.85 }]}
-              accessibilityRole="button"
-              accessibilityLabel={trIn(sel, CHOOSE)}
-            >
-              <Ionicons name="language-outline" size={20} color={colors.ink2} />
-              <Text style={{ ...font.body, color: colors.ink, flex: 1 }}>{LANGUAGES.find((l) => l.value === sel)?.label}</Text>
-              <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.ink3} />
-            </Pressable>
-            {open ? (
-              <Animated.View entering={FadeIn.duration(160)}>
-                <View style={styles.list}>
-                  {LANGUAGES.map((l, i) => (
-                    <Pressable
-                      key={l.value}
-                      onPress={() => pick(l.value)}
-                      style={({ pressed }) => [styles.row, i < LANGUAGES.length - 1 && styles.rowLine, pressed && { backgroundColor: colors.fill }]}
-                    >
-                      <Text style={{ ...font.body, color: colors.ink, flex: 1, fontWeight: l.value === sel ? '600' : '400' }}>{l.label}</Text>
-                      {l.value === sel ? <Ionicons name="checkmark" size={20} color={colors.brand} /> : null}
-                    </Pressable>
-                  ))}
-                </View>
-              </Animated.View>
-            ) : null}
+          {/* Alle Sprachen gleich sichtbar, die gewählte mit Haken. */}
+          <View style={styles.list} accessibilityRole="radiogroup" accessibilityLabel={trIn(sel, CHOOSE)}>
+            {LANGUAGES.map((l, i) => (
+              <Pressable
+                key={l.value}
+                onPress={() => pick(l.value)}
+                accessibilityRole="radio"
+                accessibilityState={{ selected: l.value === sel }}
+                style={({ pressed }) => [styles.row, i < LANGUAGES.length - 1 && styles.rowLine, pressed && { backgroundColor: colors.fill }]}
+              >
+                <Text style={{ ...font.body, color: colors.ink, flex: 1, fontWeight: l.value === sel ? '600' : '400' }}>{l.label}</Text>
+                {l.value === sel ? <Ionicons name="checkmark" size={20} color={colors.brand} /> : null}
+              </Pressable>
+            ))}
           </View>
         </ScrollView>
 
@@ -101,19 +83,7 @@ const styles = StyleSheet.create({
   headline: { minHeight: 120, justifyContent: 'flex-start' },
   title: { ...font.largeTitle, color: colors.ink },
   lead: { ...font.body, fontSize: 17, lineHeight: 24, color: colors.ink2 },
-  field: {
-    minHeight: TAP + 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: space.lg,
-    backgroundColor: colors.card,
-    borderRadius: radius.lg,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
-  },
-  fieldOpen: { borderColor: colors.brand },
-  list: { marginTop: 8, backgroundColor: colors.card, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.lineStrong, overflow: 'hidden' },
+  list: { backgroundColor: colors.card, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.lineStrong, overflow: 'hidden' },
   row: { minHeight: TAP, flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.lg },
   rowLine: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.lineStrong },
 });
