@@ -38,7 +38,7 @@ export function TourScreen({ navigation }: { navigation: { goBack: () => void } 
         <View style={{ gap: space.xl }}>
           <Image source={require('../../assets/icon.png')} style={styles.logo} />
           <View style={{ gap: 8 }}>
-            <Text style={styles.title}>{tr('Willkommen bei Liftbase')}</Text>
+            <Text style={styles.title}>{tr('Willkommen bei Liftpictures')}</Text>
             <Text style={styles.lead}>{tr('Ein kurzer Rundgang zeigt dir in etwa einer Minute, wo du was findest.')}</Text>
           </View>
           <View style={styles.list}>

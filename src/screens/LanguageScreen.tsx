@@ -8,7 +8,7 @@ import { Button } from '../components/ui';
 import { detectLanguage, LANGUAGES, markLanguagePicked, N_, setLanguage, trIn, type Language } from '../i18n';
 import { colors, font, radius, space, TAP } from '../theme';
 
-const HELLO = N_('Willkommen bei Liftbase');
+const HELLO = N_('Willkommen bei Liftpictures');
 const CHOOSE = N_('Wähle deine Sprache');
 const NEXT = N_('Weiter');
 

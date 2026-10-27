@@ -2,7 +2,7 @@
   "expo": {
     "name": "Liftpictures Dashboard",
     "slug": "dashboardapp",
-    "version": "1.5.7",
+    "version": "1.5.8",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,11 +16,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.john12305.dashboardapp",
-      "buildNumber": "15",
+      "buildNumber": "16",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSPhotoLibraryUsageDescription": "Damit du Logos und Fotos ins Dashboard hochladen kannst.",
-        "NSCameraUsageDescription": "Damit du Fotos direkt aufnehmen und ins Dashboard hochladen kannst."
+        "NSCameraUsageDescription": "Damit du Fotos direkt aufnehmen und ins Dashboard hochladen kannst.",
+        "CFBundleDisplayName": "Liftpictures"
       }
     },
     "android": {

@@ -1,5 +1,5 @@
 {
-  "CFBundleDisplayName": "Liftpictures Dashboard",
+  "CFBundleDisplayName": "Liftpictures",
   "NSPhotoLibraryUsageDescription": "Per caricare loghi, overlay e foto nella dashboard.",
   "NSCameraUsageDescription": "Per scattare foto e caricarle nella dashboard."
 }

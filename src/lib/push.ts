@@ -79,5 +79,5 @@ export function routeForUrl(url: string | undefined): { name: string; params?: o
   if (sub) return { name: 'Marketing', params: { tab: sub } };
   if (path === '/shop/preise') return { name: 'Plans', params: { group: 'shop' } };
   const name = map[path];
-  return name ? { name } : { name: 'Web', params: { path, title: tr('Liftbase') } };
+  return name ? { name } : { name: 'Web', params: { path, title: 'Liftpictures' } };
 }

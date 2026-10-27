@@ -1,5 +1,5 @@
 {
-  "CFBundleDisplayName": "Liftpictures Dashboard",
+  "CFBundleDisplayName": "Liftpictures",
   "NSPhotoLibraryUsageDescription": "Pour importer des logos, overlays et photos dans le tableau de bord.",
   "NSCameraUsageDescription": "Pour prendre des photos et les importer dans le tableau de bord."
 }

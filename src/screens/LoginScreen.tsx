@@ -50,7 +50,7 @@ export function LoginScreen() {
       <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 56, paddingBottom: insets.bottom + 24 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.head}>
           <Image source={require('../../assets/icon.png')} style={styles.logo} />
-          <Text style={styles.title}>{tr('Liftbase')}</Text>
+          <Text style={styles.title}>{'Liftpictures'}</Text>
           <Text style={styles.sub}>{tr('Dein Park. Immer dabei.')}</Text>
         </View>
         <BlurView intensity={60} tint="systemThickMaterial" style={styles.form}>

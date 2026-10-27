@@ -31,7 +31,7 @@ export function Sidebar({ active, onOpen, onAlerts, onAccount }: { active: strin
       <View style={styles.brand}>
         <Image source={require('../../assets/icon.png')} style={styles.logo} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Text style={styles.brandName}>{tr('Liftbase')}</Text>
+          <Text style={styles.brandName}>{'Liftpictures'}</Text>
           <Text style={styles.park} numberOfLines={1}>
             {parkName}
           </Text>
