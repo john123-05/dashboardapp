@@ -183,6 +183,14 @@
 "1 maand gratis",
 "1 mēnesis dāvanā"
 ],
+"1 neuer Kontakt": [
+"1 new contact",
+"1 contacto nuevo",
+"1 nouveau contact",
+"1 nuovo contatto",
+"1 nieuw contact",
+"1 jauns kontakts"
+],
 "1 Änderung bereit": [
 "1 change ready",
 "1 cambio listo",
@@ -823,6 +831,14 @@
 "Ranglijst en snelheden",
 "Līderu saraksts un ātrumi"
 ],
+"Besucher haben beim Freischalten ihrer Fotos ihre E-Mail-Adresse hinterlassen.": [
+"Visitors left their email address when unlocking their photos.",
+"Los visitantes dejaron su correo al desbloquear sus fotos.",
+"Des visiteurs ont laissé leur adresse e-mail en débloquant leurs photos.",
+"I visitatori hanno lasciato il loro indirizzo e-mail sbloccando le foto.",
+"Bezoekers lieten hun e-mailadres achter bij het vrijgeven van hun foto's.",
+"Apmeklētāji, atbloķējot foto, atstāja savu e-pasta adresi."
+],
 "Betrieb, Marketing und Verwaltung – wie im Web-Dashboard. Unten dein Konto, Hell/Dunkel und die Glocke.": [
 "Operations, marketing and admin – just like the web dashboard. At the bottom: your account, light/dark and the bell.",
 "Operación, marketing y administración, como en el panel web. Abajo: tu cuenta, claro/oscuro y la campana.",
@@ -1246,6 +1262,14 @@
 "Il distributore non risponde più. Controlla corrente e internet al distributore.",
 "De automaat meldt zich niet meer. Controleer stroom en internet bij de automaat.",
 "Automāts vairs neziņo. Lūdzu, pārbaudi strāvu un internetu pie automāta."
+],
+"Der Automat meldet sich wieder, Verkauf und Upload laufen.": [
+"The kiosk is reporting again – sales and uploads are running.",
+"La máquina vuelve a responder: la venta y la subida funcionan.",
+"La borne répond à nouveau – vente et envoi fonctionnent.",
+"Il distributore risponde di nuovo: vendita e caricamento funzionano.",
+"De automaat meldt zich weer – verkoop en upload lopen.",
+"Automāts atkal ziņo – pārdošana un augšupielāde darbojas."
 ],
 "Der Automat nimmt jetzt ein Foto auf und schickt es durch die ganze Kette bis zum Upload.": [
 "The kiosk will now take a photo and send it through the whole chain up to the upload.",
@@ -1974,6 +1998,22 @@
 "Foto vendute",
 "Foto's verkocht",
 "Pārdotie foto"
+],
+"Fotoumsatz +{0} % diese Woche": [
+"Photo revenue up {0} % this week",
+"Ingresos por fotos +{0} % esta semana",
+"Recettes photos +{0} % cette semaine",
+"Incassi foto +{0} % questa settimana",
+"Fotoomzet +{0} % deze week",
+"Foto ieņēmumi +{0} % šonedēļ"
+],
+"Fotoumsatz −{0} % diese Woche": [
+"Photo revenue down {0} % this week",
+"Ingresos por fotos −{0} % esta semana",
+"Recettes photos −{0} % cette semaine",
+"Incassi foto −{0} % questa settimana",
+"Fotoomzet −{0} % deze week",
+"Foto ieņēmumi −{0} % šonedēļ"
 ],
 "Frage entfernen?": [
 "Remove question?",
@@ -4071,6 +4111,14 @@
 "Social media",
 "Sociālie tīkli"
 ],
+"Software aktualisiert": [
+"Software updated",
+"Software actualizado",
+"Logiciel mis à jour",
+"Software aggiornato",
+"Software bijgewerkt",
+"Programmatūra atjaunināta"
+],
 "Sollwert {0}": [
 "Target {0}",
 "Valor objetivo {0}",
@@ -5551,6 +5599,14 @@
 "{0} vergeleken",
 "{0} salīdzinājumā"
 ],
+"{0} in den letzten 7 Tagen, {1} in den 7 Tagen davor.": [
+"{0} in the last 7 days, {1} in the 7 days before.",
+"{0} en los últimos 7 días, {1} en los 7 días anteriores.",
+"{0} ces 7 derniers jours, {1} les 7 jours précédents.",
+"{0} negli ultimi 7 giorni, {1} nei 7 giorni precedenti.",
+"{0} in de laatste 7 dagen, {1} in de 7 dagen daarvoor.",
+"{0} pēdējās 7 dienās, {1} 7 dienās pirms tam."
+],
 "{0} ist offline": [
 "{0} is offline",
 "{0} está sin conexión",
@@ -5575,6 +5631,22 @@
 "{0} km/u",
 "{0} km/h"
 ],
+"{0} läuft jetzt mit Version {1}.": [
+"{0} is now running version {1}.",
+"{0} funciona ahora con la versión {1}.",
+"{0} fonctionne désormais avec la version {1}.",
+"{0} ora funziona con la versione {1}.",
+"{0} draait nu met versie {1}.",
+"{0} tagad darbojas ar versiju {1}."
+],
+"{0} läuft wieder": [
+"{0} is running again",
+"{0} vuelve a funcionar",
+"{0} fonctionne à nouveau",
+"{0} funziona di nuovo",
+"{0} draait weer",
+"{0} atkal darbojas"
+],
 "{0} neu": [
 "{0} new",
 "{0} nuevos",
@@ -5590,6 +5662,14 @@
 "Riavviare {0}?",
 "{0} opnieuw starten?",
 "Restartēt {0}?"
+],
+"{0} neue Kontakte": [
+"{0} new contacts",
+"{0} contactos nuevos",
+"{0} nouveaux contacts",
+"{0} nuovi contatti",
+"{0} nieuwe contacten",
+"{0} jauni kontakti"
 ],
 "{0} startet heute Nacht neu.": [
 "{0} will restart tonight.",
@@ -5614,6 +5694,14 @@
 "{0} di {1} riscatti",
 "{0} van {1} inwisselingen",
 "{0} no {1} izmantošanām"
+],
+"{0} wieder online": [
+"{0} back online",
+"{0} de nuevo en línea",
+"{0} de nouveau en ligne",
+"{0} di nuovo online",
+"{0} weer online",
+"{0} atkal tiešsaistē"
 ],
 "{0} wird beendet.": [
 "{0} will be stopped.",
@@ -5742,6 +5830,14 @@
 "{0}: guasto ({1})",
 "{0}: storing ({1})",
 "{0}: traucējums ({1})"
+],
+"{0}: die Störung ist behoben.": [
+"{0}: the fault is fixed.",
+"{0}: la avería está resuelta.",
+"{0} : la panne est résolue.",
+"{0}: il guasto è risolto.",
+"{0}: de storing is verholpen.",
+"{0}: traucējums ir novērsts."
 ],
 "{0}:00 bis {1}:00 Uhr": [
 "{0}:00 to {1}:00",

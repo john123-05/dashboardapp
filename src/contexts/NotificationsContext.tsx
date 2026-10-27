@@ -3,7 +3,10 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { PropsWithChildren } from 'react';
 import { useAuth } from './AuthContext';
 import { usePark } from './ParkContext';
-import { loadHealth, loadSupportReplies } from '../lib/data';
+import { loadHealth, loadKioskSales, loadSupportReplies } from '../lib/data';
+import { changesBetween, contactsInsight, revenueInsight, snapshotOf, type HealthSnapshot, type Insight } from '../lib/feedInsights';
+import { loadLeads } from '../lib/marketing';
+import { canSee } from '../lib/permissions';
 import { benenne } from '../lib/geraeteNamen';
 import { useData } from '../lib/useData';
 import { fetchAnnouncements, reportAnnouncement } from '../lib/announcements';
@@ -11,17 +14,20 @@ import { tr } from '../i18n';
 
 // Meldungen wie in der Glocke des Web-Dashboards (src/lib/notificationFeed.ts): Automat offline,
 // Abholcode fehlt, Papier knapp, Gerät ausgefallen, Münzröhre leer und Antworten vom Support,
-// dazu die Hinweise aus dem Liftpictures-CRM. Alles wird live berechnet: ist eine Störung behoben
+// dazu die Hinweise aus dem Liftpictures-CRM und gute Nachrichten (lib/feedInsights.ts): Umsatz im
+// Wochenvergleich, neue Kontakte, wieder laufende Geräte und Software-Updates. Alles wird live berechnet: ist eine Störung behoben
 // oder ein Hinweis im CRM gelöscht bzw. abgelaufen, verschwindet die Meldung beim nächsten Abgleich.
 export type FeedItem = {
   id: string;
-  kind: 'support' | 'fault' | 'offline' | 'paper' | 'code' | 'coins' | 'crm';
+  kind: 'support' | 'fault' | 'offline' | 'paper' | 'code' | 'coins' | 'crm' | Insight['kind'];
+  /** Eigenes Symbol (gute Nachrichten); sonst das Symbol der Art. */
+  icon?: string;
   /** Ziel beim Antippen (Pfad wie im Web oder https-Link). */
   link?: string | null;
   title: string;
   text: string;
   createdAt: string;
-  severity: 'info' | 'warning' | 'error';
+  severity: 'ok' | 'info' | 'warning' | 'error';
 };
 
 interface Value {
@@ -40,7 +46,10 @@ interface Value {
 const Ctx = createContext<Value | null>(null);
 
 export function NotificationsProvider({ children }: PropsWithChildren) {
-  const { user, isOwner, isStaff } = useAuth();
+  const { user, isOwner, isStaff, allowedPages } = useAuth();
+  const viewer = { isOwner, isStaff, allowedPages };
+  const seesRevenue = canSee('revenue', viewer);
+  const seesMarketing = canSee('marketing', viewer);
   const { parkId } = usePark();
   const [read, setRead] = useState<string[]>([]);
   const [hidden, setHidden] = useState<string[]>([]);
@@ -60,6 +69,36 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
   const support = useData(parkId ? `support:${parkId}` : null, () => loadSupportReplies(parkId!), [parkId], 120000);
   // Gleicher Schlüssel wie die Hinweis-Karten auf den Seiten: ein Abruf für beide.
   const crm = useData(parkId ? `ann:${parkId}` : null, () => fetchAnnouncements(parkId!), [parkId], 120000);
+  // Gleiche Schlüssel wie Übersicht/Umsatz und Marketing: keine zusätzlichen Abrufe.
+  const sales = useData(parkId && seesRevenue ? `sales:${parkId}` : null, () => loadKioskSales(parkId!), [parkId], 300000);
+  const leads = useData(parkId && seesMarketing ? `leads:${parkId}` : null, () => loadLeads(parkId!), [parkId], 300000);
+
+  // Wiederhergestellte Geräte und Updates: Vergleich mit dem zuletzt gesehenen Stand, Meldungen 2 Tage lang.
+  const stateKey = parkId ? `lp-feed-state:${parkId}` : null;
+  const [events, setEvents] = useState<Insight[]>([]);
+  useEffect(() => {
+    if (!stateKey) return;
+    AsyncStorage.getItem(`${stateKey}:events`)
+      .then((raw) => setEvents(raw ? (JSON.parse(raw) as Insight[]) : []))
+      .catch(() => setEvents([]));
+  }, [stateKey]);
+  useEffect(() => {
+    if (!stateKey || !health.data) return;
+    const machines = health.data;
+    void (async () => {
+      const raw = await AsyncStorage.getItem(stateKey).catch(() => null);
+      const prev = raw ? (JSON.parse(raw) as HealthSnapshot) : null;
+      await AsyncStorage.setItem(stateKey, JSON.stringify(snapshotOf(machines))).catch(() => undefined);
+      if (!prev) return;
+      const fresh = changesBetween(prev, machines);
+      setEvents((cur) => {
+        const cutoff = Date.now() - 2 * 86400000;
+        const next = [...fresh, ...cur.filter((e) => new Date(e.createdAt).getTime() > cutoff && !fresh.some((f) => f.id === e.id))].slice(0, 30);
+        if (fresh.length || next.length !== cur.length) void AsyncStorage.setItem(`${stateKey}:events`, JSON.stringify(next)).catch(() => undefined);
+        return next;
+      });
+    })();
+  }, [health.data, stateKey]);
 
   const all = useMemo<FeedItem[]>(() => {
     const out: FeedItem[] = [];
@@ -97,9 +136,14 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
     for (const s of support.data ?? []) {
       out.push({ id: `support-${s.id}`, kind: 'support', title: s.ticket_subject ? tr('Support-Antwort: {0}', s.ticket_subject) : tr('Support-Antwort'), text: s.message, createdAt: s.created_at, severity: 'info' });
     }
-    const rank = { error: 0, warning: 1, info: 2 } as const;
+    const revenue = seesRevenue ? revenueInsight(sales.data) : null;
+    if (revenue) out.push(revenue);
+    const contacts = seesMarketing ? contactsInsight(leads.data) : null;
+    if (contacts) out.push(contacts);
+    out.push(...events);
+    const rank = { error: 0, warning: 1, info: 2, ok: 2 } as const;
     return out.sort((a, b) => rank[a.severity] - rank[b.severity] || b.createdAt.localeCompare(a.createdAt));
-  }, [health.data, support.data, crm.data, isOwner, isStaff]);
+  }, [health.data, support.data, crm.data, sales.data, leads.data, events, seesRevenue, seesMarketing, isOwner, isStaff]);
   const items = useMemo(() => all.filter((i) => !hidden.includes(i.id)), [all, hidden]);
 
   // Behobene Störungen vergessen: tritt dieselbe Störung später wieder auf, erscheint sie neu.
@@ -142,9 +186,11 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
         health.reload();
         support.reload();
         crm.reload();
+        sales.reload();
+        leads.reload();
       },
     }),
-    [items, read, isRead, markAllRead, hide, health, support, crm],
+    [items, read, isRead, markAllRead, hide, health, support, crm, sales, leads],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

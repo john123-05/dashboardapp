@@ -22,11 +22,16 @@ const KIND: Record<FeedItem['kind'], IconName> = {
   code: 'qr-code-outline',
   coins: 'logo-euro',
   crm: 'megaphone-outline',
+  revenue: 'trending-up-outline',
+  contacts: 'mail-outline',
+  recovered: 'checkmark-circle-outline',
+  update: 'cloud-download-outline',
 };
 const TONE = {
   error: [colors.errSoft, colors.err],
   warning: [colors.warnSoft, colors.warn],
   info: [colors.infoSoft, colors.info],
+  ok: [colors.okSoft, colors.ok],
 } as const;
 
 export function AlertsScreen({ navigation }: { navigation: { goBack: () => void } }) {
@@ -77,7 +82,7 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
             return (
               <Row
                 key={it.id}
-                icon={KIND[it.kind]}
+                icon={(it.icon as IconName | undefined) ?? KIND[it.kind]}
                 iconBg={bg}
                 iconColor={fg}
                 title={it.title}

@@ -14,7 +14,7 @@ import type { Kameradaten } from './camera';
 import { previewHealth, previewKioskSales, previewLedger, previewMachineRevenue } from './mock';
 import { tr } from '../i18n';
 
-export type HealthItem = { name: string; status: string; detail?: string | null; plain?: string | null };
+export type HealthItem = { name: string; status: string; kind?: string; detail?: string | null; plain?: string | null };
 
 // Antwort von operator-liftpic-health (siehe supabase/functions/operator-liftpic-health im Web-Repo).
 export type HealthMachine = {
