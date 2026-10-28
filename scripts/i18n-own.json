@@ -4423,14 +4423,6 @@
 "TikTok",
 "TikTok"
 ],
-"Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein.": [
-"Type the first letters of your park and enter the park password.",
-"Escribe las primeras letras de tu parque e introduce la contraseña del parque.",
-"Tape les premières lettres de ton parc et saisis le mot de passe du parc.",
-"Digita le prime lettere del tuo parco e inserisci la password del parco.",
-"Typ de eerste letters van je park en voer het parkwachtwoord in.",
-"Ieraksti sava parka pirmos burtus un ievadi parka paroli."
-],
 "Titel": [
 "Title",
 "Título",
@@ -5998,5 +5990,37 @@
 "{0} con più foto di una corsa · {1} hanno rifatto la corsa",
 "{0} met meerdere foto’s van één rit · {1} reden nog een keer",
 "{0} ar vairākiem viena brauciena foto · {1} brauca vēlreiz"
+],
+"Deine Parks – ohne Park-Passwort.": [
+"Your parks – no park password needed.",
+"Tus parques, sin contraseña del parque.",
+"Tes parcs – sans mot de passe du parc.",
+"I tuoi parchi – senza password del parco.",
+"Je parken – zonder parkwachtwoord.",
+"Tavi parki – bez parka paroles."
+],
+"Weiteren Park verbinden": [
+"Connect another park",
+"Conectar otro parque",
+"Connecter un autre parc",
+"Collega un altro parco",
+"Ander park koppelen",
+"Pievienot vēl vienu parku"
+],
+"Nur einmal nötig: Tippe die ersten Buchstaben deines Parks und gib das Park-Passwort ein. Danach reicht die Anmeldung mit E-Mail und Passwort.": [
+"Only needed once: type the first letters of your park and enter the park password. After that, signing in with email and password is enough.",
+"Solo una vez: escribe las primeras letras de tu parque e introduce la contraseña del parque. Después basta con correo y contraseña.",
+"Une seule fois : tape les premières lettres de ton parc et saisis le mot de passe du parc. Ensuite, l’e-mail et le mot de passe suffisent.",
+"Serve solo una volta: digita le prime lettere del tuo parco e inserisci la password del parco. Poi bastano e-mail e password.",
+"Maar één keer nodig: typ de eerste letters van je park en voer het parkwachtwoord in. Daarna is inloggen met e-mail en wachtwoord genoeg.",
+"Vajadzīgs tikai vienreiz: ieraksti sava parka pirmos burtus un ievadi parka paroli. Pēc tam pietiek ar e-pastu un paroli."
+],
+"Zurück zu meinen Parks": [
+"Back to my parks",
+"Volver a mis parques",
+"Retour à mes parcs",
+"Torna ai miei parchi",
+"Terug naar mijn parken",
+"Atpakaļ pie maniem parkiem"
 ]
 }
