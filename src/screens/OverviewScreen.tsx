@@ -39,21 +39,20 @@ export function OverviewScreen() {
   const health = useData(parkId ? `health:${parkId}` : null, () => loadHealth(parkId!), [parkId], 60000);
   const photos = useData(wide && parkId ? `ovphotos:${parkId}` : null, () => fetchRecentPhotos(parkId!, 4), [parkId, wide], 120000);
   const ledger = useData(parkId ? `ledger-latest:${parkId}` : null, () => loadLedger(parkId!, { from: todayInTimezone(timezone) }), [parkId, timezone], 90000);
-  // Speedmessung: Wiederholungsfahrten aus der Bestenliste (dieser Monat).
+  // Speedmessung: Anteil der verkauften Fotos in der Bestenliste (dieser Monat).
   const ent = useEntitlements(parkId);
   const speedOn = speedUnlocked(parkId, ent.has);
   const speed = useData(parkId && speedOn ? `ovspeed:${parkId}` : null, () => fetchSpeedOverview(parkId!, 'month', ''), [parkId, speedOn], 300000);
-  const repeat = speed.data?.enabled && speed.data.repeat && speed.data.repeat.guests > 0 && 'extraRides' in speed.data.repeat ? speed.data.repeat : null;
-  const repeatPrice = speed.data?.sales?.priceCents ?? sales.data?.priceCents ?? null;
-  const repeatKpi = repeat ? (
+  const share = speed.data?.enabled && speed.data.repeat && 'entries' in speed.data.repeat && speed.data.sales && speed.data.sales.photosSold > 0
+    ? { entries: speed.data.repeat.entries, sold: speed.data.sales.photosSold }
+    : null;
+  const repeatKpi = share ? (
     <Kpi
-      icon="repeat-outline"
+      icon="trophy-outline"
       accent="#F59E0B"
-      label={tr('Wiederholungsfahrten im Monat')}
-      value={tr('+{0} Fahrten', formatNumber(repeat.extraRides))}
-      sub={repeatPrice
-        ? tr('{0} Fotos · {1} zusätzlich', formatNumber(repeat.extraPhotos), formatCents(repeat.extraPhotos * repeatPrice))
-        : tr('{0} Fotos zusätzlich verkauft', formatNumber(repeat.extraPhotos))}
+      label={tr('In der Bestenliste')}
+      value={formatPercent(share.entries / share.sold)}
+      sub={tr('{0} von {1} verkauften Fotos diesen Monat', formatNumber(share.entries), formatNumber(share.sold))}
     />
   ) : null;
 

@@ -5887,38 +5887,6 @@
 "‘{0}’ is doorgegeven aan {1}. Start nu het verkoopprogramma opnieuw om het zichtbaar te maken.",
 "“{0}” nodots {1}. Lai tas būtu redzams, tagad restartē pārdošanas programmu."
 ],
-"Wiederholungsfahrten": [
-"Repeat rides",
-"Viajes repetidos",
-"Tours répétés",
-"Corse ripetute",
-"Herhaalde ritten",
-"Atkārtoti braucieni"
-],
-"+{0} Fahrten": [
-"+{0} rides",
-"+{0} viajes",
-"+{0} tours",
-"+{0} corse",
-"+{0} ritten",
-"+{0} braucieni"
-],
-"{0} Fotos zusätzlich verkauft · ≈ {1}": [
-"{0} extra photos sold · ≈ {1}",
-"{0} fotos adicionales vendidas · ≈ {1}",
-"{0} photos supplémentaires vendues · ≈ {1}",
-"{0} foto in più vendute · ≈ {1}",
-"{0} extra foto’s verkocht · ≈ {1}",
-"{0} papildu foto pārdoti · ≈ {1}"
-],
-"{0} Fotos zusätzlich verkauft": [
-"{0} extra photos sold",
-"{0} fotos adicionales vendidas",
-"{0} photos supplémentaires vendues",
-"{0} foto in più vendute",
-"{0} extra foto’s verkocht",
-"{0} papildu foto pārdoti"
-],
 "{0} von {1}": [
 "{0} of {1}",
 "{0} de {1}",
@@ -5926,30 +5894,6 @@
 "{0} su {1}",
 "{0} van {1}",
 "{0} no {1}"
-],
-"Gäste der Bestenliste sind nochmal gefahren": [
-"guests on the leaderboard rode again",
-"visitantes de la clasificación repitieron",
-"visiteurs du classement ont refait un tour",
-"ospiti in classifica hanno rifatto la corsa",
-"gasten uit de ranglijst reden nog een keer",
-"rangu tabulas viesi brauca vēlreiz"
-],
-"verkaufte Fotos wurden in die Bestenliste eingetragen": [
-"photos sold were entered on the leaderboard",
-"fotos vendidas se inscribieron en la clasificación",
-"photos vendues ont été inscrites au classement",
-"foto vendute sono state iscritte in classifica",
-"verkochte foto’s werden in de ranglijst ingeschreven",
-"pārdotie foto ierakstīti rangu tabulā"
-],
-"Gäste aus der Bestenliste, die nochmal gefahren sind und ihr neues Foto wieder eingetragen haben. Fotos derselben E-Mail innerhalb von 5 Minuten zählen als eine Fahrt (z. B. Familie auf mehreren Schlitten).": [
-"Guests on the leaderboard who rode again and entered their new photo too. Photos with the same email within 5 minutes count as one ride (e.g. a family on several sleds).",
-"Visitantes de la clasificación que repitieron el viaje e inscribieron también su nueva foto. Las fotos con el mismo correo en 5 minutos cuentan como un viaje (p. ej. una familia en varios trineos).",
-"Visiteurs du classement qui ont refait un tour et inscrit aussi leur nouvelle photo. Les photos d’une même adresse e-mail à moins de 5 minutes d’écart comptent comme un tour (p. ex. une famille sur plusieurs luges).",
-"Ospiti in classifica che hanno rifatto la corsa e iscritto anche la nuova foto. Le foto con la stessa e-mail entro 5 minuti contano come una corsa (ad es. una famiglia su più slittini).",
-"Gasten uit de ranglijst die nog een keer reden en ook hun nieuwe foto inschreven. Foto’s met hetzelfde e-mailadres binnen 5 minuten tellen als één rit (bijv. een gezin op meerdere sleeën).",
-"Rangu tabulas viesi, kuri brauca vēlreiz un ierakstīja arī jauno foto. Foto ar to pašu e-pastu 5 minūšu laikā skaitās kā viens brauciens (piem., ģimene uz vairākām ragaviņām)."
 ],
 " · {0} Fahrten": [
 " · {0} rides",
@@ -5959,28 +5903,68 @@
 " · {0} ritten",
 " · {0} braucieni"
 ],
-"Wiederholungsfahrten im Monat": [
-"Repeat rides this month",
-"Viajes repetidos este mes",
-"Tours répétés ce mois-ci",
-"Corse ripetute questo mese",
-"Herhaalde ritten deze maand",
-"Atkārtoti braucieni šomēnes"
+"der Gäste in der Bestenliste sind nochmal gefahren": [
+"of guests on the leaderboard rode again",
+"de los visitantes de la clasificación repitieron",
+"des visiteurs du classement ont refait un tour",
+"degli ospiti in classifica hanno rifatto la corsa",
+"van de gasten in de ranglijst reed nog een keer",
+"rangu tabulas viesu brauca vēlreiz"
 ],
-"{0} Fotos · {1} zusätzlich": [
-"{0} photos · {1} extra",
-"{0} fotos · {1} adicionales",
-"{0} photos · {1} en plus",
-"{0} foto · {1} in più",
-"{0} foto’s · {1} extra",
-"{0} foto · {1} papildus"
+"{0} von {1} Gästen": [
+"{0} of {1} guests",
+"{0} de {1} visitantes",
+"{0} sur {1} visiteurs",
+"{0} su {1} ospiti",
+"{0} van {1} gasten",
+"{0} no {1} viesiem"
 ],
-"verkaufte Fotos stammen von Gästen, die nochmal gefahren sind": [
-"photos sold came from guests who rode again",
-"fotos vendidas proceden de visitantes que repitieron",
-"photos vendues viennent de visiteurs qui ont refait un tour",
-"foto vendute provengono da ospiti che hanno rifatto la corsa",
-"verkochte foto’s komen van gasten die nog een keer reden",
-"pārdotie foto ir no viesiem, kuri brauca vēlreiz"
+"der verkauften Fotos wurden in die Bestenliste eingetragen": [
+"of photos sold were entered on the leaderboard",
+"de las fotos vendidas se inscribieron en la clasificación",
+"des photos vendues ont été inscrites au classement",
+"delle foto vendute sono state iscritte in classifica",
+"van de verkochte foto’s werd in de ranglijst ingeschreven",
+"pārdoto foto ierakstīti rangu tabulā"
+],
+"{0} von {1} Fotos": [
+"{0} of {1} photos",
+"{0} de {1} fotos",
+"{0} sur {1} photos",
+"{0} su {1} foto",
+"{0} van {1} foto’s",
+"{0} no {1} foto"
+],
+"der verkauften Fotos stammen von einer Wiederholungsfahrt": [
+"of photos sold came from a repeat ride",
+"de las fotos vendidas proceden de un viaje repetido",
+"des photos vendues viennent d’un tour répété",
+"delle foto vendute proviene da una corsa ripetuta",
+"van de verkochte foto’s komt uit een herhaalde rit",
+"pārdoto foto ir no atkārtota brauciena"
+],
+"Fotos derselben E-Mail innerhalb von 5 Minuten zählen als eine Fahrt (z. B. Familie auf mehreren Schlitten).": [
+"Photos with the same email within 5 minutes count as one ride (e.g. a family on several sleds).",
+"Las fotos con el mismo correo en 5 minutos cuentan como un viaje (p. ej. una familia en varios trineos).",
+"Les photos d’une même adresse e-mail à moins de 5 minutes d’écart comptent comme un tour (p. ex. une famille sur plusieurs luges).",
+"Le foto con la stessa e-mail entro 5 minuti contano come una corsa (ad es. una famiglia su più slittini).",
+"Foto’s met hetzelfde e-mailadres binnen 5 minuten tellen als één rit (bijv. een gezin op meerdere sleeën).",
+"Foto ar to pašu e-pastu 5 minūšu laikā skaitās kā viens brauciens (piem., ģimene uz vairākām ragaviņām)."
+],
+"In der Bestenliste": [
+"On the leaderboard",
+"En la clasificación",
+"Au classement",
+"In classifica",
+"In de ranglijst",
+"Rangu tabulā"
+],
+"{0} von {1} verkauften Fotos diesen Monat": [
+"{0} of {1} photos sold this month",
+"{0} de {1} fotos vendidas este mes",
+"{0} sur {1} photos vendues ce mois-ci",
+"{0} su {1} foto vendute questo mese",
+"{0} van {1} verkochte foto’s deze maand",
+"{0} no {1} pārdotajiem foto šomēnes"
 ]
 }

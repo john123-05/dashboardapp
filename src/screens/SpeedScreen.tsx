@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { ActionSheetIOS, Alert, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Locked, SPEED_OFFER } from '../components/Locked';
 import { Screen } from '../components/Screen';
+import { useWide } from '../components/layout';
 import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Segmented } from '../components/ui';
 import { tapHaptic } from '../components/haptics';
 import { usePark } from '../contexts/ParkContext';
-import { formatCents, formatDayLong, formatNumber, formatPercent, formatTime, formatDecimal } from '../lib/format';
+import { formatDayLong, formatNumber, formatPercent, formatTime, formatDecimal } from '../lib/format';
 import { todayInTimezone } from '../lib/kioskSales';
 import { fetchSpeedOverview, setSpeedResultHidden, shiftDate, type SpeedPeriod, type SpeedRow } from '../lib/speed';
 import { useData } from '../lib/useData';
@@ -30,6 +31,7 @@ function maskEmail(e: string) {
 
 export function SpeedScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const { parkId, timezone } = usePark();
+  const wide = useWide();
   const [period, setPeriod] = useState<SpeedPeriod>('day');
   const [date, setDate] = useState(todayInTimezone(timezone));
   const data = useData(parkId ? `speed:${parkId}:${period}:${date}` : null, () => fetchSpeedOverview(parkId!, period, date), [parkId, period, date], 60000);
@@ -84,31 +86,20 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
           <Kpi icon="trending-down-outline" label={tr('Langsamste')} value={kmh(o.stats.slowest)} />
         </KpiGrid>
       ) : null}
-      {/* Wiederholungsfahrten: Gäste der Liste, die nochmal gefahren sind (egal ob schneller), mit Bezug auf alle Verkäufe. */}
+      {/* Bestenliste in Zahlen: Anteil der Gäste, die nochmal gefahren sind, und Bezug auf alle verkauften Fotos. */}
       {o?.repeat && o.repeat.guests > 0 && 'extraRides' in o.repeat ? (
         <>
-          <KpiGrid columns={1}>
-            <Kpi
-              icon="repeat-outline"
-              accent="#F59E0B"
-              label={tr('Wiederholungsfahrten')}
-              value={tr('+{0} Fahrten', formatNumber(o.repeat.extraRides))}
-              sub={o.sales?.priceCents
-                ? tr('{0} Fotos zusätzlich verkauft · ≈ {1}', formatNumber(o.repeat.extraPhotos), formatCents(o.repeat.extraPhotos * o.sales.priceCents))
-                : tr('{0} Fotos zusätzlich verkauft', formatNumber(o.repeat.extraPhotos))}
-            />
-          </KpiGrid>
-          <KpiGrid>
-            <Kpi label={tr('Gäste der Bestenliste sind nochmal gefahren')} value={tr('{0} von {1}', formatNumber(o.repeat.repeaters), formatNumber(o.repeat.guests))} sub={formatPercent(o.repeat.repeaters / o.repeat.guests)} />
+          <KpiGrid columns={wide ? 3 : undefined}>
+            <Kpi icon="repeat-outline" accent="#F59E0B" label={tr('der Gäste in der Bestenliste sind nochmal gefahren')} value={formatPercent(o.repeat.repeaters / o.repeat.guests)} sub={tr('{0} von {1} Gästen', formatNumber(o.repeat.repeaters), formatNumber(o.repeat.guests))} />
             {o.sales && o.sales.photosSold > 0 ? (
-              <Kpi label={tr('verkaufte Fotos wurden in die Bestenliste eingetragen')} value={tr('{0} von {1}', formatNumber(o.repeat.entries), formatNumber(o.sales.photosSold))} sub={formatPercent(o.repeat.entries / o.sales.photosSold)} />
+              <Kpi icon="trophy-outline" accent="#F59E0B" label={tr('der verkauften Fotos wurden in die Bestenliste eingetragen')} value={formatPercent(o.repeat.entries / o.sales.photosSold)} sub={tr('{0} von {1} Fotos', formatNumber(o.repeat.entries), formatNumber(o.sales.photosSold))} />
             ) : null}
             {o.sales && o.sales.photosSold > 0 ? (
-              <Kpi label={tr('verkaufte Fotos stammen von Gästen, die nochmal gefahren sind')} value={tr('{0} von {1}', formatNumber(o.repeat.extraPhotos), formatNumber(o.sales.photosSold))} sub={formatPercent(o.repeat.extraPhotos / o.sales.photosSold)} />
+              <Kpi icon="images-outline" accent="#F59E0B" label={tr('der verkauften Fotos stammen von einer Wiederholungsfahrt')} value={formatPercent(o.repeat.extraPhotos / o.sales.photosSold)} sub={tr('{0} von {1} Fotos', formatNumber(o.repeat.extraPhotos), formatNumber(o.sales.photosSold))} />
             ) : null}
           </KpiGrid>
           <Text style={{ ...font.caption, color: colors.ink3 }}>
-            {tr('Gäste aus der Bestenliste, die nochmal gefahren sind und ihr neues Foto wieder eingetragen haben. Fotos derselben E-Mail innerhalb von 5 Minuten zählen als eine Fahrt (z. B. Familie auf mehreren Schlitten).')}
+            {tr('Fotos derselben E-Mail innerhalb von 5 Minuten zählen als eine Fahrt (z. B. Familie auf mehreren Schlitten).')}
           </Text>
         </>
       ) : null}
