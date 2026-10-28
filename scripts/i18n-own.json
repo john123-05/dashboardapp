@@ -6022,5 +6022,101 @@
 "Torna ai miei parchi",
 "Terug naar mijn parken",
 "Atpakaļ pie maniem parkiem"
+],
+"Bitte Name, E-Mail und Passwort eingeben.": [
+"Please enter your name, email and password.",
+"Introduce tu nombre, correo y contraseña.",
+"Saisis ton nom, ton e-mail et ton mot de passe.",
+"Inserisci nome, e-mail e password.",
+"Voer je naam, e-mail en wachtwoord in.",
+"Ievadi vārdu, e-pastu un paroli."
+],
+"Das Passwort braucht mindestens 6 Zeichen.": [
+"The password needs at least 6 characters.",
+"La contraseña necesita al menos 6 caracteres.",
+"Le mot de passe doit comporter au moins 6 caractères.",
+"La password deve avere almeno 6 caratteri.",
+"Het wachtwoord moet minstens 6 tekens hebben.",
+"Parolei jābūt vismaz 6 rakstzīmēm."
+],
+"Fast geschafft: Bitte bestätige deine E-Mail-Adresse und melde dich dann an.": [
+"Almost done: please confirm your email address and then sign in.",
+"Casi listo: confirma tu correo y luego inicia sesión.",
+"Presque fini : confirme ton adresse e-mail, puis connecte-toi.",
+"Quasi fatto: conferma il tuo indirizzo e-mail e poi accedi.",
+"Bijna klaar: bevestig je e-mailadres en log dan in.",
+"Gandrīz gatavs: apstiprini e-pasta adresi un tad piesakies."
+],
+"Für diese E-Mail gibt es schon ein Konto. Bitte melde dich an.": [
+"There is already an account for this email. Please sign in.",
+"Ya existe una cuenta con este correo. Inicia sesión.",
+"Un compte existe déjà pour cet e-mail. Connecte-toi.",
+"Esiste già un account con questa e-mail. Accedi.",
+"Er bestaat al een account voor dit e-mailadres. Log in.",
+"Šim e-pastam jau ir konts. Lūdzu, piesakies."
+],
+"Ich habe schon ein Konto": [
+"I already have an account",
+"Ya tengo una cuenta",
+"J’ai déjà un compte",
+"Ho già un account",
+"Ik heb al een account",
+"Man jau ir konts"
+],
+"Mindestens 6 Zeichen": [
+"At least 6 characters",
+"Al menos 6 caracteres",
+"Au moins 6 caractères",
+"Almeno 6 caratteri",
+"Minstens 6 tekens",
+"Vismaz 6 rakstzīmes"
+],
+"Neuer Betreiber? ": [
+"New operator? ",
+"¿Nuevo operador? ",
+"Nouvel exploitant ? ",
+"Nuovo gestore? ",
+"Nieuwe exploitant? ",
+"Jauns operators? "
+],
+"Konto löschen": [
+"Delete account",
+"Eliminar cuenta",
+"Supprimer le compte",
+"Elimina account",
+"Account verwijderen",
+"Dzēst kontu"
+],
+"Konto löschen?": [
+"Delete account?",
+"¿Eliminar la cuenta?",
+"Supprimer le compte ?",
+"Eliminare l’account?",
+"Account verwijderen?",
+"Dzēst kontu?"
+],
+"Dein Zugang ({0}) wird endgültig gelöscht. Die Daten deines Parks bleiben erhalten. Das lässt sich nicht rückgängig machen.": [
+"Your login ({0}) will be deleted permanently. Your park’s data stays. This cannot be undone.",
+"Tu acceso ({0}) se eliminará definitivamente. Los datos de tu parque se conservan. No se puede deshacer.",
+"Ton accès ({0}) sera supprimé définitivement. Les données de ton parc sont conservées. C’est irréversible.",
+"Il tuo accesso ({0}) verrà eliminato definitivamente. I dati del tuo parco restano. Non si può annullare.",
+"Je toegang ({0}) wordt definitief verwijderd. De gegevens van je park blijven bewaard. Dit kan niet ongedaan worden gemaakt.",
+"Tava piekļuve ({0}) tiks neatgriezeniski dzēsta. Tava parka dati paliek. To nevar atsaukt."
+],
+"Endgültig löschen": [
+"Delete permanently",
+"Eliminar definitivamente",
+"Supprimer définitivement",
+"Elimina definitivamente",
+"Definitief verwijderen",
+"Dzēst neatgriezeniski"
+],
+"Das Konto konnte nicht gelöscht werden.": [
+"The account could not be deleted.",
+"No se pudo eliminar la cuenta.",
+"Le compte n’a pas pu être supprimé.",
+"Non è stato possibile eliminare l’account.",
+"Het account kon niet worden verwijderd.",
+"Kontu neizdevās dzēst."
 ]
 }

@@ -1,13 +1,17 @@
-import { useRef, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useRef, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import { Image as ExpoImage } from 'expo-image';
 import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Field } from '../components/Field';
-import { Button, ErrorNote } from '../components/ui';
+import { Button, ErrorNote, Row } from '../components/ui';
 import { successHaptic } from '../components/haptics';
 import { useAuth } from '../contexts/AuthContext';
+import { usePark } from '../contexts/ParkContext';
+import { invokeEdgeFunction } from '../lib/edgeFunctions';
+import { supabase } from '../lib/supabase';
 import { colors, font, radius, space } from '../theme';
 import { tr } from '../i18n';
 
@@ -16,7 +20,103 @@ function friendly(message: string): string {
   if (m.includes('invalid login') || m.includes('invalid credentials')) return tr('E-Mail oder Passwort stimmt nicht.');
   if (m.includes('email not confirmed')) return tr('Bitte bestätige zuerst deine E-Mail-Adresse.');
   if (m.includes('network') || m.includes('fetch')) return tr('Keine Verbindung. Bitte Internet prüfen.');
+  if (m.includes('already registered') || m.includes('already exists')) return tr('Für diese E-Mail gibt es schon ein Konto. Bitte melde dich an.');
   return message;
+}
+
+type Park = { id: string; name: string };
+const LAST_PARK_KEY = 'lp-last-park';
+
+// Konto erstellen wie im Web: Name, E-Mail, Passwort und einmalig Park + Park-Passwort (link_park_access).
+// Danach reicht die Anmeldung mit E-Mail und Passwort.
+function RegisterForm({ onBack }: { onBack: () => void }) {
+  const { refreshProfile } = useAuth();
+  const { setPark } = usePark();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [query, setQuery] = useState('');
+  const [park, setParkChoice] = useState<Park | null>(null);
+  const [match, setMatch] = useState<Park | null>(null);
+  const [state, setState] = useState<'idle' | 'loading' | 'short' | 'none' | 'many' | 'one'>('idle');
+  const [parkPassword, setParkPassword] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const q = query.trim();
+    setMatch(null);
+    if (park || q.length === 0) return setState('idle');
+    if (q.length < 2) return setState('short');
+    setState('loading');
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const { data, error: err } = await invokeEdgeFunction<{ park: Park | null; state: 'short' | 'none' | 'many' | 'one' }>('park-lookup', { query: { q } });
+      if (cancelled) return;
+      if (err || !data) return setState('none');
+      setMatch(data.park);
+      setState(data.park ? 'one' : data.state);
+    }, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query, park]);
+
+  async function submit() {
+    if (!name.trim() || !email.trim() || !password) return setError(tr('Bitte Name, E-Mail und Passwort eingeben.'));
+    if (password.length < 6) return setError(tr('Das Passwort braucht mindestens 6 Zeichen.'));
+    if (!park) return setError(tr('Bitte zuerst einen Park wählen.'));
+    if (!parkPassword) return setError(tr('Bitte das Park-Passwort eingeben.'));
+    setError(null);
+    setBusy(true);
+    await AsyncStorage.setItem(LAST_PARK_KEY, JSON.stringify(park)).catch(() => undefined);
+    const { data, error: err } = await supabase.auth.signUp({ email: email.trim(), password, options: { data: { full_name: name.trim() } } });
+    if (err) {
+      setBusy(false);
+      return setError(friendly(err.message));
+    }
+    if (!data.session) {
+      setBusy(false);
+      return setInfo(tr('Fast geschafft: Bitte bestätige deine E-Mail-Adresse und melde dich dann an.'));
+    }
+    // Stimmt das Park-Passwort nicht, ist das Konto trotzdem angelegt: der Park-Bildschirm fragt dann erneut.
+    const { data: ok } = await supabase.rpc('link_park_access', { p_park_id: park.id, p_password: parkPassword });
+    if (ok) {
+      await supabase.auth.refreshSession().catch(() => undefined);
+      await setPark(park.id, park.name);
+      await refreshProfile();
+      successHaptic();
+    }
+  }
+
+  const hint =
+    state === 'short' ? tr('Mindestens 2 Buchstaben eingeben.') : state === 'none' ? tr('Kein Park gefunden.') : state === 'many' ? tr('Mehrere Parks passen, bitte genauer tippen.') : state === 'loading' ? tr('Suche…') : null;
+
+  return (
+    <>
+      <Text style={{ ...font.headline, color: colors.ink }}>{tr('Konto erstellen')}</Text>
+      <Field label={tr('Name')} value={name} onChangeText={setName} autoComplete="name" textContentType="name" placeholder={tr('Vor- und Nachname')} />
+      <Field label={tr('E-Mail')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="username" placeholder={tr('name@firma.de')} />
+      <Field label={tr('Passwort')} value={password} onChangeText={setPassword} secure autoCapitalize="none" autoComplete="new-password" textContentType="newPassword" placeholder={tr('Mindestens 6 Zeichen')} />
+      <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Dein Park: einmal mit dem Park-Passwort verbinden. Danach meldest du dich nur mit E-Mail und Passwort an.')}</Text>
+      {park ? (
+        <Row title={park.name} icon="location-outline" right={<Text style={{ ...font.callout, color: colors.brand }}>{tr('Ändern')}</Text>} onPress={() => setParkChoice(null)} last />
+      ) : (
+        <>
+          <Field label={tr('Park')} value={query} onChangeText={setQuery} autoCapitalize="none" placeholder={tr('z. B. Wingst')} returnKeyType="search" />
+          {hint ? <Text style={{ ...font.footnote, color: colors.ink2 }}>{hint}</Text> : null}
+          {match ? <Row icon="location-outline" title={match.name} chevron onPress={() => { setParkChoice(match); setQuery(''); }} last /> : null}
+        </>
+      )}
+      <Field label={tr('Park-Passwort')} value={parkPassword} onChangeText={setParkPassword} secure autoCapitalize="none" returnKeyType="go" onSubmitEditing={submit} placeholder={tr('Park-Passwort')} />
+      {error ? <ErrorNote text={error} /> : null}
+      {info ? <Text style={{ ...font.callout, color: colors.ink }}>{info}</Text> : null}
+      <Button title={tr('Konto erstellen')} onPress={submit} loading={busy} />
+      <Button title={tr('Ich habe schon ein Konto')} kind="plain" onPress={onBack} />
+    </>
+  );
 }
 
 export function LoginScreen() {
@@ -26,6 +126,7 @@ export function LoginScreen() {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [register, setRegister] = useState(false);
   const pw = useRef<TextInput>(null);
 
   async function submit() {
@@ -54,6 +155,7 @@ export function LoginScreen() {
           <Text style={styles.sub}>{tr('Dein Park. Immer dabei.')}</Text>
         </View>
         <BlurView intensity={60} tint="systemThickMaterial" style={styles.form}>
+          {register ? <RegisterForm onBack={() => setRegister(false)} /> : <>
           <Text style={{ ...font.headline, color: colors.ink }}>{tr('Anmelden')}</Text>
           <Field label={tr('E-Mail')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="username" returnKeyType="next" onSubmitEditing={() => pw.current?.focus()} placeholder={tr('name@firma.de')} />
           <Field ref={pw} label={tr('Passwort')} value={password} onChangeText={setPassword} secure autoCapitalize="none" autoComplete="current-password" textContentType="password" returnKeyType="go" onSubmitEditing={submit} placeholder={tr('Passwort')} />
@@ -62,7 +164,15 @@ export function LoginScreen() {
           <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} hitSlop={8} style={{ alignSelf: 'center', minHeight: 36, justifyContent: 'center' }}>
             <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Passwort vergessen?')}</Text>
           </Pressable>
+          </>}
         </BlurView>
+        {!register ? (
+          <Pressable onPress={() => setRegister(true)} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
+            <Text style={{ ...font.callout, color: '#fff' }}>
+              {tr('Neuer Betreiber? ')}<Text style={{ fontWeight: '700' }}>{tr('Konto erstellen')}</Text>
+            </Text>
+          </Pressable>
+        ) : null}
         <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
           <Text style={{ ...font.callout, color: '#fff' }}>
             {tr('Noch kein Zugang? ')}<Text style={{ fontWeight: '700' }}>{tr('Demo anfragen')}</Text>

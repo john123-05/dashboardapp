@@ -22,7 +22,7 @@ const LAST_PARK_KEY = 'lp-last-park';
 // Super-Admins wechseln ohne Passwort.
 export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
   const insets = useSafeAreaInsets();
-  const { email, allowedParkIds, signOut } = useAuth();
+  const { email, allowedParkIds, signOut, refreshProfile } = useAuth();
   const { setPark, parkId } = usePark();
   const superAdmin = isSuperAdminEmail(email);
   const [query, setQuery] = useState('');
@@ -121,8 +121,14 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
     if (err && /link_park_access|function|schema cache/i.test(err.message)) {
       ({ data: ok, error: err } = await supabase.rpc('verify_park_access', { p_park_id: selected.id, p_password: password }));
     }
+    if (err || !ok) {
+      setBusy(false);
+      return setError(tr('Das Park-Passwort stimmt nicht.'));
+    }
+    // Neue Konten bekommen beim Verbinden ihre Organisation: Sitzung und Profil neu laden.
+    await supabase.auth.refreshSession().catch(() => undefined);
+    await refreshProfile();
     setBusy(false);
-    if (err || !ok) return setError(tr('Das Park-Passwort stimmt nicht.'));
     await AsyncStorage.setItem(LAST_PARK_KEY, JSON.stringify(selected)).catch(() => undefined);
     await pick(selected);
   }

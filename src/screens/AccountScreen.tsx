@@ -8,6 +8,7 @@ import { Screen } from '../components/Screen';
 import { Button, Card, ListCard, Row, Section, Segmented } from '../components/ui';
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
+import { supabase } from '../lib/supabase';
 import { canSee } from '../lib/permissions';
 import { isSuperAdminEmail, openPage, PAGES } from '../lib/pages';
 import { colors, font, space } from '../theme';
@@ -101,6 +102,27 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
             Alert.alert(tr('Abmelden'), tr('Möchtest du dich abmelden?'), [
               { text: tr('Abbrechen'), style: 'cancel' },
               { text: tr('Abmelden'), style: 'destructive', onPress: async () => { await setPark(null, null); await signOut(); } },
+            ])
+          }
+        />
+        {/* App Store 5.1.1(v): Konto in der App löschen (delete_my_account). Daten des Parks bleiben. */}
+        <Button
+          title={tr('Konto löschen')}
+          kind="plain"
+          icon="trash-outline"
+          onPress={() =>
+            Alert.alert(tr('Konto löschen?'), tr('Dein Zugang ({0}) wird endgültig gelöscht. Die Daten deines Parks bleiben erhalten. Das lässt sich nicht rückgängig machen.', email ?? ''), [
+              { text: tr('Abbrechen'), style: 'cancel' },
+              {
+                text: tr('Endgültig löschen'),
+                style: 'destructive',
+                onPress: async () => {
+                  const { data: ok, error } = await supabase.rpc('delete_my_account');
+                  if (error || !ok) return Alert.alert(tr('Fehler'), error?.message ?? tr('Das Konto konnte nicht gelöscht werden.'));
+                  await setPark(null, null);
+                  await signOut();
+                },
+              },
             ])
           }
         />

@@ -208,19 +208,6 @@ function Splash() {
   );
 }
 
-function NoAccess() {
-  const { signOut, email } = useAuth();
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg, padding: 32, gap: 10 }}>
-      <Text style={{ ...font.title, color: colors.ink, textAlign: 'center' }}>{tr('Kein Zugang')}</Text>
-      <Text style={{ ...font.subhead, color: colors.ink2, textAlign: 'center' }}>{tr('Das Konto {0} ist noch keiner Organisation zugeordnet. Bitte wende dich an Liftpictures.', email ?? '')}</Text>
-      <View style={{ width: 220, marginTop: 8 }}>
-        <Button title={tr('Abmelden')} kind="plain" onPress={() => void signOut()} />
-      </View>
-    </View>
-  );
-}
-
 function ParkSwitch({ navigation }: { navigation: { goBack: () => void } }) {
   return <ParkAccessScreen onClose={navigation.goBack} />;
 }
@@ -325,8 +312,8 @@ export function AppNavigator() {
 
   if (!PREVIEW && (auth.loading || park.loading)) return <Splash />;
   if (!PREVIEW && !auth.user) return languagePicked ? <LoginScreen key={lang} /> : <LanguageScreen onDone={() => setLanguagePicked(true)} />;
-  if (!PREVIEW && !auth.hasOrg) return <NoAccess />;
-  if (!PREVIEW && !park.parkId) return <ParkAccessScreen key={lang} />;
+  // Ohne Organisation (neues Konto) oder ohne Park: einmalig mit Park und Park-Passwort verbinden.
+  if (!PREVIEW && (!auth.hasOrg || !park.parkId)) return <ParkAccessScreen key={lang} />;
 
   return (
     <NotificationsProvider>

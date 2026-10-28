@@ -122,8 +122,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
       signOut: async () => {
         await supabase.auth.signOut();
       },
+      // Aktuelle Sitzung statt state.user: funktioniert auch direkt nach signUp/Verbinden.
       refreshProfile: async () => {
-        if (state.user) await loadProfile(state.user);
+        const { data } = await supabase.auth.getSession();
+        const user = data.session?.user ?? state.user;
+        if (user) await loadProfile(user);
       },
     }),
     [state, loadProfile],
