@@ -5966,5 +5966,37 @@
 "{0} su {1} foto vendute questo mese",
 "{0} van {1} verkochte foto’s deze maand",
 "{0} no {1} pārdotajiem foto šomēnes"
+],
+"Mehrere Bilder gekauft": [
+"Bought several photos",
+"Compraron varias fotos",
+"Plusieurs photos achetées",
+"Più foto acquistate",
+"Meerdere foto’s gekocht",
+"Nopirka vairākus foto"
+],
+"{0} von {1} Gästen · letzte {2} Tage": [
+"{0} of {1} guests · last {2} days",
+"{0} de {1} visitantes · últimos {2} días",
+"{0} sur {1} visiteurs · {2} derniers jours",
+"{0} su {1} ospiti · ultimi {2} giorni",
+"{0} van {1} gasten · laatste {2} dagen",
+"{0} no {1} viesiem · pēdējās {2} dienas"
+],
+"Davon Familie oder Gruppe": [
+"Of which family or group",
+"De ellos, familia o grupo",
+"Dont famille ou groupe",
+"Di cui famiglia o gruppo",
+"Waarvan gezin of groep",
+"No tiem ģimene vai grupa"
+],
+"{0} mit mehreren Bildern einer Fahrt · {1} nochmal gefahren": [
+"{0} with several photos of one ride · {1} rode again",
+"{0} con varias fotos de un viaje · {1} repitieron",
+"{0} avec plusieurs photos d’un tour · {1} ont refait un tour",
+"{0} con più foto di una corsa · {1} hanno rifatto la corsa",
+"{0} met meerdere foto’s van één rit · {1} reden nog een keer",
+"{0} ar vairākiem viena brauciena foto · {1} brauca vēlreiz"
 ]
 }

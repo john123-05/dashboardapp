@@ -5,6 +5,7 @@ import { Screen } from '../components/Screen';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Row, Section, Segmented, Skeleton } from '../components/ui';
 import { usePark } from '../contexts/ParkContext';
 import { loadKioskSales, loadMachineRevenue } from '../lib/data';
+import { fetchPhotoBuyers } from '../lib/buyers';
 import { formatCents, formatDay, formatDayLong, formatNumber, formatPercent } from '../lib/format';
 import { aggregateByDate, sumDays, toChartSeries } from '../lib/kioskSales';
 import { useData } from '../lib/useData';
@@ -19,6 +20,9 @@ export function RevenueScreen() {
   const [range, setRange] = useState<Range>('30');
   const sales = useData(parkId ? `sales:${parkId}` : null, () => loadKioskSales(parkId!), [parkId], 120000);
   const revenue = useData(parkId ? `rev:${parkId}` : null, () => loadMachineRevenue(parkId!), [parkId], 120000);
+  // Gäste mit mehreren eingelösten Bildern (Familie/Gruppe oder nochmal gefahren), letzte 30 Tage.
+  const buyersData = useData(parkId ? `buyers:${parkId}` : null, () => fetchPhotoBuyers(parkId!), [parkId], 300000);
+  const buyers = buyersData.data && buyersData.data.guests > 0 ? buyersData.data : null;
 
   const days = useMemo(() => (sales.data ? aggregateByDate(sales.data.days, sales.data.priceCents ?? 0) : []), [sales.data]);
   const periodDays = useMemo(() => days.slice(0, Number(range)), [days, range]);
@@ -57,6 +61,14 @@ export function RevenueScreen() {
           <Kpi icon="trending-up-outline" label={tr('Kaufquote')} value={formatPercent(conversion)} />
         </KpiGrid>
       )}
+      {buyers ? (
+        <KpiGrid>
+          <Kpi icon="images-outline" accent="#F59E0B" label={tr('Mehrere Bilder gekauft')} value={formatPercent(buyers.multi / buyers.guests)} sub={tr('{0} von {1} Gästen · letzte {2} Tage', formatNumber(buyers.multi), formatNumber(buyers.guests), buyers.days)} />
+          {buyers.multi > 0 ? (
+            <Kpi icon="people-outline" accent="#14B8A6" label={tr('Davon Familie oder Gruppe')} value={formatPercent(buyers.family / buyers.multi)} sub={tr('{0} mit mehreren Bildern einer Fahrt · {1} nochmal gefahren', formatNumber(buyers.family), formatNumber(buyers.again))} />
+          ) : null}
+        </KpiGrid>
+      ) : null}
 
       <Section title={tr('Verlauf')}>
         <Card>
