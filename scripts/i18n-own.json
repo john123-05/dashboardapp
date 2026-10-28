@@ -6126,5 +6126,93 @@
 "Gestisci abbonamento e fatture nella dashboard web.",
 "Je abonnement en facturen beheer je in het webdashboard.",
 "Abonementu un rēķinus pārvaldi tīmekļa panelī."
+],
+"Ausgewählt: {0}.": [
+"Selected: {0}.",
+"Seleccionado: {0}.",
+"Sélectionné : {0}.",
+"Selezionato: {0}.",
+"Geselecteerd: {0}.",
+"Izvēlēts: {0}."
+],
+"Automat, Kamera oder Drucker fällt aus": [
+"Kiosk, camera or printer fails",
+"Falla el kiosco, la cámara o la impresora",
+"Le kiosque, la caméra ou l’imprimante tombe en panne",
+"Si guasta il chiosco, la fotocamera o la stampante",
+"Kiosk, camera of printer valt uit",
+"Atteices kioskam, kamerai vai printerim"
+],
+"Keine Art ausgewählt – es kommen keine Mitteilungen.": [
+"No type selected – you won’t get any notifications.",
+"Ningún tipo seleccionado: no recibirás notificaciones.",
+"Aucun type sélectionné – tu ne recevras aucune notification.",
+"Nessun tipo selezionato: non riceverai notifiche.",
+"Geen soort gekozen – je krijgt geen meldingen.",
+"Nav izvēlēts neviens veids – paziņojumi nepienāks."
+],
+"Mitteilungen erlauben": [
+"Allow notifications",
+"Permitir notificaciones",
+"Autoriser les notifications",
+"Consenti notifiche",
+"Meldingen toestaan",
+"Atļaut paziņojumus"
+],
+"Neue Nachricht zu deiner Anfrage": [
+"New message about your request",
+"Nuevo mensaje sobre tu solicitud",
+"Nouveau message concernant ta demande",
+"Nuovo messaggio sulla tua richiesta",
+"Nieuw bericht over je aanvraag",
+"Jauna ziņa par tavu pieprasījumu"
+],
+"Sofort wissen, was im Park los ist": [
+"Know right away what’s happening in your park",
+"Entérate al momento de lo que pasa en tu parque",
+"Sache tout de suite ce qui se passe dans ton parc",
+"Sai subito cosa succede nel tuo parco",
+"Weet meteen wat er in je park gebeurt",
+"Uzzini uzreiz, kas notiek parkā"
+],
+"Störungen, Papier, Support und Hinweise auf diesem Gerät.": [
+"Faults, paper, support and notices on this device.",
+"Fallos, papel, soporte y avisos en este dispositivo.",
+"Pannes, papier, support et infos sur cet appareil.",
+"Guasti, carta, supporto e avvisi su questo dispositivo.",
+"Storingen, papier, support en meldingen op dit apparaat.",
+"Traucējumi, papīrs, atbalsts un paziņojumi šajā ierīcē."
+],
+"Störungen, Papier, Support-Antworten, Updates und Informationen kommen sofort aufs Handy – auch wenn die App geschlossen ist. Welche Arten, stellst du darunter einzeln ein, am Anfang sind alle an.": [
+"Faults, paper, support replies, updates and information arrive on your phone right away – even when the app is closed. You choose each type below; at first, all are on.",
+"Fallos, papel, respuestas del soporte, actualizaciones e información llegan al móvil al instante, incluso con la app cerrada. Debajo eliges cada tipo; al principio están todos activados.",
+"Pannes, papier, réponses du support, mises à jour et informations arrivent aussitôt sur ton téléphone – même app fermée. Tu choisis chaque type en dessous ; au début, tout est activé.",
+"Guasti, carta, risposte del supporto, aggiornamenti e informazioni arrivano subito sul telefono, anche con l’app chiusa. Sotto scegli ogni tipo; all’inizio sono tutti attivi.",
+"Storingen, papier, supportantwoorden, updates en informatie komen meteen op je telefoon – ook als de app gesloten is. Daaronder kies je elke soort apart; in het begin staan ze allemaal aan.",
+"Traucējumi, papīrs, atbalsta atbildes, atjauninājumi un informācija uzreiz nonāk telefonā – arī tad, ja lietotne ir aizvērta. Zemāk izvēlies katru veidu; sākumā visi ir ieslēgti."
+],
+"Systemzustand, Papier, Support, Updates und mehr": [
+"System health, paper, support, updates and more",
+"Estado del sistema, papel, soporte, actualizaciones y más",
+"État du système, papier, support, mises à jour et plus",
+"Stato del sistema, carta, supporto, aggiornamenti e altro",
+"Systeemstatus, papier, support, updates en meer",
+"Sistēmas stāvoklis, papīrs, atbalsts, atjauninājumi un vairāk"
+],
+"Worüber benachrichtigen?": [
+"What should we notify you about?",
+"¿Sobre qué quieres que te avisemos?",
+"Pour quoi veux-tu être averti ?",
+"Per cosa vuoi essere avvisato?",
+"Waarover wil je een melding?",
+"Par ko paziņot?"
+],
+"Wähle, worüber dich Liftpictures auf diesem Gerät benachrichtigt – auch wenn die App geschlossen ist.": [
+"Choose what Liftpictures notifies you about on this device – even when the app is closed.",
+"Elige sobre qué te avisa Liftpictures en este dispositivo, incluso con la app cerrada.",
+"Choisis ce pour quoi Liftpictures t’avertit sur cet appareil – même app fermée.",
+"Scegli per cosa Liftpictures ti avvisa su questo dispositivo, anche con l’app chiusa.",
+"Kies waarover Liftpictures je op dit apparaat informeert – ook als de app gesloten is.",
+"Izvēlies, par ko Liftpictures tev paziņo šajā ierīcē – arī tad, ja lietotne ir aizvērta."
 ]
 }

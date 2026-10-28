@@ -53,19 +53,31 @@ export function AlertsScreen({ navigation }: { navigation: { goBack: () => void 
       refreshing={refreshing}
       onRefresh={reload}
       right={
-        unread > 0 ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          {unread > 0 ? (
+            <Pressable
+              onPress={() => {
+                successHaptic();
+                markAllRead();
+              }}
+              hitSlop={8}
+              style={{ minHeight: TAP, justifyContent: 'center' }}
+              accessibilityRole="button"
+            >
+              <Text style={{ ...font.callout, color: colors.brand }}>{tr('Alle gelesen')}</Text>
+            </Pressable>
+          ) : null}
+          {/* Benachrichtigungen einstellen: welche Arten aufs Handy kommen */}
           <Pressable
-            onPress={() => {
-              successHaptic();
-              markAllRead();
-            }}
+            onPress={() => (wide ? nav.navigate('Main', { screen: 'Notifications' }) : nav.navigate('Notifications'))}
             hitSlop={8}
             style={{ minHeight: TAP, justifyContent: 'center' }}
             accessibilityRole="button"
+            accessibilityLabel={tr('Benachrichtigungen einstellen')}
           >
-            <Text style={{ ...font.callout, color: colors.brand }}>{tr('Alle gelesen')}</Text>
+            <Ionicons name="settings-outline" size={22} color={colors.ink2} />
           </Pressable>
-        ) : null
+        </View>
       }
     >
       {error && items.length === 0 ? <ErrorNote text={error} onRetry={reload} /> : null}

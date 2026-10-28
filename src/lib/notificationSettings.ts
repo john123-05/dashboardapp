@@ -11,6 +11,8 @@ export interface NotificationSettings {
   paper_low_threshold: number;
   support_enabled: boolean;
   system_health_enabled: boolean;
+  updates_enabled: boolean;
+  news_enabled: boolean;
 }
 
 export const DEFAULT_SETTINGS: NotificationSettings = {
@@ -21,6 +23,8 @@ export const DEFAULT_SETTINGS: NotificationSettings = {
   paper_low_threshold: 20,
   support_enabled: true,
   system_health_enabled: true,
+  updates_enabled: true,
+  news_enabled: true,
 };
 
 const URL_ = `${EXTERNAL_SUPABASE_URL}/functions/v1/operator-notification-settings`;

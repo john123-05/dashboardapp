@@ -41,6 +41,7 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { NewTicketScreen } from '../screens/NewTicketScreen';
 import { OverviewScreen } from '../screens/OverviewScreen';
 import { ParkAccessScreen } from '../screens/ParkAccessScreen';
+import { NotificationsScreen } from '../screens/NotificationsScreen';
 import { PhotoDetailScreen } from '../screens/PhotoDetailScreen';
 import { PhotosScreen } from '../screens/PhotosScreen';
 import { PurchasesScreen } from '../screens/PurchasesScreen';
@@ -145,6 +146,7 @@ function pageScreens(S: typeof Inner) {
       <S.Screen name="Support" component={SupportScreen as any} />
       <S.Screen name="SupportThread" component={SupportThreadScreen as any} />
       <S.Screen name="Settings" component={SettingsScreen as any} />
+      <S.Screen name="Notifications" component={NotificationsScreen as any} />
       <S.Screen name="Team" component={TeamScreen as any} />
       <S.Screen name="Account" component={AccountScreen as any} />
       <S.Screen name="Help" component={HelpScreen as any} />
