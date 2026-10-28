@@ -201,7 +201,7 @@ export function ShopEditScreen({ navigation }: { navigation: { goBack: () => voi
 
       <Section title={tr('Zahlungen')}>
         <Card>
-          <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Dein Shop läuft im Testmodus: Gäste können alles ausprobieren, es wird nichts berechnet. Echte Zahlungen schalten wir mit der Freischaltung ein.')}</Text>
+          <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Dein Shop ist noch in der Vorschau: Gäste können alles ausprobieren, es wird nichts berechnet. Echte Bestellungen schalten wir mit der Freischaltung ein.')}</Text>
         </Card>
       </Section>
     </View>

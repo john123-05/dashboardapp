@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.john12305.dashboardapp",
-      "buildNumber": "19",
+      "buildNumber": "20",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSPhotoLibraryUsageDescription": "Damit du Logos und Fotos ins Dashboard hochladen kannst.",

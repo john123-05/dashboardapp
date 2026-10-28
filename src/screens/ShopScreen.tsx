@@ -64,7 +64,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
       onBack={navigation.goBack}
       refreshing={shop.refreshing}
       onRefresh={() => { shop.reload(); sales.reload(); }}
-      right={<Pill tone={requestedAt ? 'ok' : 'warn'} text={requestedAt ? tr('Aktivierung angefragt') : tr('Testmodus')} />}
+      right={<Pill tone={requestedAt ? 'ok' : 'warn'} text={requestedAt ? tr('Aktivierung angefragt') : tr('Vorschau')} />}
     >
       {shop.error && !shop.data ? <ErrorNote text={shop.error} onRetry={shop.reload} /> : null}
 
@@ -188,7 +188,7 @@ export function ShopPreview({ settings, version = 0 }: { settings: ShopSettings;
             <View style={styles.qrBox}>
               <QrCode value={url} size={220} />
             </View>
-            <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>{tr('Mit einem anderen Handy scannen und den Shop selbst ausprobieren – inklusive Test-Checkout mit der Karte 4242 4242 4242 4242.')}</Text>
+            <Text style={{ ...font.footnote, color: colors.ink2, textAlign: 'center' }}>{tr('Mit einem anderen Handy scannen und den Shop selbst ausprobieren.')}</Text>
           </View>
         )}
         <Button title={tr('Demo im Browser öffnen')} icon="open-outline" kind="plain" onPress={() => void Linking.openURL(url)} />
