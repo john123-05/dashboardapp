@@ -16,6 +16,8 @@ import { loadHealth, loadKioskSales, loadLedger, loadMachineRevenue } from '../l
 import { formatCents, formatDay, formatDayLong, formatNumber, formatPercent, formatTime, timeAgo } from '../lib/format';
 import { aggregateByDate, getEffectiveScheduleForDate, todayInTimezone, toChartSeries } from '../lib/kioskSales';
 import { canSee } from '../lib/permissions';
+import { speedUnlocked, useEntitlements } from '../lib/entitlements';
+import { fetchSpeedOverview } from '../lib/speed';
 import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
@@ -37,6 +39,20 @@ export function OverviewScreen() {
   const health = useData(parkId ? `health:${parkId}` : null, () => loadHealth(parkId!), [parkId], 60000);
   const photos = useData(wide && parkId ? `ovphotos:${parkId}` : null, () => fetchRecentPhotos(parkId!, 4), [parkId, wide], 120000);
   const ledger = useData(parkId ? `ledger-latest:${parkId}` : null, () => loadLedger(parkId!, { from: todayInTimezone(timezone) }), [parkId, timezone], 90000);
+  // Speedmessung: Gäste mit mehreren Bildern in der Bestenliste (dieser Monat).
+  const ent = useEntitlements(parkId);
+  const speedOn = speedUnlocked(parkId, ent.has);
+  const speed = useData(parkId && speedOn ? `ovspeed:${parkId}` : null, () => fetchSpeedOverview(parkId!, 'month', ''), [parkId, speedOn], 300000);
+  const repeat = speed.data?.enabled && speed.data.repeat && speed.data.repeat.guests > 0 ? speed.data.repeat : null;
+  const repeatKpi = repeat ? (
+    <Kpi
+      icon="repeat-outline"
+      accent="#F59E0B"
+      label={tr('Mehrfach in der Bestenliste')}
+      value={tr('{0} von {1} Gästen', formatNumber(repeat.repeaters), formatNumber(repeat.guests))}
+      sub={tr('{0} % diesen Monat · {1} Bilder zusätzlich', Math.round((repeat.repeaters / repeat.guests) * 100), formatNumber(repeat.extraEntries))}
+    />
+  ) : null;
 
   const today = todayInTimezone(timezone);
   const days = useMemo(() => (sales.data ? aggregateByDate(sales.data.days, sales.data.priceCents ?? 0) : []), [sales.data]);
@@ -99,7 +115,7 @@ export function OverviewScreen() {
               <Kpi icon="pulse-outline" label={tr('Fotopapier')} accent="#14B8A6" value={paper.length ? `${Math.min(...paper)}` : '–'} sub={paper.length ? tr('Drucke übrig') : null} />
               <Kpi icon="calendar-outline" label={tr('Fotos im Monat verkauft')} accent="#64748B" value={formatNumber(soldMonth)} />
               <Kpi icon="cash-outline" label={tr('Monatsumsatz')} accent="#22C55E" value={formatCents(revenueMonth)} />
-              <Kpi icon="camera-outline" label={tr('Fotos insgesamt verkauft')} accent="#A855F7" value={formatNumber(soldTotal)} />
+              {repeatKpi ?? <Kpi icon="camera-outline" label={tr('Fotos insgesamt verkauft')} accent="#A855F7" value={formatNumber(soldTotal)} />}
             </KpiGrid>
           ) : null}
           <CoachTarget id="overview.kpis">
@@ -109,6 +125,7 @@ export function OverviewScreen() {
             <Kpi icon="speedometer-outline" label={tr('Fahrten heute')} accent="#6366F1" value={formatNumber(ridesToday)} />
             <Kpi icon="trending-up-outline" label={tr('Kaufquote heute')} accent="#EC4899" value={formatPercent(conversion)} sub={conversion !== null && conversion < 0.05 ? tr('niedrig') : tr('Verkauft je Fahrt')} tone={conversion !== null && conversion < 0.05 ? 'warn' : undefined} />
             {wide ? <Kpi icon="hardware-chip-outline" label={tr('Automaten online')} accent="#EF4444" value={`${(health.data ?? []).filter((m) => m.reachable).length}/${(health.data ?? []).length}`} /> : null}
+            {!wide ? repeatKpi : null}
           </KpiGrid>
           </CoachTarget>
 

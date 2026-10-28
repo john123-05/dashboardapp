@@ -208,11 +208,11 @@ export function previewSpeed(period: string) {
   const names = ['Leon', 'Mia', 'Jonas', 'Anna', null, 'Ben', null, 'Emma', 'Paul', 'Lina'];
   const rows = names.map((n, i) => ({
     id: `r${i}`, rank: i + 1, speedKmh: 41.8 - i * 1.3, capturedAt: new Date(Date.now() - i * 1800000).toISOString(),
-    day: new Date().toISOString().slice(0, 10), email: n ? `${n.toLowerCase()}@example.de` : `gast${i}@example.de`, claimId: null, hidden: i === 6, displayName: n, avatarUrl: null,
+    day: new Date().toISOString().slice(0, 10), email: n ? `${n.toLowerCase()}@example.de` : `gast${i}@example.de`, claimId: null, hidden: i === 6, displayName: n, avatarUrl: null, entries: [3, 1, 2, 1, 1, 2, 1, 1, 1, 1][i],
   }));
   return {
     enabled: true, period, date: new Date().toISOString().slice(0, 10), today: new Date().toISOString().slice(0, 10), from: null, to: null,
-    rows, total: rows.length, stats: { count: 307, fastest: 41.8, slowest: 18.2, average: 31.4 },
+    rows, total: rows.length, repeat: { guests: 28, repeaters: 13, extraEntries: 17 }, stats: { count: 307, fastest: 41.8, slowest: 18.2, average: 31.4 },
     settings: { headline: 'Bestenliste', subline: '', cta_title: '', cta_text: '', winner_text: '', instagram_handle: '', hashtag: '', prize_text: '', show_qr: true, auto_scroll: true, rows: 10, max_speed_kmh: 60, periods: ['day', 'week', 'month', 'all'] },
   } as any;
 }

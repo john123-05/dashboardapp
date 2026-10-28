@@ -84,6 +84,18 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
           <Kpi icon="trending-down-outline" label={tr('Langsamste')} value={kmh(o.stats.slowest)} />
         </KpiGrid>
       ) : null}
+      {/* Gäste mit mehreren Bildern derselben E-Mail im Zeitraum, egal ob schneller oder langsamer. */}
+      {o?.repeat && o.repeat.guests > 0 ? (
+        <KpiGrid columns={1}>
+          <Kpi
+            icon="repeat-outline"
+            accent="#F59E0B"
+            label={tr('Mehrfach eingetragen')}
+            value={tr('{0} von {1} Gästen', formatNumber(o.repeat.repeaters), formatNumber(o.repeat.guests))}
+            sub={tr('{0} % · {1} Bilder zusätzlich mit derselben E-Mail', Math.round((o.repeat.repeaters / o.repeat.guests) * 100), formatNumber(o.repeat.extraEntries))}
+          />
+        </KpiGrid>
+      ) : null}
 
       {o && o.rows.length > 0 ? (
         <ListCard>
@@ -98,6 +110,7 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
                 </Text>
                 <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={1}>
                   {period === 'day' ? tr('{0} Uhr', formatTime(r.capturedAt, timezone)) : formatDayLong(r.day)}
+                  {(r.entries ?? 1) > 1 ? tr(' · {0} Bilder', r.entries ?? 1) : ''}
                   {r.hidden ? tr(' · ausgeblendet') : ''}
                 </Text>
               </View>

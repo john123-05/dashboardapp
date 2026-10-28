@@ -34,6 +34,15 @@ export interface SpeedRow {
   hidden: boolean;
   displayName: string | null;
   avatarUrl: string | null;
+  /** Eingetragene Bilder dieses Gastes im Zeitraum (fehlt bei älterer Function). */
+  entries?: number;
+}
+
+/** Gäste, die sich im Zeitraum mit mehreren Bildern (derselben E-Mail) eingetragen haben. */
+export interface SpeedRepeatStats {
+  guests: number;
+  repeaters: number;
+  extraEntries: number;
 }
 
 export interface SpeedOverview {
@@ -45,6 +54,7 @@ export interface SpeedOverview {
   to: string | null;
   rows: SpeedRow[];
   total: number;
+  repeat?: SpeedRepeatStats;
   stats: { count: number; fastest: number | null; slowest: number | null; average: number | null };
   settings: SpeedSettings;
 }

@@ -5886,5 +5886,53 @@
 "«{0}» è stato consegnato a {1}. Per renderlo visibile, riavvia ora il programma di vendita.",
 "‘{0}’ is doorgegeven aan {1}. Start nu het verkoopprogramma opnieuw om het zichtbaar te maken.",
 "“{0}” nodots {1}. Lai tas būtu redzams, tagad restartē pārdošanas programmu."
+],
+"Mehrfach eingetragen": [
+"Entered more than once",
+"Inscritos varias veces",
+"Inscrits plusieurs fois",
+"Iscritti più volte",
+"Meerdere keren ingeschreven",
+"Ierakstījušies vairākkārt"
+],
+"{0} von {1} Gästen": [
+"{0} of {1} guests",
+"{0} de {1} visitantes",
+"{0} sur {1} visiteurs",
+"{0} su {1} ospiti",
+"{0} van {1} gasten",
+"{0} no {1} viesiem"
+],
+"{0} % · {1} Bilder zusätzlich mit derselben E-Mail": [
+"{0}% · {1} extra photos with the same email",
+"{0} % · {1} fotos adicionales con el mismo correo",
+"{0} % · {1} photos en plus avec la même adresse e-mail",
+"{0}% · {1} foto in più con la stessa e-mail",
+"{0}% · {1} extra foto’s met hetzelfde e-mailadres",
+"{0} % · {1} papildu foto ar to pašu e-pastu"
+],
+" · {0} Bilder": [
+" · {0} photos",
+" · {0} fotos",
+" · {0} photos",
+" · {0} foto",
+" · {0} foto’s",
+" · {0} foto"
+],
+"Mehrfach in der Bestenliste": [
+"Repeat entries on the leaderboard",
+"Repetidores en la clasificación",
+"Inscriptions multiples au classement",
+"Iscrizioni ripetute in classifica",
+"Herhaalde inschrijvingen in de ranglijst",
+"Atkārtoti ieraksti rangu tabulā"
+],
+"{0} % diesen Monat · {1} Bilder zusätzlich": [
+"{0}% this month · {1} extra photos",
+"{0} % este mes · {1} fotos adicionales",
+"{0} % ce mois-ci · {1} photos en plus",
+"{0}% questo mese · {1} foto in più",
+"{0}% deze maand · {1} extra foto’s",
+"{0} % šomēnes · {1} papildu foto"
 ]
 }
