@@ -1215,14 +1215,6 @@
 "Je maandtegoed is bijna op. Met een groter plan of extra e-mails krijg je meer.",
 "Tavs mēneša limits ir gandrīz izsmelts. Ar lielāku plānu vai papildu e-pastiem saņemsi vairāk."
 ],
-"Dein Park. Immer dabei.": [
-"Your park. Always with you.",
-"Tu parque. Siempre contigo.",
-"Ton parc. Toujours avec toi.",
-"Il tuo parco. Sempre con te.",
-"Je park. Altijd bij je.",
-"Tavs parks. Vienmēr līdzi."
-],
 "Dein Plan, Aktionen und alles, was du dazubuchen kannst. Anfragen landen direkt bei uns.": [
 "Your plan, offers and everything you can add. Requests come straight to us.",
 "Tu plan, promociones y todo lo que puedes contratar. Las solicitudes nos llegan directamente.",
@@ -6230,5 +6222,13 @@
 "Il tuo negozio è ancora un’anteprima: gli ospiti possono provare tutto e non viene addebitato nulla. Attiviamo gli ordini reali con l’abilitazione.",
 "Je shop is nog een voorbeeld: gasten kunnen alles uitproberen, er wordt niets afgerekend. Echte bestellingen zetten we aan bij de activering.",
 "Tavs veikals vēl ir priekšskatījums: viesi var visu izmēģināt, nekas netiek iekasēts. Īstus pasūtījumus ieslēdzam aktivizējot."
+],
+"Dein Fotosystem als Business-Tool.": [
+"Your photo system as a business tool.",
+"Tu sistema de fotos como herramienta de negocio.",
+"Ton système photo comme outil business.",
+"Il tuo sistema fotografico come strumento di business.",
+"Je fotosysteem als zakelijke tool.",
+"Tava foto sistēma kā biznesa rīks."
 ]
 }

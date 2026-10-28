@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import { Image as ExpoImage } from 'expo-image';
-import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import type { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Field } from '../components/Field';
@@ -127,6 +127,9 @@ export function LoginScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [register, setRegister] = useState(false);
+  const { width: winW, height: winH } = useWindowDimensions();
+  const portrait = winH > winW;
+  const bgHeight = Math.round((winW * 1080) / 1920 * 1.35);
   const pw = useRef<TextInput>(null);
 
   async function submit() {
@@ -144,15 +147,28 @@ export function LoginScreen() {
 
   return (
     <View style={styles.root}>
-      {/* Wie die Anmeldeseite im Web: Foto aus dem Park im Hintergrund, dunkel abgetönt. */}
-      <ExpoImage source={{ uri: BG }} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(15,23,42,0.55)' }]} />
+      {/* Foto aus dem Park (Liftpic-Kamera und Achterbahn). Hochkant ganz zeigen statt beschneiden: oben in voller
+          Breite, unten weich in den dunklen Hintergrund auslaufen lassen. Quer (iPad, Mac) füllt es die Fläche. */}
+      {portrait ? (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgHeight + FADE }}>
+          <ExpoImage source={{ uri: BG }} style={{ width: '100%', height: bgHeight }} contentFit="cover" transition={300} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(15,23,42,0.45)' }]} />
+          {Array.from({ length: 8 }, (_, i) => (
+            <View key={i} style={{ position: 'absolute', left: 0, right: 0, top: bgHeight - FADE + (i * FADE * 2) / 8, height: (FADE * 2) / 8 + 1, backgroundColor: `rgba(15,23,42,${((i + 1) / 8).toFixed(2)})` }} />
+          ))}
+        </View>
+      ) : (
+        <>
+          <ExpoImage source={{ uri: BG }} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(15,23,42,0.55)' }]} />
+        </>
+      )}
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 56, paddingBottom: insets.bottom + 24 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.head}>
           <Image source={require('../../assets/icon.png')} style={styles.logo} />
           <Text style={styles.title}>{'Liftpictures'}</Text>
-          <Text style={styles.sub}>{tr('Dein Park. Immer dabei.')}</Text>
+          <Text style={styles.sub}>{tr('Dein Fotosystem als Business-Tool.')}</Text>
         </View>
         <BlurView intensity={60} tint="systemThickMaterial" style={styles.form}>
           {register ? <RegisterForm onBack={() => setRegister(false)} /> : <>
@@ -173,17 +189,21 @@ export function LoginScreen() {
             </Text>
           </Pressable>
         ) : null}
-        <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
-          <Text style={{ ...font.callout, color: '#fff' }}>
-            {tr('Noch kein Zugang? ')}<Text style={{ fontWeight: '700' }}>{tr('Demo anfragen')}</Text>
-          </Text>
-        </Pressable>
+        {/* „Demo anfragen“ nur bei „Konto erstellen“ – auf der Anmeldung reicht der Weg für neue Betreiber. */}
+        {register ? (
+          <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
+            <Text style={{ ...font.callout, color: '#fff' }}>
+              {tr('Noch kein Zugang? ')}<Text style={{ fontWeight: '700' }}>{tr('Demo anfragen')}</Text>
+            </Text>
+          </Pressable>
+        ) : null}
       </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
 }
 
+const FADE = 90;
 const BG = 'https://xcrxltiiovpoladpaewd.supabase.co/storage/v1/object/public/test/Copy%20of%20Copy%20of%20Photo-%20und%20Videosystems%20since%202006.jpg';
 
 const styles = StyleSheet.create({
