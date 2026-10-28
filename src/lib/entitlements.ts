@@ -23,6 +23,7 @@ export const PLAN_LABEL: Record<PlanKey, string> = { get basis() { return tr('Ba
 const GUEST_ACTIVITY_PARK_IDS = new Set([
   'e2da6436-6a83-4c39-add3-5f99eb6bd897', '3b08e092-beb5-46ec-9811-5698e86dd83a', '25c1022b-4e2e-4fc4-b54d-72a4ced2522b',
   '91902231-5950-471b-8cc9-a03833f2a318', '56f864d0-1852-4baf-8167-a51fde746315', '3eed6a5a-eca7-4097-90c2-45c64919e222',
+  '36b887eb-7c89-4b45-a23f-095a6e6251fa',
 ]);
 export const hasGuestActivity = (parkId: string | null | undefined) => !!parkId && GUEST_ACTIVITY_PARK_IDS.has(parkId);
 
