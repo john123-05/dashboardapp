@@ -7,7 +7,7 @@ import { speedUnlocked, useEntitlements } from '../lib/entitlements';
 import { Card, EmptyState, ErrorNote, Kpi, KpiGrid, KpiSkeleton, ListCard, Pill, Segmented } from '../components/ui';
 import { tapHaptic } from '../components/haptics';
 import { usePark } from '../contexts/ParkContext';
-import { formatDayLong, formatNumber, formatTime, formatDecimal } from '../lib/format';
+import { formatCents, formatDayLong, formatNumber, formatPercent, formatTime, formatDecimal } from '../lib/format';
 import { todayInTimezone } from '../lib/kioskSales';
 import { fetchSpeedOverview, setSpeedResultHidden, shiftDate, type SpeedPeriod, type SpeedRow } from '../lib/speed';
 import { useData } from '../lib/useData';
@@ -84,17 +84,33 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
           <Kpi icon="trending-down-outline" label={tr('Langsamste')} value={kmh(o.stats.slowest)} />
         </KpiGrid>
       ) : null}
-      {/* Gäste mit mehreren Bildern derselben E-Mail im Zeitraum, egal ob schneller oder langsamer. */}
-      {o?.repeat && o.repeat.guests > 0 ? (
-        <KpiGrid columns={1}>
-          <Kpi
-            icon="repeat-outline"
-            accent="#F59E0B"
-            label={tr('Mehrfach eingetragen')}
-            value={tr('{0} von {1} Gästen', formatNumber(o.repeat.repeaters), formatNumber(o.repeat.guests))}
-            sub={tr('{0} % · {1} Bilder zusätzlich mit derselben E-Mail', Math.round((o.repeat.repeaters / o.repeat.guests) * 100), formatNumber(o.repeat.extraEntries))}
-          />
-        </KpiGrid>
+      {/* Wiederholungsfahrten: Gäste der Liste, die nochmal gefahren sind (egal ob schneller), mit Bezug auf alle Verkäufe. */}
+      {o?.repeat && o.repeat.guests > 0 && 'extraRides' in o.repeat ? (
+        <>
+          <KpiGrid columns={1}>
+            <Kpi
+              icon="repeat-outline"
+              accent="#F59E0B"
+              label={tr('Wiederholungsfahrten')}
+              value={tr('+{0} Fahrten', formatNumber(o.repeat.extraRides))}
+              sub={o.sales?.priceCents
+                ? tr('{0} Fotos zusätzlich verkauft · ≈ {1}', formatNumber(o.repeat.extraPhotos), formatCents(o.repeat.extraPhotos * o.sales.priceCents))
+                : tr('{0} Fotos zusätzlich verkauft', formatNumber(o.repeat.extraPhotos))}
+            />
+          </KpiGrid>
+          <KpiGrid>
+            <Kpi label={tr('Gäste der Bestenliste sind nochmal gefahren')} value={tr('{0} von {1}', formatNumber(o.repeat.repeaters), formatNumber(o.repeat.guests))} sub={formatPercent(o.repeat.repeaters / o.repeat.guests)} />
+            {o.sales && o.sales.photosSold > 0 ? (
+              <Kpi label={tr('verkaufte Fotos wurden in die Bestenliste eingetragen')} value={tr('{0} von {1}', formatNumber(o.repeat.entries), formatNumber(o.sales.photosSold))} sub={formatPercent(o.repeat.entries / o.sales.photosSold)} />
+            ) : null}
+            {o.sales && o.sales.photosSold > 0 ? (
+              <Kpi label={tr('verkaufte Fotos stammen von Gästen, die nochmal gefahren sind')} value={tr('{0} von {1}', formatNumber(o.repeat.extraPhotos), formatNumber(o.sales.photosSold))} sub={formatPercent(o.repeat.extraPhotos / o.sales.photosSold)} />
+            ) : null}
+          </KpiGrid>
+          <Text style={{ ...font.caption, color: colors.ink3 }}>
+            {tr('Gäste aus der Bestenliste, die nochmal gefahren sind und ihr neues Foto wieder eingetragen haben. Fotos derselben E-Mail innerhalb von 5 Minuten zählen als eine Fahrt (z. B. Familie auf mehreren Schlitten).')}
+          </Text>
+        </>
       ) : null}
 
       {o && o.rows.length > 0 ? (
@@ -110,7 +126,7 @@ export function SpeedScreen({ navigation }: { navigation: { goBack: () => void }
                 </Text>
                 <Text style={{ ...font.footnote, color: colors.ink2 }} numberOfLines={1}>
                   {period === 'day' ? tr('{0} Uhr', formatTime(r.capturedAt, timezone)) : formatDayLong(r.day)}
-                  {(r.entries ?? 1) > 1 ? tr(' · {0} Bilder', r.entries ?? 1) : ''}
+                  {(r.rides ?? 1) > 1 ? tr(' · {0} Fahrten', r.rides ?? 1) : ''}
                   {r.hidden ? tr(' · ausgeblendet') : ''}
                 </Text>
               </View>

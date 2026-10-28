@@ -39,18 +39,21 @@ export function OverviewScreen() {
   const health = useData(parkId ? `health:${parkId}` : null, () => loadHealth(parkId!), [parkId], 60000);
   const photos = useData(wide && parkId ? `ovphotos:${parkId}` : null, () => fetchRecentPhotos(parkId!, 4), [parkId, wide], 120000);
   const ledger = useData(parkId ? `ledger-latest:${parkId}` : null, () => loadLedger(parkId!, { from: todayInTimezone(timezone) }), [parkId, timezone], 90000);
-  // Speedmessung: Gäste mit mehreren Bildern in der Bestenliste (dieser Monat).
+  // Speedmessung: Wiederholungsfahrten aus der Bestenliste (dieser Monat).
   const ent = useEntitlements(parkId);
   const speedOn = speedUnlocked(parkId, ent.has);
   const speed = useData(parkId && speedOn ? `ovspeed:${parkId}` : null, () => fetchSpeedOverview(parkId!, 'month', ''), [parkId, speedOn], 300000);
-  const repeat = speed.data?.enabled && speed.data.repeat && speed.data.repeat.guests > 0 ? speed.data.repeat : null;
+  const repeat = speed.data?.enabled && speed.data.repeat && speed.data.repeat.guests > 0 && 'extraRides' in speed.data.repeat ? speed.data.repeat : null;
+  const repeatPrice = speed.data?.sales?.priceCents ?? sales.data?.priceCents ?? null;
   const repeatKpi = repeat ? (
     <Kpi
       icon="repeat-outline"
       accent="#F59E0B"
-      label={tr('Mehrfach in der Bestenliste')}
-      value={tr('{0} von {1} Gästen', formatNumber(repeat.repeaters), formatNumber(repeat.guests))}
-      sub={tr('{0} % diesen Monat · {1} Bilder zusätzlich', Math.round((repeat.repeaters / repeat.guests) * 100), formatNumber(repeat.extraEntries))}
+      label={tr('Wiederholungsfahrten im Monat')}
+      value={tr('+{0} Fahrten', formatNumber(repeat.extraRides))}
+      sub={repeatPrice
+        ? tr('{0} Fotos · {1} zusätzlich', formatNumber(repeat.extraPhotos), formatCents(repeat.extraPhotos * repeatPrice))
+        : tr('{0} Fotos zusätzlich verkauft', formatNumber(repeat.extraPhotos))}
     />
   ) : null;
 
