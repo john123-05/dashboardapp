@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
-import { AppState, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Notice, TabStrip } from '../components/controls';
+import { AppState, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TabStrip } from '../components/controls';
 import { successHaptic } from '../components/haptics';
 import { useWide } from '../components/layout';
 import { Screen } from '../components/Screen';
@@ -10,7 +10,6 @@ import { Button, Card, ErrorNote, Pill, Section, Skeleton } from '../components/
 import { useAuth } from '../contexts/AuthContext';
 import { usePark } from '../contexts/ParkContext';
 import {
-  BillingDisabledError,
   BUILT_IN_GROUPS,
   bullets,
   catalogGroup,
@@ -21,11 +20,9 @@ import {
   groupName,
   groupSub,
   money,
-  openBillingPortal,
   pkgText,
   priceLine,
   requestPackage,
-  startCheckout,
   useCatalog,
   type CatalogPackage,
 } from '../lib/catalog';
@@ -53,7 +50,6 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
   const [busy, setBusy] = useState<string | null>(null);
   const [requested, setRequested] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
 
   // Nach der Buchung im Browser: beim Zurückkehren Freischaltung und Katalog neu laden.
   useFocusEffect(
@@ -78,28 +74,10 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
   const shown = tabs.some((t) => t.value === filter) ? filter : 'all';
   const visibleGroups = groups.filter((g) => shown === 'all' || g.key === shown);
 
+  // App Store 3.1.1: in der App keine Buchung über Stripe – nur unverbindlich anfragen (gebucht wird im Web-Dashboard).
   async function book(plan: 'marketing_starter' | 'marketing_pro', pkg: CatalogPackage | undefined) {
-    if (!parkId) return;
-    setBusy(plan);
-    setError(null);
-    try {
-      try {
-        // Mit eingerichteter Stripe-Abrechnung geht es direkt zur Buchung im Browser.
-        await Linking.openURL(await startCheckout(parkId, plan));
-        setNotice(tr('Die Buchung ist im Browser geöffnet. Wenn du zurück in die App wechselst, wird dein Plan neu geladen.'));
-        return;
-      } catch (e) {
-        if (!(e instanceof BillingDisabledError)) throw e;
-      }
-      const fb = FALLBACK_PLANS.find((p) => p.plan === plan)!;
-      await requestPackage(parkId, pkg ?? { key: plan, name: fb.name, price: tr('{0} €/Monat', fb.cents / 100) });
-      successHaptic();
-      setRequested((r) => [...r, plan]);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : tr('Anfrage fehlgeschlagen.'));
-    } finally {
-      setBusy(null);
-    }
+    const fb = FALLBACK_PLANS.find((p) => p.plan === plan)!;
+    await ask(plan, pkg ?? { key: plan, name: fb.name, price: tr('{0} €/Monat', fb.cents / 100) });
   }
 
   async function ask(key: string, target: Parameters<typeof requestPackage>[1]) {
@@ -114,16 +92,6 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
       setError(e instanceof Error ? e.message : tr('Anfrage fehlgeschlagen.'));
     }
     setBusy(null);
-  }
-
-  async function manageBilling() {
-    if (!parkId) return;
-    setError(null);
-    try {
-      await Linking.openURL(await openBillingPortal(parkId));
-    } catch (e) {
-      setError(e instanceof BillingDisabledError ? tr('Die Online-Abrechnung ist für deinen Park noch nicht eingerichtet. Wir melden uns persönlich.') : e instanceof Error ? e.message : String(e));
-    }
   }
 
   const cols = wide ? 3 : 1;
@@ -155,7 +123,7 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
                 ) : lower || !bookable ? null : requested.includes(it.plan) ? (
                   <Pill tone="ok" icon="checkmark" text={tr('Angefragt – wir melden uns')} />
                 ) : isOwner ? (
-                  <Button title={busy === it.plan ? tr('Wird geöffnet…') : tr('Jetzt buchen')} kind={it.highlight ? 'primary' : 'plain'} loading={busy === it.plan} onPress={() => void book(it.plan as 'marketing_starter' | 'marketing_pro', it.pkg)} />
+                  <Button title={busy === it.plan ? tr('Wird gesendet…') : tr('Anfragen')} kind={it.highlight ? 'primary' : 'plain'} loading={busy === it.plan} onPress={() => void book(it.plan as 'marketing_starter' | 'marketing_pro', it.pkg)} />
                 ) : (
                   <Text style={styles.hint}>{tr('Buchen kann der Inhaber des Kontos.')}</Text>
                 )
@@ -222,12 +190,11 @@ export function PlansScreen({ navigation, route }: { navigation: { goBack: () =>
         </View>
       ))}
       {error ? <ErrorNote text={error} /> : null}
-      {notice ? <Notice tone="info" text={notice} /> : null}
 
       <CoachTarget id="plans.tabs">
         <TabStrip tabs={tabs} value={shown} onChange={setFilter} />
       </CoachTarget>
-      {ent.plan !== 'basis' && isOwner ? <Button title={tr('Abo und Rechnungen verwalten')} icon="card-outline" kind="plain" onPress={() => void manageBilling()} /> : null}
+      {ent.plan !== 'basis' && isOwner ? <Text style={styles.hint}>{tr('Abo und Rechnungen verwaltest du im Web-Dashboard.')}</Text> : null}
 
       {catalog.loading && !catalog.data ? <Skeleton height={300} radius={radius.lg} /> : null}
 

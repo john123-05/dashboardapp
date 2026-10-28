@@ -172,7 +172,16 @@ export function ShopPreview({ settings, version = 0 }: { settings: ShopSettings;
         <Segmented<'phone' | 'qr'> value={mode} onChange={setMode} options={[{ value: 'phone', label: tr('Handy') }, { value: 'qr', label: tr('QR-Code') }]} />
         {mode === 'phone' ? (
           <View style={styles.frame}>
-            <WebView key={`${settings.demo_token}-${version}`} source={{ uri: `${DASHBOARD_URL}/demo-shop/${settings.demo_token}?embed=1` }} style={{ flex: 1, backgroundColor: '#fff' }} applicationNameForUserAgent="LiftpicturesDashboardApp/1.5" nestedScrollEnabled />
+            <WebView key={`${settings.demo_token}-${version}`} source={{ uri: `${DASHBOARD_URL}/demo-shop/${settings.demo_token}?embed=1` }} style={{ flex: 1, backgroundColor: '#fff' }} applicationNameForUserAgent="LiftpicturesDashboardApp/1.5" nestedScrollEnabled
+              // „Kasse im Browser testen“ in der Vorschau: die Kasse läuft nur in der Browser-Version.
+              onMessage={(e) => {
+                try {
+                  if (JSON.parse(e.nativeEvent.data)?.type === 'open-browser') void Linking.openURL(url);
+                } catch {
+                  // andere Nachrichten ignorieren
+                }
+              }}
+            />
           </View>
         ) : (
           <View style={{ alignItems: 'center', gap: 12, paddingVertical: 8 }}>
