@@ -22,6 +22,7 @@ import { SocialTab } from './marketing/SocialTab';
 import { SurveyTab } from './marketing/SurveyTab';
 import { CoachTarget } from '../components/coach/Coach';
 import { tr } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 export type MarketingTab = 'start' | 'kontakte' | 'email' | 'social' | 'umfrage' | 'pixel';
 const flag = (cc?: string | null) => (cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))) : '');
@@ -152,7 +153,7 @@ export function MarketingScreen({ navigation, route }: { navigation: { goBack: (
             <LeadList leads={all.slice(0, 5)} loading={leads.loading && !leads.data} />
           </Section>
           <ListCard>
-            <Row icon="pricetags-outline" title={tr('Preise und Pakete ansehen')} chevron onPress={() => nav.navigate('Plans', { group: 'plan' })} last />
+            {NO_IN_APP_COMMERCE ? null : <Row icon="pricetags-outline" title={tr('Preise und Pakete ansehen')} chevron onPress={() => nav.navigate('Plans', { group: 'plan' })} last />}
           </ListCard>
         </>
       ) : tab === 'kontakte' ? (

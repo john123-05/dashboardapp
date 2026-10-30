@@ -10,6 +10,7 @@ import { defaultQuestions, fetchSurveyConfig, saveSurveyConfig, type Localized, 
 import { PLAN_LABEL, useEntitlements } from '../../lib/entitlements';
 import { colors, font, radius, space } from '../../theme';
 import { tr } from '../../i18n';
+import { NO_IN_APP_COMMERCE } from '../../lib/storePolicy';
 
 const TYPE_LABEL: Record<QuestionType, string> = { get nps() { return tr('Weiterempfehlung (0–10)'); }, get stars() { return tr('Sterne (1–5)'); }, get yesno() { return tr('Ja / Nein'); }, get choice() { return tr('Auswahl'); }, get text() { return tr('Freitext'); } };
 const MAX = 12;
@@ -183,7 +184,7 @@ export function SurveyEditScreen({ navigation }: { navigation: { goBack: () => v
             <Card style={{ gap: space.md }}>
               <Pill tone="warn" icon="lock-closed" text={PLAN_LABEL.marketing_pro} />
               <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Mit {0} leitest du zufriedene Gäste direkt zur Google-Bewertung weiter.', PLAN_LABEL.marketing_pro)}</Text>
-              <Button title={tr('Preise und Pakete ansehen')} kind="plain" onPress={() => nav.navigate('Plans', { group: 'plan' })} />
+              {NO_IN_APP_COMMERCE ? null : <Button title={tr('Preise und Pakete ansehen')} kind="plain" onPress={() => nav.navigate('Plans', { group: 'plan' })} />}
             </Card>
           )}
         </Section>

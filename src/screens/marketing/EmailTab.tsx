@@ -9,6 +9,7 @@ import { formatNumber } from '../../lib/format';
 import { useData } from '../../lib/useData';
 import { colors, font, radius, space } from '../../theme';
 import { tr, localeTag } from '../../i18n';
+import { NO_IN_APP_COMMERCE } from '../../lib/storePolicy';
 
 export const EMAIL_STATUS: Record<EmailStatus, { text: string; tone: 'ok' | 'warn' | 'err' | 'info' | 'neutral' }> = {
   draft: { get text() { return tr('Entwurf'); }, tone: 'neutral' },
@@ -157,7 +158,7 @@ function Automations({ parkId, data, onReload, onError }: { parkId: string; data
         <Card style={{ gap: 10 }}>
           <Pill tone="warn" icon="lock-closed" text={tr('Marketing Pro')} />
           <Text style={{ ...font.subhead, color: colors.ink2 }}>{tr('Automationen gehören zu Marketing Pro.')}</Text>
-          <Button title={tr('Preise und Pakete ansehen')} kind="plain" onPress={() => nav.navigate('Plans', { group: 'plan' })} />
+          {NO_IN_APP_COMMERCE ? null : <Button title={tr('Preise und Pakete ansehen')} kind="plain" onPress={() => nav.navigate('Plans', { group: 'plan' })} />}
         </Card>
       ) : null}
       {notice ? <Notice text={notice} /> : null}

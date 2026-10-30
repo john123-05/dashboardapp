@@ -15,6 +15,7 @@ import { colors, font, space } from '../theme';
 import { startCoach } from '../components/coach/Coach';
 import { PickerSheet } from '../components/controls';
 import { getChosenLanguage, LANGUAGES, setLanguage, tr, useLanguage, type Language } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 export function AccountScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const nav = useNavigation<any>();
@@ -26,7 +27,7 @@ export function AccountScreen({ navigation }: { navigation: { goBack: () => void
   const lang = useLanguage();
   const [langOpen, setLangOpen] = useState(false);
   const chosenLang = getChosenLanguage();
-  const links = ['settings', 'team', 'plans', 'tickets'].map((k) => PAGES.find((p) => p.key === k)!).filter((p) => canSee(p.key, viewer));
+  const links = ['settings', 'team', ...(NO_IN_APP_COMMERCE ? [] : ['plans']), 'tickets'].map((k) => PAGES.find((p) => p.key === k)!).filter((p) => canSee(p.key, viewer));
 
   return (
     <Screen title={tr('Konto')} onBack={navigation.goBack}>

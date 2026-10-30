@@ -1369,5 +1369,10 @@ const dict: Record<string, string> = {
   "„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.": "“Saglabāt pašreizējo stāvokli” augšupielādē attēlu, kas pašlaik ir automātā – tikai attēlošanai. Tas netiek nosūtīts uz automātu, nav restartēšanas.",
   "„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.": "“{0}” saglabāts. Automātā nekas nav mainījies.",
   "„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.": "“{0}” nodots {1}. Lai tas būtu redzams, tagad restartē pārdošanas programmu.",
+  "In deinem Paket nicht enthalten.": "Nav iekļauts jūsu paketē.",
+  "Nicht enthalten": "Nav iekļauts",
+  "Dein Paket": "Jūsu pakete",
+  "Dein Paket wird von Liftpictures für deinen Park eingerichtet.": "Jūsu paketi jūsu parkam iestata Liftpictures.",
+  "Funktionen, die nicht freigeschaltet sind, siehst du in der App als „nicht enthalten“.": "Neaktivizētās funkcijas lietotnē redzamas kā “nav iekļauts”.",
 };
 export default dict;

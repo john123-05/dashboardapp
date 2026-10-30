@@ -20,6 +20,7 @@ import { colors, font, radius, space } from '../theme';
 import { DASHBOARD_URL } from './WebPageScreen';
 import { CoachTarget } from '../components/coach/Coach';
 import { tr, localeTag } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 const POTENTIAL_DAYS = 30;
 
@@ -70,7 +71,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
 
       {isKioskPark ? (
         <Card style={{ gap: space.md }}>
-          {!ent.loading && !ent.has('online_shop') && !requestedAt ? <Pill tone="warn" icon="lock-closed" text={tr('Upgrade')} /> : null}
+          {!ent.loading && !ent.has('online_shop') && !requestedAt ? <Pill tone="warn" icon="lock-closed" text={NO_IN_APP_COMMERCE ? tr('Nicht enthalten') : tr('Upgrade')} /> : null}
           {!potential ? (
             <Skeleton height={90} />
           ) : potential.reliable ? (
@@ -94,7 +95,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
               </Text>
               {requestedAt ? (
                 <Pill tone="ok" icon="checkmark-circle" text={tr('Angefragt am {0}', requestedAt.toLocaleDateString(localeTag()))} />
-              ) : (
+              ) : NO_IN_APP_COMMERCE ? null : (
                 <Button title={tr('Preise ansehen')} icon="pricetags-outline" onPress={() => nav.navigate('Plans', { group: 'shop' })} />
               )}
             </>
@@ -150,7 +151,7 @@ export function ShopScreen({ navigation }: { navigation: { goBack: () => void } 
           </Section>
 
           <ListCard>
-            <Row icon="pricetags-outline" title={tr('Preise und Pakete ansehen')} subtitle={tr('Drei Wege, den Shop freizuschalten')} chevron onPress={() => nav.navigate('Plans', { group: 'shop' })} />
+            {NO_IN_APP_COMMERCE ? null : <Row icon="pricetags-outline" title={tr('Preise und Pakete ansehen')} subtitle={tr('Drei Wege, den Shop freizuschalten')} chevron onPress={() => nav.navigate('Plans', { group: 'shop' })} />}
             <Row icon="create-outline" title={tr('Shop bearbeiten')} subtitle={tr('Design, Texte, Produkte und Preise')} chevron onPress={() => nav.navigate('ShopEdit')} last />
           </ListCard>
         </View>

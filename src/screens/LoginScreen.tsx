@@ -14,6 +14,7 @@ import { invokeEdgeFunction } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { colors, font, radius, space } from '../theme';
 import { tr } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 function friendly(message: string): string {
   const m = message.toLowerCase();
@@ -171,7 +172,7 @@ export function LoginScreen() {
           <Text style={styles.sub}>{tr('Dein Fotosystem als Business-Tool.')}</Text>
         </View>
         <BlurView intensity={60} tint="systemThickMaterial" style={styles.form}>
-          {register ? <RegisterForm onBack={() => setRegister(false)} /> : <>
+          {register && !NO_IN_APP_COMMERCE ? <RegisterForm onBack={() => setRegister(false)} /> : <>
           <Text style={{ ...font.headline, color: colors.ink }}>{tr('Anmelden')}</Text>
           <Field label={tr('E-Mail')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="username" returnKeyType="next" onSubmitEditing={() => pw.current?.focus()} placeholder={tr('name@firma.de')} />
           <Field ref={pw} label={tr('Passwort')} value={password} onChangeText={setPassword} secure autoCapitalize="none" autoComplete="current-password" textContentType="password" returnKeyType="go" onSubmitEditing={submit} placeholder={tr('Passwort')} />
@@ -182,7 +183,7 @@ export function LoginScreen() {
           </Pressable>
           </>}
         </BlurView>
-        {!register ? (
+        {!register && !NO_IN_APP_COMMERCE ? (
           <Pressable onPress={() => setRegister(true)} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
             <Text style={{ ...font.callout, color: '#fff' }}>
               {tr('Neuer Betreiber? ')}<Text style={{ fontWeight: '700' }}>{tr('Konto erstellen')}</Text>
@@ -190,7 +191,7 @@ export function LoginScreen() {
           </Pressable>
         ) : null}
         {/* „Demo anfragen“ nur bei „Konto erstellen“ – auf der Anmeldung reicht der Weg für neue Betreiber. */}
-        {register ? (
+        {register && !NO_IN_APP_COMMERCE ? (
           <Pressable onPress={() => void Linking.openURL('https://dashboard-liftpictures.com/login')} style={{ alignSelf: 'center', minHeight: 44, justifyContent: 'center' }}>
             <Text style={{ ...font.callout, color: '#fff' }}>
               {tr('Noch kein Zugang? ')}<Text style={{ fontWeight: '700' }}>{tr('Demo anfragen')}</Text>

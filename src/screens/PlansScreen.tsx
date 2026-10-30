@@ -30,12 +30,28 @@ import { hasGuestActivity, PLAN_LABEL, useEntitlements, type PlanKey } from '../
 import { colors, font, radius, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
 import { tr, getLanguage, localeTag } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 const PLAN_ORDER: PlanKey[] = ['basis', 'marketing_starter', 'marketing_pro'];
 
 // Preise & Pakete wie im Web (/plaene). Alles, was im Liftpictures-CRM unter „Pakete & Preise“ gepflegt
 // ist (Karten, Preise, Kundenpreise, Aktionen, eigene Kategorien), erscheint hier ohne neue App-Version.
-export function PlansScreen({ navigation, route }: { navigation: { goBack: () => void }; route: { params?: { group?: string } } }) {
+// iOS (App Store 3.1.1): keine Preise, Pakete oder Anfragen in der App – nur ein Hinweis.
+export function PlansScreen(props: { navigation: { goBack: () => void }; route: { params?: { group?: string } } }) {
+  if (NO_IN_APP_COMMERCE) {
+    return (
+      <Screen page="plans" title={tr('Dein Paket')} onBack={props.navigation.goBack}>
+        <Card style={{ gap: space.sm }}>
+          <Text style={{ ...font.callout, color: colors.ink }}>{tr('Dein Paket wird von Liftpictures für deinen Park eingerichtet.')}</Text>
+          <Text style={{ ...font.footnote, color: colors.ink2 }}>{tr('Funktionen, die nicht freigeschaltet sind, siehst du in der App als „nicht enthalten“.')}</Text>
+        </Card>
+      </Screen>
+    );
+  }
+  return <PlansScreenFull {...props} />;
+}
+
+function PlansScreenFull({ navigation, route }: { navigation: { goBack: () => void }; route: { params?: { group?: string } } }) {
   const nav = useNavigation<any>();
   const wide = useWide();
   const { parkId } = usePark();

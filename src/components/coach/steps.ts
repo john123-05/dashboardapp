@@ -2,6 +2,7 @@ import type { PageKey, Viewer } from '../../lib/permissions';
 import { canSee } from '../../lib/permissions';
 import type { CoachStep } from './Coach';
 import { tr } from '../../i18n';
+import { NO_IN_APP_COMMERCE } from '../../lib/storePolicy';
 
 type Def = CoachStep & { page?: PageKey; only?: 'phone' | 'wide' };
 
@@ -27,5 +28,5 @@ const ALL: Def[] = [
 ];
 
 export function coachSteps(viewer: Viewer, opts: { wide: boolean; cameraAvailable: boolean | null; push: boolean }): CoachStep[] {
-  return ALL.filter((s) => (s.action !== 'push' || opts.push) && (!s.only || (s.only === 'wide') === opts.wide) && (!s.page || canSee(s.page, viewer)) && (s.page !== 'kamera' || opts.cameraAvailable === true));
+  return ALL.filter((s) => (s.action !== 'push' || opts.push) && (!s.only || (s.only === 'wide') === opts.wide) && (!s.page || canSee(s.page, viewer)) && (s.page !== 'kamera' || opts.cameraAvailable === true) && (s.page !== 'plans' || !NO_IN_APP_COMMERCE));
 }

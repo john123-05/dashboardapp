@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { colors, font, space } from '../theme';
 import { Button, Card, Pill } from './ui';
 import { tr } from '../i18n';
+import { NO_IN_APP_COMMERCE } from '../lib/storePolicy';
 
 // Nicht freigeschaltete Funktion: dieselbe Upgrade-Ansicht wie im Web (UpgradeHero).
 export function Locked({ badge = 'Upgrade', title, intro, points }: { badge?: string; title: string; intro: string; points?: { title: string; text: string }[] }) {
@@ -22,7 +23,9 @@ export function Locked({ badge = 'Upgrade', title, intro, points }: { badge?: st
           </View>
         </View>
       ))}
-      <Button title={tr('Preise und Pakete ansehen')} onPress={() => nav.navigate('Plans')} />
+      {NO_IN_APP_COMMERCE
+        ? <Text style={{ ...font.footnote, color: colors.ink3 }}>{tr('In deinem Paket nicht enthalten.')}</Text>
+        : <Button title={tr('Preise und Pakete ansehen')} onPress={() => nav.navigate('Plans')} />}
     </Card>
   );
 }

@@ -1369,5 +1369,10 @@ const dict: Record<string, string> = {
   "„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.": "‘Huidige stand vastleggen’ uploadt de afbeelding die nu op de automaat staat – alleen ter weergave. Er wordt niets naar de automaat gestuurd, geen herstart.",
   "„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.": "‘{0}’ vastgelegd. Bij de automaat is niets veranderd.",
   "„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.": "‘{0}’ is doorgegeven aan {1}. Start nu het verkoopprogramma opnieuw om het zichtbaar te maken.",
+  "In deinem Paket nicht enthalten.": "Niet inbegrepen in je pakket.",
+  "Nicht enthalten": "Niet inbegrepen",
+  "Dein Paket": "Je pakket",
+  "Dein Paket wird von Liftpictures für deinen Park eingerichtet.": "Je pakket wordt door Liftpictures voor je park ingericht.",
+  "Funktionen, die nicht freigeschaltet sind, siehst du in der App als „nicht enthalten“.": "Functies die niet zijn vrijgeschakeld, zie je in de app als ‘niet inbegrepen’.",
 };
 export default dict;

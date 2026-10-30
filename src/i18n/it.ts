@@ -1369,5 +1369,10 @@ const dict: Record<string, string> = {
   "„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.": "«Salva stato attuale» carica l'immagine presente ora sul distributore, solo per la visualizzazione. Non viene inviata al distributore, nessun riavvio.",
   "„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.": "«{0}» salvato. Al distributore non è cambiato nulla.",
   "„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.": "«{0}» è stato consegnato a {1}. Per renderlo visibile, riavvia ora il programma di vendita.",
+  "In deinem Paket nicht enthalten.": "Non incluso nel tuo pacchetto.",
+  "Nicht enthalten": "Non incluso",
+  "Dein Paket": "Il tuo pacchetto",
+  "Dein Paket wird von Liftpictures für deinen Park eingerichtet.": "Il tuo pacchetto viene configurato da Liftpictures per il tuo parco.",
+  "Funktionen, die nicht freigeschaltet sind, siehst du in der App als „nicht enthalten“.": "Le funzioni non attivate sono indicate nell’app come «non incluso».",
 };
 export default dict;

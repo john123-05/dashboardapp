@@ -1369,5 +1369,10 @@ const dict: Record<string, string> = {
   "„Stand hinterlegen“ lädt das Bild hoch, das gerade auf dem Automaten ist – nur zum Anzeigen. Es wird nicht an den Automaten gesendet, kein Neustart.": "“Store current state” uploads the image currently on the kiosk – for display only. It isn't sent to the kiosk and nothing restarts.",
   "„{0}“ hinterlegt. Am Automaten hat sich nichts geändert.": "“{0}” stored. Nothing has changed at the kiosk.",
   "„{0}“ wurde an {1} übergeben. Damit es sichtbar wird, jetzt noch das Verkaufsprogramm neu starten.": "“{0}” was handed to {1}. To make it visible, restart the sales program now.",
+  "In deinem Paket nicht enthalten.": "Not included in your plan.",
+  "Nicht enthalten": "Not included",
+  "Dein Paket": "Your plan",
+  "Dein Paket wird von Liftpictures für deinen Park eingerichtet.": "Your plan is set up by Liftpictures for your park.",
+  "Funktionen, die nicht freigeschaltet sind, siehst du in der App als „nicht enthalten“.": "Features that are not activated are shown as “not included” in the app.",
 };
 export default dict;

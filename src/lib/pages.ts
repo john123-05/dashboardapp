@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+import { NO_IN_APP_COMMERCE } from './storePolicy';
 import type { Ionicons } from '@expo/vector-icons';
 import type { PageKey } from './permissions';
 import { tr } from '../i18n';
@@ -52,6 +53,7 @@ export const isSuperAdminEmail = (email: string | null | undefined) => !!email &
 // Seiten, die es nur unter einer Bedingung gibt: die Kamera nur, solange ein Automat sie erreichbar meldet.
 export function pageAvailable(p: PageEntry, ctx: { cameraAvailable: boolean | null }) {
   if (p.key === 'kamera') return ctx.cameraAvailable === true;
+  if (p.key === 'plans') return !NO_IN_APP_COMMERCE;
   return true;
 }
 

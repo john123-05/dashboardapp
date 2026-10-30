@@ -6,6 +6,7 @@ import { EXTERNAL_SUPABASE_ANON_KEY, EXTERNAL_SUPABASE_URL } from './supabase';
 import { getFunctionSession } from './functionAuth';
 import { PREVIEW } from './preview';
 import { tr } from '../i18n';
+import { NO_IN_APP_COMMERCE } from './storePolicy';
 
 // Push in der App: das Gerät meldet sich mit seinem Expo-Push-Token in derselben Tabelle an wie
 // ein Browser im Web-Dashboard (operator-push-subscription), endpoint = "expo:<token>".
@@ -77,6 +78,7 @@ export function routeForUrl(url: string | undefined): { name: string; params?: o
   const crm: Record<string, string> = { kontakte: 'kontakte', email: 'email', social: 'social', umfrage: 'umfrage', pixel: 'pixel' };
   const sub = path.startsWith('/leads/') ? crm[path.slice(7)] : undefined;
   if (sub) return { name: 'Marketing', params: { tab: sub } };
+  if (NO_IN_APP_COMMERCE && (map[path] === 'Plans' || path === '/shop/preise')) return { name: 'Overview' };
   if (path === '/shop/preise') return { name: 'Plans', params: { group: 'shop' } };
   const name = map[path];
   return name ? { name } : { name: 'Web', params: { path, title: 'Liftpictures' } };
