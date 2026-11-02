@@ -1,5 +1,13 @@
 // Erzeugt mit scripts/i18n-build.py – Schlüssel ist der deutsche Text aus tr(…).
 const dict: Record<string, string> = {
+  "Stripe-Onlineverkauf": "Stripe online sales",
+  "Testmodus": "Test mode",
+  "Echte Onlineumsätze": "Real online revenue",
+  "Testumsatz (separat)": "Test revenue (separate)",
+  "Testzahlungen zählen nicht zum echten Umsatz. Foto-Uploads sind keine Verkäufe.": "Test payments do not count as real revenue. Photo uploads are not sales.",
+  "{0} Zahlungen · Gesamt": "{0} payments · All time",
+  "Onlinezahlungen vorübergehend nicht verfügbar": "Online payments temporarily unavailable",
+  "Datenstand: {0}": "As of: {0}",
   " (Version {0})": " (version {0})",
   " Hinterlegt sind: {0}.": " Stored: {0}.",
   " einmalig": " one-time",

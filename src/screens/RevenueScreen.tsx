@@ -12,10 +12,17 @@ import { useData } from '../lib/useData';
 import { colors, font, space } from '../theme';
 import { CoachTarget } from '../components/coach/Coach';
 import { tr } from '../i18n';
+import {OnlinePhotoRevenueScreen} from './OnlinePhotoRevenueScreen';
 
 type Range = '7' | '30' | '90';
 
 export function RevenueScreen() {
+  const {parkId}=usePark();
+  if(parkId==='cd65690a-3e83-414a-8e38-5482cfe1c482')return <OnlinePhotoRevenueScreen key={parkId} parkId={parkId}/>;
+  return <LegacyRevenueScreen/>;
+}
+
+function LegacyRevenueScreen() {
   const { parkId, isKioskPark } = usePark();
   const [range, setRange] = useState<Range>('30');
   const sales = useData(parkId ? `sales:${parkId}` : null, () => loadKioskSales(parkId!), [parkId], 120000);

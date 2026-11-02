@@ -1,5 +1,13 @@
 // Erzeugt mit scripts/i18n-build.py – Schlüssel ist der deutsche Text aus tr(…).
 const dict: Record<string, string> = {
+  "Stripe-Onlineverkauf": "Stripe-onlineverkoop",
+  "Testmodus": "Testmodus",
+  "Echte Onlineumsätze": "Echte onlineomzet",
+  "Testumsatz (separat)": "Testomzet (apart)",
+  "Testzahlungen zählen nicht zum echten Umsatz. Foto-Uploads sind keine Verkäufe.": "Testbetalingen tellen niet mee als echte omzet. Foto-uploads zijn geen verkopen.",
+  "{0} Zahlungen · Gesamt": "{0} betalingen · Totaal",
+  "Onlinezahlungen vorübergehend nicht verfügbar": "Onlinebetalingen tijdelijk niet beschikbaar",
+  "Datenstand: {0}": "Gegevens van: {0}",
   " (Version {0})": " (versie {0})",
   " Hinterlegt sind: {0}.": " Opgeslagen: {0}.",
   " einmalig": " eenmalig",
