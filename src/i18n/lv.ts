@@ -1,5 +1,13 @@
 // Erzeugt mit scripts/i18n-build.py – Schlüssel ist der deutsche Text aus tr(…).
 const dict: Record<string, string> = {
+  "Stripe-Onlineverkauf": "Stripe tiešsaistes pārdošana",
+  "Testmodus": "Testa režīms",
+  "Echte Onlineumsätze": "Reālie tiešsaistes ieņēmumi",
+  "Testumsatz (separat)": "Testa ieņēmumi (atsevišķi)",
+  "Testzahlungen zählen nicht zum echten Umsatz. Foto-Uploads sind keine Verkäufe.": "Testa maksājumi netiek ieskaitīti reālajos ieņēmumos. Foto augšupielādes nav pārdošana.",
+  "{0} Zahlungen · Gesamt": "{0} maksājumi · Kopā",
+  "Onlinezahlungen vorübergehend nicht verfügbar": "Tiešsaistes maksājumi īslaicīgi nav pieejami",
+  "Datenstand: {0}": "Dati uz: {0}",
   " (Version {0})": " (versija {0})",
   " Hinterlegt sind: {0}.": " Saglabāti: {0}.",
   " einmalig": " vienreizēja maksa",
