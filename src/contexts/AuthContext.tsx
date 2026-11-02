@@ -98,7 +98,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setState((prev) => ({ ...prev, session, user: session?.user ?? null }));
       if (!session?.user) {
         setState({ ...initial, loading: false });
-      } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+      } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'TOKEN_REFRESHED') {
         void loadProfile(session.user);
       }
     });
@@ -124,7 +124,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       },
       // Aktuelle Sitzung statt state.user: funktioniert auch direkt nach signUp/Verbinden.
       refreshProfile: async () => {
-        const { data } = await supabase.auth.getSession();
+        const { data } = await supabase.auth.refreshSession();
         const user = data.session?.user ?? state.user;
         if (user) await loadProfile(user);
       },
