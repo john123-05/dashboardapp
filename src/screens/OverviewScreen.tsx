@@ -1,3 +1,4 @@
+import {OnlinePhotoRevenueScreen} from './OnlinePhotoRevenueScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
@@ -25,7 +26,8 @@ import { tr } from '../i18n';
 
 type Range = '7' | '14' | '30';
 
-export function OverviewScreen() {
+export function OverviewScreen(){const {parkId}=usePark();return parkId==='cd65690a-3e83-414a-8e38-5482cfe1c482'?<OnlinePhotoRevenueScreen parkId={parkId} overview/>:<LegacyOverviewScreen/>;}
+function LegacyOverviewScreen() {
   const nav = useNavigation<any>();
   const { isOwner, isStaff, allowedPages, fullName } = useAuth();
   const wide = useWide();
