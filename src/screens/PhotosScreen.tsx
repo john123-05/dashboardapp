@@ -1,3 +1,4 @@
+import {OnlinePhotosScreen} from './OnlinePhotosScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -19,7 +20,8 @@ import { tr } from '../i18n';
 
 type Mode = 'neu' | 'code' | 'zeit';
 
-export function PhotosScreen() {
+export function PhotosScreen(){const {parkId}=usePark();return parkId==='cd65690a-3e83-414a-8e38-5482cfe1c482'?<OnlinePhotosScreen/>:<LegacyPhotosScreen/>;}
+function LegacyPhotosScreen() {
   const nav = useNavigation<any>();
   const wide = useWide();
   const { width } = useWindowDimensions();

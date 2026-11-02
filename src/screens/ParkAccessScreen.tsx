@@ -69,6 +69,9 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
     if (!superAdmin) return;
     let active = true;
     (async () => {
+      const {data:fresh}=await supabase.auth.getUser();
+      const raw=fresh.user?.app_metadata?.allowed_park_ids;const allowed=Array.isArray(raw)?raw.map(String):allowedParkIds;
+      if(JSON.stringify(allowed)!==JSON.stringify(allowedParkIds))await refreshProfile();
       const [listed, accessible] = await Promise.all([invokeEdgeFunction<{ parks: Park[] }>('external-parks'), supabase.from('parks').select('id')]);
       if (!active) return;
       if (listed.error || !listed.data) {
@@ -77,7 +80,7 @@ export function ParkAccessScreen({ onClose }: { onClose?: () => void }) {
         return;
       }
       const ok = new Set((accessible.data ?? []).map((r: any) => String(r.id)));
-      setList(listed.data.parks.filter((p) => ok.has(p.id) && (allowedParkIds.length === 0 || allowedParkIds.includes(p.id))));
+      setList(listed.data.parks.filter((p) => ok.has(p.id) && (allowed.length === 0 || allowed.includes(p.id))));
     })();
     return () => {
       active = false;

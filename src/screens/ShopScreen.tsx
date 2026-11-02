@@ -1,3 +1,4 @@
+import {OnlinePhotoShopScreen} from './OnlinePhotoShopScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -29,7 +30,8 @@ export const productDesc = (p: { key: string; description: string }) => (PRODUCT
 
 // Online-Shop wie im Web (/shop): wie viele Bilder nie verkauft wurden, der eigene Shop, Live-Vorschau
 // mit QR-Code zum Selbst-Ausprobieren. Bearbeiten öffnet den Editor (ShopEdit).
-export function ShopScreen({ navigation }: { navigation: { goBack: () => void } }) {
+export function ShopScreen(props:{navigation:{goBack:()=>void}}){const {parkId}=usePark();return parkId==='cd65690a-3e83-414a-8e38-5482cfe1c482'?<OnlinePhotoShopScreen key={parkId} parkId={parkId}/>:<LegacyShopScreen {...props}/>;}
+function LegacyShopScreen({ navigation }: { navigation: { goBack: () => void } }) {
   const nav = useNavigation<any>();
   const wide = useWide();
   const { parkId, parkName, isKioskPark, priceCents } = usePark();
