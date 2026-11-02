@@ -15,10 +15,10 @@ async function load(parkId:string):Promise<Report>{
  const json=await res.json();if(!res.ok||!json.data)throw new Error(tr('Onlinezahlungen vorübergehend nicht verfügbar'));
  return json.data;
 }
-export function OnlinePhotoRevenueScreen({parkId}:{parkId:string}){
+export function OnlinePhotoRevenueScreen({parkId,overview=false}:{parkId:string;overview?:boolean}){
  const report=useData('online-revenue:'+parkId,()=>load(parkId),[parkId],60000);
  const money=(value:number)=>new Intl.NumberFormat(localeTag(),{style:'currency',currency:report.data?.currency??'USD'}).format(value/100);
- return <Screen page="revenue" tabs actions title={tr('Stripe-Onlineverkauf')} subtitle={tr('Testmodus')} refreshing={report.refreshing} onRefresh={report.reload}>
+ return <Screen page={overview?'overview':'revenue'} tabs actions title={overview?tr('Übersicht'):tr('Stripe-Onlineverkauf')} subtitle={tr('Testmodus')} refreshing={report.refreshing} onRefresh={report.reload}>
   {report.error&&<ErrorNote text={report.error} onRetry={report.reload}/>}
   {report.data?<><KpiGrid><Kpi icon="cash-outline" label={tr('Echte Onlineumsätze')} value={money(report.data.real.net_cents)} sub={tr('{0} Zahlungen · Gesamt',report.data.real.payments)}/><Kpi icon="flask-outline" label={tr('Testumsatz (separat)')} value={money(report.data.test.net_cents)} sub={tr('{0} Zahlungen · Gesamt',report.data.test.payments)}/></KpiGrid><Section title={tr('Datenstand: {0}',new Date(report.data.as_of).toLocaleString(localeTag()))}><Card><Text style={{...font.footnote,color:colors.ink2}}>{tr('Testzahlungen zählen nicht zum echten Umsatz. Foto-Uploads sind keine Verkäufe.')}</Text></Card></Section></>:!report.error&&<KpiSkeleton/>}
  </Screen>;
